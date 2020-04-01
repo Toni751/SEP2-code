@@ -1,4 +1,14 @@
 package ESharing.Shared.Util;
 
-public interface PropertyChangeSubject {
+import java.beans.PropertyChangeListener;
+
+/**
+ * Interface for adding and removing listeners to events
+ */
+public interface PropertyChangeSubject
+{
+  void addPropertyChangeListener (String eventName, PropertyChangeListener listener);
+  void addPropertyChangeListener (PropertyChangeListener listener);
+  void removePropertyChangeListener (String eventName, PropertyChangeListener listener);
+  void removePropertyChangeListener (PropertyChangeListener listener);
 }

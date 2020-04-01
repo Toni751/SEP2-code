@@ -1,4 +1,6 @@
 package ESharing.Server.Persistance;
 
-public class DatabaseManager {
+public class DatabaseManager implements Database
+{
+
 }

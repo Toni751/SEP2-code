@@ -1,4 +1,8 @@
 package ESharing.Shared.Networking;
 
-public interface RMIClient {
+import java.rmi.Remote;
+
+public interface RMIClient extends Remote
+{
+
 }

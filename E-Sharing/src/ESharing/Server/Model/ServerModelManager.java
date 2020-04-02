@@ -20,6 +20,7 @@ public class ServerModelManager implements ServerModel
   @Override
   public boolean addNewUser(User user)
   {
+    System.out.println("A new user is on a server side. Username: " + user.getUsername());
     return false;
   }
 
@@ -38,6 +39,7 @@ public class ServerModelManager implements ServerModel
   @Override
   public User loginUser(String username, String password)
   {
+    System.out.println("New login request from user: " + username);
     return null;
   }
 

@@ -1,22 +1,40 @@
 package ESharing.Client.Model.UserAccount;
 
 import ESharing.Client.Networking.Client;
-import ESharing.Shared.TransferedObject.Events;
-import ESharing.Shared.Util.FailedConnection.FailedConnectionViewController;
-
-import java.beans.PropertyChangeEvent;
+import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * The class from the model layer which contains all user features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class UserAccountModelManager implements UserAccountModel{
 
     private Client client;
     private PropertyChangeSupport support;
 
+
+    /**
+     * One-argument constructor initializes all fields
+     * @param client the client used for the networking connection
+     */
     public UserAccountModelManager(Client client)
     {
         this.client = client;
         support = new PropertyChangeSupport(this);
+    }
+
+
+    @Override
+    public void createNewUser(User newUser) {
+        client.addUserRequest(newUser);
+    }
+
+    @Override
+    public void onLoginRequest(String username, String password) {
+        client.loginUserRequest(username, password);
     }
 
     @Override
@@ -48,4 +66,5 @@ public class UserAccountModelManager implements UserAccountModel{
     {
         support.removePropertyChangeListener(listener);
     }
+
 }

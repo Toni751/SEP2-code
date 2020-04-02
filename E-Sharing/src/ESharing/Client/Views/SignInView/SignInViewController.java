@@ -1,17 +1,20 @@
 package ESharing.Client.Views.SignInView;
 
 
+import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 
+/**
+ * The controller class used to open and service signIn fxml file
+ * @version 1.0
+ * @author Group1
+ */
 public class SignInViewController {
 
     @FXML private JFXPasswordField passwordTextField;
@@ -21,6 +24,10 @@ public class SignInViewController {
 
     private SignInViewModel signInViewModel;
 
+    /**
+     * Initializes and opens signIn view with all components
+     * @param signInVM the class from a view model layer contains all background functionality
+     */
     public void init(SignInViewModel signInVM)
     {
         this.signInViewModel = signInVM;
@@ -30,14 +37,14 @@ public class SignInViewController {
         warningPane.setVisible(false);
     }
 
+    /**
+     * Starts a verification process of the login fields and sends login request to a model layer
+     */
     public void onSignInButton(ActionEvent actionEvent) {
         if(!signInViewModel.textFieldsVerification())
         {
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), warningPane);
             warningPane.setVisible(true);
-            fadeIn.setFromValue(0.1);
-            fadeIn.setToValue(10);
-            fadeIn.play();
+            GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
         }
         else {
             warningPane.setVisible(false);
@@ -45,6 +52,9 @@ public class SignInViewController {
         }
     }
 
+    /**
+     * Hides warning notification after each keyPressed action in the text fields
+     */
     public void onKeyPressed(KeyEvent keyEvent) {
         if(warningPane.visibleProperty().get())
         {

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="480.0" prefWidth="350.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.SignUpView.SignUpViewController">
+    <Pane prefHeight="480.0" prefWidth="350.0" styleClass="welcome-content-pane">
+        <children>
+         <ProgressBar fx:id="creatingProgressBar2" layoutX="192.0" layoutY="69.0" prefHeight="13.0" prefWidth="72.0" progress="0.0" />
+         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="12.0" prefHeight="32.0" prefWidth="350.0" styleClass="big-label" text="CREATE NEW ACCOUNT" textAlignment="CENTER">
+            <font>
+               <Font name="Segoe UI Black" size="27.0" />
+            </font>
+         </Label>
+         <ProgressBar fx:id="creatingProgressBar1" layoutX="101.0" layoutY="69.0" prefHeight="13.0" prefWidth="72.0" progress="0.0" />
+         <Circle fill="#4cdbc4" layoutX="91.0" layoutY="76.0" radius="16.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+         <Circle fill="#4cdbc4" layoutX="180.0" layoutY="76.0" radius="16.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+         <Label layoutX="88.0" layoutY="63.0" styleClass="big-label" text="1" />
+         <Circle fill="#4cdbc4" layoutX="267.0" layoutY="76.0" radius="16.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+         <Label layoutX="70.0" layoutY="97.0" text="Personal" />
+         <Label layoutX="156.0" layoutY="97.0" text="Address" />
+         <Label layoutX="175.0" layoutY="62.0" styleClass="big-label" text="2" />
+         <Label layoutX="262.0" layoutY="62.0" styleClass="big-label" text="3" />
+         <Label layoutX="247.0" layoutY="97.0" text="Sign Up" />
+         <Pane fx:id="addressPane" layoutY="111.0" prefHeight="365.0" prefWidth="350.0">
+            <children>
+                  <JFXButton layoutX="87.0" layoutY="266.0" onAction="#onSignUpButton" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Sign up" />
+               <Label layoutX="97.0" layoutY="334.0" onMouseClicked="#onRulesClick" text="Terms and Condiditons of Use" textFill="#4cdbc4">
+                  <font>
+                     <Font size="10.0" />
+                  </font>
+               </Label>
+               <Text fill="#4d4d4d" layoutX="47.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="By clicking the 'Sign up' above, you agree to E-Sharing's " wrappingWidth="252.267578125">
+                  <font>
+                     <Font size="10.0" />
+                  </font>
+               </Text>
+               <JFXTextField fx:id="postalCodeTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="211.0" prefHeight="25.0" prefWidth="190.0" promptText="Postal Code" />
+               <JFXTextField fx:id="cityTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="158.0" prefHeight="25.0" prefWidth="190.0" promptText="City" />
+               <JFXTextField fx:id="streetNumberTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="94.0" prefHeight="32.0" prefWidth="190.0" promptText="Number" unFocusColor="#324a5e" />
+               <JFXTextField fx:id="streetTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="32.0" prefHeight="32.0" prefWidth="190.0" promptText="Street" unFocusColor="#324a5e" />
+               <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="38.0" layoutY="269.0" onMouseClicked="#onGoToPersonalClick" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                  <image>
+                     <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+                  </image>
+               </ImageView>
+            </children>
+         </Pane>
+        </children>
+    </Pane>
+   <Pane fx:id="personalPane" layoutY="111.0" prefHeight="365.0" prefWidth="350.0">
+      <children>
+         <JFXTextField fx:id="phoneTextField" focusColor="#4cdbc4" layoutX="83.0" layoutY="205.0" prefHeight="32.0" prefWidth="184.0" promptText="📱 Phone" unFocusColor="#324a5e" />
+            <JFXTextField fx:id="passwordTextField" focusColor="#4cdbc4" layoutX="83.0" layoutY="93.0" prefHeight="32.0" prefWidth="184.0" promptText="🔒 Password" unFocusColor="#324a5e" />
+            <JFXTextField fx:id="usernameTextField" focusColor="#4cdbc4" layoutX="83.0" layoutY="34.0" prefHeight="32.0" prefWidth="184.0" promptText="👨 Username" unFocusColor="#324a5e" />
+         <JFXTextField fx:id="confirmPasswordTextField" focusColor="#4cdbc4" layoutX="83.0" layoutY="151.0" prefHeight="32.0" prefWidth="184.0" promptText="🔒 Confirm Password" unFocusColor="#324a5e" />
+         <JFXButton layoutX="89.0" layoutY="272.0" onAction="#onSignUpButton" onMouseClicked="#onGoToAddressClick" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Next " />
+         <ImageView fitHeight="25.0" fitWidth="32.0" layoutX="194.0" layoutY="282.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+            </image>
+         </ImageView>
+      </children>
+   </Pane>
+
+</AnchorPane>

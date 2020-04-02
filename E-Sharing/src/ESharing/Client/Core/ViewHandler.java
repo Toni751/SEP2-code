@@ -5,6 +5,7 @@ import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewController;
 import ESharing.Client.Views.WelcomeView.WelcomeViewController;
 import ESharing.Shared.Util.FailedConnection.FailedConnectionViewController;
+import ESharing.Shared.Util.FailedConnection.ShowFailedConnectionView;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +40,7 @@ public class ViewHandler {
 
     public void start()
     {
-        FailedConnectionViewController.closeFailedConnectionView();
+        ShowFailedConnectionView.closeFailedConnectionView();
         currentStage = new Stage();
         openWelcomeView();
     }

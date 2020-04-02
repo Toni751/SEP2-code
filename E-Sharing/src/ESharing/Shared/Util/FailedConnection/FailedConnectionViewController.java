@@ -1,14 +1,26 @@
 package ESharing.Shared.Util.FailedConnection;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+
 public class FailedConnectionViewController
 {
-  public static void openFailedConnectionView ()
+//  private static FailedConnectionViewController instance;
+  //private static Scene scene;
+  //private static Stage stage = new Stage();
+//  private FailedConnectionViewController instance;
+
+
+  public void init()
   {
 
   }
 
-  public static void closeFailedConnectionView ()
-  {
-
-  }
+//  public static FailedConnectionViewController getInstance() {
+//    return instance;
+//  }
 }

@@ -4,6 +4,8 @@ import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.FailedConnection.FailedConnectionViewController;
+import ESharing.Shared.Util.FailedConnection.ShowFailedConnectionView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -46,7 +48,7 @@ public class ClientHandler implements Client, RMIClient
       {
         try
         {
-          support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
+          ShowFailedConnectionView.openFailedConnectionView();
           System.out.println("Client can't connect with the server... trying again after 5 seconds");
           Thread.sleep(5000);
         }

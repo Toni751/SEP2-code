@@ -17,12 +17,6 @@ public class UserAccountModelManager implements UserAccountModel{
     {
         this.client = client;
         support = new PropertyChangeSupport(this);
-        client.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
-    }
-
-    private void connectionFailed(PropertyChangeEvent event)
-    {
-        FailedConnectionViewController.openFailedConnectionView();
     }
 
     @Override

@@ -2,6 +2,7 @@ package ESharing.Client.Networking;
 
 import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeListener;
@@ -24,16 +25,36 @@ public class ClientHandler implements Client, RMIClient
 
   public ClientHandler()
   {
+    support = new PropertyChangeSupport(this);
     try
     {
       UnicastRemoteObject.exportObject(this, 0);
-      support = new PropertyChangeSupport(this);
-      server = (RMIServer) LocateRegistry.getRegistry("localhost", 1099).lookup("Server");
-      System.out.println("Client connected");
     }
-    catch (RemoteException | NotBoundException e)
+    catch (RemoteException e)
     {
       e.printStackTrace();
+    }
+    while (true)
+    {
+      try
+      {
+        server = (RMIServer) LocateRegistry.getRegistry("localhost", 1099).lookup("Server");
+        System.out.println("Client connected");
+        break;
+      }
+      catch (RemoteException | NotBoundException e)
+      {
+        try
+        {
+          support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
+          System.out.println("Client can't connect with the server... trying again after 5 seconds");
+          Thread.sleep(5000);
+        }
+        catch (InterruptedException ex)
+        {
+          ex.printStackTrace();
+        }
+      }
     }
   }
 

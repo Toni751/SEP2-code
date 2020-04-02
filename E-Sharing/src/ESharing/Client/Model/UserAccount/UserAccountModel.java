@@ -1,4 +1,7 @@
 package ESharing.Client.Model.UserAccount;
 
-public interface UserAccountModel {
+import ESharing.Shared.Util.PropertyChangeSubject;
+
+public interface UserAccountModel extends PropertyChangeSubject
+{
 }

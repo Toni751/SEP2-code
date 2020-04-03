@@ -10,8 +10,7 @@ public class User implements Serializable
   private int phoneNumber;
   private Address address;
 
-  public User(String username, String password, int phoneNumber,
-      Address address, int user_id)
+  public User(String username, String password, int phoneNumber, Address address, int user_id)
   {
     this.username = username;
     this.password = password;

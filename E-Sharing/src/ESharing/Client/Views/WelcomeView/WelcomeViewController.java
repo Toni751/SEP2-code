@@ -1,5 +1,6 @@
 package ESharing.Client.Views.WelcomeView;
 
+import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Views.SignInView.SignInViewController;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewController;
@@ -22,25 +23,20 @@ public class WelcomeViewController {
     @FXML private Pane transitionPane;
 
     private WelcomeViewModel welcomeViewModel;
-    private SignInViewModel signInViewModel;
-    private SignUpViewModel signUpViewModel;
-    private Object currentTypeController;
-    private Parent fxml;
+    private ViewHandler viewHandler;
     private String signInPath;
     private String signUpPath;
 
 
     /**
      * Initializes and opens welcome view with all components
+     * @param viewHandler the class responsible for managing views
      * @param welcomeViewModel the class from a view model layer contains all background functionality
-     * @param signUpViewModel the class from a view model layer used to set all functions in a sign up view
-     * @param signInViewModel the class from a view model layer used to set all functions in a sign in view
      */
-    public void init(WelcomeViewModel welcomeViewModel, SignUpViewModel signUpViewModel, SignInViewModel signInViewModel)
+    public void init(ViewHandler viewHandler, WelcomeViewModel welcomeViewModel)
     {
         this.welcomeViewModel = welcomeViewModel;
-        this.signInViewModel = signInViewModel;
-        this.signUpViewModel = signUpViewModel;
+        this.viewHandler = viewHandler;
         signInPath = "../SignInView/SignIn.fxml";
         signUpPath = "../SignUpView/SignUp.fxml";
         moveTransitionPane(signInPath, 322);
@@ -72,24 +68,8 @@ public class WelcomeViewController {
         transition.setToX(XPosition);
         transition.play();
         transition.setOnFinished((event) ->{
-            try {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource(fxmlName));
-                fxml = loader.load();
-                transitionPane.getChildren().removeAll();
-                transitionPane.getChildren().addAll(fxml);
-                if(fxmlName.equals(signInPath)) {
-                    currentTypeController = loader.getController();
-                    ((SignInViewController)currentTypeController).init(signInViewModel);
-                }
-                else {
-                    currentTypeController = loader.getController();
-                    ((SignUpViewController)currentTypeController).init(signUpViewModel);
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if(fxmlName.equals(signInPath)) viewHandler.openSignInView(transitionPane);
+            else viewHandler.openSignUpView(transitionPane);
         });
     }
 }

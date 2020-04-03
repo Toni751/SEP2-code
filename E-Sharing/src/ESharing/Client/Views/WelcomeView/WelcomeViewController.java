@@ -60,12 +60,12 @@ public class WelcomeViewController {
     /**
      * Starts an animation used to changing the current view and loads fxml file to the transitionPane by the given values
      * @param fxmlName the path to the fxml file which will be load after an animation
-     * @param XPosition the X position of the transitionPane where animation stops
+     * @param xPosition the X position of the transitionPane where animation stops
      */
-    private void moveTransitionPane(String fxmlName, int XPosition)
+    private void moveTransitionPane(String fxmlName, int xPosition)
     {
         TranslateTransition transition = new TranslateTransition(Duration.seconds(1),transitionPane);
-        transition.setToX(XPosition);
+        transition.setToX(xPosition);
         transition.play();
         transition.setOnFinished((event) ->{
             if(fxmlName.equals(signInPath)) viewHandler.openSignInView(transitionPane);

@@ -35,26 +35,26 @@ public class SignUpViewController {
     @FXML private Pane warningPane;
     @FXML private Label warningLabel;
 
-    private SignUpViewModel signInViewModel;
+    private SignUpViewModel signUpViewModel;
 
     /**
      * Initializes and opens signUn view with all components
-     * @param signInVM the class from a view model layer contains all background functionality
+     * @param signUpVM the class from a view model layer contains all background functionality
      */
-    public void init(SignUpViewModel signInVM)
+    public void init(SignUpViewModel signUpVM)
     {
-        this.signInViewModel = signInVM;
+        this.signUpViewModel = signUpVM;
 
-        usernameTextField.textProperty().bindBidirectional(signInViewModel.getUsernameProperty());
-        passwordTextField.textProperty().bindBidirectional(signInViewModel.getPasswordProperty());
-        confirmPasswordTextField.textProperty().bindBidirectional(signInViewModel.getConfirmPasswordProperty());
-        phoneTextField.textProperty().bindBidirectional(signInViewModel.getPhoneProperty());
-        warningLabel.textProperty().bind(signInViewModel.getWarningLabel());
+        usernameTextField.textProperty().bindBidirectional(signUpViewModel.getUsernameProperty());
+        passwordTextField.textProperty().bindBidirectional(signUpViewModel.getPasswordProperty());
+        confirmPasswordTextField.textProperty().bindBidirectional(signUpViewModel.getConfirmPasswordProperty());
+        phoneTextField.textProperty().bindBidirectional(signUpViewModel.getPhoneProperty());
+        warningLabel.textProperty().bind(signUpViewModel.getWarningLabel());
 
-        streetNumberTextField.textProperty().bindBidirectional(signInViewModel.getNumberProperty());
-        streetTextField.textProperty().bindBidirectional(signInViewModel.getStreetProperty());
-        cityTextField.textProperty().bindBidirectional(signInViewModel.getCityProperty());
-        postalCodeTextField.textProperty().bindBidirectional(signInViewModel.getPostalCodeProperty());
+        streetNumberTextField.textProperty().bindBidirectional(signUpViewModel.getNumberProperty());
+        streetTextField.textProperty().bindBidirectional(signUpViewModel.getStreetProperty());
+        cityTextField.textProperty().bindBidirectional(signUpViewModel.getCityProperty());
+        postalCodeTextField.textProperty().bindBidirectional(signUpViewModel.getPostalCodeProperty());
 
         addOnOutFocusEvent(usernameTextField, creatingProgressBar1);
         addOnOutFocusEvent(passwordTextField, creatingProgressBar1);
@@ -74,7 +74,7 @@ public class SignUpViewController {
      * Starts a verification process of the address fields and sends request to create new user in the system
      */
     public void onSignUpButton() {
-        if(signInViewModel.addressFieldVerification()) {
+        if(signUpViewModel.addressFieldsVerification()) {
             addressCircle.setRadius(16);
             addressCircle.setStyle("-fx-fill: #4cdbc4");
 
@@ -84,7 +84,7 @@ public class SignUpViewController {
             if(warningPane.visibleProperty().get())
                 warningPane.setVisible(false);
 
-            signInViewModel.createNewUser();
+            signUpViewModel.createNewUser();
         }
         else {
             warningPane.setVisible(true);
@@ -102,7 +102,7 @@ public class SignUpViewController {
      * Starts a verification process of the personal fields and changes current pane to the pane with the address fields
      */
     public void onGoToAddressClick() {
-        if(signInViewModel.personalFieldsVerification()) {
+        if(signUpViewModel.personalFieldsVerification()) {
             GeneralFunctions.fadeNode("FadeOut", personalPane, 500);
             personalPane.setVisible(false);
             GeneralFunctions.fadeNode("FadeIn", addressPane, 500);

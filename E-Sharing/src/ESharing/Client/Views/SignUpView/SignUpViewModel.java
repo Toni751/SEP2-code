@@ -91,7 +91,7 @@ public class SignUpViewModel {
      * Verifies all fields in the address pane
      * @return the boolean value with the result of the verification
      */
-    public boolean addressFieldVerification()
+    public boolean addressFieldsVerification()
     {
         boolean verification = true;
         if(streetProperty.get() == null || streetProperty.get().equals("")){

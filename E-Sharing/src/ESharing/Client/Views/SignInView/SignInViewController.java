@@ -40,7 +40,7 @@ public class SignInViewController {
     /**
      * Starts a verification process of the login fields and sends login request to a model layer
      */
-    public void onSignInButton(ActionEvent actionEvent) {
+    public void onSignInButton() {
         if(!signInViewModel.textFieldsVerification())
         {
             warningPane.setVisible(true);
@@ -55,7 +55,7 @@ public class SignInViewController {
     /**
      * Hides warning notification after each keyPressed action in the text fields
      */
-    public void onKeyPressed(KeyEvent keyEvent) {
+    public void onKeyPressed() {
         if(warningPane.visibleProperty().get())
         {
             warningPane.setVisible(false);

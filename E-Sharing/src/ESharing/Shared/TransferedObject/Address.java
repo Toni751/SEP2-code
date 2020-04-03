@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 public class Address implements Serializable
 {
+  private int address_id;
   private String street;
-  private String number;
+  private int number;
   private String city;
-  private String postcode;
+  private int postcode;
 
-  public Address(String street, String number, String city, String postcode)
+  public Address(int address_id,String street, int number, String city, int postcode)
   {
     this.street = street;
     this.number = number;
     this.city = city;
     this.postcode = postcode;
+    this.address_id=address_id;
   }
 
   public String getStreet()
@@ -22,7 +24,7 @@ public class Address implements Serializable
     return street;
   }
 
-  public String getNumber()
+  public int getNumber()
   {
     return number;
   }
@@ -32,8 +34,13 @@ public class Address implements Serializable
     return city;
   }
 
-  public String getPostcode()
+  public int getPostcode()
   {
     return postcode;
+  }
+
+  public int getAddress_id()
+  {
+    return address_id;
   }
 }

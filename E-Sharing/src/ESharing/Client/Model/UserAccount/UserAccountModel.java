@@ -14,7 +14,7 @@ public interface UserAccountModel extends PropertyChangeSubject
      * Sends a new created user to a model
      * @param newUser the new user object
      */
-    void createNewUser(User newUser);
+    boolean createNewUser(User newUser);
 
     /**
      * Sends a request for login to a model

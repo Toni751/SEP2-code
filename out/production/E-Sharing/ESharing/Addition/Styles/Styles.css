@@ -55,3 +55,11 @@
     -fx-text-box-border: transparent;
     -fx-background-color: #fff;
 }
+.progress-bar > .track {
+    -fx-text-box-border: white;
+    -fx-control-inner-background: white;
+}
+.progress-bar .bar
+{
+    -fx-background-color: #4cdbc4;
+}

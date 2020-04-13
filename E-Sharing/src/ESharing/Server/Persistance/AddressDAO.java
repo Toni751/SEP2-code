@@ -8,9 +8,10 @@ import java.util.List;
 
 public interface AddressDAO
 {
-  Address create(int address_id,String street, int number, String city, int postcode) throws SQLException;
-  Address readById(int address_id) throws SQLException;
-  List<Address> readByStreet(String searchString) throws SQLException;
-  void update(Address address) throws SQLException;
-  void delete(Address address) throws SQLException;
+  int create(Address address); //returns the id of the address
+  Address readById(int address_id);
+  Address readByAddress (String street, String number, String city, String postcode);
+//  List<Address> readByStreet(String searchString);
+//  void update(Address address);
+  void delete(int address_id);
 }

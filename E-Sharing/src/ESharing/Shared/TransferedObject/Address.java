@@ -6,17 +6,22 @@ public class Address implements Serializable
 {
   private int address_id;
   private String street;
-  private int number;
+  private String number;
   private String city;
-  private int postcode;
+  private String postcode;
 
-  public Address(int address_id,String street, int number, String city, int postcode)
+  public Address(String street, String number, String city, String postcode)
   {
     this.street = street;
     this.number = number;
     this.city = city;
     this.postcode = postcode;
-    this.address_id=address_id;
+//    this.address_id=address_id;
+  }
+
+  public void setAddress_id(int address_id)
+  {
+    this.address_id = address_id;
   }
 
   public String getStreet()
@@ -24,7 +29,7 @@ public class Address implements Serializable
     return street;
   }
 
-  public int getNumber()
+  public String getNumber()
   {
     return number;
   }
@@ -34,7 +39,7 @@ public class Address implements Serializable
     return city;
   }
 
-  public int getPostcode()
+  public String getPostcode()
   {
     return postcode;
   }

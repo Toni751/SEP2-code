@@ -7,16 +7,21 @@ public class User implements Serializable
   private int user_id;
   private String username;
   private String password;
-  private int phoneNumber;
+  private String phoneNumber;
   private Address address;
 
-  public User(String username, String password, int phoneNumber, Address address, int user_id)
+  public User(String username, String password, String phoneNumber, Address address)
   {
     this.username = username;
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.address = address;
-    this.user_id =user_id;
+//    this.user_id =user_id;
+  }
+
+  public void setUser_id(int user_id)
+  {
+    this.user_id = user_id;
   }
 
   public String getUsername()
@@ -29,7 +34,7 @@ public class User implements Serializable
     return password;
   }
 
-  public int getPhoneNumber()
+  public String getPhoneNumber()
   {
     return phoneNumber;
   }

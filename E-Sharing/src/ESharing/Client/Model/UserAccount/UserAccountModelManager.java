@@ -14,7 +14,7 @@ public class UserAccountModelManager implements UserAccountModel{
 
     private Client client;
     private PropertyChangeSupport support;
-
+    private User currentUser;
 
     /**
      * One-argument constructor initializes all fields
@@ -28,13 +28,19 @@ public class UserAccountModelManager implements UserAccountModel{
 
 
     @Override
-    public void createNewUser(User newUser) {
-        client.addUserRequest(newUser);
+    public boolean createNewUser(User newUser) {
+        return client.addUserRequest(newUser);
     }
 
     @Override
     public void onLoginRequest(String username, String password) {
-        client.loginUserRequest(username, password);
+        User user = client.loginUserRequest(username, password);
+        if (user == null)
+        {
+            //give warning or fire event idk
+        }
+        else
+            currentUser = user;
     }
 
     @Override

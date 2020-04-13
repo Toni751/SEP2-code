@@ -10,18 +10,28 @@ import java.util.List;
 public class UserDAOImpl implements UserDAO
 {
 
-  private UserDAOImpl() throws SQLException
+  private static UserDAOImpl instance;
+  private AddressDAO addressDAO;
+
+  //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
+  private UserDAOImpl(AddressDAO addressDAO)
   {
-    DriverManager.registerDriver(new org.postgresql.Driver());
+    try
+    {
+      DriverManager.registerDriver(new org.postgresql.Driver());
+      this.addressDAO = addressDAO;
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
   }
 
-  public static synchronized UserDAOImpl getInstance(UserDAOImpl instance) throws SQLException
+  public static synchronized UserDAOImpl getInstance(AddressDAO addressDAO)
   {
-
-
     if (instance == null)
     {
-      instance = new UserDAOImpl();
+      instance = new UserDAOImpl(addressDAO);
     }
     return instance;
   }
@@ -33,102 +43,162 @@ public class UserDAOImpl implements UserDAO
         "postgres", "sep");
   }
 
-
-
-  @Override public User create(String username, String password,
-      int phoneNumber, Address address, int user_id) throws SQLException
+  @Override public boolean create(User user)
   {
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO User ( user_id,username,password,phoneNumber,address_id) VALUES (?,?,?,?,?):");
-      statement.setInt(1, user_id);
-      statement.setString(2, username);
-      statement.setString(3, password);
-      statement.setInt(4, phoneNumber);
-      statement.setInt(5, address.getAddress_id());
+          "INSERT INTO user (username,password,phoneNumber,address_id) VALUES (?,?,?,?) "
+              + "ON CONFLICT ON CONSTRAINT unique_username DO NOTHING;");
+      statement.setString(1, user.getUsername());
+      statement.setString(2, user.getPassword());
+      statement.setString(3, user.getPhoneNumber());
+      statement.setInt(4, addressDAO.create(user.getAddress()));
+      int affectedRows = statement.executeUpdate();
+      System.out.println("Affected rows by create user: " + affectedRows);
 
-      return new User( username, password,phoneNumber, address,user_id);
-    }
-  }
-
-  @Override public User readById(int user_id) throws SQLException
-  {
-    try(Connection connection = getConnection()) {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM User JOIN Address ON address_id = id WHERE user_id= ?");
-      statement.setInt(1, user_id);
-      ResultSet resultSet = statement.executeQuery();
-      if (resultSet.next()) {
-        String username= resultSet.getString("username");
-        String password= resultSet.getString("password");
-        int phoneNumber = resultSet.getInt(" phoneNumber");
-        int address_id = resultSet.getInt("address_id");
-        String street = resultSet.getString("street");
-        int postcode =resultSet.getInt("postcode");
-        int number =resultSet.getInt("number");
-        String city =resultSet.getString("city");
-       Address address = new Address(address_id, street,number,city,postcode);
-        return new User(username,password,phoneNumber,address,user_id);
-      } else {
-        return null;
+      if (affectedRows == 1)
+      {
+//        Statement statementForLastValue = connection.createStatement();
+//        ResultSet resultSet = statementForLastValue.executeQuery("SELECT last_value FROM user_id_seq;");
+//        if (resultSet.next())
+//        {
+//          user.setUser_id(resultSet.getInt("last_value"));
+//        }
+        return true;
       }
     }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return false;
   }
 
-  @Override public List<User> readByUserName(String searchString)
-      throws SQLException
+  @Override public User readById(int user_id)
+  {
+    try(Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user NATURAL JOIN address WHERE user_id= ?;");
+      statement.setInt(1, user_id);
+      ResultSet resultSet = statement.executeQuery();
+      if (resultSet.next())
+      {
+        String username= resultSet.getString("username");
+        String password= resultSet.getString("password");
+        String phoneNumber = resultSet.getString(" phoneNumber");
+        int address_id = resultSet.getInt("address_id");
+        String street = resultSet.getString("street");
+        String postcode = resultSet.getString("postcode");
+        String number = resultSet.getString("number");
+        String city = resultSet.getString("city");
+        Address address = new Address(street, number,city,postcode);
+        address.setAddress_id(address_id);
+        User user = new User(username,password,phoneNumber,address);
+        user.setUser_id(user_id);
+        return user;
+      }
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Override public User readByUserNameAndPassword(String usernameRequest, String passwordRequest)
   {
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM User JOIN Address ON address_id = address_id WHERE username LIKE ?");
-      statement.setString(1, "%" + searchString + "%");
+          "SELECT * FROM user NATURAL JOIN address WHERE username = ? AND password = ?;");
+      statement.setString(1, usernameRequest);
+      statement.setString(2, passwordRequest);
       ResultSet resultSet = statement.executeQuery();
-      ArrayList<User> result = new ArrayList<>();
-      while (resultSet.next())
+      if (resultSet.next())
       {
         int user_id = resultSet.getInt("user_id");
         String username= resultSet.getString("username");
         String password= resultSet.getString("password");
-        int phoneNumber = resultSet.getInt(" phoneNumber");
+        String phoneNumber = resultSet.getString(" phoneNumber");
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
-        int postcode =resultSet.getInt("postcode");
-        int number =resultSet.getInt("number");
-        String city =resultSet.getString("city");
-        Address address = new Address( address_id,street,number,city,postcode);
-        User user = new User(username,password,phoneNumber,address,user_id);
-        result.add(user);
+        String postcode =resultSet.getString("postcode");
+        String number = resultSet.getString("number");
+        String city = resultSet.getString("city");
+        Address address = new Address(street,number,city,postcode);
+        address.setAddress_id(address_id);
+        User user = new User(username,password,phoneNumber,address);
+        user.setUser_id(user_id);
+        return user;
       }
-      return result;
     }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return null;
   }
 
-  @Override public void update(User user) throws SQLException
+  @Override public boolean update(User user)
   {
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "UPDATE User SET  username = ?, password = ?, phoneNumber=? , address =? WHERE user_id=? ");
+          "UPDATE user SET  username = ?, password = ?, phoneNumber=? , address =? WHERE user_id=?;");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
-      statement.setInt(3, user.getPhoneNumber());
-      statement.setInt(4, user.getAddress().getAddress_id());
-      statement.setInt(5,user.getUser_id());
-      statement.executeUpdate();
+      statement.setString(3, user.getPhoneNumber());
+      statement.setInt(4, addressDAO.create(user.getAddress()));
+      statement.setInt(5, user.getUser_id());
+      int affectedRows = statement.executeUpdate();
+
+      if (affectedRows == 1)
+        return true;
     }
-
-
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return false;
   }
 
-  @Override public void delete(User user) throws SQLException
+  @Override public boolean delete(User user)
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("DELETE FROM User WHERE user_id = ?");
+      PreparedStatement statement = connection.prepareStatement("DELETE FROM user WHERE user_id = ?;");
       statement.setInt(1, user.getUser_id());
-      statement.executeUpdate();
+      int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
+      int affectedRows = statement.executeUpdate();
+      if (noUsersLivingAtAddress > 1)
+        addressDAO.delete(user.getAddress().getAddress_id());
+
+      if (affectedRows == 1)
+        return true;
     }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  private int getNoUsersLivingAtAddress (int address_id)
+  {
+    try (Connection connection = getConnection())
+    {
+      Statement statement = connection.createStatement();
+      ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM user WHERE address_id = " + address_id + " AS count;");
+
+      if (resultSet.next())
+        return resultSet.getInt("count");
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return 0;
   }
 }
 

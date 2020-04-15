@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="415.0" prefWidth="308.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.RulesView.RulesViewController">
+   <children>
+      <TextArea layoutY="44.0" prefHeight="370.0" prefWidth="318.0" text="&#10;E-sharing targets to provide an eco-friendly sharing vehicle-system which will help the citizens of Horsens by giving the opportunity to rent different means of transportation.&#10;&#10;Condition of terms:&#10;&#10;1.&#9;Remember to include the all details regarding the vehicle specification, so it’s easier for the potential users to search for a certain type. &#10;2.&#9;Keep in mind that having a multiple account used for scamming is prohibited and it will be banned. &#10;3.&#9;Making a fake offer or cloning is prohibited. &#10;4.&#9;Showing a different vehicle on pictures than it is in real life might be reported. &#10;5.&#9;Reposting the same vehicle is acceptable, once it is returned back to the owner.&#10;6.&#9;If a user loses the connection with the server, an administrator can be contacted through the e-mail. &#10;7.&#9;This system only supports sharing, so no vehicle can be sold.&#10;8.&#9;Once a user faces any issues with posting a vehicle, contact the administration.&#10;9.&#9;All the bugs related to the app should be reported. &#10;10.&#9;All the pictures of the vehicle should represent its present state. &#10;I hereby confirm that I have read all the terms above and I agree to stick with them. &#10;" wrapText="true" />
+      <Label layoutX="116.0" layoutY="14.0" styleClass="big-label" text="E -  sharing" />
+   </children>
+</AnchorPane>

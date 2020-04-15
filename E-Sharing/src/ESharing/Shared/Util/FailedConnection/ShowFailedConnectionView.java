@@ -12,6 +12,12 @@ public class ShowFailedConnectionView {
     private static Scene scene;
     private static Stage stage = new Stage();
 
+    public ShowFailedConnectionView()
+    {
+        stage = new Stage();
+        openFailedConnectionView();
+    }
+
     public static void openFailedConnectionView ()
     {
         if (scene == null) {
@@ -19,9 +25,9 @@ public class ShowFailedConnectionView {
                 System.out.println("Try to open loading pane");
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(FailedConnectionViewController.class.getResource("failedConnectionView.fxml"));
-               // FailedConnectionViewController controller = loader.getController();
-              //  controller.init();
                 Parent root = loader.load();
+                FailedConnectionViewController controller = loader.getController();
+                controller.init();
                 scene = new Scene(root);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -33,7 +39,7 @@ public class ShowFailedConnectionView {
 
     public static void closeFailedConnectionView () {
         stage.close();
-        scene = null;
+        //scene = null;
     }
 
 }

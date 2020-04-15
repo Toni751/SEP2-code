@@ -1,13 +1,13 @@
 package ESharing.Client.Views.SignInView;
 
 
+import ESharing.Client.Core.ViewHandler;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 /**
@@ -23,13 +23,15 @@ public class SignInViewController {
     @FXML private Label warningLabel;
 
     private SignInViewModel signInViewModel;
+    private ViewHandler viewHandler;
 
     /**
      * Initializes and opens signIn view with all components
      * @param signInVM the class from a view model layer contains all background functionality
      */
-    public void init(SignInViewModel signInVM)
+    public void init(ViewHandler viewHandler, SignInViewModel signInVM)
     {
+        this.viewHandler = viewHandler;
         this.signInViewModel = signInVM;
         usernameTextField.textProperty().bindBidirectional(signInViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signInViewModel.getPasswordProperty());
@@ -48,7 +50,8 @@ public class SignInViewController {
         }
         else {
             warningPane.setVisible(false);
-            signInViewModel.onLoginButton();
+            System.out.println("it works");
+            viewHandler.openMainAppView(signInViewModel.getLoginUser());
         }
     }
 

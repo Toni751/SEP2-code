@@ -1,8 +1,11 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
+import ESharing.Client.Views.MainAppView.MainAppViewModel;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
 import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
+import com.sun.tools.javac.Main;
 
 /**
  * The class responsible for managing all view models
@@ -16,6 +19,10 @@ public class ViewModelFactory {
     private SignInViewModel signInViewModel;
     private SignUpViewModel signUpViewModel;
 
+    private MainAppViewModel mainAppViewModel;
+
+    private MainSettingViewModel mainSettingViewModel;
+
     /**
      * One-argument constructor initializes view models and sets class managing models
      * @param mf the class managing models
@@ -26,6 +33,10 @@ public class ViewModelFactory {
         welcomeViewModel = new WelcomeViewModel(modelFactory.getUserAccountModel());
         signInViewModel = new SignInViewModel(modelFactory.getUserAccountModel());
         signUpViewModel = new SignUpViewModel(modelFactory.getUserAccountModel());
+
+        mainAppViewModel = new MainAppViewModel(modelFactory.getAppOverviewModel());
+
+        mainSettingViewModel = new MainSettingViewModel(modelFactory.getUserSettingModel());
     }
 
     /**
@@ -50,5 +61,13 @@ public class ViewModelFactory {
      */
     public SignUpViewModel getSignUpViewModel() {
         return signUpViewModel;
+    }
+
+    public MainSettingViewModel getMainSettingViewModel() {
+        return mainSettingViewModel;
+    }
+
+    public MainAppViewModel getMainAppViewModel() {
+        return mainAppViewModel;
     }
 }

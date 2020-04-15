@@ -54,11 +54,13 @@ public class SignUpViewModel {
         Address userAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
         User newUser = new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), userAddress);
 
-        boolean didItWork = userAccountModel.createNewUser(newUser);
+        boolean validateCreation = userAccountModel.createNewUser(newUser);
 
-        if (!didItWork)
-        {
-            //display warning
+        if (validateCreation) {
+            System.out.println("New user created");
+        }
+        else {
+            System.out.println("Problem with sign up");
         }
     }
 

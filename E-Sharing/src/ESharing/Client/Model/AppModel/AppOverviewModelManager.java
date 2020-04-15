@@ -1,45 +1,23 @@
-package ESharing.Client.Model.UserAccount;
+package ESharing.Client.Model.AppModel;
 
 import ESharing.Client.Networking.Client;
-import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-/**
- * The class from the model layer which contains all user features and connects them with a networking part
- * @version 1.0
- * @author Group1
- */
-public class UserAccountModelManager implements UserAccountModel{
+public class AppOverviewModelManager implements AppOverviewModel{
 
     private Client client;
     private PropertyChangeSupport support;
-    private User currentUser;
 
-    /**
-     * One-argument constructor initializes all fields
-     * @param client the client used for the networking connection
-     */
-    public UserAccountModelManager(Client client)
+    public AppOverviewModelManager(Client client)
     {
         this.client = client;
         support = new PropertyChangeSupport(this);
     }
 
-
     @Override
-    public boolean createNewUser(User newUser) {
-        return client.addUserRequest(newUser);
-    }
-
-    @Override
-    public User onLoginRequest(String username, String password) {
-        User user = client.loginUserRequest(username, password);
-        return user;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
+    public void loadAdvertisements() {
+        //Load advertisements from the database
     }
 
     @Override

@@ -1,8 +1,12 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Views.MainAccountSetting.MainAccountSettingController;
+import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
+import ESharing.Client.Views.MainAppView.MainAppViewController;
 import ESharing.Client.Views.SignInView.SignInViewController;
 import ESharing.Client.Views.SignUpView.SignUpViewController;
 import ESharing.Client.Views.WelcomeView.WelcomeViewController;
+import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.FailedConnection.ShowFailedConnectionView;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -32,6 +36,8 @@ public class ViewHandler {
     private WelcomeViewController welcomeViewController;
     private SignInViewController signInViewController;
     private SignUpViewController signUpViewController;
+    private MainAccountSettingController mainAccountSettingController;
+    private MainAppViewController mainAppViewController;
 
     private double xOffset;
     private double yOffset;
@@ -63,9 +69,8 @@ public class ViewHandler {
      */
     public void openWelcomeView()
     {
-        //test app without this line
-        currentStage.initStyle(StageStyle.TRANSPARENT);
-        setViewToOpen(welcomeViewController, "../Views/WelcomeView/WelcomeView.fxml", null);
+        if(currentStage.getScene() == null) currentStage.initStyle(StageStyle.TRANSPARENT);
+        setViewToOpen(welcomeViewController, "../Views/WelcomeView/WelcomeView.fxml", null, null);
     }
 
     /**
@@ -74,7 +79,7 @@ public class ViewHandler {
      */
     public void openSignInView(Pane existingPane)
     {
-        setViewToOpen(signInViewController, "../Views/SignInView/SignIn.fxml", existingPane);
+        setViewToOpen(signInViewController, "../Views/SignInView/SignIn.fxml", existingPane, null);
     }
 
     /**
@@ -83,7 +88,32 @@ public class ViewHandler {
      */
     public void openSignUpView(Pane existingPane)
     {
-        setViewToOpen(signUpViewController, "../Views/SignUpView/SignUp.fxml", existingPane);
+        setViewToOpen(signUpViewController, "../Views/SignUpView/SignUp.fxml", existingPane, null);
+    }
+
+    public void openMainSettingView(User loggedUser)
+    {
+        setViewToOpen(mainAccountSettingController, "../Views/MainAccountSetting/MainAccountSettingView.fxml", null, loggedUser);
+    }
+
+    public void openMainAppView(User loggedUser)
+    {
+        setViewToOpen(mainAppViewController, "../Views/MainAppView/MainAppView.fxml", null, loggedUser);
+    }
+
+    public void openRulesAndDescription() {
+        Stage rulesStage = new Stage();
+        Scene rulesScene = null;
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("../Views/RulesView/RulesView.fxml"));
+        try {
+            Parent root = loader.load();
+            rulesScene = new Scene(root);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        rulesStage.setScene(rulesScene);
+        rulesStage.show();
     }
 
     /**
@@ -93,7 +123,7 @@ public class ViewHandler {
      * @param existingPane the pane component where new view will be loaded.
      *                     For open new view in main stage this parameter should be set as null.
      */
-    private void setViewToOpen(Object controller, String fxmlPath, Pane existingPane)
+    private void setViewToOpen(Object controller, String fxmlPath, Pane existingPane, User loggedUser)
     {
         try {
             FXMLLoader loader = new FXMLLoader();
@@ -103,9 +133,13 @@ public class ViewHandler {
             if(controller instanceof WelcomeViewController)
                 ((WelcomeViewController) controller).init(this, viewModelFactory.getWelcomeViewModel());
             else if(controller instanceof SignInViewController)
-                ((SignInViewController) controller).init(viewModelFactory.getSignInViewModel());
+                ((SignInViewController) controller).init(this, viewModelFactory.getSignInViewModel());
             else if(controller instanceof SignUpViewController)
-                ((SignUpViewController) controller).init(viewModelFactory.getSignUpViewModel());
+                ((SignUpViewController) controller).init(this, viewModelFactory.getSignUpViewModel());
+            else if(controller instanceof MainAccountSettingController)
+                ((MainAccountSettingController) controller).init(this, viewModelFactory.getMainSettingViewModel(), loggedUser);
+            else if(controller instanceof MainAppViewController)
+                ((MainAppViewController) controller).init(this, viewModelFactory.getMainAppViewModel(), loggedUser);
             if(existingPane == null) {
                 moveWindowEvents(root);
                 currentScene = new Scene(root);

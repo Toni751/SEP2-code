@@ -1,8 +1,10 @@
 package ESharing.Client.Views.SignUpView;
 
+import ESharing.Client.Core.ViewHandler;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.glass.ui.View;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -36,14 +38,17 @@ public class SignUpViewController {
     @FXML private Label warningLabel;
 
     private SignUpViewModel signUpViewModel;
+    private ViewHandler viewHandler;
 
     /**
      * Initializes and opens signUn view with all components
+     * @param viewHandler the class responsible for managing views
      * @param signUpVM the class from a view model layer contains all background functionality
      */
-    public void init(SignUpViewModel signUpVM)
+    public void init(ViewHandler viewHandler, SignUpViewModel signUpVM)
     {
         this.signUpViewModel = signUpVM;
+        this.viewHandler = viewHandler;
 
         usernameTextField.textProperty().bindBidirectional(signUpViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signUpViewModel.getPasswordProperty());
@@ -96,6 +101,7 @@ public class SignUpViewController {
      * Displays rules and conditions of the system
      */
     public void onRulesClick() {
+        viewHandler.openRulesAndDescription();
     }
 
     /**

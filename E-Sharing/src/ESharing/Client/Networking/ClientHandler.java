@@ -6,6 +6,7 @@ import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.FailedConnection.FailedConnectionViewController;
 import ESharing.Shared.Util.FailedConnection.ShowFailedConnectionView;
+import javafx.application.Platform;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

@@ -1,6 +1,7 @@
 package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Model.UserAccount.UserAccountModel;
+import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -11,11 +12,13 @@ import javafx.beans.property.StringProperty;
  */
 public class SignInViewModel {
 
-    StringProperty usernameProperty;
-    StringProperty passwordProperty;
-    StringProperty warningProperty;
+    private StringProperty usernameProperty;
+    private StringProperty passwordProperty;
+    private StringProperty warningProperty;
+
 
     private UserAccountModel userAccountModel;
+    private User loginUser;
 
     /**
      * One-argument constructor initializes model layer for a user features and all fields
@@ -31,8 +34,10 @@ public class SignInViewModel {
     /**
      * Sends a login request to a model layer with values from a gui
      */
-    public void onLoginButton() {
-        userAccountModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
+    public boolean onLoginButton() {
+        loginUser = userAccountModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
+        if(loginUser != null) return true;
+        else return false;
     }
 
     /**
@@ -58,7 +63,15 @@ public class SignInViewModel {
             warningProperty.set("The password field can not be empty!");
             verification = false;
         }
+        else if(!onLoginButton()) {
+            warningProperty.set("The user does not exist");
+            verification = false;
+        }
         return verification;
+    }
+
+    public User getLoginUser() {
+        return loginUser;
     }
 
     /**

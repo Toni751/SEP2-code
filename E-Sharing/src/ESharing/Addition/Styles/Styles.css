@@ -39,6 +39,21 @@
     -fx-font-size: 18px;
     -fx-cursor: hand;
 }
+.button-warning
+{
+    -fx-background-color: #DB5461;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.green-pane
+{
+    -fx-background-color: #4cdbc4;
+}
+.white-pane
+{
+    -fx-background-color: #fff;
+}
 .warning-pane
 {
     -fx-background-color: #DB5461;

@@ -122,7 +122,7 @@ public class UserDAOImpl implements UserDAO
         int user_id = resultSet.getInt("user_id");
         String username= resultSet.getString("username");
         String password= resultSet.getString("password");
-        String phoneNumber = resultSet.getString(" phoneNumber");
+        String phoneNumber = resultSet.getString("phoneNumber");
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
         String postcode =resultSet.getString("postcode");
@@ -173,7 +173,7 @@ public class UserDAOImpl implements UserDAO
       statement.setInt(1, user.getUser_id());
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
       int affectedRows = statement.executeUpdate();
-      if (noUsersLivingAtAddress > 1)
+      if (noUsersLivingAtAddress == 1)
         addressDAO.delete(user.getAddress().getAddress_id());
 
       if (affectedRows == 1)
@@ -191,7 +191,7 @@ public class UserDAOImpl implements UserDAO
     try (Connection connection = getConnection())
     {
       Statement statement = connection.createStatement();
-      ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM user_account WHERE address_id = " + address_id + " AS count;");
+      ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) AS count FROM user_account WHERE address_id = " + address_id + ";");
 
       if (resultSet.next())
         return resultSet.getInt("count");

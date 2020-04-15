@@ -39,16 +39,18 @@ public class UserDAOImpl implements UserDAO
   private Connection getConnection() throws SQLException
   {
     return DriverManager.getConnection(
-        "jdbc:postgresql://localhost:5432/postgres?currentSchema=jdbc",
-        "postgres", "sep");
+        "jdbc:postgresql://localhost:5432/sep2",
+        "postgres", "password");
   }
 
   @Override public boolean create(User user)
   {
+    System.out.println("Trying to establish connection");
     try (Connection connection = getConnection())
     {
+      System.out.println("Connection established");
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO user (username,password,phoneNumber,address_id) VALUES (?,?,?,?) "
+          "INSERT INTO user_account (username,password,phoneNumber,address_id) VALUES (?,?,?,?) "
               + "ON CONFLICT ON CONSTRAINT unique_username DO NOTHING;");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
@@ -60,7 +62,7 @@ public class UserDAOImpl implements UserDAO
       if (affectedRows == 1)
       {
 //        Statement statementForLastValue = connection.createStatement();
-//        ResultSet resultSet = statementForLastValue.executeQuery("SELECT last_value FROM user_id_seq;");
+//        ResultSet resultSet = statementForLastValue.executeQuery("SELECT last_value FROM user_account_user_id_seq;");
 //        if (resultSet.next())
 //        {
 //          user.setUser_id(resultSet.getInt("last_value"));
@@ -79,7 +81,7 @@ public class UserDAOImpl implements UserDAO
   {
     try(Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user NATURAL JOIN address WHERE user_id= ?;");
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address WHERE user_id= ?;");
       statement.setInt(1, user_id);
       ResultSet resultSet = statement.executeQuery();
       if (resultSet.next())
@@ -111,7 +113,7 @@ public class UserDAOImpl implements UserDAO
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM user NATURAL JOIN address WHERE username = ? AND password = ?;");
+          "SELECT * FROM user_account NATURAL JOIN address WHERE username = ? AND password = ?;");
       statement.setString(1, usernameRequest);
       statement.setString(2, passwordRequest);
       ResultSet resultSet = statement.executeQuery();
@@ -145,7 +147,7 @@ public class UserDAOImpl implements UserDAO
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "UPDATE user SET  username = ?, password = ?, phoneNumber=? , address =? WHERE user_id=?;");
+          "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address =? WHERE user_id=?;");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
       statement.setString(3, user.getPhoneNumber());
@@ -167,7 +169,7 @@ public class UserDAOImpl implements UserDAO
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("DELETE FROM user WHERE user_id = ?;");
+      PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE user_id = ?;");
       statement.setInt(1, user.getUser_id());
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
       int affectedRows = statement.executeUpdate();
@@ -189,7 +191,7 @@ public class UserDAOImpl implements UserDAO
     try (Connection connection = getConnection())
     {
       Statement statement = connection.createStatement();
-      ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM user WHERE address_id = " + address_id + " AS count;");
+      ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM user_account WHERE address_id = " + address_id + " AS count;");
 
       if (resultSet.next())
         return resultSet.getInt("count");

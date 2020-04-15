@@ -37,8 +37,8 @@ public class AddressDAOImpl implements AddressDAO
   private Connection getConnection() throws SQLException
   {
       return DriverManager.getConnection(
-          "jdbc:postgresql://localhost:5432/postgres?currentSchema=jdbc",
-          "postgres", "sep");
+          "jdbc:postgresql://localhost:5432/sep2",
+          "postgres", "password");
 
   }
 
@@ -59,7 +59,7 @@ public class AddressDAOImpl implements AddressDAO
       if (rowCount == 1)
       {
         Statement statementForLastValue = connection.createStatement();
-        ResultSet resultSet = statementForLastValue.executeQuery("SELECT last_value FROM address_id_seq;");
+        ResultSet resultSet = statementForLastValue.executeQuery("SELECT last_value FROM address_address_id_seq;");
         if (resultSet.next())
           address.setAddress_id(resultSet.getInt("last_value"));
         return address.getAddress_id();

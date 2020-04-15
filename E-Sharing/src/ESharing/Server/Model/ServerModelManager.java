@@ -20,6 +20,7 @@ public class ServerModelManager implements ServerModel
   @Override
   public boolean addNewUser(User user)
   {
+    System.out.println("Creating a new user from SMM");
     if (user.getPassword().length() > 7 && user.getPhoneNumber().length() == 8)
     {
       return userDAO.create(user);

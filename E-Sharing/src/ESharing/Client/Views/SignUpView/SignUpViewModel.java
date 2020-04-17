@@ -1,5 +1,6 @@
 package ESharing.Client.Views.SignUpView;
 
+import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserAccount.UserAccountModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
@@ -28,11 +29,10 @@ public class SignUpViewModel {
 
     /**
      * One-argument constructor initializes model layer for a user features and all fields
-     * @param userAccountModel the interface form the model layer contains all user features
      */
-    public SignUpViewModel(UserAccountModel userAccountModel) {
+    public SignUpViewModel() {
 
-        this.userAccountModel = userAccountModel;
+        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
 
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();

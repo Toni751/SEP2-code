@@ -2,6 +2,7 @@ package ESharing.Client.Views.SignInView;
 
 
 import ESharing.Client.Core.ViewHandler;
+import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -27,12 +28,11 @@ public class SignInViewController {
 
     /**
      * Initializes and opens signIn view with all components
-     * @param signInVM the class from a view model layer contains all background functionality
      */
-    public void init(ViewHandler viewHandler, SignInViewModel signInVM)
+    public void init()
     {
-        this.viewHandler = viewHandler;
-        this.signInViewModel = signInVM;
+        this.viewHandler = ViewHandler.getViewHandler();
+        this.signInViewModel = ViewModelFactory.getViewModelFactory().getSignInViewModel();
         usernameTextField.textProperty().bindBidirectional(signInViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signInViewModel.getPasswordProperty());
         warningLabel.textProperty().bind(signInViewModel.getWarningProperty());

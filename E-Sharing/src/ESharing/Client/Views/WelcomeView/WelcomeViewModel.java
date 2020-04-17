@@ -1,5 +1,6 @@
 package ESharing.Client.Views.WelcomeView;
 
+import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserAccount.UserAccountModel;
 
 /**
@@ -13,10 +14,9 @@ public class WelcomeViewModel {
 
     /**
      * One-argument constructor initializes model layer for a user features and all fields
-     * @param accountModel the interface form the model layer contains all user features
      */
-    public WelcomeViewModel(UserAccountModel accountModel)
+    public WelcomeViewModel()
     {
-        this.userAccountModel = accountModel;
+        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
     }
 }

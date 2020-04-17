@@ -42,16 +42,28 @@ public class ViewHandler {
     private double xOffset;
     private double yOffset;
 
+    private static ViewHandler viewHandler;
+
     /**
      * One-argument constructor initializes fields and sets class with all view models
-     * @param modelFactory the class managing all view models
      */
-    public ViewHandler(ViewModelFactory modelFactory)
+    private ViewHandler()
     {
-        this.viewModelFactory = modelFactory;
+        this.viewModelFactory = ViewModelFactory.getViewModelFactory();
         xOffset = 0;
         yOffset = 0;
         css = this.getClass().getResource("../../Addition/Styles/Styles.css").toExternalForm();
+    }
+
+    /**
+     * Returns ViewHandler object if it exists, otherwise creates new object
+     * @return the ViewHandler object
+     */
+    public static ViewHandler getViewHandler()
+    {
+        if(viewHandler == null)
+            viewHandler = new ViewHandler();
+        return viewHandler;
     }
 
     /**
@@ -131,15 +143,15 @@ public class ViewHandler {
             Parent root = loader.load();
             controller = loader.getController();
             if(controller instanceof WelcomeViewController)
-                ((WelcomeViewController) controller).init(this, viewModelFactory.getWelcomeViewModel());
+                ((WelcomeViewController) controller).init();
             else if(controller instanceof SignInViewController)
-                ((SignInViewController) controller).init(this, viewModelFactory.getSignInViewModel());
+                ((SignInViewController) controller).init();
             else if(controller instanceof SignUpViewController)
-                ((SignUpViewController) controller).init(this, viewModelFactory.getSignUpViewModel());
+                ((SignUpViewController) controller).init();
             else if(controller instanceof MainAccountSettingController)
-                ((MainAccountSettingController) controller).init(this, viewModelFactory.getMainSettingViewModel(), loggedUser);
+                ((MainAccountSettingController) controller).init(loggedUser);
             else if(controller instanceof MainAppViewController)
-                ((MainAppViewController) controller).init(this, viewModelFactory.getMainAppViewModel(), loggedUser);
+                ((MainAppViewController) controller).init(loggedUser);
             if(existingPane == null) {
                 moveWindowEvents(root);
                 currentScene = new Scene(root);

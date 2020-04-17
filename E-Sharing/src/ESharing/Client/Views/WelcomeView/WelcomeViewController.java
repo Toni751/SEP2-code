@@ -1,17 +1,11 @@
 package ESharing.Client.Views.WelcomeView;
 
 import ESharing.Client.Core.ViewHandler;
-import ESharing.Client.Views.SignInView.SignInViewController;
-import ESharing.Client.Views.SignInView.SignInViewModel;
-import ESharing.Client.Views.SignUpView.SignUpViewController;
-import ESharing.Client.Views.SignUpView.SignUpViewModel;
+import ESharing.Client.Core.ViewModelFactory;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-import java.io.IOException;
 
 /**
  * The controller class used to open and service welcome fxml file
@@ -30,17 +24,14 @@ public class WelcomeViewController {
 
     /**
      * Initializes and opens welcome view with all components
-     * @param viewHandler the class responsible for managing views
-     * @param welcomeViewModel the class from a view model layer contains all background functionality
      */
-    public void init(ViewHandler viewHandler, WelcomeViewModel welcomeViewModel)
+    public void init()
     {
-        this.welcomeViewModel = welcomeViewModel;
-        this.viewHandler = viewHandler;
+        this.welcomeViewModel = ViewModelFactory.getViewModelFactory().getWelcomeViewModel();
+        this.viewHandler = ViewHandler.getViewHandler();
         signInPath = "../SignInView/SignIn.fxml";
         signUpPath = "../SignUpView/SignUp.fxml";
         moveTransitionPane(signInPath, 322);
-
     }
 
     /**

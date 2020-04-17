@@ -1,6 +1,7 @@
 package ESharing.Client.Views.MainAppView;
 
 import ESharing.Client.Core.ViewHandler;
+import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Shared.TransferedObject.User;
 
 public class MainAppViewController {
@@ -9,10 +10,10 @@ public class MainAppViewController {
     private MainAppViewModel mainAppViewModel;
     private User loggerUser;
 
-    public void init(ViewHandler viewHandler, MainAppViewModel mainAppViewModel, User loggedUser)
+    public void init(User loggedUser)
     {
-        this.viewHandler = viewHandler;
-        this.mainAppViewModel = mainAppViewModel;
+        this.viewHandler = ViewHandler.getViewHandler();
+        this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
         this.loggerUser = loggedUser;
     }
 

@@ -19,10 +19,10 @@ public class ClientApplication extends Application {
             System.setSecurityManager(new RMISecurityManager());
         }
 
-        ClientFactory clientFactory = new ClientFactory();
-        ModelFactory modelFactory = new ModelFactory(clientFactory);
-        ViewModelFactory viewModelFactory = new ViewModelFactory(modelFactory);
-        ViewHandler viewHandler = new ViewHandler(viewModelFactory);
+       // ClientFactory clientFactory = ClientFactory.getClientFactory();
+        //ModelFactory modelFactory = ModelFactory.getModelFactory();
+        //ViewModelFactory viewModelFactory = ViewModelFactory.getViewModelFactory();
+        ViewHandler viewHandler = ViewHandler.getViewHandler();
 
         viewHandler.start();
     }

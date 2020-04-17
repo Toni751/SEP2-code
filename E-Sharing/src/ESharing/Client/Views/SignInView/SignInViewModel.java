@@ -1,5 +1,6 @@
 package ESharing.Client.Views.SignInView;
 
+import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserAccount.UserAccountModel;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,10 +23,9 @@ public class SignInViewModel {
 
     /**
      * One-argument constructor initializes model layer for a user features and all fields
-     * @param userAccountModel the interface form the model layer contains all user features
      */
-    public SignInViewModel(UserAccountModel userAccountModel) {
-        this.userAccountModel = userAccountModel;
+    public SignInViewModel() {
+        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
         warningProperty= new SimpleStringProperty();

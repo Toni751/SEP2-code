@@ -1,6 +1,7 @@
 package ESharing.Client.Views.SignUpView;
 
 import ESharing.Client.Core.ViewHandler;
+import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -42,13 +43,11 @@ public class SignUpViewController {
 
     /**
      * Initializes and opens signUn view with all components
-     * @param viewHandler the class responsible for managing views
-     * @param signUpVM the class from a view model layer contains all background functionality
      */
-    public void init(ViewHandler viewHandler, SignUpViewModel signUpVM)
+    public void init()
     {
-        this.signUpViewModel = signUpVM;
-        this.viewHandler = viewHandler;
+        this.signUpViewModel = ViewModelFactory.getViewModelFactory().getSignUpViewModel();
+        this.viewHandler = ViewHandler.getViewHandler();
 
         usernameTextField.textProperty().bindBidirectional(signUpViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signUpViewModel.getPasswordProperty());

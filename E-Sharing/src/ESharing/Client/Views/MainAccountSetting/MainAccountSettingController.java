@@ -1,6 +1,7 @@
 package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ViewHandler;
+import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Shared.TransferedObject.User;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -14,11 +15,11 @@ public class MainAccountSettingController {
     private User loggedUser;
 
 
-    public void init(ViewHandler viewHandler, MainSettingViewModel mainSettingViewModel, User loggedUser)
+    public void init(User loggedUser)
     {
-        this.viewHandler = viewHandler;
+        this.viewHandler = ViewHandler.getViewHandler();
+        this.mainSettingViewModel = ViewModelFactory.getViewModelFactory().getMainSettingViewModel();
         this.loggedUser = loggedUser;
-        this.mainSettingViewModel = mainSettingViewModel;
     }
 
 

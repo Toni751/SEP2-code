@@ -18,16 +18,27 @@ public class ModelFactory {
     private UserSettingModel userSettingModel;
     private AppOverviewModel appOverviewModel;
 
+    private static ModelFactory modelFactory;
+
     /**
      * One-argument constructor initializes fields and sets class responsible for initialize client
-     * @param clientFactory the class which initializes client
      */
-    public ModelFactory(ClientFactory clientFactory)
+    private ModelFactory()
     {
-        this.clientFactory = clientFactory;
+        this.clientFactory = ClientFactory.getClientFactory();
         userAccountModel = new UserAccountModelManager(clientFactory.getClient());
         userSettingModel = new UserSettingModelManager(clientFactory.getClient());
         appOverviewModel = new AppOverviewModelManager(clientFactory.getClient());
+    }
+
+    /**
+     * Returns ModelFactory object if it exists, otherwise creates new object
+     * @return the ModelFactory object
+     */
+    public static ModelFactory getModelFactory() {
+        if(modelFactory == null)
+            modelFactory = new ModelFactory();
+        return modelFactory;
     }
 
     /**
@@ -38,10 +49,18 @@ public class ModelFactory {
         return userAccountModel;
     }
 
+    /**
+     * Returns initialized model for all features belongs to user settings
+     * @return initialized model for all features belongs to user settings
+     */
     public UserSettingModel getUserSettingModel() {
         return userSettingModel;
     }
 
+    /**
+     * Returns initialized model for all features belongs to system overview
+     * @return initialized model for all features belongs to system overview
+     */
     public AppOverviewModel getAppOverviewModel() {
         return appOverviewModel;
     }

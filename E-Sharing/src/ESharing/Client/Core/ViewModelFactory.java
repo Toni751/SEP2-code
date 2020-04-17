@@ -5,7 +5,6 @@ import ESharing.Client.Views.MainAppView.MainAppViewModel;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
 import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
-import com.sun.tools.javac.Main;
 
 /**
  * The class responsible for managing all view models
@@ -18,25 +17,32 @@ public class ViewModelFactory {
     private WelcomeViewModel welcomeViewModel;
     private SignInViewModel signInViewModel;
     private SignUpViewModel signUpViewModel;
-
     private MainAppViewModel mainAppViewModel;
-
     private MainSettingViewModel mainSettingViewModel;
+    private static ViewModelFactory viewModelFactory;
 
     /**
      * One-argument constructor initializes view models and sets class managing models
-     * @param mf the class managing models
      */
-    public ViewModelFactory(ModelFactory mf)
+    private ViewModelFactory()
     {
-        this.modelFactory = mf;
-        welcomeViewModel = new WelcomeViewModel(modelFactory.getUserAccountModel());
-        signInViewModel = new SignInViewModel(modelFactory.getUserAccountModel());
-        signUpViewModel = new SignUpViewModel(modelFactory.getUserAccountModel());
+        this.modelFactory = ModelFactory.getModelFactory();
+        welcomeViewModel = new WelcomeViewModel();
+        signInViewModel = new SignInViewModel();
+        signUpViewModel = new SignUpViewModel();
+        mainAppViewModel = new MainAppViewModel();
+        mainSettingViewModel = new MainSettingViewModel();
+    }
 
-        mainAppViewModel = new MainAppViewModel(modelFactory.getAppOverviewModel());
-
-        mainSettingViewModel = new MainSettingViewModel(modelFactory.getUserSettingModel());
+    /**
+     * Returns ViewModelFactory object if it exists, otherwise creates new object
+     * @return the ViewModelFactory object
+     */
+    public static ViewModelFactory getViewModelFactory()
+    {
+        if(viewModelFactory == null)
+            viewModelFactory = new ViewModelFactory();
+        return viewModelFactory;
     }
 
     /**
@@ -63,10 +69,18 @@ public class ViewModelFactory {
         return signUpViewModel;
     }
 
+    /**
+     * Returns initialized view model of the main user setting view
+     * @return the initialized MainSettingViewModel
+     */
     public MainSettingViewModel getMainSettingViewModel() {
         return mainSettingViewModel;
     }
 
+    /**
+     * Returns initialized view model of the main system view
+     * @return the initialized MainAppViewModel
+     */
     public MainAppViewModel getMainAppViewModel() {
         return mainAppViewModel;
     }

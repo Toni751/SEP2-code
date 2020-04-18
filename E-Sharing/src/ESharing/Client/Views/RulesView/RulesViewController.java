@@ -1,4 +1,6 @@
 package ESharing.Client.Views.RulesView;
 
-public class RulesViewController {
+import ESharing.Client.Views.ViewController;
+
+public class RulesViewController extends ViewController {
 }

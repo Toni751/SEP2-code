@@ -2,15 +2,18 @@ package ESharing.Client.Views.SignUpView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import com.sun.glass.ui.View;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 
 /**
@@ -18,7 +21,7 @@ import javafx.scene.shape.Circle;
  * @version 1.0
  * @author Group1
  */
-public class SignUpViewController {
+public class SignUpViewController extends ViewController {
 
     @FXML private JFXTextField streetTextField;
     @FXML private JFXTextField streetNumberTextField;

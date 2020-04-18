@@ -2,13 +2,14 @@ package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
-public class MainAccountSettingController {
+public class MainAccountSettingController extends ViewController {
 
     private ViewHandler viewHandler;
     private MainSettingViewModel mainSettingViewModel;

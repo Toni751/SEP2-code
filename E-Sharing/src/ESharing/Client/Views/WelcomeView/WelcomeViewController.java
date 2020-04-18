@@ -2,8 +2,10 @@ package ESharing.Client.Views.WelcomeView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Views.ViewController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -12,9 +14,10 @@ import javafx.util.Duration;
  * @version 1.0
  * @author Group1
  */
-public class WelcomeViewController {
+public class WelcomeViewController extends ViewController {
 
-    @FXML private Pane transitionPane;
+    @FXML
+    private Pane transitionPane;
 
     private WelcomeViewModel welcomeViewModel;
     private ViewHandler viewHandler;
@@ -25,8 +28,7 @@ public class WelcomeViewController {
     /**
      * Initializes and opens welcome view with all components
      */
-    public void init()
-    {
+    public void init() {
         this.welcomeViewModel = ViewModelFactory.getViewModelFactory().getWelcomeViewModel();
         this.viewHandler = ViewHandler.getViewHandler();
         signInPath = "../SignInView/SignIn.fxml";
@@ -50,17 +52,18 @@ public class WelcomeViewController {
 
     /**
      * Starts an animation used to changing the current view and loads fxml file to the transitionPane by the given values
-     * @param fxmlName the path to the fxml file which will be load after an animation
+     *
+     * @param fxmlName  the path to the fxml file which will be load after an animation
      * @param xPosition the X position of the transitionPane where animation stops
      */
-    private void moveTransitionPane(String fxmlName, int xPosition)
-    {
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(1),transitionPane);
+    private void moveTransitionPane(String fxmlName, int xPosition) {
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(1), transitionPane);
         transition.setToX(xPosition);
         transition.play();
-        transition.setOnFinished((event) ->{
-            if(fxmlName.equals(signInPath)) viewHandler.openSignInView(transitionPane);
+        transition.setOnFinished((event) -> {
+            if (fxmlName.equals(signInPath)) viewHandler.openSignInView(transitionPane);
             else viewHandler.openSignUpView(transitionPane);
         });
     }
+
 }

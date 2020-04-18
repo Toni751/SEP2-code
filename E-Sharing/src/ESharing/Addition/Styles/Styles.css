@@ -65,11 +65,6 @@
     -fx-font-size: 14px;
     -fx-alignment: center;
 }
-
-.text-field {
-    -fx-text-box-border: transparent;
-    -fx-background-color: #fff;
-}
 .progress-bar > .track {
     -fx-text-box-border: white;
     -fx-control-inner-background: white;

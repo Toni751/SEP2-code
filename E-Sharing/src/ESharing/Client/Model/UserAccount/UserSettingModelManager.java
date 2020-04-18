@@ -19,13 +19,15 @@ public class UserSettingModelManager implements UserSettingModel{
     }
 
     @Override
-    public void modifyAddress() {
+    public void modifyAddress(User updatedUser) {
         //code for modify address
     }
 
     @Override
-    public void modifyGeneralInformation() {
+    public boolean modifyGeneralInformation(User updatedUser) {
         //code for modify general info
+        System.out.println("Update user in model");
+        return client.editUserRequest(updatedUser);
     }
 
     @Override

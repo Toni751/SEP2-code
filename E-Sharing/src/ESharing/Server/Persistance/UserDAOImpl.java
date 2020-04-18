@@ -147,7 +147,7 @@ public class UserDAOImpl implements UserDAO
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address =? WHERE user_id=?;");
+          "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address_id =? WHERE user_id=?;");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
       statement.setString(3, user.getPhoneNumber());

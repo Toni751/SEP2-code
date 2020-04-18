@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="380.0" prefWidth="380.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.UserInfoSettingView.UserInfoSettingViewController">
+   <children>
+      <Label layoutX="127.0" layoutY="14.0" styleClass="big-label" text="User Information" />
+      <ImageView fitHeight="75.0" fitWidth="75.0" layoutX="153.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Addition/Images/avatar-icon.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="81.0" layoutY="119.0" styleClass="sub-title" text="Username" />
+      <Label layoutX="81.0" layoutY="151.0" styleClass="sub-title" text="Phone" />
+      <TextField fx:id="usernameTextField" layoutX="172.0" layoutY="116.0" />
+      <TextField fx:id="phoneTextField" layoutX="172.0" layoutY="148.0" />
+      <Label layoutX="137.0" layoutY="189.0" styleClass="sub-title" text="Change Password" />
+      <Label layoutX="78.0" layoutY="221.0" styleClass="sub-title" text="Old password" />
+      <Label layoutX="78.0" layoutY="253.0" styleClass="sub-title" text="New password" />
+      <JFXButton layoutX="272.0" layoutY="274.0" onAction="#onSaveButton" prefHeight="26.0" prefWidth="86.0" text="Save" />
+      <JFXButton layoutX="218.0" layoutY="275.0" onAction="#onDefaultButton" text="Default" />
+      <PasswordField fx:id="oldPasswordField" layoutX="174.0" layoutY="218.0" prefHeight="26.0" prefWidth="134.0" />
+      <PasswordField fx:id="newPasswordField" layoutX="176.0" layoutY="249.0" prefHeight="26.0" prefWidth="134.0" />
+      <Pane fx:id="warningPane" layoutY="333.0" prefHeight="46.0" prefWidth="380.0" styleClass="warning-pane">
+         <children>
+            <Label fx:id="warningLabel" layoutX="176.0" layoutY="15.0" styleClass="warning-label" text="Label" />
+         </children></Pane>
+   </children>
+</AnchorPane>

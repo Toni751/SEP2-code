@@ -1,19 +1,8 @@
 package ESharing.Client.Views;
 
-import ESharing.Client.Views.MainAccountSetting.MainAccountSettingController;
-import ESharing.Client.Views.MainAppView.MainAppViewController;
-import ESharing.Client.Views.SignInView.SignInViewController;
-import ESharing.Client.Views.SignUpView.SignUpViewController;
-import ESharing.Client.Views.WelcomeView.WelcomeViewController;
-import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Views;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +20,9 @@ public class ViewControllerFactory {
             else if(id == Views.SIGN_UP_VIEW) viewController = creatNewViewControllerObject("SignUpView/SignUp.fxml");
             else if(id == Views.MAIN_APP_VIEW) viewController = creatNewViewControllerObject("MainAppView/MainAppView.fxml");
             else if(id == Views.MAIN_USER_SETTING_VIEW) viewController = creatNewViewControllerObject("MainAccountSetting/MainAccountSettingView.fxml");
+            else if(id == Views.FAILED_CONNECTION_VIEW) viewController = creatNewViewControllerObject("FailedConnectionView/FailedConnectionView.fxml");
+            else if(id == Views.USER_ADDRESS_SETTING_VIEW) viewController = creatNewViewControllerObject("UserAddressSettingView/UserAddressSettingView.fxml");
+            else if(id == Views.USER_INFO_SETTING_VIEW) viewController = creatNewViewControllerObject("UserInfoSettingView/UserInfoSettingView.fxml");
             viewControllers.put(id, viewController);
         }
         System.out.println(viewController);

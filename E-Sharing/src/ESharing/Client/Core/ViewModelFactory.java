@@ -4,6 +4,8 @@ import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
 import ESharing.Client.Views.MainAppView.MainAppViewModel;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
+import ESharing.Client.Views.UserAddressSettingView.UserAddressSettingViewModel;
+import ESharing.Client.Views.UserInfoSettingView.UserInfoSettingViewModel;
 import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
 
 /**
@@ -19,6 +21,8 @@ public class ViewModelFactory {
     private SignUpViewModel signUpViewModel;
     private MainAppViewModel mainAppViewModel;
     private MainSettingViewModel mainSettingViewModel;
+    private UserInfoSettingViewModel userInfoSettingViewModel;
+    private UserAddressSettingViewModel userAddressSettingViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -32,6 +36,8 @@ public class ViewModelFactory {
         signUpViewModel = new SignUpViewModel();
         mainAppViewModel = new MainAppViewModel();
         mainSettingViewModel = new MainSettingViewModel();
+        userAddressSettingViewModel = new UserAddressSettingViewModel();
+        userInfoSettingViewModel = new UserInfoSettingViewModel();
     }
 
     /**
@@ -83,5 +89,13 @@ public class ViewModelFactory {
      */
     public MainAppViewModel getMainAppViewModel() {
         return mainAppViewModel;
+    }
+
+    public UserAddressSettingViewModel getUserAddressSettingViewModel() {
+        return userAddressSettingViewModel;
+    }
+
+    public UserInfoSettingViewModel getUserInfoSettingViewModel() {
+        return userInfoSettingViewModel;
     }
 }

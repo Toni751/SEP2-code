@@ -1,6 +1,7 @@
 package ESharing.Shared.TransferedObject;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable
 {
@@ -24,6 +25,15 @@ public class User implements Serializable
     this.user_id = user_id;
   }
 
+  public void updateInformation(User updatedUser)
+  {
+    this.username = updatedUser.getUsername();
+    this.password = updatedUser.getPassword();
+    this.user_id = updatedUser.getUser_id();
+    this.address = updatedUser.getAddress();
+    this.phoneNumber = updatedUser.getPhoneNumber();
+  }
+
   public String getUsername()
   {
     return username;
@@ -44,18 +54,41 @@ public class User implements Serializable
     return address;
   }
 
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setPhoneNumber(String phoneNumber) {
+    this.phoneNumber = phoneNumber;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
+  public void setUserId(int userId)
+  {
+    this.user_id = userId;
+  }
+
   public int getUser_id()
   {
     return user_id;
   }
 
-  @Override
-  public boolean equals(Object obj)
-  {
-    if (!(obj instanceof User))
-      return false;
-    User other = (User) obj;
 
-    return username.equals(other.username);
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    User user = (User) o;
+    return  Objects.equals(username, user.username) &&
+            Objects.equals(password, user.password) &&
+            Objects.equals(phoneNumber, user.phoneNumber) &&
+            address.equals(user.address);
   }
 }

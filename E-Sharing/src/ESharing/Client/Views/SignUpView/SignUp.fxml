@@ -5,6 +5,8 @@
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -14,10 +16,29 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="480.0" prefWidth="350.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.SignUpView.SignUpViewController">
+   <Pane fx:id="rulesPane" prefHeight="482.0" prefWidth="350.0">
+      <children>
+         <Label fx:id="rulesTitle" alignment="CENTER" contentDisplay="CENTER" layoutY="14.0" prefHeight="32.0" prefWidth="350.0" styleClass="big-label" text="E-SHARING RULES" textAlignment="CENTER">
+            <font>
+               <Font name="Segoe UI Black" size="27.0" />
+            </font>
+         </Label>
+         <ScrollPane layoutY="56.0" prefHeight="376.0" prefWidth="350.0">
+            <content>
+               <TextArea editable="false" prefHeight="372.0" prefWidth="348.0" text="E-sharing targets to provide an eco-friendly sharing vehicle-system which will help the citizens of Horsens by giving the opportunity to rent different means of transportation.&#10;&#10;Condition of terms:&#10;&#10;1.&#9;Remember to include the all details regarding the vehicle specification, so it’s easier for the potential users to search for a certain type. &#10;2.&#9;Keep in mind that having a multiple account used for scamming is prohibited and it will be banned. &#10;3.&#9;Making a fake offer or cloning is prohibited. &#10;4.&#9;Showing a different vehicle on pictures than it is in real life might be reported. &#10;5.&#9;Reposting the same vehicle is acceptable, once it is returned back to the owner.&#10;6.&#9;If a user loses the connection with the server, an administrator can be contacted through the e-mail. &#10;7.&#9;This system only supports sharing, so no vehicle can be sold.&#10;8.&#9;Once a user faces any issues with posting a vehicle, contact the administration.&#10;9.&#9;All the bugs related to the app should be reported. &#10;10.&#9;All the pictures of the vehicle should represent its present state. &#10;I hereby confirm that I have read all the terms above and I agree to stick with them. " wrapText="true" />
+            </content>
+         </ScrollPane>
+         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="7.0" layoutY="435.0" onMouseClicked="#onBackToSignUp" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
+            <image>
+               <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+            </image>
+         </ImageView>
+      </children>
+   </Pane>
     <Pane prefHeight="480.0" prefWidth="350.0" styleClass="welcome-content-pane">
         <children>
          <ProgressBar fx:id="creatingProgressBar2" layoutX="192.0" layoutY="69.0" prefHeight="13.0" prefWidth="72.0" progress="0.0" />
-         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="12.0" prefHeight="32.0" prefWidth="350.0" styleClass="big-label" text="CREATE NEW ACCOUNT" textAlignment="CENTER">
+         <Label fx:id="signUpTitle" alignment="CENTER" contentDisplay="CENTER" layoutX="4.0" layoutY="12.0" prefHeight="32.0" prefWidth="350.0" styleClass="big-label" text="CREATE NEW ACCOUNT" textAlignment="CENTER">
             <font>
                <Font name="Segoe UI Black" size="27.0" />
             </font>
@@ -41,6 +62,11 @@
          <JFXButton layoutX="89.0" layoutY="272.0" onAction="#onSignUpButton" onMouseClicked="#onGoToAddressClick" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Next " />
          <JFXPasswordField fx:id="passwordTextField" focusColor="#4cdbc4" layoutX="80.0" layoutY="95.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="🔒 Password" />
          <JFXPasswordField fx:id="confirmPasswordTextField" focusColor="#4cdbc4" layoutX="80.0" layoutY="151.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="🔒 Confirm Password" />
+      </children>
+   </Pane>
+   <Pane fx:id="warningPane" layoutY="435.0" prefHeight="45.0" prefWidth="350.0" styleClass="warning-pane">
+      <children>
+         <Label fx:id="warningLabel" layoutX="4.0" layoutY="14.0" prefHeight="17.0" prefWidth="344.0" styleClass="warning-label" text="Label" />
       </children>
    </Pane>
    <Pane fx:id="addressPane" layoutY="111.0" prefHeight="365.0" prefWidth="350.0">
@@ -67,10 +93,5 @@
          </ImageView>
       </children>
    </Pane>
-   <Pane fx:id="warningPane" layoutY="435.0" prefHeight="45.0" prefWidth="350.0" styleClass="warning-pane">
-      <children>
-         <Label fx:id="warningLabel" layoutX="4.0" layoutY="14.0" prefHeight="17.0" prefWidth="344.0" styleClass="warning-label" text="Label" />
-      </children>
-   </Pane>
 
-</AnchorPane>
+                  </AnchorPane>

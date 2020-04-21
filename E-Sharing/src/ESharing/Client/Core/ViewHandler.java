@@ -110,21 +110,6 @@ public class ViewHandler {
         showView(viewController, null, loggedUser);
     }
 
-    public void openRulesAndDescription() {
-        Stage rulesStage = new Stage();
-        Scene rulesScene = null;
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../Views/RulesView/RulesView.fxml"));
-        try {
-            Parent root = loader.load();
-            rulesScene = new Scene(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        rulesStage.setScene(rulesScene);
-        rulesStage.show();
-    }
-
     public void openUserInfoSettingView(Pane existingPane, User loggedUser)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_INFO_SETTING_VIEW);
@@ -136,12 +121,6 @@ public class ViewHandler {
         viewController = ViewControllerFactory.getViewController(Views.USER_ADDRESS_SETTING_VIEW);
         showView(viewController, existingPane, loggedUser);
     }
-
-//    public static void openFailedConnectionView()
-//    {
-//        viewController = ViewControllerFactory.getViewController(Views.FAILED_CONNECTION_VIEW);
-//        showView(viewController,null, null);
-//    }
 
     private void showView(ViewController controller, Pane existingPane, User loggedUser)
     {

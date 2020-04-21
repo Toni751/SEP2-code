@@ -73,3 +73,6 @@
 {
     -fx-background-color: #4cdbc4;
 }
+.text-area:focused .content {
+    -fx-background-color:  white;
+}

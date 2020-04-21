@@ -7,9 +7,20 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The controller class used to create and to store all system views
+ * @version 1.0
+ * @author Group1
+ */
 public class ViewControllerFactory {
     private static Map<Views, ViewController> viewControllers = new HashMap<>();
 
+    /**
+     * Opens a view which is stored in the collection using the given id.
+     * If there are no views with the given id in the collection, creates new one and saves it.
+     * @param id the id of a view
+     * @return the view which is assigned to the given id
+     */
     public static ViewController getViewController(Views id)
     {
         ViewController viewController = viewControllers.get(id);
@@ -29,6 +40,11 @@ public class ViewControllerFactory {
         return viewController;
     }
 
+    /**
+     * Loads view from a fxml file using the given path to this file
+     * @param fxmlPath the path to the fxml file with a view
+     * @return the ViewController object which is loaded from the given fxml file
+     */
     private static ViewController creatNewViewControllerObject(String fxmlPath)
     {
         ViewController controller = null;

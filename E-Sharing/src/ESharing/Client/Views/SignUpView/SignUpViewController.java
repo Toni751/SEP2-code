@@ -6,18 +6,15 @@ import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.sun.glass.ui.View;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.shape.Circle;
 
 /**
- * The controller class used to open and service signUn fxml file
+ * The controller class used to manage all functions and components from the fxml file
  * @version 1.0
  * @author Group1
  */
@@ -39,13 +36,16 @@ public class SignUpViewController extends ViewController {
     @FXML private JFXPasswordField confirmPasswordTextField;
     @FXML private Pane personalPane;
     @FXML private Pane warningPane;
+    @FXML private Pane rulesPane;
     @FXML private Label warningLabel;
+    @FXML private Label rulesTitle;
+    @FXML private Label signUpTitle;
 
     private SignUpViewModel signUpViewModel;
     private ViewHandler viewHandler;
 
     /**
-     * Initializes and opens signUn view with all components
+     * Initializes and opens signUn view with all components adds on focus and out focus events to the text fields
      */
     public void init()
     {
@@ -76,7 +76,6 @@ public class SignUpViewController extends ViewController {
         onOpenSetting();
     }
 
-
     /**
      * Starts a verification process of the address fields and sends request to create new user in the system
      */
@@ -103,7 +102,13 @@ public class SignUpViewController extends ViewController {
      * Displays rules and conditions of the system
      */
     public void onRulesClick() {
-        viewHandler.openRulesAndDescription();
+        GeneralFunctions.fadeNode("FadeOut", addressPane, 500);
+        addressPane.setVisible(false);
+        signUpTitle.setVisible(false);
+        rulesPane.toFront();
+        GeneralFunctions.fadeNode("FadeIn", rulesPane, 500);
+        rulesPane.setVisible(true);
+        rulesTitle.setVisible(true);
     }
 
     /**
@@ -126,6 +131,19 @@ public class SignUpViewController extends ViewController {
             warningPane.setVisible(true);
             GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
         }
+    }
+
+    /**
+     * Closes the rules view and goes back to the address view
+     */
+    public void onBackToSignUp() {
+        GeneralFunctions.fadeNode("FadeOut", rulesPane, 500);
+        rulesTitle.setVisible(false);
+        rulesPane.setVisible(false);
+        rulesPane.toBack();
+        GeneralFunctions.fadeNode("FadeIn", addressPane, 500);
+        addressPane.setVisible(true);
+        signUpTitle.setVisible(true);
     }
 
     /**

@@ -2,11 +2,18 @@ package ESharing.Client.Views.UserInfoSettingView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserAccount.UserSettingModel;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import java.beans.PropertyChangeSupport;
 
-public class UserInfoSettingViewModel {
+/**
+ * The class in a view model layer contains all functions which are used in the signUp view.
+ * @version 1.0
+ * @author Group1
+ */
+public class UserInfoSettingViewModel{
 
     private StringProperty usernameProperty;
     private StringProperty phoneProperty;
@@ -14,12 +21,13 @@ public class UserInfoSettingViewModel {
     private StringProperty newPasswordProperty;
     private StringProperty warningLabel;
 
+    private PropertyChangeSupport support;
     private UserSettingModel settingModel;
     private User loggedUser;
-    private final int minPasswordLength = 8;
-    private final int maxUsernameLength = 20;
-    private final int phoneNumberSize = 8;
 
+    /**
+     * A constructor initializes model layer for a user features and all fields
+     */
     public UserInfoSettingViewModel() {
         usernameProperty = new SimpleStringProperty();
         phoneProperty = new SimpleStringProperty();
@@ -28,11 +36,21 @@ public class UserInfoSettingViewModel {
         warningLabel = new SimpleStringProperty();
 
         settingModel = ModelFactory.getModelFactory().getUserSettingModel();
+        support = new PropertyChangeSupport(this);
     }
 
+    /**
+     * Verifies all values inserted by the user. If values are incorrect sets the warning
+     * otherwise sends User object with new values to the model layer.
+     * @return the verification result
+     */
     public boolean verifyNewValues() {
         boolean verification = true;
         boolean connection;
+        int minPasswordLength = 8;
+        int phoneNumberSize = 8;
+        int maxUsernameLength = 20;
+
         User updatedUser = new User(loggedUser.getUsername(), loggedUser.getPassword(), loggedUser.getPhoneNumber(), loggedUser.getAddress());
         if ((newPasswordProperty.getValue() == null || newPasswordProperty.getValue().equals("")) && (oldPasswordProperty.getValue() == null || oldPasswordProperty.getValue().equals(""))) {
             if (usernameProperty.getValue().equals(loggedUser.getUsername())) {
@@ -62,7 +80,6 @@ public class UserInfoSettingViewModel {
                 updatedUser.setPassword(newPasswordProperty.getValue());
             }
         }
-        System.out.println(loggedUser.getUsername());
         if (!updatedUser.equals(loggedUser)) {
             updatedUser.setUser_id(loggedUser.getUser_id());
             connection = settingModel.modifyGeneralInformation(updatedUser);
@@ -75,38 +92,66 @@ public class UserInfoSettingViewModel {
             {
                 warningLabel.setValue("Information has successfully changed");
                 loggedUser.updateInformation(updatedUser);
+                support.firePropertyChange(Events.UPDATE_USER_INFO.toString(), null, updatedUser);
             }
         }
         return verification;
     }
 
-
+    /**
+     * Fills text fields with the logged user values
+     */
     public void loadUserInfo() {
         usernameProperty.setValue(loggedUser.getUsername());
         phoneProperty.setValue(loggedUser.getPhoneNumber());
     }
 
+    /**
+     * Replaces logged user with the given object
+     * @param loggedUser the given user object which is used to replace current one
+     */
     public void setLoggedUser(User loggedUser) {
         this.loggedUser = loggedUser;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the oldPassword text field
+     */
     public StringProperty getOldPasswordProperty() {
         return oldPasswordProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the newPassword text field
+     */
     public StringProperty getNewPasswordProperty() {
         return newPasswordProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the username text field
+     */
     public StringProperty getUsernameProperty() {
         return usernameProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the phone text field
+     */
     public StringProperty getPhoneProperty() {
         return phoneProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the warning notification
+     */
     public StringProperty getWarningLabel() {
         return warningLabel;
     }
+
 }

@@ -5,12 +5,11 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 /**
- * The controller class used to open and service welcome fxml file
+ * The controller class used to manage all functions and components from the fxml file
  * @version 1.0
  * @author Group1
  */
@@ -18,7 +17,6 @@ public class WelcomeViewController extends ViewController {
 
     @FXML
     private Pane transitionPane;
-
     private WelcomeViewModel welcomeViewModel;
     private ViewHandler viewHandler;
     private String signInPath;

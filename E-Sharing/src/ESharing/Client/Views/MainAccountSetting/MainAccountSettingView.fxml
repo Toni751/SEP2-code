@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane prefHeight="380.0" prefWidth="500.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAccountSetting.MainAccountSettingController">
+   <children>
+      <Pane prefHeight="382.0" prefWidth="200.0" styleClass="white-pane">
+         <children>
+            <Label layoutX="55.0" layoutY="14.0" styleClass="big-label" text="User Setting" />
+            <Label layoutX="14.0" layoutY="59.0" prefHeight="17.0" prefWidth="67.0" text="Account" />
+            <JFXButton layoutX="35.0" layoutY="338.0" onAction="#removeAccountButton" prefHeight="27.0" prefWidth="131.0" styleClass="button-warning" text="Remove Account" />
+            <JFXButton alignment="TOP_LEFT" layoutY="93.0" onAction="#loadAboutPane" prefHeight="25.0" prefWidth="200.0" text="👨 About" />
+            <JFXButton alignment="TOP_LEFT" layoutY="128.0" onAction="#loadAddressPane" prefHeight="25.0" prefWidth="200.0" text="🏠 Address" />
+         </children>
+      </Pane>
+      <Pane fx:id="userSettingPane" layoutX="200.0" prefHeight="380.0" prefWidth="380.0" styleClass="green-pane" />
+   </children>
+</AnchorPane>

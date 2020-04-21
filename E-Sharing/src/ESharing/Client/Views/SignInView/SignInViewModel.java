@@ -22,7 +22,7 @@ public class SignInViewModel {
     private User loginUser;
 
     /**
-     * One-argument constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a user features and all fields
      */
     public SignInViewModel() {
         this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();

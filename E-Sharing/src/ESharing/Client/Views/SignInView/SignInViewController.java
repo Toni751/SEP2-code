@@ -1,6 +1,5 @@
 package ESharing.Client.Views.SignInView;
 
-
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
@@ -8,13 +7,11 @@ import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 
 /**
- * The controller class used to open and service signIn fxml file
+ * The controller class used to manage all functions and components from the fxml file
  * @version 1.0
  * @author Group1
  */

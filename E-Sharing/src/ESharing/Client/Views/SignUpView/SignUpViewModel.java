@@ -19,7 +19,6 @@ public class SignUpViewModel {
     private StringProperty confirmPasswordProperty;
     private StringProperty phoneProperty;
     private StringProperty warningLabel;
-
     private StringProperty streetProperty;
     private StringProperty numberProperty;
     private StringProperty cityProperty;
@@ -28,7 +27,7 @@ public class SignUpViewModel {
     private UserAccountModel userAccountModel;
 
     /**
-     * One-argument constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a user features and all fields
      */
     public SignUpViewModel() {
 
@@ -79,12 +78,21 @@ public class SignUpViewModel {
             warningLabel.set("The password field can not be empty");
             verification = false;
         }
+        else if(passwordProperty.get().length() < 8){
+            warningLabel.set("The password should have more than 7 letters");
+            verification = false;
+        }
         else if(confirmPasswordProperty.get() == null || confirmPasswordProperty.get().equals("")) {
             warningLabel.set("Please confirm your password");
             verification = false;
         }
         else if(phoneProperty.get() == null || phoneProperty.get().equals("")) {
             warningLabel.set("The phone field can not be empty");
+            verification = false;
+        }
+        else if(phoneProperty.get().length() != 8)
+        {
+            warningLabel.set("The phone number should have 8 digits");
             verification = false;
         }
         else if(!confirmPasswordProperty.get().equals(passwordProperty.get())) {
@@ -119,7 +127,6 @@ public class SignUpViewModel {
         }
         return verification;
     }
-
 
     /**
      * Returns value used in the bind process between a controller and view model

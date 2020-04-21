@@ -13,7 +13,7 @@ public class WelcomeViewModel {
     private UserAccountModel userAccountModel;
 
     /**
-     * One-argument constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a user features and all fields
      */
     public WelcomeViewModel()
     {

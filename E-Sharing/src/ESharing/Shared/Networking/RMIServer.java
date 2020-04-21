@@ -1,5 +1,6 @@
 package ESharing.Shared.Networking;
 
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
 import java.rmi.Remote;

@@ -37,6 +37,7 @@ public class ViewControllerFactory {
             viewControllers.put(id, viewController);
         }
         System.out.println(viewController);
+        viewController.init();
         return viewController;
     }
 

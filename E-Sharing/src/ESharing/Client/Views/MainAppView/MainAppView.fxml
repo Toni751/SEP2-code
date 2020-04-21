@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="welcome-info-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAppView.MainAppViewController">
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="welcome-info-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAppView.MainAppViewController">
    <children>
       <JFXButton layoutX="270.0" layoutY="185.0" onAction="#onSettingButton" styleClass="button-warning" text="Setting" />
+      <Button layoutX="357.0" layoutY="31.0" mnemonicParsing="false" onAction="#onLogout" text="Logout" />
    </children>
 </AnchorPane>

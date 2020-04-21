@@ -50,7 +50,7 @@ public class SignInViewController extends ViewController {
         else {
             warningPane.setVisible(false);
             System.out.println("it works");
-            viewHandler.openMainAppView(signInViewModel.getLoginUser());
+            viewHandler.openMainAppView();
         }
     }
 

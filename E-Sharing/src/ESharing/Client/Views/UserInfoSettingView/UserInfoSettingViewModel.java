@@ -1,6 +1,7 @@
 package ESharing.Client.Views.UserInfoSettingView;
 
 import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Model.UserAccount.UserSettingModel;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
@@ -23,7 +24,7 @@ public class UserInfoSettingViewModel{
 
     private PropertyChangeSupport support;
     private UserSettingModel settingModel;
-    private User loggedUser;
+    private LoggedUser loggedUser;
 
     /**
      * A constructor initializes model layer for a user features and all fields
@@ -36,6 +37,7 @@ public class UserInfoSettingViewModel{
         warningLabel = new SimpleStringProperty();
 
         settingModel = ModelFactory.getModelFactory().getUserSettingModel();
+        loggedUser = LoggedUser.getLoggedUser();
         support = new PropertyChangeSupport(this);
     }
 
@@ -82,7 +84,7 @@ public class UserInfoSettingViewModel{
         }
         if (!updatedUser.equals(loggedUser)) {
             updatedUser.setUser_id(loggedUser.getUser_id());
-            connection = settingModel.modifyGeneralInformation(updatedUser);
+            connection = settingModel.modifyUserInformation(updatedUser);
             if(!connection)
             {
                 warningLabel.setValue("Database connection error");
@@ -91,8 +93,8 @@ public class UserInfoSettingViewModel{
             else
             {
                 warningLabel.setValue("Information has successfully changed");
-                loggedUser.updateInformation(updatedUser);
-                support.firePropertyChange(Events.UPDATE_USER_INFO.toString(), null, updatedUser);
+                loggedUser.loginUser(updatedUser);
+                verification = true;
             }
         }
         return verification;
@@ -104,14 +106,6 @@ public class UserInfoSettingViewModel{
     public void loadUserInfo() {
         usernameProperty.setValue(loggedUser.getUsername());
         phoneProperty.setValue(loggedUser.getPhoneNumber());
-    }
-
-    /**
-     * Replaces logged user with the given object
-     * @param loggedUser the given user object which is used to replace current one
-     */
-    public void setLoggedUser(User loggedUser) {
-        this.loggedUser = loggedUser;
     }
 
     /**

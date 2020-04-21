@@ -1,6 +1,7 @@
 package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Model.UserAccount.UserAccountModel;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,7 +20,7 @@ public class SignInViewModel {
 
 
     private UserAccountModel userAccountModel;
-    private User loginUser;
+    private LoggedUser loggedUser;
 
     /**
      * A constructor initializes model layer for a user features and all fields
@@ -35,8 +36,11 @@ public class SignInViewModel {
      * Sends a login request to a model layer with values from a gui
      */
     public boolean onLoginButton() {
-        loginUser = userAccountModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
-        if(loginUser != null) return true;
+        boolean verification = userAccountModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
+        if(verification) {
+            loggedUser = LoggedUser.getLoggedUser();
+            return true;
+        }
         else return false;
     }
 
@@ -70,9 +74,9 @@ public class SignInViewModel {
         return verification;
     }
 
-    public User getLoginUser() {
-        return loginUser;
-    }
+//    public User getLoginUser() {
+//        return loggedUser;
+//    }
 
     /**
      * Returns value used in the bind process between a controller and view model

@@ -1,6 +1,7 @@
 package ESharing.Client.Model.UserAccount;
 
 import ESharing.Client.Networking.Client;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeListener;
@@ -19,20 +20,15 @@ public class UserSettingModelManager implements UserSettingModel{
     }
 
     @Override
-    public void modifyAddress(User updatedUser) {
-        //code for modify address
-    }
-
-    @Override
-    public boolean modifyGeneralInformation(User updatedUser) {
-        //code for modify general info
-        System.out.println("Update user in model");
+    public boolean modifyUserInformation(User updatedUser) {
         return client.editUserRequest(updatedUser);
     }
 
     @Override
-    public void removeAccount(User loggedUser) {
-        client.removeUserRequest(loggedUser);
+    public void removeAccount() {
+        User accountToRemove = new User(LoggedUser.getLoggedUser());
+        client.removeUserRequest(accountToRemove);
+        LoggedUser.getLoggedUser().logoutUser();
     }
 
     @Override

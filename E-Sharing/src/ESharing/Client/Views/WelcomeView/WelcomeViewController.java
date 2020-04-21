@@ -31,7 +31,7 @@ public class WelcomeViewController extends ViewController {
         this.viewHandler = ViewHandler.getViewHandler();
         signInPath = "../SignInView/SignIn.fxml";
         signUpPath = "../SignUpView/SignUp.fxml";
-        moveTransitionPane(signInPath, 322);
+        moveTransitionPane(signInPath, 400);
     }
 
     /**
@@ -45,7 +45,7 @@ public class WelcomeViewController extends ViewController {
      * Initializes and opens a sign up view
      */
     public void onGoToSignIn() {
-        moveTransitionPane(signInPath, 322);
+        moveTransitionPane(signInPath, 400);
     }
 
     /**

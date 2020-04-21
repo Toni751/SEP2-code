@@ -2,11 +2,13 @@ package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import java.util.Optional;
 
@@ -21,17 +23,16 @@ public class MainAccountSettingController extends ViewController {
 
     private ViewHandler viewHandler;
     private MainSettingViewModel mainSettingViewModel;
-    private User loggedUser;
+    private LoggedUser loggedUser;
 
     /**
      * Initializes controller with all components
-     * @param loggedUser the User object which is current logged in the system
      */
-    public void init(User loggedUser)
+    public void init()
     {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainSettingViewModel = ViewModelFactory.getViewModelFactory().getMainSettingViewModel();
-        this.loggedUser = loggedUser;
+        this.loggedUser = LoggedUser.getLoggedUser();
     }
 
     /**
@@ -44,7 +45,7 @@ public class MainAccountSettingController extends ViewController {
         removeConfirmation.setContentText("Are you sure? This operation can not be restored");
         Optional<ButtonType> result = removeConfirmation.showAndWait();
         if (result.get() == ButtonType.OK) {
-            mainSettingViewModel.removeAccount(loggedUser);
+            mainSettingViewModel.removeAccount();
             viewHandler.openWelcomeView();
         } else {
             removeConfirmation.close();
@@ -55,13 +56,17 @@ public class MainAccountSettingController extends ViewController {
      * Opens a setting view with general user information
      */
     public void loadAboutPane() {
-        viewHandler.openUserInfoSettingView(userSettingPane, loggedUser);
+        viewHandler.openUserInfoSettingView(userSettingPane);
     }
 
     /**
      * Opens a setting view with address information connected with the current logged user
      */
     public void loadAddressPane() {
-        viewHandler.openUserAddressSettingView(userSettingPane, loggedUser);
+        viewHandler.openUserAddressSettingView(userSettingPane);
+    }
+
+    public void onBackToMainView() {
+        viewHandler.openMainAppView();
     }
 }

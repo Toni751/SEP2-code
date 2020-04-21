@@ -18,11 +18,11 @@ public abstract class ViewController{
      */
     public void init(){}
 
-    /**
-     * Initializes controller with all components
-     * @param loggedUser the User object which is current logged in the system
-     */
-    public void init(User loggedUser){}
+//    /**
+//     * Initializes controller with all components
+//     * @param loggedUser the User object which is current logged in the system
+//     */
+//    public void init(User loggedUser){}
 
     /**
      * Sets the root of the view

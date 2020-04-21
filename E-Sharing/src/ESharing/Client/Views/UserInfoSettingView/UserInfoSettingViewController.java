@@ -1,9 +1,12 @@
 package ESharing.Client.Views.UserInfoSettingView;
 
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -17,26 +20,26 @@ import javafx.scene.layout.Pane;
  */
 public class UserInfoSettingViewController extends ViewController {
 
-    @FXML private TextField usernameTextField;
-    @FXML private TextField phoneTextField;
-    @FXML private PasswordField oldPasswordField;
-    @FXML private PasswordField newPasswordField;
+    @FXML private JFXTextField usernameTextField;
+    @FXML private JFXTextField phoneTextField;
+    @FXML private JFXPasswordField oldPasswordField;
+    @FXML private JFXPasswordField newPasswordField;
     @FXML private Pane warningPane;
     @FXML private Label warningLabel;
     private UserInfoSettingViewModel viewModel;
-    private User loggedUser;
+    private LoggedUser loggedUser;
 
     /**
      * Initializes controller with all components
-     * @param loggedUser the User object which is current logged in the system
      */
-    public void init(User loggedUser)
+    public void init()
     {
-        this.loggedUser = loggedUser;
+        this.loggedUser = LoggedUser.getLoggedUser();
         this.viewModel = ViewModelFactory.getViewModelFactory().getUserInfoSettingViewModel();
 
-        viewModel.setLoggedUser(loggedUser);
         viewModel.loadUserInfo();
+        warningPane.setVisible(false);
+        warningLabel.setVisible(false);
 
         usernameTextField.textProperty().bindBidirectional(viewModel.getUsernameProperty());
         phoneTextField.textProperty().bindBidirectional(viewModel.getPhoneProperty());
@@ -49,11 +52,17 @@ public class UserInfoSettingViewController extends ViewController {
      * Gets verification result and if given values are incorrect displays a warning
      */
     public void onSaveButton() {
-        if(!viewModel.verifyNewValues());
-        {
-            warningPane.setVisible(true);
+        warningPane.setVisible(true);
+        warningLabel.setVisible(true);
+        if (!viewModel.verifyNewValues()) {
             GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+
         }
+        else
+        {
+
+        }
+
     }
 
     /**
@@ -66,4 +75,12 @@ public class UserInfoSettingViewController extends ViewController {
         newPasswordField.clear();
     }
 
+    @FXML private void hideWarningPane()
+    {
+        if(warningPane.isVisible()) {
+            GeneralFunctions.fadeNode("FadeOut", warningPane, 400);
+            warningPane.setVisible(false);
+            warningLabel.setVisible(false);
+        }
+    }
 }

@@ -21,5 +21,5 @@ public interface UserAccountModel extends PropertyChangeSubject
      * @param username the requested username
      * @param password the requested password
      */
-    User onLoginRequest(String username, String password);
+    boolean onLoginRequest(String username, String password);
 }

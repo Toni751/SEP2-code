@@ -1,6 +1,7 @@
 package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Model.UserAccount.UserSettingModel;
 import ESharing.Shared.TransferedObject.User;
 
@@ -12,21 +13,22 @@ import ESharing.Shared.TransferedObject.User;
 public class MainSettingViewModel {
 
     private UserSettingModel userSettingModel;
+    private LoggedUser loggedUser;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public MainSettingViewModel()
     {
+        this.loggedUser = LoggedUser.getLoggedUser();
         this.userSettingModel = ModelFactory.getModelFactory().getUserSettingModel();
     }
 
     /**
      * Sends the remove current logged user request to the view model
-     * @param loggedUser the current logged user
      */
-    public void removeAccount(User loggedUser) {
-            userSettingModel.removeAccount(loggedUser);
+    public void removeAccount() {
+            userSettingModel.removeAccount();
     }
 
 }

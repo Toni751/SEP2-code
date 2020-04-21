@@ -3,6 +3,7 @@ package ESharing.Server.Networking;
 import ESharing.Server.Model.ServerModel;
 import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
 import java.rmi.RemoteException;

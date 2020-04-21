@@ -65,6 +65,23 @@
     -fx-font-size: 14px;
     -fx-alignment: center;
 }
+.text-field-label
+{
+    -fx-font-size: 11px;
+}
+.label-green
+{
+    -fx-text-fill:  #4cdbc4;
+}
+.dark-pane
+{
+    -fx-background-color: #222828;
+}
+.rectangle-pane
+{
+    -fx-fill: #fff1 ;
+    -fx-stroke-width: 1px;
+}
 .progress-bar > .track {
     -fx-text-box-border: white;
     -fx-control-inner-background: white;

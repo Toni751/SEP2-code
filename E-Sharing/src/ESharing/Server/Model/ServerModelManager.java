@@ -1,6 +1,8 @@
 package ESharing.Server.Model;
 
+import ESharing.Server.Persistance.AddressDAO;
 import ESharing.Server.Persistance.UserDAO;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeListener;

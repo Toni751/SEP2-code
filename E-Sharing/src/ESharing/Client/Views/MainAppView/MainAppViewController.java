@@ -2,8 +2,9 @@ package ESharing.Client.Views.MainAppView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserAccount.LoggedUser;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.TransferedObject.User;
+import javafx.event.ActionEvent;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -14,17 +15,16 @@ public class MainAppViewController extends ViewController {
 
     private ViewHandler viewHandler;
     private MainAppViewModel mainAppViewModel;
-    private User loggerUser;
+    private LoggedUser loggerUser;
 
     /**
      * Initializes controller with all components
-     * @param loggedUser the User object which is current logged in the system
      */
-    public void init(User loggedUser)
+    public void init()
     {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
-        this.loggerUser = loggedUser;
+        this.loggerUser = LoggedUser.getLoggedUser();
     }
 
     /**
@@ -32,7 +32,12 @@ public class MainAppViewController extends ViewController {
      */
     public void onSettingButton()
     {
-        viewHandler.openMainSettingView(loggerUser);
+        viewHandler.openMainSettingView();
     }
 
+    public void onLogout() {
+        LoggedUser.getLoggedUser().logoutUser();
+        viewHandler.openWelcomeView();
+        System.out.println("user:" + LoggedUser.getLoggedUser().getUsername());
+    }
 }

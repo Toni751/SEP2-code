@@ -75,7 +75,7 @@ public class ViewHandler {
     public void openWelcomeView()
     {
         viewController = ViewControllerFactory.getViewController(Views.WELCOME_VIEW);
-        showView(viewController,null, null);
+        showView(viewController,null);
     }
 
     /**
@@ -85,7 +85,7 @@ public class ViewHandler {
     public void openSignInView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.SIGN_IN_VIEW);
-        showView(viewController, existingPane, null);
+        showView(viewController, existingPane);
     }
 
     /**
@@ -95,37 +95,37 @@ public class ViewHandler {
     public void openSignUpView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.SIGN_UP_VIEW);
-        showView(viewController, existingPane, null);
+        showView(viewController, existingPane);
     }
 
-    public void openMainSettingView(User loggedUser)
+    public void openMainSettingView()
     {
         viewController = ViewControllerFactory.getViewController(Views.MAIN_USER_SETTING_VIEW);
-        showView(viewController, null, loggedUser);
+        showView(viewController, null);
     }
 
-    public void openMainAppView(User loggedUser)
+    public void openMainAppView()
     {
         viewController = ViewControllerFactory.getViewController(Views.MAIN_APP_VIEW);
-        showView(viewController, null, loggedUser);
+        showView(viewController, null);
     }
 
-    public void openUserInfoSettingView(Pane existingPane, User loggedUser)
+    public void openUserInfoSettingView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_INFO_SETTING_VIEW);
-        showView(viewController, existingPane, loggedUser);
+        showView(viewController, existingPane);
     }
 
-    public void openUserAddressSettingView(Pane existingPane, User loggedUser)
+    public void openUserAddressSettingView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_ADDRESS_SETTING_VIEW);
-        showView(viewController, existingPane, loggedUser);
+        showView(viewController, existingPane);
     }
 
-    private void showView(ViewController controller, Pane existingPane, User loggedUser)
+    private void showView(ViewController controller, Pane existingPane)
     {
-        if(loggedUser == null) controller.init();
-        else controller.init(loggedUser);
+//        if(loggedUser == null) controller.init();
+//        else controller.init(loggedUser);
         if(existingPane == null) {
                 moveWindowEvents(controller.getRoot());
                 if (currentScene == null)  currentScene = new Scene(controller.getRoot());

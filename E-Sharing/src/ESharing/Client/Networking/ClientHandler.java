@@ -2,6 +2,7 @@ package ESharing.Client.Networking;
 
 import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;

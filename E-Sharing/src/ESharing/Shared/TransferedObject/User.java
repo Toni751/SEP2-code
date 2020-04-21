@@ -1,5 +1,7 @@
 package ESharing.Shared.TransferedObject;
 
+import ESharing.Client.Model.UserAccount.LoggedUser;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,6 +20,15 @@ public class User implements Serializable
     this.phoneNumber = phoneNumber;
     this.address = address;
 //    this.user_id =user_id;
+  }
+
+  public User(LoggedUser loggedUser)
+  {
+    this.username = loggedUser.getUsername();
+    this.password = loggedUser.getPassword();
+    this.user_id = loggedUser.getUser_id();
+    this.address = loggedUser.getAddress();
+    this.phoneNumber = loggedUser.getPhoneNumber();
   }
 
   public void setUser_id(int user_id)

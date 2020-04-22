@@ -58,29 +58,37 @@ public class UserAddressSettingViewModel {
             verification = false;
         }
         if(!numberProperty.get().equals(loggedUser.getAddress().getNumber()) || !numberProperty.get().equals(""))
-            updatedAddress.setStreet(numberProperty.get());
+            updatedAddress.setNumber(numberProperty.get());
         else {
             warningProperty.set("Invalid number");
             verification = false;
         }
         if(!cityProperty.get().equals(loggedUser.getAddress().getCity()) || !cityProperty.get().equals(""))
-            updatedAddress.setStreet(cityProperty.get());
+            updatedAddress.setCity(cityProperty.get());
         else {
             warningProperty.set("Invalid city name");
             verification = false;
         }
         if(!postalCodeProperty.get().equals(loggedUser.getAddress().getPostcode()) || !postalCodeProperty.get().equals(""))
-            updatedAddress.setStreet(streetProperty.get());
+            updatedAddress.setPostcode(postalCodeProperty.get());
         else {
             warningProperty.set("Invalid postal code");
             verification = false;
         }
+        updatedAddress.setAddress_id(loggedUser.getAddress().getAddress_id());
         User updateUser = new User(loggedUser.getUsername(), loggedUser.getPassword(), loggedUser.getPhoneNumber(), updatedAddress);
+        updateUser.setUser_id(loggedUser.getUser_id());
         if(verification)
            connection = settingModel.modifyUserInformation(updateUser);
             if(!connection){
                 warningProperty.set("Database connection error");
                 verification = false;
+            }
+            else
+            {
+                warningProperty.set("Information has successfully changed");
+                loggedUser.loginUser(updateUser);
+                verification = true;
             }
         return verification;
     }

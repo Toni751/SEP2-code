@@ -64,4 +64,12 @@ public class Address implements Serializable
   public void setPostcode(String postcode) {
     this.postcode = postcode;
   }
+
+  @Override
+  public String toString()
+  {
+    return "Address{" + "address_id=" + address_id + ", street='" + street
+        + '\'' + ", number='" + number + '\'' + ", city='" + city + '\''
+        + ", postcode='" + postcode + '\'' + '}';
+  }
 }

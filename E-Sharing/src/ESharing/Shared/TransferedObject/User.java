@@ -81,11 +81,6 @@ public class User implements Serializable
     this.address = address;
   }
 
-  public void setUserId(int userId)
-  {
-    this.user_id = userId;
-  }
-
   public int getUser_id()
   {
     return user_id;

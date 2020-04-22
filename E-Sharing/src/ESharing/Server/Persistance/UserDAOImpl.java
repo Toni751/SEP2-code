@@ -40,7 +40,7 @@ public class UserDAOImpl implements UserDAO
   {
     return DriverManager.getConnection(
         "jdbc:postgresql://localhost:5432/sep2",
-        "postgres", "password");
+        "postgres", "29312112");
   }
 
   @Override public boolean create(User user)
@@ -153,7 +153,25 @@ public class UserDAOImpl implements UserDAO
       statement.setString(3, user.getPhoneNumber());
       statement.setInt(4, addressDAO.create(user.getAddress()));
       statement.setInt(5, user.getUser_id());
+
+      Statement addressStatement = connection.createStatement();
+      int noUsersLivingAtAddress = 0;
+      int oldAddressId = 0;
+
+      ResultSet resultSet = addressStatement.executeQuery("SELECT address_id AS plswork FROM user_account WHERE user_id = " + user.getUser_id() + ";");
+
+      if (resultSet.next())
+      {
+        oldAddressId = resultSet.getInt("plswork");
+        System.out.println("Address id: " + oldAddressId);
+        noUsersLivingAtAddress = getNoUsersLivingAtAddress(resultSet.getInt("plswork"));
+      }
+
+      System.out.println("People living at address: " + noUsersLivingAtAddress);
       int affectedRows = statement.executeUpdate();
+
+      if (noUsersLivingAtAddress == 1)
+        addressDAO.delete(oldAddressId);
 
       if (affectedRows == 1)
         return true;

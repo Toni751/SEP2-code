@@ -38,7 +38,7 @@ public class AddressDAOImpl implements AddressDAO
   {
       return DriverManager.getConnection(
           "jdbc:postgresql://localhost:5432/sep2",
-          "postgres", "password");
+          "postgres", "29312112");
 
   }
 
@@ -46,6 +46,7 @@ public class AddressDAOImpl implements AddressDAO
   {
     try (Connection connection = getConnection())
     {
+      System.out.println(address);
       PreparedStatement statement = connection.prepareStatement(
           "INSERT INTO address (street,number,city,postcode) VALUES (?,?,?,?)"
               + "ON CONFLICT ON CONSTRAINT unique_address DO NOTHING;");
@@ -164,6 +165,7 @@ public class AddressDAOImpl implements AddressDAO
   {
     try(Connection connection = getConnection())
     {
+      System.out.println("Deleting address at id: " + address_id);
       PreparedStatement statement = connection.prepareStatement("DELETE FROM address WHERE address_id = ?;");
       statement.setInt(1, address_id);
       statement.executeUpdate();

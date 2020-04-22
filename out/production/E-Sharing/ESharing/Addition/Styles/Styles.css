@@ -39,6 +39,21 @@
     -fx-font-size: 18px;
     -fx-cursor: hand;
 }
+.button-warning
+{
+    -fx-background-color: #DB5461;
+    -fx-text-fill: #fff;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.green-pane
+{
+    -fx-background-color: #4cdbc4;
+}
+.white-pane
+{
+    -fx-background-color: #fff;
+}
 .warning-pane
 {
     -fx-background-color: #DB5461;
@@ -50,10 +65,22 @@
     -fx-font-size: 14px;
     -fx-alignment: center;
 }
-
-.text-field {
-    -fx-text-box-border: transparent;
-    -fx-background-color: #fff;
+.text-field-label
+{
+    -fx-font-size: 11px;
+}
+.label-green
+{
+    -fx-text-fill:  #4cdbc4;
+}
+.dark-pane
+{
+    -fx-background-color: #222828;
+}
+.rectangle-pane
+{
+    -fx-fill: #fff1 ;
+    -fx-stroke-width: 1px;
 }
 .progress-bar > .track {
     -fx-text-box-border: white;
@@ -62,4 +89,7 @@
 .progress-bar .bar
 {
     -fx-background-color: #4cdbc4;
+}
+.text-area:focused .content {
+    -fx-background-color:  white;
 }

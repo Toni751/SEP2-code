@@ -31,6 +31,7 @@ public class VerificationList {
         verifications.put(Verifications.USER_NOT_EXIST, "The user does not exist");
         verifications.put(Verifications.INVALID_STREET, "Invalid street");
         verifications.put(Verifications.DATABASE_CONNECTION_ERROR, "Database connection error");
+        verifications.put(Verifications.ACTION_SUCCESS, "Action successful");
     }
 
     public Map<Verifications, String> getVerifications() {

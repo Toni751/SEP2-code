@@ -56,25 +56,15 @@ public class UserAddressSettingViewController extends ViewController {
     }
 
     public void onSaveButton() {
+        warningPane.setStyle("-fx-background-color: #DB5461");
+        warningLabel.setStyle("-fx-text-fill: white");
         warningPane.setVisible(true);
         warningLabel.setVisible(true);
-        if (!viewModel.modifyAddressRequest()) {
-            GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
-        }
-        else
-        {
+        GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+        if (viewModel.modifyAddressRequest()) {
             warningPane.setStyle("-fx-background-color: #4cdbc4");
             warningLabel.setStyle("-fx-text-fill: black");
-            try {
-                Thread.sleep(2000);
-                GeneralFunctions.fadeNode("FadeOut", warningPane, 400);
-                warningPane.setVisible(false);
-                warningPane.setVisible(false);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
-
     }
 
 

@@ -3,6 +3,9 @@ package ESharing.Client.Views.UserInfoSettingView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.VerificationList;
+import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.beans.PropertyChangeSupport;
@@ -41,10 +44,53 @@ public class UserInfoSettingViewModel{
 
     public boolean modifyUserRequest()
     {
-        //userActionsModel.modifyUserInformation()
-        return false;
+        if((oldPasswordProperty.get() == null || oldPasswordProperty.get().equals("")))
+        {
+            return checkAndUpdateInformation("withoutPassword");
+        }
+        else {
+
+        String passwordVerification = userActionsModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get());
+        if(passwordVerification == null)
+        {
+            return checkAndUpdateInformation("withPassword");
+        }
+        else
+        {
+            warningLabel.set(passwordVerification);
+            return false;
+        }
+        }
     }
 
+    private boolean checkAndUpdateInformation(String type)
+    {
+        User updateUser;
+        String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPassword(), getPhoneProperty().get());
+        if(verification == null) {
+            if(type.equalsIgnoreCase("withPassword")) {
+                System.out.println("Changing with password");
+                updateUser = new User(getUsernameProperty().get(), newPasswordProperty.get(), phoneProperty.get(), loggedUser.getUser().getAddress());
+            }
+            else {
+                System.out.println("Changing without password");
+                updateUser = new User(getUsernameProperty().get(), loggedUser.getUser().getPassword(), phoneProperty.get(), loggedUser.getUser().getAddress());
+            }
+            updateUser.setUser_id(loggedUser.getUser().getUser_id());
+            if(userActionsModel.modifyUserInformation(updateUser) == null) {
+                warningLabel.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
+                return true;
+            }
+            else{
+                warningLabel.set(userActionsModel.modifyUserInformation(updateUser));
+                return false;
+            }
+        }
+        else{
+            warningLabel.set(verification);
+            return false;
+        }
+    }
 
 
 //    /**

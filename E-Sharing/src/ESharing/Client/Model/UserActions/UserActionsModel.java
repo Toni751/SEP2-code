@@ -30,5 +30,7 @@ public interface UserActionsModel extends PropertyChangeSubject
 
     String verifyAddress(Address address);
 
+    String verifyChangePassword(String oldPassword, String newPassword);
+
     void removeAccount();
 }

@@ -30,7 +30,6 @@ public class UserActionsModelManager implements UserActionsModel {
         support = new PropertyChangeSupport(this);
     }
 
-
     @Override
     public String createNewUser(User newUser) {
         boolean verification = client.addUserRequest(newUser);
@@ -55,17 +54,7 @@ public class UserActionsModelManager implements UserActionsModel {
             return verification;
     }
 
-
-    private String verifyUsernameAndPassword(String username, String password)
-    {
-        if(username == null || username.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_USERNAME);
-        else if(password == null || password.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
-        else
-            return null;
-    }
-
+    @Override
     public String verifyAddress(Address address)
     {
         if(address.getStreet() == null || address.getStreet().equals(""))
@@ -80,6 +69,19 @@ public class UserActionsModelManager implements UserActionsModel {
             return null;
     }
 
+    @Override
+    public String verifyChangePassword(String oldPassword, String newPassword) {
+        if(oldPassword == null || oldPassword.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
+        else if(newPassword == null || newPassword.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
+        else if(!oldPassword.equals(LoggedUser.getLoggedUser().getUser().getPassword()))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.NOT_THE_SAME_PASSWORDS);
+        else
+            return null;
+    }
+
+    @Override
     public String verifyUserInfo(String username, String password, String passwordAgain, String phoneNumber)
     {
         if(username == null || username.equals(""))
@@ -97,8 +99,10 @@ public class UserActionsModelManager implements UserActionsModel {
     @Override
     public String modifyUserInformation(User updatedUser) {
         boolean verification = client.editUserRequest(updatedUser);
-        if(verification)
+        if(verification) {
+            LoggedUser.getLoggedUser().loginUser(updatedUser);
             return null;
+        }
         else
             return VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR);
     }
@@ -138,5 +142,15 @@ public class UserActionsModelManager implements UserActionsModel {
     public void removePropertyChangeListener(PropertyChangeListener listener)
     {
         support.removePropertyChangeListener(listener);
+    }
+
+    private String verifyUsernameAndPassword(String username, String password)
+    {
+        if(username == null || username.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_USERNAME);
+        else if(password == null || password.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
+        else
+            return null;
     }
 }

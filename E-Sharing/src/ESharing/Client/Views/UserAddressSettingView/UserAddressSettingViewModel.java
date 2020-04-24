@@ -5,9 +5,16 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.VerificationList;
+import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * The class in a view model layer contains all functions which are used in the UserAddressSetting view.
+ * @version 1.0
+ * @author Group1
+ */
 public class UserAddressSettingViewModel {
 
     private StringProperty usernameProperty;
@@ -17,12 +24,13 @@ public class UserAddressSettingViewModel {
     private StringProperty cityProperty;
     private StringProperty postalCodeProperty;
     private StringProperty warningProperty;
-
     private UserActionsModel userActionsModel;
     private LoggedUser loggedUser;
 
-    public UserAddressSettingViewModel()
-    {
+    /**
+     * A constructor initializes model layer for a user features and all fields
+     */
+    public UserAddressSettingViewModel() {
         loggedUser = LoggedUser.getLoggedUser();
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
 
@@ -35,8 +43,10 @@ public class UserAddressSettingViewModel {
         phoneNumberProperty = new SimpleStringProperty();
     }
 
-    public void loadDefaultValues()
-    {
+    /**
+     * Fills all text fields with a current logged user information
+     */
+    public void loadDefaultValues() {
         usernameProperty.set(loggedUser.getUser().getUsername());
         phoneNumberProperty.set(loggedUser.getUser().getPhoneNumber());
 
@@ -46,97 +56,84 @@ public class UserAddressSettingViewModel {
         postalCodeProperty.set(loggedUser.getUser().getAddress().getPostcode());
     }
 
-    public boolean modifyAddressRequest()
-    {
+    /**
+     * Calls the modify function in model, waits for results and sets the information label
+     * @return the verification result
+     */
+    public boolean modifyAddressRequest() {
         Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        if(!updatedAddress.equals(loggedUser.getUser().getAddress()))
-        {
-            System.out.println("Address is different");
+        if (!updatedAddress.equals(loggedUser.getUser().getAddress())) {
             User updatedUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
-            if(userActionsModel.verifyAddress(updatedAddress) == null)
-            {
+            updatedUser.setUser_id(loggedUser.getUser().getUser_id());
+            if (userActionsModel.verifyAddress(updatedAddress) == null) {
                 String databaseVerification = userActionsModel.modifyUserInformation(updatedUser);
-                if(databaseVerification == null)
+                if (databaseVerification == null) {
+                    warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
                     return true;
-                else{
-                 warningProperty.set(databaseVerification);
-                 return false;
+                } else {
+                    warningProperty.set(databaseVerification);
+                    return false;
                 }
+            } else {
+                warningProperty.set(userActionsModel.verifyAddress(updatedAddress));
+                return false;
             }
         }
         return true;
     }
 
-//    public boolean verifyNewAddressValues()
-//    {
-//        boolean verification = true;
-//        boolean connection = true;
-//        Address updatedAddress = new Address(loggedUser.getUser().getAddress().getStreet(), loggedUser.getUser().getAddress().getNumber(), loggedUser.getUser().getAddress().getCity(), loggedUser.getUser().getAddress().getPostcode());
-//        if(!streetProperty.get().equals(loggedUser.getUser().getAddress().getStreet()) || !streetProperty.get().equals(""))
-//            updatedAddress.setStreet(streetProperty.get());
-//        else{
-//            warningProperty.set("Invalid street name");
-//            verification = false;
-//        }
-//        if(!numberProperty.get().equals(loggedUser.getUser().getAddress().getNumber()) || !numberProperty.get().equals(""))
-//            updatedAddress.setNumber(numberProperty.get());
-//        else {
-//            warningProperty.set("Invalid number");
-//            verification = false;
-//        }
-//        if(!cityProperty.get().equals(loggedUser.getUser().getAddress().getCity()) || !cityProperty.get().equals(""))
-//            updatedAddress.setCity(cityProperty.get());
-//        else {
-//            warningProperty.set("Invalid city name");
-//            verification = false;
-//        }
-//        if(!postalCodeProperty.get().equals(loggedUser.getUser().getAddress().getPostcode()) || !postalCodeProperty.get().equals(""))
-//            updatedAddress.setPostcode(postalCodeProperty.get());
-//        else {
-//            warningProperty.set("Invalid postal code");
-//            verification = false;
-//        }
-//        updatedAddress.setAddress_id(loggedUser.getUser().getAddress().getAddress_id());
-//        User updateUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
-//        updateUser.setUser_id(loggedUser.getUser().getUser_id());
-//        if(verification)
-//           connection = settingModel.modifyUserInformation(updateUser);
-//            if(!connection){
-//                warningProperty.set("Database connection error");
-//                verification = false;
-//            }
-//            else
-//            {
-//                warningProperty.set("Information has successfully changed");
-//                loggedUser.loginUser(updateUser);
-//            }
-//        return verification;
-//    }
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the username label
+     */
     public StringProperty getUsernameProperty() {
         return usernameProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the city text field
+     */
     public StringProperty getCityProperty() {
         return cityProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the number text field
+     */
     public StringProperty getNumberProperty() {
         return numberProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the phone number label
+     */
     public StringProperty getPhoneNumberProperty() {
         return phoneNumberProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the postal code text field
+     */
     public StringProperty getPostalCodeProperty() {
         return postalCodeProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the street text field
+     */
     public StringProperty getStreetProperty() {
         return streetProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the warning label
+     */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }

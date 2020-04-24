@@ -49,12 +49,15 @@ public class UserInfoSettingViewController extends ViewController {
      * Gets verification result and if given values are incorrect displays a warning
      */
     public void onSaveButton() {
-        if (!viewModel.modifyUserRequest()) {
-            warningPane.setVisible(true);
-            warningLabel.setVisible(true);
-            GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+        warningPane.setStyle("-fx-background-color: #DB5461");
+        warningLabel.setStyle("-fx-text-fill: white");
+        warningPane.setVisible(true);
+        warningLabel.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+        if (viewModel.modifyUserRequest()) {
+            warningPane.setStyle("-fx-background-color: #4cdbc4");
+            warningLabel.setStyle("-fx-text-fill: black");
         }
-
     }
 
     /**

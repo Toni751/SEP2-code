@@ -42,14 +42,13 @@ public class SignInViewController extends ViewController {
      * Starts a verification process of the login fields and sends login request to a model layer
      */
     public void onSignInButton() {
-        if(!signInViewModel.textFieldsVerification())
+        if(!signInViewModel.loginRequest())
         {
             warningPane.setVisible(true);
             GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
         }
         else {
             warningPane.setVisible(false);
-            System.out.println("it works");
             viewHandler.openMainAppView();
         }
     }

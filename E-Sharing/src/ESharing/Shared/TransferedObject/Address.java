@@ -1,6 +1,7 @@
 package ESharing.Shared.TransferedObject;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Address implements Serializable
 {
@@ -63,6 +64,17 @@ public class Address implements Serializable
 
   public void setPostcode(String postcode) {
     this.postcode = postcode;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Address address = (Address) o;
+    return Objects.equals(street, address.street) &&
+            Objects.equals(number, address.number) &&
+            Objects.equals(city, address.city) &&
+            Objects.equals(postcode, address.postcode);
   }
 
   @Override

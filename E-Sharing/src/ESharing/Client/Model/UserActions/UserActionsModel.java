@@ -1,5 +1,6 @@
-package ESharing.Client.Model.UserAccount;
+package ESharing.Client.Model.UserActions;
 
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
 
@@ -8,18 +9,26 @@ import ESharing.Shared.Util.PropertyChangeSubject;
  * @version 1.0
  * @author Group1
  */
-public interface UserAccountModel extends PropertyChangeSubject
+public interface UserActionsModel extends PropertyChangeSubject
 {
     /**
      * Sends a new created user to a model
      * @param newUser the new user object
      */
-    boolean createNewUser(User newUser);
+    String createNewUser(User newUser);
 
     /**
      * Sends a request for login to a model
      * @param username the requested username
      * @param password the requested password
      */
-    boolean onLoginRequest(String username, String password);
+    String onLoginRequest(String username, String password);
+
+    String modifyUserInformation(User updatedUser);
+
+    String verifyUserInfo(String username, String password, String passwordAgain, String phoneNumber);
+
+    String verifyAddress(Address address);
+
+    void removeAccount();
 }

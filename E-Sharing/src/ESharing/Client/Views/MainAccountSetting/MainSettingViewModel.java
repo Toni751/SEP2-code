@@ -1,9 +1,8 @@
 package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserAccount.LoggedUser;
-import ESharing.Client.Model.UserAccount.UserSettingModel;
-import ESharing.Shared.TransferedObject.User;
+import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 
 /**
  * The class in a view model layer contains all functions which are used in the signUp view.
@@ -12,7 +11,7 @@ import ESharing.Shared.TransferedObject.User;
  */
 public class MainSettingViewModel {
 
-    private UserSettingModel userSettingModel;
+    private UserActionsModel userActionsModel;
     private LoggedUser loggedUser;
 
     /**
@@ -21,14 +20,14 @@ public class MainSettingViewModel {
     public MainSettingViewModel()
     {
         this.loggedUser = LoggedUser.getLoggedUser();
-        this.userSettingModel = ModelFactory.getModelFactory().getUserSettingModel();
+        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
     }
 
     /**
      * Sends the remove current logged user request to the view model
      */
     public void removeAccount() {
-            userSettingModel.removeAccount();
+            userActionsModel.removeAccount();
     }
 
 }

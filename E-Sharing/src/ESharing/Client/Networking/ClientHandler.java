@@ -48,7 +48,6 @@ public class ClientHandler implements Client, RMIClient
         {
           //ShowFailedConnectionView.openFailedConnectionView();
           if(!failedConnection){
-            //ViewHandler.openFailedConnectionView();
             failedConnection = true;
           }
 

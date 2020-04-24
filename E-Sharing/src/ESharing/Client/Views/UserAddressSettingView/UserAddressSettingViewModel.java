@@ -1,8 +1,8 @@
 package ESharing.Client.Views.UserAddressSettingView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserAccount.LoggedUser;
-import ESharing.Client.Model.UserAccount.UserSettingModel;
+import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,13 +18,13 @@ public class UserAddressSettingViewModel {
     private StringProperty postalCodeProperty;
     private StringProperty warningProperty;
 
-    private UserSettingModel settingModel;
+    private UserActionsModel userActionsModel;
     private LoggedUser loggedUser;
 
     public UserAddressSettingViewModel()
     {
         loggedUser = LoggedUser.getLoggedUser();
-        settingModel = ModelFactory.getModelFactory().getUserSettingModel();
+        userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
 
         warningProperty = new SimpleStringProperty();
         cityProperty = new SimpleStringProperty();
@@ -37,61 +37,81 @@ public class UserAddressSettingViewModel {
 
     public void loadDefaultValues()
     {
-        usernameProperty.set(loggedUser.getUsername());
-        phoneNumberProperty.set(loggedUser.getPhoneNumber());
+        usernameProperty.set(loggedUser.getUser().getUsername());
+        phoneNumberProperty.set(loggedUser.getUser().getPhoneNumber());
 
-        numberProperty.set(loggedUser.getAddress().getNumber());
-        streetProperty.set(loggedUser.getAddress().getStreet());
-        cityProperty.set(loggedUser.getAddress().getCity());
-        postalCodeProperty.set(loggedUser.getAddress().getPostcode());
+        numberProperty.set(loggedUser.getUser().getAddress().getNumber());
+        streetProperty.set(loggedUser.getUser().getAddress().getStreet());
+        cityProperty.set(loggedUser.getUser().getAddress().getCity());
+        postalCodeProperty.set(loggedUser.getUser().getAddress().getPostcode());
     }
 
-    public boolean verifyNewAddressValues()
+    public boolean modifyAddressRequest()
     {
-        boolean verification = true;
-        boolean connection = true;
-        Address updatedAddress = new Address(loggedUser.getAddress().getStreet(), loggedUser.getAddress().getNumber(), loggedUser.getAddress().getCity(), loggedUser.getAddress().getPostcode());
-        if(!streetProperty.get().equals(loggedUser.getAddress().getStreet()) || !streetProperty.get().equals(""))
-            updatedAddress.setStreet(streetProperty.get());
-        else{
-            warningProperty.set("Invalid street name");
-            verification = false;
-        }
-        if(!numberProperty.get().equals(loggedUser.getAddress().getNumber()) || !numberProperty.get().equals(""))
-            updatedAddress.setNumber(numberProperty.get());
-        else {
-            warningProperty.set("Invalid number");
-            verification = false;
-        }
-        if(!cityProperty.get().equals(loggedUser.getAddress().getCity()) || !cityProperty.get().equals(""))
-            updatedAddress.setCity(cityProperty.get());
-        else {
-            warningProperty.set("Invalid city name");
-            verification = false;
-        }
-        if(!postalCodeProperty.get().equals(loggedUser.getAddress().getPostcode()) || !postalCodeProperty.get().equals(""))
-            updatedAddress.setPostcode(postalCodeProperty.get());
-        else {
-            warningProperty.set("Invalid postal code");
-            verification = false;
-        }
-        updatedAddress.setAddress_id(loggedUser.getAddress().getAddress_id());
-        User updateUser = new User(loggedUser.getUsername(), loggedUser.getPassword(), loggedUser.getPhoneNumber(), updatedAddress);
-        updateUser.setUser_id(loggedUser.getUser_id());
-        if(verification)
-           connection = settingModel.modifyUserInformation(updateUser);
-            if(!connection){
-                warningProperty.set("Database connection error");
-                verification = false;
-            }
-            else
+        Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
+        if(!updatedAddress.equals(loggedUser.getUser().getAddress()))
+        {
+            System.out.println("Address is different");
+            User updatedUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
+            if(userActionsModel.verifyAddress(updatedAddress) == null)
             {
-                warningProperty.set("Information has successfully changed");
-                loggedUser.loginUser(updateUser);
-                verification = true;
+                String databaseVerification = userActionsModel.modifyUserInformation(updatedUser);
+                if(databaseVerification == null)
+                    return true;
+                else{
+                 warningProperty.set(databaseVerification);
+                 return false;
+                }
             }
-        return verification;
+        }
+        return true;
     }
+
+//    public boolean verifyNewAddressValues()
+//    {
+//        boolean verification = true;
+//        boolean connection = true;
+//        Address updatedAddress = new Address(loggedUser.getUser().getAddress().getStreet(), loggedUser.getUser().getAddress().getNumber(), loggedUser.getUser().getAddress().getCity(), loggedUser.getUser().getAddress().getPostcode());
+//        if(!streetProperty.get().equals(loggedUser.getUser().getAddress().getStreet()) || !streetProperty.get().equals(""))
+//            updatedAddress.setStreet(streetProperty.get());
+//        else{
+//            warningProperty.set("Invalid street name");
+//            verification = false;
+//        }
+//        if(!numberProperty.get().equals(loggedUser.getUser().getAddress().getNumber()) || !numberProperty.get().equals(""))
+//            updatedAddress.setNumber(numberProperty.get());
+//        else {
+//            warningProperty.set("Invalid number");
+//            verification = false;
+//        }
+//        if(!cityProperty.get().equals(loggedUser.getUser().getAddress().getCity()) || !cityProperty.get().equals(""))
+//            updatedAddress.setCity(cityProperty.get());
+//        else {
+//            warningProperty.set("Invalid city name");
+//            verification = false;
+//        }
+//        if(!postalCodeProperty.get().equals(loggedUser.getUser().getAddress().getPostcode()) || !postalCodeProperty.get().equals(""))
+//            updatedAddress.setPostcode(postalCodeProperty.get());
+//        else {
+//            warningProperty.set("Invalid postal code");
+//            verification = false;
+//        }
+//        updatedAddress.setAddress_id(loggedUser.getUser().getAddress().getAddress_id());
+//        User updateUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
+//        updateUser.setUser_id(loggedUser.getUser().getUser_id());
+//        if(verification)
+//           connection = settingModel.modifyUserInformation(updateUser);
+//            if(!connection){
+//                warningProperty.set("Database connection error");
+//                verification = false;
+//            }
+//            else
+//            {
+//                warningProperty.set("Information has successfully changed");
+//                loggedUser.loginUser(updateUser);
+//            }
+//        return verification;
+//    }
 
     public StringProperty getUsernameProperty() {
         return usernameProperty;

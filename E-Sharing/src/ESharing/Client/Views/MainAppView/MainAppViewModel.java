@@ -2,7 +2,7 @@ package ESharing.Client.Views.MainAppView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AppModel.AppOverviewModel;
-import ESharing.Client.Model.UserAccount.LoggedUser;
+import ESharing.Client.Model.UserActions.LoggedUser;
 
 /**
  * The class in a view model layer contains all functions which are used in the signUp view.

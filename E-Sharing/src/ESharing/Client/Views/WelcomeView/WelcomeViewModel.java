@@ -1,7 +1,7 @@
 package ESharing.Client.Views.WelcomeView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserAccount.UserAccountModel;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 
 /**
  * The class in a view model layer contains all functions which are used in the welcome view.
@@ -10,13 +10,13 @@ import ESharing.Client.Model.UserAccount.UserAccountModel;
  */
 public class WelcomeViewModel {
 
-    private UserAccountModel userAccountModel;
+    private UserActionsModel userActionsModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public WelcomeViewModel()
     {
-        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
+        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
     }
 }

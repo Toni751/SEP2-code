@@ -80,7 +80,7 @@ public class SignUpViewController extends ViewController {
      * Starts a verification process of the address fields and sends request to create new user in the system
      */
     public void onSignUpButton() {
-        if(signUpViewModel.addressFieldsVerification()) {
+        if(signUpViewModel.signUpAddressRequest()) {
             addressCircle.setRadius(16);
             addressCircle.setStyle("-fx-fill: #4cdbc4");
 
@@ -90,7 +90,12 @@ public class SignUpViewController extends ViewController {
             if(warningPane.visibleProperty().get())
                 warningPane.setVisible(false);
 
-            signUpViewModel.createNewUser();
+            if(!signUpViewModel.createNewUser())
+            {
+                warningLabel.setVisible(true);
+                warningLabel.setVisible(true);
+                GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
+            }
         }
         else {
             warningPane.setVisible(true);
@@ -115,7 +120,7 @@ public class SignUpViewController extends ViewController {
      * Starts a verification process of the personal fields and changes current pane to the pane with the address fields
      */
     public void onGoToAddressClick() {
-        if(signUpViewModel.personalFieldsVerification()) {
+        if(signUpViewModel.signUpPersonalRequest()) {
             GeneralFunctions.fadeNode("FadeOut", personalPane, 500);
             personalPane.setVisible(false);
             GeneralFunctions.fadeNode("FadeIn", addressPane, 500);

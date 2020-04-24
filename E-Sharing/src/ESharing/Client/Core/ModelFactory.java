@@ -2,10 +2,8 @@ package ESharing.Client.Core;
 
 import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.AppModel.AppOverviewModelManager;
-import ESharing.Client.Model.UserAccount.UserAccountModel;
-import ESharing.Client.Model.UserAccount.UserAccountModelManager;
-import ESharing.Client.Model.UserAccount.UserSettingModel;
-import ESharing.Client.Model.UserAccount.UserSettingModelManager;
+import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.UserActions.UserActionsModelManager;
 
 /**
  * The class responsible for managing models
@@ -14,8 +12,7 @@ import ESharing.Client.Model.UserAccount.UserSettingModelManager;
  */
 public class ModelFactory {
     private ClientFactory clientFactory;
-    private UserAccountModel userAccountModel;
-    private UserSettingModel userSettingModel;
+    private UserActionsModel userActionsModel;
     private AppOverviewModel appOverviewModel;
 
     private static ModelFactory modelFactory;
@@ -26,8 +23,7 @@ public class ModelFactory {
     private ModelFactory()
     {
         this.clientFactory = ClientFactory.getClientFactory();
-        userAccountModel = new UserAccountModelManager(clientFactory.getClient());
-        userSettingModel = new UserSettingModelManager(clientFactory.getClient());
+        userActionsModel = new UserActionsModelManager(clientFactory.getClient());
         appOverviewModel = new AppOverviewModelManager(clientFactory.getClient());
     }
 
@@ -45,16 +41,8 @@ public class ModelFactory {
      * Returns initialized model for all features belongs to user service
      * @return initialized model for all features belongs to user service
      */
-    public UserAccountModel getUserAccountModel() {
-        return userAccountModel;
-    }
-
-    /**
-     * Returns initialized model for all features belongs to user settings
-     * @return initialized model for all features belongs to user settings
-     */
-    public UserSettingModel getUserSettingModel() {
-        return userSettingModel;
+    public UserActionsModel getUserActionsModel() {
+        return userActionsModel;
     }
 
     /**

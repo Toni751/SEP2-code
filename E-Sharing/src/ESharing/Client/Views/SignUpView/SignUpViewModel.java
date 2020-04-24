@@ -1,7 +1,7 @@
 package ESharing.Client.Views.SignUpView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserAccount.UserAccountModel;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,14 +24,14 @@ public class SignUpViewModel {
     private StringProperty cityProperty;
     private StringProperty postalCodeProperty;
 
-    private UserAccountModel userAccountModel;
+    private UserActionsModel userActionsModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public SignUpViewModel() {
 
-        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
+        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
 
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
@@ -45,87 +45,53 @@ public class SignUpViewModel {
         postalCodeProperty = new SimpleStringProperty();
     }
 
-    /**
-     * Creates new user using values from a gui and sends it to the model layer
-     */
-    public void createNewUser()
+//    /**
+//     * Creates new user using values from a gui and sends it to the model layer
+//     */
+    public boolean createNewUser()
+        {
+        String verification = userActionsModel.createNewUser(new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get())));
+        if(verification == null)
+            return true;
+        else {
+            warningLabel.set(verification);
+            return false;
+        }
+//        Address userAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
+//        User newUser = new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), userAddress);
+//
+//        boolean validateCreation = userActionsModel.createNewUser(newUser);
+//
+//        if (validateCreation) {
+//            System.out.println("New user created");
+//        }
+//        else {
+//            System.out.println("Problem with sign up");
+//        }
+    }
+
+    public boolean signUpPersonalRequest()
     {
-        Address userAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        User newUser = new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), userAddress);
+        String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), passwordProperty.get(), confirmPasswordProperty.get(), phoneProperty.get());
+        if(verification == null)
+            return true;
+        else {
+            warningLabel.set(verification);
+            return false;
+        }
+    }
 
-        boolean validateCreation = userAccountModel.createNewUser(newUser);
-
-        if (validateCreation) {
-            System.out.println("New user created");
+    public boolean signUpAddressRequest()
+    {
+        Address address = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
+        String verification = userActionsModel.verifyAddress(address);
+        if(verification == null) {
+           return true;
         }
         else {
-            System.out.println("Problem with sign up");
+            warningLabel.set(verification);
+            return false;
         }
-    }
-
-    /**
-     * Verifies all fields in the personal pane
-     * @return the boolean value with the result of the verification
-     */
-    public boolean personalFieldsVerification()
-    {
-        boolean verification = true;
-        if(usernameProperty.get() == null || usernameProperty.get().equals("")) {
-        warningLabel.set("The username filed can not be empty");
-        verification = false;
-        }
-        else if(passwordProperty.get() == null || passwordProperty.get().equals("")) {
-            warningLabel.set("The password field can not be empty");
-            verification = false;
-        }
-        else if(passwordProperty.get().length() < 8){
-            warningLabel.set("The password should have more than 7 letters");
-            verification = false;
-        }
-        else if(confirmPasswordProperty.get() == null || confirmPasswordProperty.get().equals("")) {
-            warningLabel.set("Please confirm your password");
-            verification = false;
-        }
-        else if(phoneProperty.get() == null || phoneProperty.get().equals("")) {
-            warningLabel.set("The phone field can not be empty");
-            verification = false;
-        }
-        else if(phoneProperty.get().length() != 8)
-        {
-            warningLabel.set("The phone number should have 8 digits");
-            verification = false;
-        }
-        else if(!confirmPasswordProperty.get().equals(passwordProperty.get())) {
-            warningLabel.set("Passwords are not the same");
-            verification = false;
-        }
-        return verification;
-    }
-
-    /**
-     * Verifies all fields in the address pane
-     * @return the boolean value with the result of the verification
-     */
-    public boolean addressFieldsVerification()
-    {
-        boolean verification = true;
-        if(streetProperty.get() == null || streetProperty.get().equals("")){
-            warningLabel.set("The street field can not be empty");
-            verification = false;
-        }
-        else if(numberProperty.get() == null || numberProperty.get().equals("")) {
-            warningLabel.set("The number field can not be empty");
-            verification = false;
-        }
-        else if(cityProperty.get() == null || cityProperty.get().equals("")) {
-            warningLabel.set("The city field can not be empty");
-            verification = false;
-        }
-        else if(postalCodeProperty.get() == null || postalCodeProperty.get().equals("")) {
-            warningLabel.set("The postal code field can not be empty");
-            verification = false;
-        }
-        return verification;
     }
 
     /**

@@ -1,9 +1,8 @@
 package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserAccount.LoggedUser;
-import ESharing.Client.Model.UserAccount.UserAccountModel;
-import ESharing.Shared.TransferedObject.User;
+import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -18,65 +17,32 @@ public class SignInViewModel {
     private StringProperty passwordProperty;
     private StringProperty warningProperty;
 
-
-    private UserAccountModel userAccountModel;
-    private LoggedUser loggedUser;
+    private UserActionsModel userActionsModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public SignInViewModel() {
-        this.userAccountModel = ModelFactory.getModelFactory().getUserAccountModel();
+        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
         warningProperty= new SimpleStringProperty();
     }
 
     /**
-     * Sends a login request to a model layer with values from a gui
-     */
-    public boolean onLoginButton() {
-        boolean verification = userAccountModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
-        if(verification) {
-            loggedUser = LoggedUser.getLoggedUser();
-            return true;
-        }
-        else return false;
-    }
-
-    /**
-     * Verifies all fields used in the login process
+     * Sends the login request to the model layer and waits for the verification result
      * @return the boolean value with the result of the verification
      */
-    public boolean textFieldsVerification()
+    public boolean loginRequest()
     {
-        boolean verification = true;
-        if((passwordProperty.get() == null && usernameProperty.get() == null) || (usernameProperty.get().equals("") && passwordProperty.get().equals(""))) {
-            warningProperty.set("Fields are empty!");
-            verification = false;
+        String verification = userActionsModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
+        if(verification == null)
+            return true;
+        else{
+            warningProperty.set(verification);
+            return false;
         }
-        else if((passwordProperty.get() == null && usernameProperty.get().equals("")) || (usernameProperty.get() == null && passwordProperty.get().equals(""))) {
-            warningProperty.set("Fields are empty!");
-            verification = false;
-        }
-        else if(usernameProperty.get() == null || usernameProperty.get().equals("")) {
-            warningProperty.set("The username field can not be empty!");
-            verification = false;
-        }
-        else if(passwordProperty.get() == null || passwordProperty.get().equals("")) {
-            warningProperty.set("The password field can not be empty!");
-            verification = false;
-        }
-        else if(!onLoginButton()) {
-            warningProperty.set("The user does not exist");
-            verification = false;
-        }
-        return verification;
     }
-
-//    public User getLoginUser() {
-//        return loggedUser;
-//    }
 
     /**
      * Returns value used in the bind process between a controller and view model

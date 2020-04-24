@@ -1,17 +1,13 @@
 package ESharing.Client.Views.UserAddressSettingView;
 
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Model.UserAccount.LoggedUser;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXTextField;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-
-import javax.swing.*;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -62,17 +58,23 @@ public class UserAddressSettingViewController extends ViewController {
     public void onSaveButton() {
         warningPane.setVisible(true);
         warningLabel.setVisible(true);
-        if (viewModel.verifyNewAddressValues()) {
+        if (!viewModel.modifyAddressRequest()) {
+            GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+        }
+        else
+        {
             warningPane.setStyle("-fx-background-color: #4cdbc4");
             warningLabel.setStyle("-fx-text-fill: black");
             try {
                 Thread.sleep(2000);
                 GeneralFunctions.fadeNode("FadeOut", warningPane, 400);
+                warningPane.setVisible(false);
+                warningPane.setVisible(false);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+
     }
 
 

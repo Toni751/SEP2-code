@@ -2,13 +2,11 @@ package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Model.UserAccount.LoggedUser;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.TransferedObject.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import java.util.Optional;
 

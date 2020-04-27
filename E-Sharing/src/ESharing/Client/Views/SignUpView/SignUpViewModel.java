@@ -45,9 +45,11 @@ public class SignUpViewModel {
         postalCodeProperty = new SimpleStringProperty();
     }
 
-//    /**
-//     * Creates new user using values from a gui and sends it to the model layer
-//     */
+
+    /**
+     * Sends a request to create a new user and waits for result
+     * @return the result of new user creation request
+     */
     public boolean createNewUser()
         {
         String verification = userActionsModel.createNewUser(new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get())));
@@ -57,19 +59,12 @@ public class SignUpViewModel {
             warningLabel.set(verification);
             return false;
         }
-//        Address userAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-//        User newUser = new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), userAddress);
-//
-//        boolean validateCreation = userActionsModel.createNewUser(newUser);
-//
-//        if (validateCreation) {
-//            System.out.println("New user created");
-//        }
-//        else {
-//            System.out.println("Problem with sign up");
-//        }
     }
 
+    /**
+     * Sends a request with verification user information
+     * @return the result of the verification
+     */
     public boolean signUpPersonalRequest()
     {
         String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), passwordProperty.get(), confirmPasswordProperty.get(), phoneProperty.get());
@@ -81,6 +76,10 @@ public class SignUpViewModel {
         }
     }
 
+    /**
+     * Sends a request with verification address information
+     * @return the result of the verification
+     */
     public boolean signUpAddressRequest()
     {
         Address address = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());

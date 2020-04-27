@@ -9,10 +9,20 @@ import ESharing.Shared.TransferedObject.User;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * The class handles all requests which are received from clients
+ * @version 1.0
+ * @author Group 1
+ */
 public class ServerHandler implements RMIServer
 {
   private ServerModel serverModel;
 
+  /**
+   * A constructor initializes fields and starts the internet connection
+   * @param serverModel the server model which manages all requests
+   * @throws RemoteException if the method invocation fails
+   */
   public ServerHandler(ServerModel serverModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);

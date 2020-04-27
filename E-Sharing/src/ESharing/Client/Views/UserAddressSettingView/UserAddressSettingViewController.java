@@ -28,6 +28,9 @@ public class UserAddressSettingViewController extends ViewController {
     private UserAddressSettingViewModel viewModel;
     private LoggedUser loggedUser;
 
+    /**
+     * Initializes and opens signUn view with all components adds on focus and out focus events to the text fields
+     */
     public void init()
     {
         this.loggedUser = LoggedUser.getLoggedUser();
@@ -50,11 +53,9 @@ public class UserAddressSettingViewController extends ViewController {
         viewModel.loadDefaultValues();
     }
 
-    public void hideWarningPane() {
-        warningLabel.setVisible(false);
-        warningPane.setVisible(false);
-    }
-
+    /**
+     * Sends a request for changing address information
+     */
     public void onSaveButton() {
         warningPane.setStyle("-fx-background-color: #DB5461");
         warningLabel.setStyle("-fx-text-fill: white");
@@ -68,6 +69,9 @@ public class UserAddressSettingViewController extends ViewController {
     }
 
 
+    /**
+     * Uses a function in a view model layer for loading default user information into text fields
+     */
     public void onDefaultButton() {
         viewModel.loadDefaultValues();
     }

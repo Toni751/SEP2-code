@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 
 /**
  * Interface for adding and removing listeners to events
+ * @version 1.0
+ * @author Group1
  */
 public interface PropertyChangeSubject
 {

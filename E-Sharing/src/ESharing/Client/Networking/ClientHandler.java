@@ -2,7 +2,6 @@ package ESharing.Client.Networking;
 
 import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
-import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -21,8 +20,10 @@ public class ClientHandler implements Client, RMIClient
 {
   private RMIServer server;
   private PropertyChangeSupport support;
-  private boolean failedConnection = false;
 
+  /**
+   * A constructor which initializes fields and tries to establish connection with the server
+   */
   public ClientHandler()
   {
     support = new PropertyChangeSupport(this);
@@ -46,11 +47,6 @@ public class ClientHandler implements Client, RMIClient
       {
         try
         {
-          //ShowFailedConnectionView.openFailedConnectionView();
-          if(!failedConnection){
-            failedConnection = true;
-          }
-
           System.out.println("Client can't connect with the server... trying again after 5 seconds");
           Thread.sleep(5000);
         }

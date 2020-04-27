@@ -1,13 +1,11 @@
 package ESharing.Shared.Networking;
 
-import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
-
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- * The interface used by the client handler for remote method calling on the server
+ * The interface used by the server handler for remote method calling on the server
  * @version 1.0
  * @author Group1
  */

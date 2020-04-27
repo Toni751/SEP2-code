@@ -1,18 +1,24 @@
 package ESharing.Server.Model;
 
-import ESharing.Server.Persistance.AddressDAO;
 import ESharing.Server.Persistance.UserDAO;
-import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * The class manages all requests on the server side
+ * @version 1.0
+ * @author Group 1
+ */
 public class ServerModelManager implements ServerModel
 {
   private UserDAO userDAO;
   private PropertyChangeSupport support;
 
+  /**
+   * A constructor initializes all fields
+   * @param userDAO
+   */
   public ServerModelManager(UserDAO userDAO)
   {
     this.userDAO = userDAO;

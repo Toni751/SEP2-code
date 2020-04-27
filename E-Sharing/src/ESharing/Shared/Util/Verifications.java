@@ -1,5 +1,10 @@
 package ESharing.Shared.Util;
 
+/**
+ * The enum used for store all names of verifications which are used in the system
+ * @version 1.0
+ * @author Group1
+ */
 public enum Verifications {
     USER_NOT_EXIST,
     INVALID_USERNAME,

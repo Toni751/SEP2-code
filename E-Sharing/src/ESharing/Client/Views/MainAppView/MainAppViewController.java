@@ -35,6 +35,9 @@ public class MainAppViewController extends ViewController {
         viewHandler.openMainSettingView();
     }
 
+    /**
+     * Logs out current user and opens a welcome view
+     */
     public void onLogout() {
         LoggedUser.getLoggedUser().logoutUser();
         viewHandler.openWelcomeView();

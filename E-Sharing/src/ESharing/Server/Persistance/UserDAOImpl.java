@@ -2,12 +2,9 @@ package ESharing.Server.Persistance;
 
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class UserDAOImpl implements UserDAO
+public class UserDAOImpl extends Database implements UserDAO
 {
 
   private static UserDAOImpl instance;
@@ -36,11 +33,8 @@ public class UserDAOImpl implements UserDAO
     return instance;
   }
 
-  private Connection getConnection() throws SQLException
-  {
-    return DriverManager.getConnection(
-        "jdbc:postgresql://localhost:5432/sep2",
-        "postgres", "password");
+  public Connection getConnection() throws SQLException {
+    return super.getConnection();
   }
 
   @Override public boolean create(User user)
@@ -77,7 +71,8 @@ public class UserDAOImpl implements UserDAO
     return false;
   }
 
-  @Override public User readById(int user_id)
+  @Override
+  public User readById(int user_id)
   {
     try(Connection connection = getConnection())
     {
@@ -108,11 +103,13 @@ public class UserDAOImpl implements UserDAO
     return null;
   }
 
-  @Override public User readByUserNameAndPassword(String usernameRequest, String passwordRequest)
+  @Override
+  public User readByUserNameAndPassword(String usernameRequest, String passwordRequest)
   {
+    PreparedStatement statement;
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement(
+      statement = connection.prepareStatement(
           "SELECT * FROM user_account NATURAL JOIN address WHERE username = ? AND password = ?;");
       statement.setString(1, usernameRequest);
       statement.setString(2, passwordRequest);
@@ -142,7 +139,8 @@ public class UserDAOImpl implements UserDAO
     return null;
   }
 
-  @Override public boolean update(User user)
+  @Override
+  public boolean update(User user)
   {
     try (Connection connection = getConnection())
     {

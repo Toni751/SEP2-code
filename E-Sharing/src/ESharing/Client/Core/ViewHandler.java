@@ -2,11 +2,8 @@ package ESharing.Client.Core;
 
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
-import ESharing.Shared.TransferedObject.User;
-import ESharing.Client.Views.FailedConnectionView.ShowFailedConnectionView;
 import ESharing.Shared.Util.Views;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +11,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import java.io.IOException;
 
 /**
  * The class responsible for managing views
@@ -25,10 +21,7 @@ public class ViewHandler {
 
     private Stage currentStage;
     private Scene currentScene;
-
-    private ViewModelFactory viewModelFactory;
     private String css;
-
     private ViewController viewController;
 
     private double xOffset;
@@ -37,11 +30,10 @@ public class ViewHandler {
     private static ViewHandler viewHandler;
 
     /**
-     * One-argument constructor initializes fields and sets class with all view models
+     * A constructor initializes fields
      */
     private ViewHandler()
     {
-        this.viewModelFactory = ViewModelFactory.getViewModelFactory();
         xOffset = 0;
         yOffset = 0;
         css = this.getClass().getResource("../../Addition/Styles/Styles.css").toExternalForm();
@@ -63,7 +55,6 @@ public class ViewHandler {
      */
     public void start()
     {
-        //ShowFailedConnectionView.closeFailedConnectionView();
         currentStage = new Stage();
         if(currentStage.getScene() == null) currentStage.initStyle(StageStyle.TRANSPARENT);
         openWelcomeView();
@@ -98,34 +89,51 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the the main user setting view
+     */
     public void openMainSettingView()
     {
         viewController = ViewControllerFactory.getViewController(Views.MAIN_USER_SETTING_VIEW);
         showView(viewController, null);
     }
 
+    /**
+     * Opens the main application view
+     */
     public void openMainAppView()
     {
         viewController = ViewControllerFactory.getViewController(Views.MAIN_APP_VIEW);
         showView(viewController, null);
     }
 
+    /**
+     * Opens a view with user information settings
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openUserInfoSettingView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_INFO_SETTING_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens a view with user address settings
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openUserAddressSettingView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_ADDRESS_SETTING_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Shows views in a current scene or already loaded pane, using the ViewController class
+     * @param controller the ViewController class which inheritances all view controllers
+     * @param existingPane the already loaded pane where a new view can be loaded
+     */
     private void showView(ViewController controller, Pane existingPane)
     {
-//        if(loggedUser == null) controller.init();
-//        else controller.init(loggedUser);
         if(existingPane == null) {
                 moveWindowEvents(controller.getRoot());
                 if (currentScene == null)  currentScene = new Scene(controller.getRoot());

@@ -18,7 +18,7 @@ public class ModelFactory {
     private static ModelFactory modelFactory;
 
     /**
-     * One-argument constructor initializes fields and sets class responsible for initialize client
+     * A constructor initializes fields and sets class responsible for initialize client
      */
     private ModelFactory()
     {

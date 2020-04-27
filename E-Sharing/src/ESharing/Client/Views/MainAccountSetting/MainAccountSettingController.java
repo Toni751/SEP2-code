@@ -31,6 +31,7 @@ public class MainAccountSettingController extends ViewController {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainSettingViewModel = ViewModelFactory.getViewModelFactory().getMainSettingViewModel();
         this.loggedUser = LoggedUser.getLoggedUser();
+        viewHandler.openUserInfoSettingView(userSettingPane);
     }
 
     /**
@@ -64,6 +65,9 @@ public class MainAccountSettingController extends ViewController {
         viewHandler.openUserAddressSettingView(userSettingPane);
     }
 
+    /**
+     * Opens a main application view
+     */
     public void onBackToMainView() {
         viewHandler.openMainAppView();
     }

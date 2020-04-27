@@ -1,10 +1,14 @@
 package ESharing.Shared.TransferedObject;
 
 import ESharing.Client.Model.UserActions.LoggedUser;
-
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * A class representing the user used in the system
+ * @version 1.0
+ * @author Group1
+ */
 public class User implements Serializable
 {
   private int user_id;
@@ -13,6 +17,13 @@ public class User implements Serializable
   private String phoneNumber;
   private Address address;
 
+  /**
+   * A constructor which sets all user fields
+   * @param username the value of a user username
+   * @param password the value of a user password
+   * @param phoneNumber the value of a user phone number
+   * @param address the address object representing the user address
+   */
   public User(String username, String password, String phoneNumber, Address address)
   {
     this.username = username;
@@ -21,6 +32,10 @@ public class User implements Serializable
     this.address = address;
   }
 
+  /**
+   * One-argument constructor which sets all fields using the LoggedUser object
+   * @param loggedUser the LoggedUser object used to set all fields
+   */
   public User(LoggedUser loggedUser)
   {
     this.username = loggedUser.getUser().getUsername();
@@ -30,61 +45,91 @@ public class User implements Serializable
     this.phoneNumber = loggedUser.getUser().getPhoneNumber();
   }
 
+  /**
+   * Sets value of user id
+   * @param user_id the value of user id
+   */
   public void setUser_id(int user_id)
   {
     this.user_id = user_id;
   }
 
-  public void updateInformation(User updatedUser)
-  {
-    this.username = updatedUser.getUsername();
-    this.password = updatedUser.getPassword();
-    this.user_id = updatedUser.getUser_id();
-    this.address = updatedUser.getAddress();
-    this.phoneNumber = updatedUser.getPhoneNumber();
-  }
-
+  /**
+   * Returns value of a username
+   * @return the username value
+   */
   public String getUsername()
   {
     return username;
   }
 
+  /**
+   * Returns value of a password
+   * @return the password value
+   */
   public String getPassword()
   {
     return password;
   }
 
+  /**
+   * Returns value of a phone number
+   * @return the phone number value
+   */
   public String getPhoneNumber()
   {
     return phoneNumber;
   }
 
+  /**
+   * Returns value of an address
+   * @return the address value
+   */
   public Address getAddress()
   {
     return address;
   }
 
+  /**
+   * Sets value of a username
+   * @param username the value of username
+   */
   public void setUsername(String username) {
     this.username = username;
   }
 
+  /**
+   * Sets value of a phone number
+   * @param phoneNumber the value of phone number
+   */
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
   }
 
+  /**
+   * Sets value of a password
+   * @param password the value of password
+   */
   public void setPassword(String password) {
     this.password = password;
   }
 
+  /**
+   * Sets value of address
+   * @param address the value of address
+   */
   public void setAddress(Address address) {
     this.address = address;
   }
 
+  /**
+   * Returns value of a user id
+   * @return the user id value
+   */
   public int getUser_id()
   {
     return user_id;
   }
-
 
   @Override
   public boolean equals(Object o) {

@@ -1,5 +1,10 @@
 package ESharing.Shared.TransferedObject;
 
+/**
+ * The enum used for store all names of events which are used in the system
+ * @version 1.0
+ * @author Group1
+ */
 public enum Events
 {
   CONNECTION_FAILED,

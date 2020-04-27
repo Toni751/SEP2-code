@@ -1,6 +1,5 @@
 package ESharing.Client.Views;
 
-import ESharing.Shared.TransferedObject.User;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 
@@ -10,19 +9,13 @@ import javafx.scene.layout.Region;
  * @author Group1
  */
 public abstract class ViewController{
-    private Region root;
 
+    private Region root;
 
     /**
      * Initializes controller with all components
      */
     public void init(){}
-
-//    /**
-//     * Initializes controller with all components
-//     * @param loggedUser the User object which is current logged in the system
-//     */
-//    public void init(User loggedUser){}
 
     /**
      * Sets the root of the view

@@ -3,22 +3,37 @@ package ESharing.Shared.Util;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A class which sets and stores all verification labels with their id
+ * @version 1.0
+ * @author Group1
+ */
 public class VerificationList {
     private Map<Verifications, String> verifications;
     private static VerificationList verificationList;
 
+    /**
+     * A private constructor initializes variables and uses function to add all verification to the map
+     */
     private VerificationList()
     {
         this.verifications = new HashMap<>();
         addAllVerifications();
     }
 
+    /**
+     * Returns VerificationList object if it exists, otherwise creates new object
+     * @return the VerificationList object
+     */
     public static VerificationList getVerificationList() {
         if(verificationList == null)
             verificationList = new VerificationList();
         return verificationList;
     }
 
+    /**
+     * Creates and adds all verification labels to the map
+     */
     private void addAllVerifications()
     {
         verifications.put(Verifications.INVALID_USERNAME, "Invalid username");
@@ -34,6 +49,10 @@ public class VerificationList {
         verifications.put(Verifications.ACTION_SUCCESS, "Action successful");
     }
 
+    /**
+     * Returns the map object with all verification labels
+     * @return
+     */
     public Map<Verifications, String> getVerifications() {
         return verifications;
     }

@@ -1,12 +1,11 @@
 package ESharing.Client.Model.UserActions;
 
+import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.Client;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
-import javafx.scene.layout.Pane;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -21,12 +20,11 @@ public class UserActionsModelManager implements UserActionsModel {
     private PropertyChangeSupport support;
 
     /**
-     * One-argument constructor initializes all fields
-     * @param client the client used for the networking connection
+     * A constructor initializes all fields
      */
-    public UserActionsModelManager(Client client)
+    public UserActionsModelManager()
     {
-        this.client = client;
+        this.client = ClientFactory.getClientFactory().getClient();
         support = new PropertyChangeSupport(this);
     }
 
@@ -144,6 +142,12 @@ public class UserActionsModelManager implements UserActionsModel {
         support.removePropertyChangeListener(listener);
     }
 
+    /**
+     * Verifies values from the username and the password text fields
+     * @param username the value from the username text field
+     * @param password the value from the password textfield
+     * @return the result of the verification as a string object
+     */
     private String verifyUsernameAndPassword(String username, String password)
     {
         if(username == null || username.equals(""))

@@ -70,6 +70,9 @@ public class UserInfoSettingViewController extends ViewController {
         newPasswordField.clear();
     }
 
+    /**
+     * Hides pane with warning label
+     */
     @FXML private void hideWarningPane()
     {
         if(warningPane.isVisible()) {

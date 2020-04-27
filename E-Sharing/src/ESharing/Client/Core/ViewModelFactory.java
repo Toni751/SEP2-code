@@ -15,7 +15,6 @@ import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
  */
 public class ViewModelFactory {
 
-    private ModelFactory modelFactory;
     private WelcomeViewModel welcomeViewModel;
     private SignInViewModel signInViewModel;
     private SignUpViewModel signUpViewModel;
@@ -26,11 +25,10 @@ public class ViewModelFactory {
     private static ViewModelFactory viewModelFactory;
 
     /**
-     * One-argument constructor initializes view models and sets class managing models
+     * A private constructor initializes all view model
      */
     private ViewModelFactory()
     {
-        this.modelFactory = ModelFactory.getModelFactory();
         welcomeViewModel = new WelcomeViewModel();
         signInViewModel = new SignInViewModel();
         signUpViewModel = new SignUpViewModel();
@@ -91,10 +89,18 @@ public class ViewModelFactory {
         return mainAppViewModel;
     }
 
+    /**
+     * Returns initialized view model of the user address setting view
+     * @return the initialized UserAddressSettingView
+     */
     public UserAddressSettingViewModel getUserAddressSettingViewModel() {
         return userAddressSettingViewModel;
     }
 
+    /**
+     * Returns initialized view model of the user information setting view
+     * @return the initialized UserInfoSettingView
+     */
     public UserInfoSettingViewModel getUserInfoSettingViewModel() {
         return userInfoSettingViewModel;
     }

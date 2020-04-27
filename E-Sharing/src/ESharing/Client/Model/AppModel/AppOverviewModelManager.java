@@ -1,17 +1,26 @@
 package ESharing.Client.Model.AppModel;
 
+import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.Client;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * The class from the model layer which contains all main application features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class AppOverviewModelManager implements AppOverviewModel{
 
     private Client client;
     private PropertyChangeSupport support;
 
-    public AppOverviewModelManager(Client client)
+    /**
+     * A constructor initializes fields
+     */
+    public AppOverviewModelManager()
     {
-        this.client = client;
+        this.client = ClientFactory.getClientFactory().getClient();
         support = new PropertyChangeSupport(this);
     }
 

@@ -3,16 +3,14 @@ package ESharing.Server.Persistance;
 import ESharing.Shared.TransferedObject.Address;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-public class AddressDAOImpl extends Database implements AddressDAO
+public class AddressDAOManager extends Database implements AddressDAO
 {
 
-  private static AddressDAOImpl instance;
+  private static AddressDAOManager instance;
   // We need to create a unique constraint for the address
   // ALTER TABLE address ADD CONSTRAINT unique_address UNIQUE (street, number, city, postcode);
-  private AddressDAOImpl()
+  private AddressDAOManager()
   {
     try
     {
@@ -24,12 +22,12 @@ public class AddressDAOImpl extends Database implements AddressDAO
     }
   }
 
-  public static synchronized AddressDAOImpl getInstance()
+  public static synchronized AddressDAOManager getInstance()
   {
 
     if (instance == null)
     {
-      instance = new AddressDAOImpl();
+      instance = new AddressDAOManager();
     }
     return instance;
   }

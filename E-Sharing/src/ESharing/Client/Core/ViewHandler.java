@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.swing.text.View;
+
 /**
  * The class responsible for managing views
  * @version 1.0
@@ -108,6 +110,25 @@ public class ViewHandler {
     }
 
     /**
+     * Opens the main admin view
+     */
+    public void openAdminMainView()
+    {
+        viewController = ViewControllerFactory.getViewController(Views.MAIN_ADMIN_VIEW);
+        showView(viewController, null);
+    }
+
+    /**
+     * Open the manageUsers view
+     */
+    public void openManagesUsersView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.MANAGE_USERS_VIEW);
+        showView(viewController,existingPane);
+    }
+
+
+    /**
      * Opens a view with user information settings
      * @param existingPane the already loaded pane where the view will be displayed
      */
@@ -125,6 +146,25 @@ public class ViewHandler {
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_ADDRESS_SETTING_VIEW);
         showView(viewController, existingPane);
+    }
+
+    /**
+     * Opens a admin dashboard view
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
+    public void openAdminDashboardView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.ADMIN_DASHBOARD_VIEW);
+        showView(viewController, existingPane);
+    }
+
+    /**
+     * Opens a admin edit user view
+     */
+    public void openAdminEditUserView()
+    {
+        viewController = ViewControllerFactory.getViewController(Views.ADMIN_EDIT_USER_VIEW);
+        showView(viewController, null);
     }
 
     /**
@@ -146,7 +186,7 @@ public class ViewHandler {
         }
         else {
                 existingPane.getChildren().clear();
-                existingPane.getChildren().addAll(controller.getRoot());
+                existingPane.getChildren().setAll(controller.getRoot());
                 System.out.println("Root : " + controller.getRoot());
         }
     }

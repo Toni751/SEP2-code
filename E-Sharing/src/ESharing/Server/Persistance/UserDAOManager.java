@@ -4,14 +4,14 @@ import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import java.sql.*;
 
-public class UserDAOImpl extends Database implements UserDAO
+public class UserDAOManager extends Database implements UserDAO
 {
 
-  private static UserDAOImpl instance;
+  private static UserDAOManager instance;
   private AddressDAO addressDAO;
 
   //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
-  private UserDAOImpl(AddressDAO addressDAO)
+  private UserDAOManager(AddressDAO addressDAO)
   {
     try
     {
@@ -24,11 +24,11 @@ public class UserDAOImpl extends Database implements UserDAO
     }
   }
 
-  public static synchronized UserDAOImpl getInstance(AddressDAO addressDAO)
+  public static synchronized UserDAOManager getInstance(AddressDAO addressDAO)
   {
     if (instance == null)
     {
-      instance = new UserDAOImpl(addressDAO);
+      instance = new UserDAOManager(addressDAO);
     }
     return instance;
   }
@@ -44,12 +44,13 @@ public class UserDAOImpl extends Database implements UserDAO
     {
       System.out.println("Connection established");
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO user_account (username,password,phoneNumber,address_id) VALUES (?,?,?,?) "
+          "INSERT INTO user_account (username,password,phoneNumber,address_id, creation_date) VALUES (?,?,?,?,?) "
               + "ON CONFLICT ON CONSTRAINT unique_username DO NOTHING;");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
       statement.setString(3, user.getPhoneNumber());
       statement.setInt(4, addressDAO.create(user.getAddress()));
+      statement.setString(5, user.getCreation_date());
       int affectedRows = statement.executeUpdate();
       System.out.println("Affected rows by create user: " + affectedRows);
 
@@ -107,13 +108,14 @@ public class UserDAOImpl extends Database implements UserDAO
   public User readByUserNameAndPassword(String usernameRequest, String passwordRequest)
   {
     PreparedStatement statement;
+    ResultSet resultSet;
     try (Connection connection = getConnection())
     {
       statement = connection.prepareStatement(
           "SELECT * FROM user_account NATURAL JOIN address WHERE username = ? AND password = ?;");
       statement.setString(1, usernameRequest);
       statement.setString(2, passwordRequest);
-      ResultSet resultSet = statement.executeQuery();
+      resultSet = statement.executeQuery();
       if (resultSet.next())
       {
         int user_id = resultSet.getInt("user_id");
@@ -125,11 +127,33 @@ public class UserDAOImpl extends Database implements UserDAO
         String postcode =resultSet.getString("postcode");
         String number = resultSet.getString("number");
         String city = resultSet.getString("city");
+        String creationDate = resultSet.getString("creation_date");
         Address address = new Address(street,number,city,postcode);
         address.setAddress_id(address_id);
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
+        user.setCreation_date(creationDate);
         return user;
+      }
+      // Search in admin table
+      else if(!resultSet.next())
+      {
+        statement = connection.prepareStatement("SELECT * FROM admin_account WHERE admin_name = ? AND password = ?");
+        statement.setString(1, usernameRequest);
+        statement.setString(2, passwordRequest);
+        resultSet = statement.executeQuery();
+        if(resultSet.next())
+        {
+          int admin_id = resultSet.getInt("admin_id");
+          String admin_name = resultSet.getString("admin_name");
+          String password = resultSet.getString("password");
+          String phoneNo = resultSet.getString("phoneNo");
+
+          User admin = new User(admin_name, password, phoneNo, null);
+          admin.setAsAdministrator();
+          admin.setUser_id(admin_id);
+          return admin;
+        }
       }
     }
     catch (SQLException e)

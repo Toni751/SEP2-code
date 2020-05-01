@@ -1,14 +1,19 @@
 package ESharing.Client.Networking;
 
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Shared.Networking.RMIClient;
 import ESharing.Shared.Networking.RMIServer;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
+import jdk.jfr.Event;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 /**
  * The class which handles the requests from the model and communicates
@@ -105,13 +110,39 @@ public class ClientHandler implements Client, RMIClient
   {
     try
     {
-      return server.loginUser(username, password, this);
+      User loggedUser = server.loginUser(username, password, this);
+      if(loggedUser != null && loggedUser.isAdministrator()) {
+        server.registerAdministratorCallback(this);
+      }
+      return loggedUser;
     }
-    catch (RemoteException e)
-    {
+    catch (RemoteException e) {e.printStackTrace();}
+    return null;
+  }
+
+  @Override
+  public List<User> getAllUsersRequest() {
+    try {
+      return server.getAllUsers();
+    } catch (RemoteException e) {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public void newUserReceived(User newUser) {
+    support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, newUser);
+  }
+
+  @Override
+  public void userRemoved(User user){
+    support.firePropertyChange(Events.USER_REMOVED.toString(), null, user);
+  }
+
+  @Override
+  public void userUpdated(User user) {
+    support.firePropertyChange(Events.USER_UPDATED.toString(), null, user);
   }
 
   @Override

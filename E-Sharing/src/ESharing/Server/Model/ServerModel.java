@@ -3,6 +3,8 @@ package ESharing.Server.Model;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
 
+import java.util.List;
+
 /**
  * Interface to enable the communication between the server handler and the server model
  * @version 1.0
@@ -38,4 +40,10 @@ public interface ServerModel extends PropertyChangeSubject
    * @return a user account, if the username and password match with it, null otherwise
    */
   User loginUser (String username, String password);
+
+  /**
+   * Returns the collection of all users existing in the system database
+   * @return the collection of all users existing in the system database
+   */
+  List<User> getAllUsers();
 }

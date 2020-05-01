@@ -30,7 +30,7 @@
          </ScrollPane>
          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="7.0" layoutY="435.0" onMouseClicked="#onBackToSignUp" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
             <image>
-               <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+               <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
             </image>
          </ImageView>
       </children>
@@ -83,7 +83,7 @@
          <JFXTextField fx:id="streetTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="32.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="Street" unFocusColor="#324a5e" />
          <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="38.0" layoutY="269.0" onMouseClicked="#onGoToPersonalClick" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
             <image>
-               <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+               <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
             </image>
          </ImageView>
       </children>

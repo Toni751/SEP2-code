@@ -31,7 +31,7 @@
             <JFXButton alignment="TOP_LEFT" layoutY="142.0" onAction="#loadAddressPane" prefHeight="25.0" prefWidth="200.0" styleClass="label-green" text="🏠 Address" />
             <ImageView fitHeight="30.0" fitWidth="33.0" layoutX="5.0" layoutY="463.0" onMouseClicked="#onBackToMainView" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
                <image>
-                  <Image url="@../../../Addition/Images/arrow-icon-green.png" />
+                  <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
                </image>
             </ImageView>
          </children>

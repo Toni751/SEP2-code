@@ -75,4 +75,11 @@ public class UserAddressSettingViewController extends ViewController {
     public void onDefaultButton() {
         viewModel.loadDefaultValues();
     }
+
+    @FXML
+    private void hideWarningPane()
+    {
+        warningPane.setVisible(false);
+        warningLabel.setVisible(false);
+    }
 }

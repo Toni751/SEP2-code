@@ -16,6 +16,9 @@ public class User implements Serializable
   private String password;
   private String phoneNumber;
   private Address address;
+  private int reportsNumber;
+  private String creation_date;
+  boolean administrator;
 
   /**
    * A constructor which sets all user fields
@@ -45,6 +48,23 @@ public class User implements Serializable
     this.phoneNumber = loggedUser.getUser().getPhoneNumber();
   }
 
+  /**
+   * Sets current user as administrator
+   */
+  public void setAsAdministrator()
+  {
+    administrator = true;
+  }
+
+  /**
+   * Returns if logged user is set as administrator
+   * @return the boolean value which represents the administrator status
+   */
+
+  public boolean isAdministrator()
+  {
+    return administrator;
+  }
   /**
    * Sets value of user id
    * @param user_id the value of user id
@@ -99,6 +119,22 @@ public class User implements Serializable
   }
 
   /**
+   * Returns number of reports
+   * @return the number of reports
+   */
+  public int getReportsNumber() {
+    return reportsNumber;
+  }
+
+  /**
+   * Add new report to the user account
+   */
+  public void addNewReport()
+  {
+    reportsNumber++;
+  }
+
+  /**
    * Sets value of a phone number
    * @param phoneNumber the value of phone number
    */
@@ -129,6 +165,30 @@ public class User implements Serializable
   public int getUser_id()
   {
     return user_id;
+  }
+
+  /**
+   * Sets the number of reports belong to the user
+   * @param reportsNumber the number of reports
+   */
+  public void setReportsNumber(int reportsNumber) {
+    this.reportsNumber = reportsNumber;
+  }
+
+  /**
+   * Returns a string object with date of creation the account
+   * @return the string with date of creation the account
+   */
+  public String getCreation_date() {
+    return creation_date;
+  }
+
+  /**
+   * Sets the creation account date
+   * @param creation_date the date of creation the account
+   */
+  public void setCreation_date(String creation_date) {
+    this.creation_date = creation_date;
   }
 
   @Override

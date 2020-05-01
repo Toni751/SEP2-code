@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane prefHeight="500.0" prefWidth="600.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminUsersView.ManageUsersViewController">
+   <children>
+      <Pane fx:id="contentPane" layoutY="-1.0">
+         <children>
+            <JFXButton fx:id="removeUserButton" layoutX="126.0" layoutY="152.0" onAction="#onRemoveUserAction" prefHeight="30.0" prefWidth="98.0" styleClass="button-warning" text="Remove User" />
+            <JFXButton fx:id="goToEditButton" layoutX="22.0" layoutY="152.0" onAction="#goToEditButton" prefHeight="30.0" prefWidth="98.0" styleClass="button-blue" text="Edit User" />
+            <TableView fx:id="usersTable" layoutY="196.0" prefHeight="306.0" prefWidth="600.0">
+               <columns>
+                  <TableColumn fx:id="userIdColumn" prefWidth="68.800048828125" text="ID" />
+                  <TableColumn fx:id="usernameColumn" prefWidth="196.8000030517578" text="USERNAME" />
+                  <TableColumn fx:id="phoneNumberColumn" prefWidth="201.5999755859375" text="PHONE NUMBER" />
+                  <TableColumn fx:id="reportsColumn" prefWidth="139.199951171875" styleClass="reports-column" text="REPORTS" />
+               </columns>
+            </TableView>
+            <Label layoutX="23.0" layoutY="40.0" prefHeight="18.0" prefWidth="194.0" text="Manage Users">
+               <styleClass>
+                  <String fx:value="big-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <Label fx:id="totalUserLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="215.0" layoutY="61.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
+               <styleClass>
+                  <String fx:value="big-number" />
+                  <String fx:value="yellow-number" />
+               </styleClass>
+            </Label>
+            <Label fx:id="reportedUserLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="322.0" layoutY="61.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
+               <styleClass>
+                  <String fx:value="big-number" />
+                  <String fx:value="red-number" />
+               </styleClass>
+            </Label>
+            <Label layoutX="217.0" layoutY="107.0" styleClass="blue-label" text="Total Users" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="310.0" layoutY="106.0" prefHeight="18.0" prefWidth="84.0" styleClass="blue-label" text="Reported Users" />
+            <TextField fx:id="searchBox" layoutX="417.0" layoutY="154.0" onKeyPressed="#onKeyPressedInSearchBox" prefHeight="26.0" prefWidth="161.0" promptText="🔎 Search by username" styleClass="search-textfield" />
+            <Pane fx:id="warningPane" prefHeight="30.0" prefWidth="600.0" styleClass="warning-pane">
+               <children>
+                  <Label fx:id="warningLabel" layoutX="286.0" layoutY="6.0" styleClass="warning-label" text="Label" />
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

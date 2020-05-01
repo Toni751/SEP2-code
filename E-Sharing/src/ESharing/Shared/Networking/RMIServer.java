@@ -3,6 +3,7 @@ package ESharing.Shared.Networking;
 import ESharing.Shared.TransferedObject.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 /**
  * The interface used by the server handler for remote method calling on the server
@@ -51,5 +52,19 @@ public interface RMIServer extends Remote
    * @throws RemoteException if the method invocation fails
    */
   User loginUser (String username, String password, RMIClient client) throws RemoteException;
+
+  /**
+   * Initializes all callbacks which are related to the administrator account
+   * @param client the client to be registered
+   * @throws RemoteException if the method invocation fails
+   */
+  void registerAdministratorCallback(RMIClient client) throws RemoteException;
+
+  /**
+   * Pass the collection of all users to the client side
+   * @return the collection of all users
+   * @throws RemoteException if the method invocation fails
+   */
+  List<User> getAllUsers() throws RemoteException;
 
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminEditUserView.AdminEditUserController">
+   <children>
+      <Pane fx:id="contentPane" layoutX="-1.0" prefHeight="502.0" prefWidth="800.0">
+         <children>
+            <Pane fx:id="warningPane" layoutY="433.0" prefHeight="68.0" prefWidth="800.0" styleClass="warning-pane">
+               <children>
+                  <Label fx:id="warningLabel" layoutY="23.0" prefHeight="20.0" prefWidth="800.0" styleClass="warning-label" text="Label" />
+               </children>
+            </Pane>
+            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="15.0" layoutY="445.0" onMouseClicked="#onBackToUsersView" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/arrow-blue.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="37.0" layoutY="24.0" prefHeight="35.0" prefWidth="161.0" text="Edit User">
+               <styleClass>
+                  <String fx:value="blue-label" />
+                  <String fx:value="blue-big-title" />
+               </styleClass>
+            </Label>
+            <JFXTextField fx:id="usernameTextfield" focusColor="#c0c000" layoutX="101.0" layoutY="188.0" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+            <Label layoutX="101.0" layoutY="168.0" text="Username">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXTextField fx:id="phoneNumberTextfield" focusColor="#c0c000" layoutX="101.0" layoutY="244.0" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+            <Label layoutX="103.0" layoutY="227.0" text="Phone Number">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXButton layoutX="179.0" layoutY="287.0" onAction="#onResetPassword" prefHeight="35.0" prefWidth="116.0" styleClass="button-warning" text="Reset Password" />
+            <Line endX="-100.0" endY="-109.4000015258789" layoutX="500.0" layoutY="191.0" startX="-100.0" startY="206.60000610351562" stroke="#343333" />
+            <JFXTextField fx:id="numberTextField" focusColor="#c0c000" layoutX="486.0" layoutY="160.0" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+            <Label layoutX="486.0" layoutY="144.0" text="Number">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXTextField fx:id="streetTextfield" focusColor="#c0c000" layoutX="486.0" layoutY="219.0" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+            <Label layoutX="486.0" layoutY="203.0" text="Street">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXTextField fx:id="cityTextfield" focusColor="#c0c000" layoutX="566.0" layoutY="285.0" prefHeight="26.0" prefWidth="116.0" styleClass="gray-textfield" />
+            <Label layoutX="566.0" layoutY="265.0" text="City">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXTextField fx:id="postalCodeTextfield" focusColor="#c0c000" layoutX="486.0" layoutY="285.0" prefHeight="26.0" prefWidth="75.0" styleClass="gray-textfield" />
+            <Label layoutX="485.0" layoutY="265.0" text="Postal Code">
+               <styleClass>
+                  <String fx:value="text-field-label" />
+                  <String fx:value="blue-label" />
+               </styleClass>
+            </Label>
+            <JFXButton layoutX="609.0" layoutY="323.0" onAction="#onSaveAction" prefHeight="35.0" prefWidth="75.0" styleClass="button-blue" text="Save" />
+            <JFXButton layoutX="528.0" layoutY="323.0" onAction="#onDefaultAction" prefHeight="35.0" prefWidth="75.0" styleClass="button-blue" text="Default" />
+            <Label layoutX="485.0" layoutY="78.0" prefHeight="35.0" prefWidth="161.0" text="Address">
+               <styleClass>
+                  <String fx:value="blue-label" />
+                  <String fx:value="big-label" />
+               </styleClass>
+            </Label>
+            <Label layoutX="67.0" layoutY="78.0" prefHeight="35.0" prefWidth="161.0" text="General">
+               <styleClass>
+                  <String fx:value="blue-label" />
+                  <String fx:value="big-label" />
+               </styleClass>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

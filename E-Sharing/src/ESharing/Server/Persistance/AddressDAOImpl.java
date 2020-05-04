@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressDAOImpl extends Database implements AddressDAO
+public class AddressDAOImpl implements AddressDAO
 {
 
   private static AddressDAOImpl instance;
@@ -34,8 +34,12 @@ public class AddressDAOImpl extends Database implements AddressDAO
     return instance;
   }
 
-  public Connection getConnection() throws SQLException {
-    return super.getConnection();
+  private Connection getConnection() throws SQLException
+  {
+      return DriverManager.getConnection(
+          "jdbc:postgresql://localhost:5432/sep2",
+          "postgres", "29312112");
+
   }
 
   @Override public int create(Address address)
@@ -122,6 +126,40 @@ public class AddressDAOImpl extends Database implements AddressDAO
     }
     return null;
   }
+
+  //  @Override public List<Address> readByStreet(String searchString)
+//      throws SQLException
+//  {
+//    try(Connection connection = getConnection()) {
+//      PreparedStatement statement = connection.prepareStatement("SELECT * FROM Address WHERE street LIKE ?;");
+//      statement.setString(1, "%" + searchString + "%");
+//      ResultSet resultSet = statement.executeQuery();
+//      ArrayList<Address> result = new ArrayList<>();
+//      while(resultSet.next()) {
+//        int address_id =resultSet.getInt("address_id");
+//        String street = resultSet.getString("street");
+//        String number = resultSet.getString("number");
+//        String city = resultSet.getString("city");
+//        String postcode = resultSet.getString("postcode");
+//        Address address = new Address(address_id, street, number, city, postcode);
+//        result.add(address);
+//      }
+//      return result;
+//    }
+//  }
+//
+//  @Override public void update(Address address) throws SQLException
+//  {
+//    try(Connection connection = getConnection()) {
+//      PreparedStatement statement = connection.prepareStatement("UPDATE Address SET street=?,number=?,city=?,postcode=? WHERE address_id = ?;");
+//      statement.setString(1, address.getStreet());
+//      statement.setString(2, address.getNumber());
+//      statement.setString(3,address.getCity());
+//      statement.setString(4, address.getPostcode());
+//      statement.setInt(5, address.getAddress_id());
+//      statement.executeUpdate();
+//    }
+//  }
 
   @Override public void delete(int address_id)
   {

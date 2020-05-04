@@ -34,6 +34,10 @@ public class ViewControllerFactory {
             else if(id == Views.FAILED_CONNECTION_VIEW) viewController = creatNewViewControllerObject("FailedConnectionView/FailedConnectionView.fxml");
             else if(id == Views.USER_ADDRESS_SETTING_VIEW) viewController = creatNewViewControllerObject("UserAddressSettingView/UserAddressSettingView.fxml");
             else if(id == Views.USER_INFO_SETTING_VIEW) viewController = creatNewViewControllerObject("UserInfoSettingView/UserInfoSettingView.fxml");
+            else if(id == Views.MAIN_ADMIN_VIEW) viewController = creatNewViewControllerObject("MainAdminView/MainAdminView.fxml");
+            else if(id == Views.MANAGE_USERS_VIEW) viewController = creatNewViewControllerObject("AdminUsersView/ManageUsersView.fxml");
+            else if(id == Views.ADMIN_DASHBOARD_VIEW) viewController = creatNewViewControllerObject("AdminDashboardView/AdminDashboardView.fxml");
+            else if(id == Views.ADMIN_EDIT_USER_VIEW) viewController = creatNewViewControllerObject("AdminEditUserView/AdminEditUserView.fxml");
             viewControllers.put(id, viewController);
         }
         System.out.println(viewController);

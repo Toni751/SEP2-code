@@ -7,6 +7,8 @@ import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.Date;
+
 /**
  * The class in a view model layer contains all functions which are used in the signUp view.
  * @version 1.0

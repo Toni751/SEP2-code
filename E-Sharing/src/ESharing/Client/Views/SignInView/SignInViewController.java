@@ -2,6 +2,7 @@ package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
@@ -49,7 +50,10 @@ public class SignInViewController extends ViewController {
         }
         else {
             warningPane.setVisible(false);
-            viewHandler.openMainAppView();
+            if(!LoggedUser.getLoggedUser().getUser().isAdministrator())
+                viewHandler.openMainAppView();
+            else
+                viewHandler.openAdminMainView();
         }
     }
 

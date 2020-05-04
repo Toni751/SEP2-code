@@ -3,6 +3,7 @@ package ESharing.Client.Model.UserActions;
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.Client;
 import ESharing.Shared.TransferedObject.Address;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
@@ -33,8 +34,9 @@ public class UserActionsModelManager implements UserActionsModel {
         boolean verification = client.addUserRequest(newUser);
         if(!verification)
             return VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR);
-        else
+        else {
             return null;
+        }
     }
 
     @Override

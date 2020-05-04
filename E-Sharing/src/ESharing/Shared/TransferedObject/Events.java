@@ -8,5 +8,8 @@ package ESharing.Shared.TransferedObject;
 public enum Events
 {
   CONNECTION_FAILED,
-  UPDATE_USER_INFO;
+  UPDATE_USER_INFO,
+  NEW_USER_CREATED,
+  USER_REMOVED,
+  USER_UPDATED
 }

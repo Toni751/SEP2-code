@@ -16,7 +16,7 @@
     <JFXButton layoutX="94.0" layoutY="358.0" onAction="#onSignInButton" prefHeight="45.0" prefWidth="162.0" styleClass="button-light" text="Sign in" />
          <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="125.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true">
             <image>
-               <Image url="@../../../Addition/Images/avatar-icon.png" />
+               <Image url="@../../../Addition/Images/icons/avatar-icon.png" />
             </image>
          </ImageView>
          <Label layoutX="69.0" layoutY="147.0" styleClass="big-label" text="WELCOME MY ECO FRIEND" />

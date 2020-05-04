@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+
+<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: black;" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAdminView.MainAdminViewController">
+   <children>
+      <Pane prefHeight="500.0" prefWidth="200.0" styleClass="dark-pane">
+         <children>
+            <Rectangle fx:id="advertisementsRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="300.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
+            <Rectangle fx:id="usersRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="200.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
+            <Rectangle fx:id="dashboardRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="100.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
+            <Rectangle fx:id="systemLogsRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="85.0" layoutY="312.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/ad-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="86.0" layoutY="214.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/users-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="85.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/home-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="85.0" layoutY="413.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/logs-icon.png" />
+               </image>
+            </ImageView>
+            <JFXButton layoutY="200.0" onAction="#onManageUsersAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Users" />
+            <JFXButton layoutX="1.0" layoutY="300.0" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Advertisements" />
+            <JFXButton layoutX="1.0" layoutY="400.0" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;System Logs" />
+            <JFXButton layoutY="100.0" onAction="#onDashboardAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Dashboard" />
+            <Label prefHeight="63.0" prefWidth="200.0" styleClass="logo-label" text="E-SHARING" />
+         </children>
+      </Pane>
+      <Pane fx:id="contentPane" layoutX="200.0" prefHeight="500.0" prefWidth="600.0" />
+   </children>
+</AnchorPane>

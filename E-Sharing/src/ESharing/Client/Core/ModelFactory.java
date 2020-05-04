@@ -2,6 +2,8 @@ package ESharing.Client.Core;
 
 import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.AppModel.AppOverviewModelManager;
+import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
+import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModelManager;
 
@@ -11,9 +13,9 @@ import ESharing.Client.Model.UserActions.UserActionsModelManager;
  * @author Group1
  */
 public class ModelFactory {
-    private ClientFactory clientFactory;
     private UserActionsModel userActionsModel;
     private AppOverviewModel appOverviewModel;
+    private AdministratorActionsModel administratorActionsModel;
 
     private static ModelFactory modelFactory;
 
@@ -22,9 +24,10 @@ public class ModelFactory {
      */
     private ModelFactory()
     {
-        this.clientFactory = ClientFactory.getClientFactory();
-        userActionsModel = new UserActionsModelManager(clientFactory.getClient());
-        appOverviewModel = new AppOverviewModelManager(clientFactory.getClient());
+        userActionsModel = new UserActionsModelManager();
+        appOverviewModel = new AppOverviewModelManager();
+        administratorActionsModel = new AdministratorActionModelManager();
+
     }
 
     /**
@@ -51,5 +54,13 @@ public class ModelFactory {
      */
     public AppOverviewModel getAppOverviewModel() {
         return appOverviewModel;
+    }
+
+    /**
+     * Returns initialized model for all features belongs to administrator
+     * @return initialized model for all features belongs to administrator
+     */
+    public AdministratorActionsModel getAdministratorActionsModel() {
+        return administratorActionsModel;
     }
 }

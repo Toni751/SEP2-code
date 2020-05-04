@@ -44,7 +44,7 @@
       <JFXPasswordField fx:id="newPasswordField" focusColor="#4cdbc4" layoutX="186.0" layoutY="330.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="179.0" promptText="New Password" />
       <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="30.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../Addition/Images/avatar-icon.png" />
+            <Image url="@../../../Addition/Images/icons/avatar-icon.png" />
          </image>
       </ImageView>
       <Label layoutX="33.0" layoutY="201.0" styleClass="sub-title" text="Advertisements " />

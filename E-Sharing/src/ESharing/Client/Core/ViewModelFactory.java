@@ -1,7 +1,11 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Views.AdminDashboardView.AdminDashboardViewModel;
+import ESharing.Client.Views.AdminEditUserView.AdminEditUserViewModel;
 import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
+import ESharing.Client.Views.MainAdminView.MainAdminViewModel;
 import ESharing.Client.Views.MainAppView.MainAppViewModel;
+import ESharing.Client.Views.AdminUsersView.ManageUsersViewModel;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
 import ESharing.Client.Views.UserAddressSettingView.UserAddressSettingViewModel;
@@ -22,6 +26,10 @@ public class ViewModelFactory {
     private MainSettingViewModel mainSettingViewModel;
     private UserInfoSettingViewModel userInfoSettingViewModel;
     private UserAddressSettingViewModel userAddressSettingViewModel;
+    private ManageUsersViewModel manageUsersViewModel;
+    private MainAdminViewModel mainAdminViewModel;
+    private AdminDashboardViewModel adminDashboardViewModel;
+    private AdminEditUserViewModel adminEditUserViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -36,6 +44,11 @@ public class ViewModelFactory {
         mainSettingViewModel = new MainSettingViewModel();
         userAddressSettingViewModel = new UserAddressSettingViewModel();
         userInfoSettingViewModel = new UserInfoSettingViewModel();
+        mainAdminViewModel = new MainAdminViewModel();
+        manageUsersViewModel = new ManageUsersViewModel();
+        adminDashboardViewModel = new AdminDashboardViewModel();
+        adminEditUserViewModel = new AdminEditUserViewModel();
+
     }
 
     /**
@@ -91,7 +104,7 @@ public class ViewModelFactory {
 
     /**
      * Returns initialized view model of the user address setting view
-     * @return the initialized UserAddressSettingView
+     * @return the initialized UserAddressSettingViewModel
      */
     public UserAddressSettingViewModel getUserAddressSettingViewModel() {
         return userAddressSettingViewModel;
@@ -99,9 +112,41 @@ public class ViewModelFactory {
 
     /**
      * Returns initialized view model of the user information setting view
-     * @return the initialized UserInfoSettingView
+     * @return the initialized UserInfoSettingViewModel
      */
     public UserInfoSettingViewModel getUserInfoSettingViewModel() {
         return userInfoSettingViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the admin main view
+     * @return the initialized MainAdminViewModel
+     */
+    public MainAdminViewModel getMainAdminViewModel() {
+        return mainAdminViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the admin manage users view
+     * @return the initialized ManageUsersViewModel
+     */
+    public ManageUsersViewModel getManageUsersViewModel() {
+        return manageUsersViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the admin dashboard view
+     * @return the initialized AdminDashboardViewModel
+     */
+    public AdminDashboardViewModel getAdminDashboardViewModel() {
+        return adminDashboardViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the admin edit user view
+     * @return the initialized AdminEditUserViewModel
+     */
+    public AdminEditUserViewModel getAdminEditUserViewModel() {
+        return adminEditUserViewModel;
     }
 }

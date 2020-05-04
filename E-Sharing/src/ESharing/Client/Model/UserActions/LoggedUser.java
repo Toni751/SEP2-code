@@ -10,6 +10,7 @@ import ESharing.Shared.TransferedObject.User;
 public class LoggedUser {
 
     private User user;
+    private boolean administrator;
     private static LoggedUser loggedUser;
 
     /**

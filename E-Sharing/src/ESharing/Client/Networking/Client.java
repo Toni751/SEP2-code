@@ -3,6 +3,8 @@ package ESharing.Client.Networking;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
 
+import java.util.List;
+
 /**
  * The interface the model will user for calling methods on the client
  * and for sending/ receiving data to the server
@@ -39,4 +41,10 @@ public interface Client extends PropertyChangeSubject
    * @return the user's account data, if the request was approved, null otherwise
    */
   User loginUserRequest (String username, String password);
+
+  /**
+   * Sends a request to get a list with all system users and gets the result as a collection
+   * @return the collection of all system users
+   */
+  List<User> getAllUsersRequest();
 }

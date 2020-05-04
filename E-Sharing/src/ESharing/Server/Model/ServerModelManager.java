@@ -1,9 +1,17 @@
 package ESharing.Server.Model;
 
+import ESharing.Server.Persistance.AdministratorDAO;
+import ESharing.Server.Persistance.AdministratorDAOManager;
 import ESharing.Server.Persistance.UserDAO;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
+import jdk.jfr.Event;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * The class manages all requests on the server side
@@ -13,6 +21,7 @@ import java.beans.PropertyChangeSupport;
 public class ServerModelManager implements ServerModel
 {
   private UserDAO userDAO;
+  private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
 
   /**
@@ -22,40 +31,50 @@ public class ServerModelManager implements ServerModel
   public ServerModelManager(UserDAO userDAO)
   {
     this.userDAO = userDAO;
+    this.administratorDAO = AdministratorDAOManager.getInstance();
     support = new PropertyChangeSupport(this);
   }
 
   @Override
   public boolean addNewUser(User user)
   {
-    System.out.println("Creating a new user from SMM");
-    if (user.getPassword().length() > 7 && user.getPhoneNumber().length() == 8)
-    {
-      return userDAO.create(user);
-    }
-    return false;
+    String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    user.setCreation_date(currentDate);
+    boolean result = userDAO.create(user);
+    if(result)
+      support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, user);
+    return result;
   }
 
   @Override
   public boolean removeUser(User user)
   {
-    return userDAO.delete(user);
+    boolean result = userDAO.delete(user);
+    if(result)
+        support.firePropertyChange(Events.USER_REMOVED.toString(), null, user);
+    return result;
   }
 
   @Override
   public boolean editUser(User user)
   {
-    if (user.getPassword().length() > 7 && user.getPhoneNumber().length() == 8)
+    boolean result = userDAO.update(user);
+    if(result)
     {
-      return userDAO.update(user);
+     support.firePropertyChange(Events.USER_UPDATED.toString(), null, user);
     }
-    return false;
+    return result;
   }
 
   @Override
   public User loginUser(String username, String password)
   {
     return userDAO.readByUserNameAndPassword(username, password);
+  }
+
+  @Override
+  public List<User> getAllUsers() {
+    return administratorDAO.getAllUsers();
   }
 
   @Override

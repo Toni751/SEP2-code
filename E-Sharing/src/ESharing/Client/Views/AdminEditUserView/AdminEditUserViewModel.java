@@ -4,6 +4,7 @@ import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
@@ -20,7 +21,9 @@ public class AdminEditUserViewModel {
     private StringProperty cityProperty;
     private StringProperty warningLabel;
     private StringProperty postalCodeProperty;
+
     private AdministratorActionsModel administratorModel;
+    private VerificationModel verificationModel;
     private UserActionsModel userActionsModel;
     private User selectedUser;
 
@@ -28,7 +31,9 @@ public class AdminEditUserViewModel {
     public AdminEditUserViewModel()
     {
         administratorModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
+        verificationModel = ModelFactory.getModelFactory().getVerificationModel();
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+
         usernameProperty  = new SimpleStringProperty();
         phoneNumberProperty  = new SimpleStringProperty();
         numberProperty  = new SimpleStringProperty();
@@ -51,8 +56,8 @@ public class AdminEditUserViewModel {
     public boolean saveChanges() {
         User updatedUser;
         Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        String addressResult = userActionsModel.verifyAddress(updatedAddress);
-        String generalResult = userActionsModel.verifyUserInfo(usernameProperty.get(), selectedUser.getPassword(), selectedUser.getPassword(), selectedUser.getPhoneNumber());
+        String addressResult = verificationModel.verifyAddress(updatedAddress);
+        String generalResult = verificationModel.verifyUserInfo(usernameProperty.get(), selectedUser.getPassword(), selectedUser.getPassword(), selectedUser.getPhoneNumber());
         if(generalResult == null && addressResult == null) {
             updatedUser = new User(usernameProperty.get(), selectedUser.getPassword(), phoneNumberProperty.get(), updatedAddress);
             updatedUser.setUser_id(selectedUser.getUser_id());

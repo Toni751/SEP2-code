@@ -3,6 +3,7 @@ package ESharing.Client.Views.UserInfoSettingView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
@@ -23,23 +24,23 @@ public class UserInfoSettingViewModel{
     private StringProperty newPasswordProperty;
     private StringProperty warningLabel;
 
-    private PropertyChangeSupport support;
     private UserActionsModel userActionsModel;
+    private VerificationModel verificationModel;
     private LoggedUser loggedUser;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public UserInfoSettingViewModel() {
+        userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        verificationModel = ModelFactory.getModelFactory().getVerificationModel();
+        loggedUser = LoggedUser.getLoggedUser();
+
         usernameProperty = new SimpleStringProperty();
         phoneProperty = new SimpleStringProperty();
         oldPasswordProperty = new SimpleStringProperty();
         newPasswordProperty = new SimpleStringProperty();
         warningLabel = new SimpleStringProperty();
-
-        userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
-        loggedUser = LoggedUser.getLoggedUser();
-        support = new PropertyChangeSupport(this);
     }
 
     /**
@@ -54,7 +55,7 @@ public class UserInfoSettingViewModel{
         }
         else {
 
-        String passwordVerification = userActionsModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get());
+        String passwordVerification = verificationModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get());
         if(passwordVerification == null)
         {
             return checkAndUpdateInformation("withPassword");
@@ -75,7 +76,7 @@ public class UserInfoSettingViewModel{
     public boolean checkAndUpdateInformation(String type)
     {
         User updateUser;
-        String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPassword(), getPhoneProperty().get());
+        String verification = verificationModel.verifyUserInfo(usernameProperty.get(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPassword(), getPhoneProperty().get());
         if(verification == null) {
             if(type.equalsIgnoreCase("withPassword")) {
                 System.out.println("Changing with password");

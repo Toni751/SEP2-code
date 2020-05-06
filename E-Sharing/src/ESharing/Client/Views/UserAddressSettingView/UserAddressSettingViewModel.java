@@ -3,6 +3,7 @@ package ESharing.Client.Views.UserAddressSettingView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
@@ -24,7 +25,9 @@ public class UserAddressSettingViewModel {
     private StringProperty cityProperty;
     private StringProperty postalCodeProperty;
     private StringProperty warningProperty;
+
     private UserActionsModel userActionsModel;
+    private VerificationModel verificationModel;
     private LoggedUser loggedUser;
 
     /**
@@ -33,6 +36,7 @@ public class UserAddressSettingViewModel {
     public UserAddressSettingViewModel() {
         loggedUser = LoggedUser.getLoggedUser();
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        verificationModel = ModelFactory.getModelFactory().getVerificationModel();
 
         warningProperty = new SimpleStringProperty();
         cityProperty = new SimpleStringProperty();
@@ -65,7 +69,7 @@ public class UserAddressSettingViewModel {
         if (!updatedAddress.equals(loggedUser.getUser().getAddress())) {
             User updatedUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
             updatedUser.setUser_id(loggedUser.getUser().getUser_id());
-            if (userActionsModel.verifyAddress(updatedAddress) == null) {
+            if (verificationModel.verifyAddress(updatedAddress) == null) {
                 String databaseVerification = userActionsModel.modifyUserInformation(updatedUser);
                 if (databaseVerification == null) {
                     warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
@@ -75,7 +79,7 @@ public class UserAddressSettingViewModel {
                     return false;
                 }
             } else {
-                warningProperty.set(userActionsModel.verifyAddress(updatedAddress));
+                warningProperty.set(verificationModel.verifyAddress(updatedAddress));
                 return false;
             }
         }

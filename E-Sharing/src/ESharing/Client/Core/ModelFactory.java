@@ -6,6 +6,8 @@ import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModelManager;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
+import ESharing.Client.Model.VerificationModel.VerificationModelManager;
 
 /**
  * The class responsible for managing models
@@ -16,6 +18,7 @@ public class ModelFactory {
     private UserActionsModel userActionsModel;
     private AppOverviewModel appOverviewModel;
     private AdministratorActionsModel administratorActionsModel;
+    private VerificationModel verificationModel;
 
     private static ModelFactory modelFactory;
 
@@ -27,7 +30,7 @@ public class ModelFactory {
         userActionsModel = new UserActionsModelManager();
         appOverviewModel = new AppOverviewModelManager();
         administratorActionsModel = new AdministratorActionModelManager();
-
+        verificationModel = new VerificationModelManager();
     }
 
     /**
@@ -62,5 +65,13 @@ public class ModelFactory {
      */
     public AdministratorActionsModel getAdministratorActionsModel() {
         return administratorActionsModel;
+    }
+
+    /**
+     * Returns initialized model for all verification processes
+     * @return initialized model for all verification processes
+     */
+    public VerificationModel getVerificationModel() {
+        return verificationModel;
     }
 }

@@ -6,6 +6,7 @@ import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

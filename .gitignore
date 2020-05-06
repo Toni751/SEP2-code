@@ -1,7 +1,11 @@
 /E-Sharing/E-Sharing.iml
 /.idea/$PRODUCT_WORKSPACE_FILE$
 /.idea/modules.xml
+/.idea/misc.xml
+/.idea/uiDesigner.xml
 /.idea/.gitignore
 /.idea/SEP2.iml
 /.idea/vcs.xml
 /.idea/workspace.xml
+/out/
+/.idea/

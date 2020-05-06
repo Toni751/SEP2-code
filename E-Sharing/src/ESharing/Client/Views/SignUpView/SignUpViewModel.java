@@ -2,6 +2,7 @@ package ESharing.Client.Views.SignUpView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import javafx.beans.property.SimpleStringProperty;
@@ -27,6 +28,7 @@ public class SignUpViewModel {
     private StringProperty postalCodeProperty;
 
     private UserActionsModel userActionsModel;
+    private VerificationModel verificationModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
@@ -34,6 +36,7 @@ public class SignUpViewModel {
     public SignUpViewModel() {
 
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        this.verificationModel = ModelFactory.getModelFactory().getVerificationModel();
 
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
@@ -69,7 +72,7 @@ public class SignUpViewModel {
      */
     public boolean signUpPersonalRequest()
     {
-        String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), passwordProperty.get(), confirmPasswordProperty.get(), phoneProperty.get());
+        String verification = verificationModel.verifyUserInfo(usernameProperty.get(), passwordProperty.get(), confirmPasswordProperty.get(), phoneProperty.get());
         if(verification == null)
             return true;
         else {
@@ -85,7 +88,7 @@ public class SignUpViewModel {
     public boolean signUpAddressRequest()
     {
         Address address = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        String verification = userActionsModel.verifyAddress(address);
+        String verification = verificationModel.verifyAddress(address);
         if(verification == null) {
            return true;
         }

@@ -94,10 +94,10 @@ public class ViewHandler {
     /**
      * Opens the the main user setting view
      */
-    public void openMainSettingView()
+    public void openMainSettingView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.MAIN_USER_SETTING_VIEW);
-        showView(viewController, null);
+        showView(viewController, existingPane);
     }
 
     /**
@@ -165,6 +165,12 @@ public class ViewHandler {
     {
         viewController = ViewControllerFactory.getViewController(Views.ADMIN_EDIT_USER_VIEW);
         showView(viewController, null);
+    }
+
+    public void openChatView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.CHAT_VIEW);
+        showView(viewController, existingPane);
     }
 
     /**

@@ -27,4 +27,11 @@ public interface VerificationModel {
      * @return the result of the verification as a string object
      */
     String verifyChangePassword(String oldPassword, String newPassword);
+
+    /**
+     * Verifies message which user want to send
+     * @param message the content of the message
+     * @return the result of the verification process
+     */
+    boolean verifyMessage(String message);
 }

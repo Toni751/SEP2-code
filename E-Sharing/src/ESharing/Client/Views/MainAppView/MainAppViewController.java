@@ -4,6 +4,10 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.Util.GeneralFunctions;
+import javafx.fxml.FXML;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -12,6 +16,9 @@ import ESharing.Client.Views.ViewController;
  */
 public class MainAppViewController extends ViewController {
 
+    @FXML private Rectangle messageRectangle;
+    @FXML private Rectangle settingRectangle;
+    @FXML private Pane contentPane;
     private ViewHandler viewHandler;
     private MainAppViewModel mainAppViewModel;
     private LoggedUser loggerUser;
@@ -24,7 +31,8 @@ public class MainAppViewController extends ViewController {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
         this.loggerUser = LoggedUser.getLoggedUser();
-        System.out.println(loggerUser.getUser().getUsername());
+        hideNavigateRectangles();
+
     }
 
     /**
@@ -32,7 +40,10 @@ public class MainAppViewController extends ViewController {
      */
     public void onSettingButton()
     {
-        viewHandler.openMainSettingView();
+        viewHandler.openMainSettingView(contentPane);
+        hideNavigateRectangles();
+        settingRectangle.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", settingRectangle, 500);
     }
 
     /**
@@ -41,5 +52,19 @@ public class MainAppViewController extends ViewController {
     public void onLogout() {
         LoggedUser.getLoggedUser().logoutUser();
         viewHandler.openWelcomeView();
+    }
+
+    public void onChatButton()
+    {
+        viewHandler.openChatView(contentPane);
+        hideNavigateRectangles();
+        messageRectangle.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", messageRectangle, 500);
+    }
+
+    private void hideNavigateRectangles()
+    {
+        messageRectangle.setVisible(false);
+        settingRectangle.setVisible(false);
     }
 }

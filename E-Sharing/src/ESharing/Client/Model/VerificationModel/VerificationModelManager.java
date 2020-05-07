@@ -35,6 +35,13 @@ public class VerificationModelManager implements VerificationModel{
     }
 
     @Override
+    public boolean verifyMessage(String message) {
+        if(message == null || message.equals(""))
+            return false;
+        return true;
+    }
+
+    @Override
     public String verifyUserInfo(String username, String password, String passwordAgain, String phoneNumber)
     {
         if(username == null || username.equals(""))

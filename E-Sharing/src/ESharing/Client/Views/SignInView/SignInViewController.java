@@ -9,6 +9,8 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 /**
@@ -43,25 +45,26 @@ public class SignInViewController extends ViewController {
      * Starts a verification process of the login fields and sends login request to a model layer
      */
     public void onSignInButton() {
-        if(!signInViewModel.loginRequest())
-        {
-            warningPane.setVisible(true);
-            GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
-        }
-        else {
-            warningPane.setVisible(false);
-            if(!LoggedUser.getLoggedUser().getUser().isAdministrator())
-                viewHandler.openMainAppView();
-            else
-                viewHandler.openAdminMainView();
-        }
+            if (!signInViewModel.loginRequest()) {
+                warningPane.setVisible(true);
+                GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+            } else {
+                warningPane.setVisible(false);
+                if (!LoggedUser.getLoggedUser().getUser().isAdministrator())
+                    viewHandler.openMainAppView();
+                else
+                    viewHandler.openAdminMainView();
+            }
     }
 
     /**
      * Hides warning notification after each keyPressed action in the text fields
      */
-    public void onKeyPressed() {
-        if(warningPane.visibleProperty().get())
+    public void onKeyPressed(KeyEvent keyEvent) {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+            onSignInButton();
+        }
+        else if(warningPane.visibleProperty().get())
         {
             warningPane.setVisible(false);
         }

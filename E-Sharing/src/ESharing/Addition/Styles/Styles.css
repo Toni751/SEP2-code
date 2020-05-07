@@ -9,6 +9,11 @@
 {
     -fx-background-color: #4cdbc4;
 }
+.transparent-background
+{
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
 .title
 {
     -fx-font-size: 22px;
@@ -381,6 +386,41 @@
 {
     -fx-text-fill: #41747f;
     -fx-font-size: 26px;
+}
+.messageTextField
+{
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-font-size: 16px;
+}
+.navigate-pane
+{
+    -fx-background-color: #303841;
+}
+.message-navigate-pane
+{
+    -fx-background-color: #363e47;
+}
+
+.search-conversation
+{
+    -fx-background-color: #303841;
+    -fx-text-fill: #a2b2be;
+    -fx-prompt-text-fill: #a2b2be;
+}
+.online-circle
+{
+    -fx-fill: #54d38a;
+    -fx-stroke: transparent;
+}
+.offline-circle
+{
+    -fx-fill: #a2b2be;
+    -fx-stroke: transparent;
+}
+.cream-background
+{
+    -fx-background-color: #f2f7f7;
 }
 
 

@@ -39,6 +39,8 @@ public class SignInViewController extends ViewController {
         passwordTextField.textProperty().bindBidirectional(signInViewModel.getPasswordProperty());
         warningLabel.textProperty().bind(signInViewModel.getWarningProperty());
         warningPane.setVisible(false);
+
+        clearFields();
     }
 
     /**
@@ -68,5 +70,13 @@ public class SignInViewController extends ViewController {
         {
             warningPane.setVisible(false);
         }
+    }
+
+    /**
+     * Clears text fields
+     */
+    private void clearFields() {
+        usernameTextField.clear();
+        passwordTextField.clear();
     }
 }

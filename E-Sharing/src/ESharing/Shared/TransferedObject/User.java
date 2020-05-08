@@ -2,6 +2,7 @@ package ESharing.Shared.TransferedObject;
 
 import ESharing.Client.Model.UserActions.LoggedUser;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -19,6 +20,7 @@ public class User implements Serializable
   private int reportsNumber;
   private String creation_date;
   boolean administrator;
+  private ArrayList<Conversation> conversations;
 
   /**
    * A constructor which sets all user fields
@@ -33,6 +35,8 @@ public class User implements Serializable
     this.password = password;
     this.phoneNumber = phoneNumber;
     this.address = address;
+
+    conversations = new ArrayList<>();
   }
 
   /**
@@ -46,6 +50,7 @@ public class User implements Serializable
     this.user_id = loggedUser.getUser().getUser_id();
     this.address = loggedUser.getUser().getAddress();
     this.phoneNumber = loggedUser.getUser().getPhoneNumber();
+    this.conversations = loggedUser.getUser().getConversations();
   }
 
   /**
@@ -189,6 +194,31 @@ public class User implements Serializable
    */
   public void setCreation_date(String creation_date) {
     this.creation_date = creation_date;
+  }
+
+  /**
+   * Returns a collection with all conversations related to the user
+   * @return the collection with all conversations related to the user
+   */
+  public ArrayList<Conversation> getConversations() {
+    return conversations;
+  }
+
+  /**
+   * Sets a collection with all conversations related to the user
+   * @param conversations the collection with all conversations related to the user
+   */
+  public void setConversations(ArrayList<Conversation> conversations) {
+    this.conversations = conversations;
+  }
+
+  /**
+   * Adds new conversation to the collection
+   * @param conversation the new conversation
+   */
+  public void addConversation(Conversation conversation)
+  {
+    conversations.add(conversation);
   }
 
   @Override

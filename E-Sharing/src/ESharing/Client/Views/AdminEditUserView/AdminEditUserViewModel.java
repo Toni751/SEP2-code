@@ -2,7 +2,6 @@ package ESharing.Client.Views.AdminEditUserView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
-import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
@@ -54,34 +53,28 @@ public class AdminEditUserViewModel {
     }
 
     public boolean saveChanges() {
-        User updatedUser;
+        User updatedUser = selectedUser;
         Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        String addressResult = verificationModel.verifyAddress(updatedAddress);
-        String generalResult = verificationModel.verifyUserInfo(usernameProperty.get(), selectedUser.getPassword(), selectedUser.getPassword(), selectedUser.getPhoneNumber());
-        if(generalResult == null && addressResult == null) {
-            updatedUser = new User(usernameProperty.get(), selectedUser.getPassword(), phoneNumberProperty.get(), updatedAddress);
-            updatedUser.setUser_id(selectedUser.getUser_id());
-            updatedUser.setCreation_date(selectedUser.getCreation_date());
-            updatedUser.setReportsNumber(selectedUser.getReportsNumber());
-            String databaseResult = userActionsModel.modifyUserInformation(updatedUser);
-            if(databaseResult == null) {
-                warningLabel.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
-                selectedUser = updatedUser;
+        String addressVerification = verificationModel.verifyAddress(updatedAddress);
+        String infoVerification = verificationModel.verifyUserInfo(usernameProperty.get(), phoneNumberProperty.get());
+        if(addressVerification == null && infoVerification == null) {
+            updatedUser.setAddress(updatedAddress);
+            updatedUser.setUsername(usernameProperty.get());
+            updatedUser.setPhoneNumber(phoneNumberProperty.get());
+            if(userActionsModel.modifyUserInformation(updatedUser)){
+                warningLabel.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
                 return true;
             }
-            else {
-                warningLabel.setValue(databaseResult);
-                return false;
-            }
         }
-        else if(generalResult != null) {
-            warningLabel.setValue(generalResult);
+        else if(addressVerification != null) {
+            warningLabel.set(addressVerification);
             return false;
         }
         else {
-            warningLabel.setValue(addressResult);
+            warningLabel.set(infoVerification);
             return false;
         }
+        return false;
     }
 
     public boolean resetPassword()

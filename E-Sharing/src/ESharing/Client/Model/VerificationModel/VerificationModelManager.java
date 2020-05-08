@@ -23,15 +23,23 @@ public class VerificationModelManager implements VerificationModel{
     }
 
     @Override
-    public String verifyChangePassword(String oldPassword, String newPassword) {
+    public String verifyChangePassword(String oldPassword, String newPassword, String confirmPassword) {
         if(oldPassword == null || oldPassword.equals(""))
             return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
-        else if(newPassword == null || newPassword.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
-        else if(!oldPassword.equals(LoggedUser.getLoggedUser().getUser().getPassword()))
+        if(verifyPassword(newPassword, confirmPassword) != null)
+            return verifyPassword(newPassword, confirmPassword);
+        if(!oldPassword.equals(LoggedUser.getLoggedUser().getUser().getPassword()))
             return VerificationList.getVerificationList().getVerifications().get(Verifications.NOT_THE_SAME_PASSWORDS);
-        else
-            return null;
+        return null;
+    }
+
+    @Override
+    public String verifyPassword(String password, String confirmPassword) {
+        if(password == null || password.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
+        if(confirmPassword == null || !confirmPassword.equals(password))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.NOT_THE_SAME_PASSWORDS);
+        return null;
     }
 
     @Override
@@ -42,16 +50,23 @@ public class VerificationModelManager implements VerificationModel{
     }
 
     @Override
-    public String verifyUserInfo(String username, String password, String passwordAgain, String phoneNumber)
+    public String verifyUserInfo(String username,  String phoneNumber)
+    {
+        if(username == null || username.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_USERNAME);
+        else if(phoneNumber == null || phoneNumber.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PHONE_NUMBER);
+        else
+            return null;
+    }
+
+    @Override
+    public String verifyUsernameAndPassword(String username, String password)
     {
         if(username == null || username.equals(""))
             return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_USERNAME);
         else if(password == null || password.equals(""))
             return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
-        else if(passwordAgain == null || !passwordAgain.equals(password))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.NOT_THE_SAME_PASSWORDS);
-        else if(phoneNumber == null || phoneNumber.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PHONE_NUMBER);
         else
             return null;
     }

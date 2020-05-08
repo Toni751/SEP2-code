@@ -1,9 +1,13 @@
 package ESharing.Shared.Util;
 
+import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Shared.TransferedObject.User;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.animation.FadeTransition;
+import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ProgressBar;
 import javafx.util.Duration;
 
@@ -62,6 +66,37 @@ public class GeneralFunctions {
     }
 
     /**
+     * Returns the javaFX confirmation alert component with given title nad content
+     * @param title the given title
+     * @param content the given content
+     * @return the initialized confirmation alert object
+     */
+    public static Alert ShowConfirmationAlert(String title, String content)
+    {
+        Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmationAlert.setTitle(title);
+        confirmationAlert.setHeaderText(null);
+        confirmationAlert.setContentText(content);
+        return confirmationAlert;
+    }
+
+    public static boolean sendEditRequest(User updatedUser, String verification, UserActionsModel userActionsModel, StringProperty warningLabel) {
+        if(verification == null)
+        {
+            if(userActionsModel.modifyUserInformation(updatedUser)) {
+                warningLabel.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
+                return true;
+            }
+        }
+        else
+        {
+            warningLabel.setValue(verification);
+            return false;
+        }
+        return false;
+    }
+
+    /**
      * Sets value of the given JavaFx progressbar
      * @param progressBar the given JavaFx progressbar
      * @param toAddOrRemove the amount progressbar of increasing or decreasing
@@ -87,6 +122,7 @@ public class GeneralFunctions {
             }
         }
     }
+
 
 
 }

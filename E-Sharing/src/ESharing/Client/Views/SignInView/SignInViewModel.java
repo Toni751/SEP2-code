@@ -4,6 +4,7 @@ import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -19,12 +20,14 @@ public class SignInViewModel {
     private StringProperty warningProperty;
 
     private UserActionsModel userActionsModel;
+    private VerificationModel verificationModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
      */
     public SignInViewModel() {
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        this.verificationModel = ModelFactory.getModelFactory().getVerificationModel();
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
         warningProperty= new SimpleStringProperty();
@@ -36,12 +39,22 @@ public class SignInViewModel {
      */
     public boolean loginRequest()
     {
-        String verification = userActionsModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
-        if(verification == null)
-            return true;
-        else{
-            warningProperty.set(verification);
-            return false;
+        String verificationFields = verificationModel.verifyUsernameAndPassword(usernameProperty.get(), passwordProperty.get());
+        {
+            if(verificationFields == null)
+            {
+                String verificationUser = userActionsModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
+                if(verificationUser == null)
+                    return true;
+                else{
+                    warningProperty.set(verificationUser);
+                    return false;
+                }
+            }
+            else{
+                warningProperty.set(verificationFields);
+                return false;
+            }
         }
     }
 

@@ -8,13 +8,11 @@ public class MainAdminViewModel {
 
     private AdministratorActionsModel administratorActionsModel;
 
-    public MainAdminViewModel()
-    {
+    public MainAdminViewModel() {
         this.administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
     }
 
-    public void loadUsersListRequest()
-    {
+    public void loadUsersListRequest() {
         AdministratorLists.getInstance().setUserList(administratorActionsModel.getAllUsers());
     }
 

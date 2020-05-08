@@ -5,6 +5,7 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.GeneralFunctions;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
@@ -22,6 +23,7 @@ public class UserInfoSettingViewModel{
     private StringProperty phoneProperty;
     private StringProperty oldPasswordProperty;
     private StringProperty newPasswordProperty;
+    private StringProperty confirmPasswordProperty;
     private StringProperty warningLabel;
 
     private UserActionsModel userActionsModel;
@@ -41,65 +43,30 @@ public class UserInfoSettingViewModel{
         oldPasswordProperty = new SimpleStringProperty();
         newPasswordProperty = new SimpleStringProperty();
         warningLabel = new SimpleStringProperty();
+        confirmPasswordProperty = new SimpleStringProperty();
     }
 
     /**
-     * Sends a request for verify the information inserted by user
-     * @return the result of the verification
+     * Verifies all information and sends a request to edit user
+     * @return the result of the the verification process
      */
-    public boolean modifyUserRequest()
+    public boolean checkAndUpdateInformation()
     {
-        if((oldPasswordProperty.get() == null || oldPasswordProperty.get().equals("")))
-        {
-            return checkAndUpdateInformation("withoutPassword");
-        }
-        else {
-
-        String passwordVerification = verificationModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get());
-        if(passwordVerification == null)
-        {
-            return checkAndUpdateInformation("withPassword");
-        }
-        else
-        {
-            warningLabel.set(passwordVerification);
-            return false;
-        }
-        }
+       User updatedUser = LoggedUser.getLoggedUser().getUser();
+       String verification = verificationModel.verifyUserInfo(usernameProperty.get(), phoneProperty.get());
+        return sendRequestToModel(updatedUser, verification);
     }
 
     /**
-     * Chooses the type of changing action and sends a request
-     * @param type type of the changing action
-     * @return the result of the verifiaciotn
+     * Verifies all information and sends a request to edit user
+     * @return the result ot the verification process
      */
-    public boolean checkAndUpdateInformation(String type)
+    public boolean changePassword()
     {
-        User updateUser;
-        String verification = verificationModel.verifyUserInfo(usernameProperty.get(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPassword(), getPhoneProperty().get());
-        if(verification == null) {
-            if(type.equalsIgnoreCase("withPassword")) {
-                System.out.println("Changing with password");
-                updateUser = new User(getUsernameProperty().get(), newPasswordProperty.get(), phoneProperty.get(), loggedUser.getUser().getAddress());
-            }
-            else {
-                System.out.println("Changing without password");
-                updateUser = new User(getUsernameProperty().get(), loggedUser.getUser().getPassword(), phoneProperty.get(), loggedUser.getUser().getAddress());
-            }
-            updateUser.setUser_id(loggedUser.getUser().getUser_id());
-            if(userActionsModel.modifyUserInformation(updateUser) == null) {
-                warningLabel.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
-                return true;
-            }
-            else{
-                warningLabel.set(userActionsModel.modifyUserInformation(updateUser));
-                return false;
-            }
-        }
-        else{
-            warningLabel.set(verification);
-            return false;
-        }
+        User updatedUser = LoggedUser.getLoggedUser().getUser();
+        System.out.println(LoggedUser.getLoggedUser().getUser().getPassword());
+        String verification = verificationModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get(),confirmPasswordProperty.get());
+        return sendRequestToModel(updatedUser, verification);
     }
 
     /**
@@ -148,6 +115,24 @@ public class UserInfoSettingViewModel{
      */
     public StringProperty getWarningLabel() {
         return warningLabel;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the value used in the confirm password text field
+     */
+    public StringProperty getConfirmPasswordProperty() {
+        return confirmPasswordProperty;
+    }
+
+    /**
+     * Sends the edit request to the model layer
+     * @param updatedUser the updated user object
+     * @param verification the result of the verification text fields
+     * @return the result of the request
+     */
+    private boolean sendRequestToModel(User updatedUser, String verification) {
+        return GeneralFunctions.sendEditRequest(updatedUser, verification, userActionsModel, warningLabel);
     }
 
 }

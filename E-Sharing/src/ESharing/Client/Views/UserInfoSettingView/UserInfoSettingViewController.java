@@ -6,6 +6,7 @@ import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,7 @@ public class UserInfoSettingViewController extends ViewController {
     @FXML private JFXTextField phoneTextField;
     @FXML private JFXPasswordField oldPasswordField;
     @FXML private JFXPasswordField newPasswordField;
+    @FXML private JFXPasswordField confirmPassword;
     @FXML private Pane warningPane;
     @FXML private Label warningLabel;
     private UserInfoSettingViewModel viewModel;
@@ -42,6 +44,7 @@ public class UserInfoSettingViewController extends ViewController {
         phoneTextField.textProperty().bindBidirectional(viewModel.getPhoneProperty());
         oldPasswordField.textProperty().bindBidirectional(viewModel.getOldPasswordProperty());
         newPasswordField.textProperty().bindBidirectional(viewModel.getNewPasswordProperty());
+        confirmPassword.textProperty().bindBidirectional(viewModel.getConfirmPasswordProperty());
         warningLabel.textProperty().bind(viewModel.getWarningLabel());
     }
 
@@ -54,7 +57,22 @@ public class UserInfoSettingViewController extends ViewController {
         warningPane.setVisible(true);
         warningLabel.setVisible(true);
         GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
-        if (viewModel.modifyUserRequest()) {
+        if (viewModel.checkAndUpdateInformation()) {
+            warningPane.setStyle("-fx-background-color: #4cdbc4");
+            warningLabel.setStyle("-fx-text-fill: black");
+        }
+    }
+
+    /**
+     * Gets verification result and if given values are incorrect displays a warning
+     */
+    public void onChangePassword() {
+        warningPane.setStyle("-fx-background-color: #DB5461");
+        warningLabel.setStyle("-fx-text-fill: white");
+        warningPane.setVisible(true);
+        warningLabel.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
+        if (viewModel.changePassword()) {
             warningPane.setStyle("-fx-background-color: #4cdbc4");
             warningLabel.setStyle("-fx-text-fill: black");
         }
@@ -68,6 +86,7 @@ public class UserInfoSettingViewController extends ViewController {
         viewModel.loadUserInfo();
         oldPasswordField.clear();
         newPasswordField.clear();
+        confirmPassword.clear();
     }
 
     /**

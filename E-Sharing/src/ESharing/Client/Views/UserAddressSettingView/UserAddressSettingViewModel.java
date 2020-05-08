@@ -65,25 +65,43 @@ public class UserAddressSettingViewModel {
      * @return the verification result
      */
     public boolean modifyAddressRequest() {
+
+        User updatedUser = LoggedUser.getLoggedUser().getUser();
         Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        if (!updatedAddress.equals(loggedUser.getUser().getAddress())) {
-            User updatedUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
-            updatedUser.setUser_id(loggedUser.getUser().getUser_id());
-            if (verificationModel.verifyAddress(updatedAddress) == null) {
-                String databaseVerification = userActionsModel.modifyUserInformation(updatedUser);
-                if (databaseVerification == null) {
-                    warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
-                    return true;
-                } else {
-                    warningProperty.set(databaseVerification);
-                    return false;
-                }
-            } else {
-                warningProperty.set(verificationModel.verifyAddress(updatedAddress));
-                return false;
+        String addressVerification = verificationModel.verifyAddress(updatedAddress);
+        if(addressVerification == null)
+        {
+            updatedUser.setAddress(updatedAddress);
+            if(userActionsModel.modifyUserInformation(updatedUser))
+            {
+                warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
+                return true;
             }
         }
-        return true;
+        else{
+            warningProperty.set(addressVerification);
+            return false;
+        }
+        return false;
+//        Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
+//        if (!updatedAddress.equals(loggedUser.getUser().getAddress())) {
+//            User updatedUser = new User(loggedUser.getUser().getUsername(), loggedUser.getUser().getPassword(), loggedUser.getUser().getPhoneNumber(), updatedAddress);
+//            updatedUser.setUser_id(loggedUser.getUser().getUser_id());
+//            if (verificationModel.verifyAddress(updatedAddress) == null) {
+//                String databaseVerification = userActionsModel.modifyUserInformation(updatedUser);
+//                if (databaseVerification == null) {
+//                    warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
+//                    return true;
+//                } else {
+//                    warningProperty.set(databaseVerification);
+//                    return false;
+//                }
+//            } else {
+//                warningProperty.set(verificationModel.verifyAddress(updatedAddress));
+//                return false;
+//            }
+//        }
+//        return true;
     }
 
     /**

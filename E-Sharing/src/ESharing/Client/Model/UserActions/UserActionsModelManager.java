@@ -41,30 +41,24 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public String onLoginRequest(String username, String password) {
-        String verification = verifyUsernameAndPassword(username,password);
-        if(verification == null){
             User requestedUser = client.loginUserRequest(username,password);
             if(requestedUser == null)
                 return VerificationList.getVerificationList().getVerifications().get(Verifications.USER_NOT_EXIST);
-            else{
+            else {
                 LoggedUser.getLoggedUser().loginUser(requestedUser);
                 return null;
             }
-        }else
-            return verification;
     }
 
-
-
     @Override
-    public String modifyUserInformation(User updatedUser) {
+    public boolean modifyUserInformation(User updatedUser) {
         boolean verification = client.editUserRequest(updatedUser);
         if(verification) {
             LoggedUser.getLoggedUser().loginUser(updatedUser);
-            return null;
+            return true;
         }
         else
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR);
+            return false;
     }
 
     @Override
@@ -99,24 +93,7 @@ public class UserActionsModelManager implements UserActionsModel {
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
-    }
-
-    /**
-     * Verifies values from the username and the password text fields
-     * @param username the value from the username text field
-     * @param password the value from the password textfield
-     * @return the result of the verification as a string object
-     */
-    private String verifyUsernameAndPassword(String username, String password)
-    {
-        if(username == null || username.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_USERNAME);
-        else if(password == null || password.equals(""))
-            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PASSWORD);
-        else
-            return null;
     }
 }

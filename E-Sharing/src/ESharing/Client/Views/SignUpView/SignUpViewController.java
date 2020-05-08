@@ -8,8 +8,10 @@ import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
@@ -20,6 +22,7 @@ import javafx.scene.shape.Circle;
  */
 public class SignUpViewController extends ViewController {
 
+    @FXML private ImageView arrowBack;
     @FXML private JFXTextField streetTextField;
     @FXML private JFXTextField streetNumberTextField;
     @FXML private JFXTextField phoneTextField;
@@ -30,16 +33,17 @@ public class SignUpViewController extends ViewController {
     @FXML private Circle personalCircle;
     @FXML private Circle addressCircle;
     @FXML private Circle signUpCircle;
-    @FXML private Pane addressPane;
     @FXML private JFXPasswordField passwordTextField;
     @FXML private JFXTextField usernameTextField;
     @FXML private JFXPasswordField confirmPasswordTextField;
     @FXML private Pane personalPane;
     @FXML private Pane warningPane;
     @FXML private Pane rulesPane;
+    @FXML private Pane addressPane;
     @FXML private Label warningLabel;
     @FXML private Label rulesTitle;
     @FXML private Label signUpTitle;
+    @FXML private Button signUpButton;
 
     private SignUpViewModel signUpViewModel;
     private ViewHandler viewHandler;
@@ -74,6 +78,7 @@ public class SignUpViewController extends ViewController {
         addOnOutFocusEvent(postalCodeTextField, creatingProgressBar2);
 
         onOpenSetting();
+        defaultView();
     }
 
     /**
@@ -87,14 +92,18 @@ public class SignUpViewController extends ViewController {
             signUpCircle.setRadius(20);
             signUpCircle.setStyle("-fx-fill: orange");
 
-            if(warningPane.visibleProperty().get())
-                warningPane.setVisible(false);
 
-            if(!signUpViewModel.createNewUser())
+            warningPane.setStyle("-fx-background-color: #DB5461");
+            warningLabel.setStyle("-fx-text-fill: white");
+            GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
+            warningPane.setVisible(true);
+
+            if(signUpViewModel.createNewUser())
             {
-                warningLabel.setVisible(true);
-                warningLabel.setVisible(true);
-                GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
+                warningPane.setStyle("-fx-background-color: #4cdbc4");
+                warningLabel.setStyle("-fx-text-fill: black");
+                arrowBack.setDisable(true);
+                signUpButton.setDisable(true);
             }
         }
         else {
@@ -120,11 +129,14 @@ public class SignUpViewController extends ViewController {
      * Starts a verification process of the personal fields and changes current pane to the pane with the address fields
      */
     public void onGoToAddressClick() {
+
         if(signUpViewModel.signUpPersonalRequest()) {
             GeneralFunctions.fadeNode("FadeOut", personalPane, 500);
             personalPane.setVisible(false);
             GeneralFunctions.fadeNode("FadeIn", addressPane, 500);
+            addressPane.setDisable(false);
             addressPane.setVisible(true);
+
             personalCircle.setRadius(16);
             personalCircle.setStyle("-fx-fill: #4cdbc4");
             addressCircle.setRadius(20);
@@ -158,6 +170,7 @@ public class SignUpViewController extends ViewController {
         GeneralFunctions.fadeNode("fadeOut", addressPane, 500);
         if(warningPane.visibleProperty().get()) warningPane.setVisible(false);
         addressPane.setVisible(false);
+        addressPane.setDisable(true);
         addressCircle.setRadius(16);
         addressCircle.setStyle("-fx-fill: #4cdbc4");
 
@@ -200,4 +213,40 @@ public class SignUpViewController extends ViewController {
         });
     }
 
+
+    private void defaultView()
+    {
+        usernameTextField.clear();
+        passwordTextField.clear();
+        confirmPasswordTextField.clear();
+        phoneTextField.clear();
+        streetTextField.clear();
+        streetNumberTextField.clear();
+        cityTextField.clear();
+        postalCodeTextField.clear();
+
+        warningPane.setVisible(false);
+
+        personalCircle.setRadius(16);
+        personalCircle.setStyle("-fx-fill: #4cdbc4");
+
+        addressCircle.setRadius(16);
+        addressCircle.setStyle("-fx-fill: #4cdbc4");
+
+        signUpCircle.setRadius(16);
+        signUpCircle.setStyle("-fx-fill: #4cdbc4");
+
+        //personalPane.toFront();
+        personalPane.setVisible(true);
+        addressPane.setVisible(false);
+        GeneralFunctions.fadeNode("fadeIn", personalPane, 500);
+        //warningPane.toFront();
+        //addressPane.toBack();
+        rulesPane.toBack();
+        arrowBack.setDisable(false);
+        signUpButton.setDisable(false);
+
+        creatingProgressBar1.setProgress(0);
+        creatingProgressBar2.setProgress(0);
+    }
 }

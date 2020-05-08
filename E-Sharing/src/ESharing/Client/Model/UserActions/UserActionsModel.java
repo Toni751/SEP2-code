@@ -31,7 +31,7 @@ public interface UserActionsModel extends PropertyChangeSubject
      * @param updatedUser the user object with updated information
      * @return the string object with a result of the action
      */
-    String modifyUserInformation(User updatedUser);
+    boolean modifyUserInformation(User updatedUser);
 
     /**
      * Removes account which belongs to current logged user and goes to the welcome view

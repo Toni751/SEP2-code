@@ -6,6 +6,7 @@ import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
@@ -66,5 +67,9 @@ public class MainAdminViewController extends ViewController {
         usersRectangle.setVisible(false);
         advertisementsRectangle.setVisible(false);
         systemLogsRectangle.setVisible(false);
+    }
+
+    public void onEditAdminAccount() {
+        viewHandler.openEditAdminView(contentPane);
     }
 }

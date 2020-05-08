@@ -3,6 +3,7 @@ package ESharing.Client.Core;
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
 import ESharing.Shared.Util.Views;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -119,6 +120,16 @@ public class ViewHandler {
     }
 
     /**
+     * Opens the view with functionalities to edit the administrator account
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
+    public void openEditAdminView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.EDIT_ADMIN_ACCOUNT);
+        showView(viewController, existingPane);
+    }
+
+    /**
      * Open the manageUsers view
      */
     public void openManagesUsersView(Pane existingPane)
@@ -180,7 +191,8 @@ public class ViewHandler {
      */
     private void showView(ViewController controller, Pane existingPane)
     {
-        if(existingPane == null) {
+        Platform.runLater(() -> {
+            if(existingPane == null) {
                 moveWindowEvents(controller.getRoot());
                 if (currentScene == null)  currentScene = new Scene(controller.getRoot());
                 currentScene.setRoot(controller.getRoot());
@@ -189,12 +201,15 @@ public class ViewHandler {
                 if (currentStage == null) currentStage = new Stage();
                 currentStage.setScene(currentScene);
                 currentStage.show();
-        }
-        else {
+
+            }
+            else {
                 existingPane.getChildren().clear();
                 existingPane.getChildren().setAll(controller.getRoot());
                 System.out.println("Root : " + controller.getRoot());
-        }
+            }
+        });
+
     }
 
     /**

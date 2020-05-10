@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="500.0" prefWidth="750.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.ChatView.ChatViewController">
+   <children>
+      <Pane layoutX="174.0" layoutY="449.0" prefHeight="47.0" prefWidth="435.0" style="-fx-background-color: white;">
+         <children>
+            <ImageView fitHeight="50.0" fitWidth="42.0" layoutX="379.0" layoutY="3.0" onMouseClicked="#sendMessageByButton" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/sendArrow.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="messageTextField" layoutX="9.0" onKeyPressed="#sendMessageByEnter" prefHeight="47.0" prefWidth="362.0" promptText="Type something to send..." styleClass="messageTextField" />
+         </children>
+      </Pane>
+      <Pane prefHeight="500.0" prefWidth="179.0" styleClass="message-navigate-pane">
+         <children>
+            <TextField fx:id="searchConversationBox" layoutX="9.0" layoutY="14.0" onKeyPressed="#searchConversation" prefHeight="25.0" prefWidth="156.0" promptText="🔎 Search Conversation" styleClass="search-conversation" />
+            <ScrollPane layoutY="69.0" prefHeight="431.0" prefWidth="174.0" styleClass="transparent-background">
+               <content>
+                  <VBox fx:id="conversationsPane" prefHeight="427.0" prefWidth="170.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </Pane>
+      <Pane layoutX="603.0" prefHeight="500.0" prefWidth="156.0" styleClass="white-pane">
+         <children>
+            <Label layoutX="30.0" layoutY="14.0" styleClass="big-label" text="Online Users" />
+            <ScrollPane layoutY="50.0" prefHeight="450.0" prefWidth="156.0" styleClass="transparent-background">
+               <content>
+                  <VBox fx:id="onlineUsersPane" prefHeight="448.0" prefWidth="152.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </Pane>
+      <ScrollPane layoutX="180.0" layoutY="47.0" prefHeight="402.0" prefWidth="429.0" styleClass="transparent-background">
+         <content>
+            <VBox fx:id="messagesPane" prefHeight="398.0" prefWidth="426.0" styleClass="cream-background" />
+         </content>
+      </ScrollPane>
+      <Pane layoutX="179.0" prefHeight="47.0" prefWidth="427.0" styleClass="cream-background">
+         <children>
+            <Label fx:id="receiverUsernameLabel" layoutX="36.0" layoutY="10.0" prefHeight="27.0" prefWidth="386.0" styleClass="big-label" text="SuperBob1201">
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font>
+            </Label>
+            <Circle fill="DODGERBLUE" layoutX="21.0" layoutY="24.0" radius="7.0" stroke="BLACK" strokeType="INSIDE" styleClass="online-circle" />
+         </children>
+      </Pane>
+      <Line endX="329.5" endY="-7.62939453125E-6" layoutX="274.0" layoutY="47.0" startX="-274.0" startY="-7.62939453125E-6" stroke="#00000038" />
+   </children>
+</AnchorPane>

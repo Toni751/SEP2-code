@@ -3,13 +3,16 @@ package ESharing.Server.Model;
 import ESharing.Server.Persistance.AdministratorDAO;
 import ESharing.Server.Persistance.AdministratorDAOManager;
 import ESharing.Server.Persistance.UserDAO;
+import ESharing.Shared.TransferedObject.Conversation;
 import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -69,6 +72,23 @@ public class ServerModelManager implements ServerModel
   @Override
   public User loginUser(String username, String password)
   {
+
+    ///
+    ///Test conversation
+    ///
+
+//    User user = userDAO.readByUserNameAndPassword(username, password);
+//    Conversation conversation1 = new Conversation(user, getAllUsers().get(2));
+//    conversation1.addMessage(new Message(user, getAllUsers().get(2), "Hello"));
+//    conversation1.addMessage(new Message(getAllUsers().get(2), user,  "Oh Hello"));
+//
+//
+//    Conversation conversation2 = new Conversation(user, getAllUsers().get(3));
+//    conversation2.addMessage(new Message(user, getAllUsers().get(3), "Hello"));
+//    conversation2.addMessage(new Message(getAllUsers().get(3), user,  "Oh Hello"));
+//
+//    user.addConversation(conversation1);
+//    user.addConversation(conversation2);
     return userDAO.readByUserNameAndPassword(username, password);
   }
 

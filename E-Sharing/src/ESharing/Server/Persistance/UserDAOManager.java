@@ -168,35 +168,50 @@ public class UserDAOManager extends Database implements UserDAO
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement(
-          "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address_id =? WHERE user_id=?;");
-      statement.setString(1, user.getUsername());
-      statement.setString(2, user.getPassword());
-      statement.setString(3, user.getPhoneNumber());
-      statement.setInt(4, addressDAO.create(user.getAddress()));
-      statement.setInt(5, user.getUser_id());
-
-      Statement addressStatement = connection.createStatement();
-      int noUsersLivingAtAddress = 0;
-      int oldAddressId = 0;
-
-      ResultSet resultSet = addressStatement.executeQuery("SELECT address_id AS plswork FROM user_account WHERE user_id = " + user.getUser_id() + ";");
-
-      if (resultSet.next())
+      System.out.println(user.isAdministrator());
+      if(user.isAdministrator())
       {
-        oldAddressId = resultSet.getInt("plswork");
-        System.out.println("Address id: " + oldAddressId);
-        noUsersLivingAtAddress = getNoUsersLivingAtAddress(resultSet.getInt("plswork"));
+        PreparedStatement statement = connection.prepareStatement("UPDATE admin_account SET admin_name = ?, password = ?, phoneno = ? WHERE admin_id = ?;");
+        statement.setString(1, user.getUsername());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getPhoneNumber());
+        statement.setInt(4, user.getUser_id());
+        int affectedRows = statement.executeUpdate();
+        if(affectedRows == 1) {
+          return true;
+        }
+
       }
+      else {
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address_id =? WHERE user_id=?;");
+        statement.setString(1, user.getUsername());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getPhoneNumber());
+        statement.setInt(4, addressDAO.create(user.getAddress()));
+        statement.setInt(5, user.getUser_id());
 
-      System.out.println("People living at address: " + noUsersLivingAtAddress);
-      int affectedRows = statement.executeUpdate();
+        Statement addressStatement = connection.createStatement();
+        int noUsersLivingAtAddress = 0;
+        int oldAddressId = 0;
 
-      if (noUsersLivingAtAddress == 1)
-        addressDAO.delete(oldAddressId);
+        ResultSet resultSet = addressStatement.executeQuery("SELECT address_id AS plswork FROM user_account WHERE user_id = " + user.getUser_id() + ";");
 
-      if (affectedRows == 1)
-        return true;
+        if (resultSet.next()) {
+          oldAddressId = resultSet.getInt("plswork");
+          System.out.println("Address id: " + oldAddressId);
+          noUsersLivingAtAddress = getNoUsersLivingAtAddress(resultSet.getInt("plswork"));
+        }
+
+        System.out.println("People living at address: " + noUsersLivingAtAddress);
+        int affectedRows = statement.executeUpdate();
+
+        if (noUsersLivingAtAddress == 1)
+          addressDAO.delete(oldAddressId);
+
+        if (affectedRows == 1)
+          return true;
+      }
     }
     catch (SQLException e)
     {

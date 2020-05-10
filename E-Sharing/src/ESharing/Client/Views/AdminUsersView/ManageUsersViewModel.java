@@ -106,8 +106,10 @@ public class ManageUsersViewModel{
     }
 
     private void updateUserTableView(PropertyChangeEvent propertyChangeEvent) {
-        loadAllUsers();
-        System.out.println("Admin knows that it is necessary to update table");
+        Platform.runLater(() -> {
+            loadAllUsers();
+            System.out.println("Admin knows that it is necessary to update table");
+        });
     }
 
     public StringProperty getSearchProperty() {
@@ -123,6 +125,5 @@ public class ManageUsersViewModel{
                     users.add(user);
             }
         });
-
     }
 }

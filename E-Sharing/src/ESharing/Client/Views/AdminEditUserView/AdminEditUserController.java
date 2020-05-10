@@ -75,4 +75,9 @@ public class AdminEditUserController extends ViewController {
         warningPane.setVisible(true);
         warningLabel.setVisible(true);
     }
+
+    public void hideWarningPane() {
+        if (warningPane.isVisible())
+            warningPane.setVisible(false);
+    }
 }

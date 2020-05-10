@@ -66,7 +66,7 @@
    </Pane>
    <Pane fx:id="addressPane" layoutY="111.0" prefHeight="365.0" prefWidth="350.0">
       <children>
-            <JFXButton layoutX="87.0" layoutY="266.0" onAction="#onSignUpButton" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Sign up" />
+            <JFXButton fx:id="signUpButton" layoutX="87.0" layoutY="266.0" onAction="#onSignUpButton" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Sign up" />
          <Label layoutX="97.0" layoutY="334.0" onMouseClicked="#onRulesClick" style="-fx-cursor: hand;" text="Terms and Conditions of Use" textFill="#4cdbc4">
             <font>
                <Font size="10.0" />
@@ -81,7 +81,7 @@
          <JFXTextField fx:id="cityTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="158.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="190.0" promptText="City" />
          <JFXTextField fx:id="streetNumberTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="94.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="Number" unFocusColor="#324a5e" />
          <JFXTextField fx:id="streetTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="32.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="Street" unFocusColor="#324a5e" />
-         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="38.0" layoutY="269.0" onMouseClicked="#onGoToPersonalClick" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
+         <ImageView fx:id="arrowBack" fitHeight="40.0" fitWidth="40.0" layoutX="38.0" layoutY="269.0" onMouseClicked="#onGoToPersonalClick" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
             <image>
                <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
             </image>

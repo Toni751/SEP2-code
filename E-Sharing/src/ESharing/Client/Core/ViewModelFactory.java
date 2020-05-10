@@ -2,6 +2,8 @@ package ESharing.Client.Core;
 
 import ESharing.Client.Views.AdminDashboardView.AdminDashboardViewModel;
 import ESharing.Client.Views.AdminEditUserView.AdminEditUserViewModel;
+import ESharing.Client.Views.ChatView.ChatViewModel;
+import ESharing.Client.Views.EditAdminView.EditAdminViewModel;
 import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
 import ESharing.Client.Views.MainAdminView.MainAdminViewModel;
 import ESharing.Client.Views.MainAppView.MainAppViewModel;
@@ -30,6 +32,8 @@ public class ViewModelFactory {
     private MainAdminViewModel mainAdminViewModel;
     private AdminDashboardViewModel adminDashboardViewModel;
     private AdminEditUserViewModel adminEditUserViewModel;
+    private ChatViewModel chatViewModel;
+    private EditAdminViewModel editAdminViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -48,7 +52,8 @@ public class ViewModelFactory {
         manageUsersViewModel = new ManageUsersViewModel();
         adminDashboardViewModel = new AdminDashboardViewModel();
         adminEditUserViewModel = new AdminEditUserViewModel();
-
+        chatViewModel= new ChatViewModel();
+        editAdminViewModel = new EditAdminViewModel();
     }
 
     /**
@@ -148,5 +153,21 @@ public class ViewModelFactory {
      */
     public AdminEditUserViewModel getAdminEditUserViewModel() {
         return adminEditUserViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the chat view
+     * @return the initialized ChatViewModel
+     */
+    public ChatViewModel getChatViewModel() {
+        return chatViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the edit admin account view
+     * @return the initialized EditAdminViewModel
+     */
+    public EditAdminViewModel getEditAdminViewModel() {
+        return editAdminViewModel;
     }
 }

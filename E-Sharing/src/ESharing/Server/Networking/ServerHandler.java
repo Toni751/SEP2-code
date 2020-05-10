@@ -67,7 +67,11 @@ public class ServerHandler implements RMIServer
       }
 
     };
+    serverModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
+  }
 
+  @Override
+  public void registerGeneralCallback(RMIClient client) throws RemoteException {
     listenForUserRemoved = evt -> {
       try {
         client.userRemoved((User) evt.getNewValue());
@@ -83,14 +87,13 @@ public class ServerHandler implements RMIServer
         e.printStackTrace();
       }
     };
-
-    serverModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
     serverModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
     serverModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
   }
 
+
   @Override
-  public List<User> getAllUsers() throws RemoteException {
+  public List<User> getAllUsers(){
     return serverModel.getAllUsers();
   }
 }

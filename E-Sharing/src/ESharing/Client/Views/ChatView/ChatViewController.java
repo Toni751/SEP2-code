@@ -1,0 +1,189 @@
+package ESharing.Client.Views.ChatView;
+
+import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Views.ViewController;
+import ESharing.Shared.TransferedObject.Conversation;
+import ESharing.Shared.TransferedObject.Message;
+import ESharing.Shared.TransferedObject.User;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+
+public class ChatViewController extends ViewController {
+    @FXML private TextField searchConversationBox;
+    @FXML private TextField messageTextField;
+    @FXML private VBox conversationsPane;
+    @FXML private VBox onlineUsersPane;
+    @FXML private VBox messagesPane;
+    @FXML private Label receiverUsernameLabel;
+
+    private ChatViewModel viewModel;
+
+    public  void init()
+    {
+        viewModel = ViewModelFactory.getViewModelFactory().getChatViewModel();
+        searchConversationBox.textProperty().bindBidirectional(viewModel.getSearchProperty());
+        messageTextField.textProperty().bindBidirectional(viewModel.getMessageProperty());
+        receiverUsernameLabel.textProperty().bind(viewModel.getReceiverProperty());
+
+        setComponentsStyling();
+        loadAllComponents();
+
+    }
+
+
+    public void searchConversation() {
+        viewModel.searchConversation();
+    }
+
+    public void sendMessageByEnter(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            viewModel.sentMessage();
+            messageTextField.clear();
+        }
+    }
+
+    public void sendMessageByButton() {
+        viewModel.sentMessage();
+        messageTextField.clear();
+    }
+
+
+    private void loadAllComponents()
+    {
+        Platform.runLater(() -> {
+            for(Conversation conversation: viewModel.getConversations())
+                conversationsPane.getChildren().add(createConversationComponent(conversation));
+            for(User user : viewModel.getUsers())
+                onlineUsersPane.getChildren().add(creatOnlineUserComponent(user));
+        });
+    }
+
+    private HBox creatOnlineUserComponent(User user)
+    {
+        HBox onlineUser = new HBox(10);
+        Circle circle = new Circle();
+        Image userAvatar = new Image("ESharing/Addition/Images/icons/avatar-icon.png");
+        Label username = new Label(user.getUsername());
+        username.setStyle("-fx-text-fill: #fff; -fx-font-size: 14px;");
+        circle.setRadius(20);
+        circle.setFill(new ImagePattern(userAvatar));
+        onlineUser.setAlignment(Pos.CENTER_LEFT);
+
+        onlineUser.getChildren().setAll(circle, username);
+
+        //
+        // On click event loads conversation or create new one
+        //
+        onlineUser.addEventHandler(MouseEvent.MOUSE_CLICKED , mouseEvent -> {
+            Conversation conversation = viewModel.createNewConversation(user);
+            if(!conversation.getMessages().isEmpty()) {
+                for (Message message : conversation.getMessages()) {
+                    if (message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a"));
+                    else
+                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff"));
+                }
+            }
+        });
+        return  onlineUser;
+    }
+
+    private HBox createConversationComponent(Conversation conversation)
+    {
+        HBox conversationHBox = new HBox();
+
+        conversationHBox.setPrefWidth(170);
+        conversationHBox.setPrefHeight(50);
+
+        ImageView userImage = new ImageView(new Image("ESharing/Addition/Images/icons/avatar-icon.png"));
+        userImage.setFitWidth(40);
+        userImage.setFitHeight(40);
+
+        VBox infoBox = new VBox();
+        infoBox.setPrefHeight(50);
+        infoBox.setPrefWidth(110);
+        Label username = new Label(conversation.getSender().getUsername());
+        Label lastMessage = new Label(conversation.getMessages().get(conversation.getMessages().size() - 1).getContent());
+
+        infoBox.getChildren().addAll(username, lastMessage);
+        conversationHBox.getChildren().addAll(userImage, infoBox);
+        conversationHBox.setCursor(Cursor.HAND);
+
+        //
+        //On clicked event loads the current conversation
+        //
+        conversationHBox.addEventHandler(MouseEvent.MOUSE_CLICKED , mouseEvent -> {
+            viewModel.setCurrentConversation(conversation);
+            messagesPane.getChildren().clear();
+            for(Message message : conversation.getMessages()){
+                if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a"));
+                    System.out.println("my message");
+                }
+                else {
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff"));
+                    System.out.println("not my message");
+                }
+            }
+        });
+
+        return conversationHBox;
+    }
+
+    private HBox createMessageComponent(Message message, Pos pos, String color)
+    {
+        HBox messageComponent = new HBox(10);
+        Circle avatarCircle = new Circle();
+        Image userAvatar = new Image("ESharing/Addition/Images/icons/avatar-icon.png");
+
+        avatarCircle.setRadius(20);
+        avatarCircle.setFill(new ImagePattern(userAvatar));
+        TextArea messageArea = new TextArea(message.getContent());
+        messageArea.getStyleClass().add("message-component");
+        if(message.getContent().length() > 22)
+        {
+            int lines = message.getContent().length()/22;
+            int height = 27 + (lines * 27);
+            messageArea.setPrefHeight(height);
+            messageArea.setMinHeight(height);
+        }
+        else
+        {
+            messageArea.setPrefHeight(30);
+            messageArea.setMinHeight(30);
+        }
+        messageArea.setEditable(false);
+        messageArea.setWrapText(true);
+        messageComponent.setAlignment(pos);
+        messageArea.setStyle("-fx-background-color: " + color +";");
+        if(pos == Pos.CENTER_LEFT)
+            messageComponent.getChildren().addAll(avatarCircle, messageArea);
+        else
+            messageComponent.getChildren().addAll(messageArea, avatarCircle);
+
+        return messageComponent;
+    }
+
+    private void setComponentsStyling()
+    {
+        onlineUsersPane.setSpacing(5);
+        messagesPane.setSpacing(15);
+        conversationsPane.getChildren().clear();
+        onlineUsersPane.getChildren().clear();
+    }
+}

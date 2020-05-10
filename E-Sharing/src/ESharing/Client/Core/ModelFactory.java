@@ -4,8 +4,12 @@ import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.AppModel.AppOverviewModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
+import ESharing.Client.Model.ChatModel.ChatModel;
+import ESharing.Client.Model.ChatModel.ChatModelManager;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModelManager;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
+import ESharing.Client.Model.VerificationModel.VerificationModelManager;
 
 /**
  * The class responsible for managing models
@@ -16,6 +20,8 @@ public class ModelFactory {
     private UserActionsModel userActionsModel;
     private AppOverviewModel appOverviewModel;
     private AdministratorActionsModel administratorActionsModel;
+    private VerificationModel verificationModel;
+    private ChatModel chatModel;
 
     private static ModelFactory modelFactory;
 
@@ -27,7 +33,8 @@ public class ModelFactory {
         userActionsModel = new UserActionsModelManager();
         appOverviewModel = new AppOverviewModelManager();
         administratorActionsModel = new AdministratorActionModelManager();
-
+        verificationModel = new VerificationModelManager();
+        chatModel = new ChatModelManager();
     }
 
     /**
@@ -62,5 +69,21 @@ public class ModelFactory {
      */
     public AdministratorActionsModel getAdministratorActionsModel() {
         return administratorActionsModel;
+    }
+
+    /**
+     * Returns initialized model for all verification processes
+     * @return initialized model for all verification processes
+     */
+    public VerificationModel getVerificationModel() {
+        return verificationModel;
+    }
+
+    /**
+     * Returns initialized model for the chat
+     * @return initialized model for the chat
+     */
+    public ChatModel getChatModel() {
+        return chatModel;
     }
 }

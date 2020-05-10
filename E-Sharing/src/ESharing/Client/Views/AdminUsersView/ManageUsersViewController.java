@@ -5,16 +5,15 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXButton;
-import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-
-import javax.swing.*;
-
+import java.util.Optional;
 
 public class ManageUsersViewController extends ViewController {
 
@@ -61,9 +60,17 @@ public class ManageUsersViewController extends ViewController {
     }
 
     public void onRemoveUserAction() {
-        setWarningVisibleAndDefault();
-        if(manageUsersViewModel.removeSelectedUser())
-            setWarningPaneAsSuccess();
+        Platform.runLater(() ->{
+            Alert removeConfirmation =  GeneralFunctions.ShowConfirmationAlert("Confirm removing", "Are you sure? This operation can not be restored");
+            Optional<ButtonType> result = removeConfirmation.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                setWarningVisibleAndDefault();
+                if(manageUsersViewModel.removeSelectedUser())
+                    setWarningPaneAsSuccess();
+            } else {
+                removeConfirmation.close();
+            }
+        });
     }
 
     @FXML
@@ -71,15 +78,13 @@ public class ManageUsersViewController extends ViewController {
         warningPane.setVisible(false);
     }
 
-    private void setWarningPaneAsSuccess()
-    {
+    private void setWarningPaneAsSuccess() {
         warningPane.setVisible(true);
         warningPane.setStyle("-fx-background-color: #4cdbc4");
         warningLabel.setStyle("-fx-text-fill: black");
     }
 
-    private void setWarningVisibleAndDefault()
-    {
+    private void setWarningVisibleAndDefault() {
         warningPane.setVisible(true);
         warningPane.setStyle("-fx-background-color: #DB5461");
         warningLabel.setStyle("-fx-text-fill: white");

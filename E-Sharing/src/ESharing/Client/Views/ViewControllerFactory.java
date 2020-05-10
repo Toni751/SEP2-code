@@ -38,6 +38,8 @@ public class ViewControllerFactory {
             else if(id == Views.MANAGE_USERS_VIEW) viewController = creatNewViewControllerObject("AdminUsersView/ManageUsersView.fxml");
             else if(id == Views.ADMIN_DASHBOARD_VIEW) viewController = creatNewViewControllerObject("AdminDashboardView/AdminDashboardView.fxml");
             else if(id == Views.ADMIN_EDIT_USER_VIEW) viewController = creatNewViewControllerObject("AdminEditUserView/AdminEditUserView.fxml");
+            else if(id == Views.CHAT_VIEW) viewController = creatNewViewControllerObject("ChatView/ChatView.fxml");
+            else if(id == Views.EDIT_ADMIN_ACCOUNT) viewController = creatNewViewControllerObject("EditAdminView/EditAdminView.fxml");
             viewControllers.put(id, viewController);
         }
         System.out.println(viewController);

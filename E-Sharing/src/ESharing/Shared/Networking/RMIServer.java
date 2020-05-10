@@ -1,5 +1,6 @@
 package ESharing.Shared.Networking;
 
+import ESharing.Client.Networking.ClientHandler;
 import ESharing.Shared.TransferedObject.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -60,11 +61,13 @@ public interface RMIServer extends Remote
    */
   void registerAdministratorCallback(RMIClient client) throws RemoteException;
 
+  void registerGeneralCallback(RMIClient client) throws RemoteException;
+
   /**
    * Pass the collection of all users to the client side
    * @return the collection of all users
    * @throws RemoteException if the method invocation fails
    */
   List<User> getAllUsers() throws RemoteException;
-
 }
+

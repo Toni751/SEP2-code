@@ -2,8 +2,11 @@ package ESharing.Client.Views.SignUpView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.VerificationList;
+import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -27,6 +30,7 @@ public class SignUpViewModel {
     private StringProperty postalCodeProperty;
 
     private UserActionsModel userActionsModel;
+    private VerificationModel verificationModel;
 
     /**
      * A constructor initializes model layer for a user features and all fields
@@ -34,6 +38,7 @@ public class SignUpViewModel {
     public SignUpViewModel() {
 
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        this.verificationModel = ModelFactory.getModelFactory().getVerificationModel();
 
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
@@ -55,8 +60,10 @@ public class SignUpViewModel {
     public boolean createNewUser()
         {
         String verification = userActionsModel.createNewUser(new User(usernameProperty.get(), passwordProperty.get(), phoneProperty.get(), new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get())));
-        if(verification == null)
+        if(verification == null) {
+            warningLabel.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             return true;
+        }
         else {
             warningLabel.set(verification);
             return false;
@@ -69,11 +76,16 @@ public class SignUpViewModel {
      */
     public boolean signUpPersonalRequest()
     {
-        String verification = userActionsModel.verifyUserInfo(usernameProperty.get(), passwordProperty.get(), confirmPasswordProperty.get(), phoneProperty.get());
-        if(verification == null)
+        String verificationUser = verificationModel.verifyUserInfo(usernameProperty.get(), phoneProperty.get());
+        String verificationPassword = verificationModel.verifyPassword(passwordProperty.get(), confirmPasswordProperty.get());
+        if(verificationUser == null && verificationPassword == null)
             return true;
+        else if(verificationUser != null) {
+            warningLabel.set(verificationUser);
+            return false;
+        }
         else {
-            warningLabel.set(verification);
+            warningLabel.set(verificationPassword);
             return false;
         }
     }
@@ -85,7 +97,7 @@ public class SignUpViewModel {
     public boolean signUpAddressRequest()
     {
         Address address = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
-        String verification = userActionsModel.verifyAddress(address);
+        String verification = verificationModel.verifyAddress(address);
         if(verification == null) {
            return true;
         }

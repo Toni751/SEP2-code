@@ -114,6 +114,7 @@ public class ClientHandler implements Client, RMIClient
       if(loggedUser != null && loggedUser.isAdministrator()) {
         server.registerAdministratorCallback(this);
       }
+      server.registerGeneralCallback(this);
       return loggedUser;
     }
     catch (RemoteException e) {e.printStackTrace();}

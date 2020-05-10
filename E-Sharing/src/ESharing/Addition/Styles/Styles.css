@@ -9,6 +9,11 @@
 {
     -fx-background-color: #4cdbc4;
 }
+.transparent-background
+{
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
 .title
 {
     -fx-font-size: 22px;
@@ -114,9 +119,9 @@
 {
     -fx-background-color: #4cdbc4;
 }
-.text-area:focused .content {
-    -fx-background-color:  white;
-}
+/*.text-area:focused .content {*/
+/*    -fx-background-color:  white;*/
+/*}*/
 
 
 
@@ -381,6 +386,80 @@
 {
     -fx-text-fill: #41747f;
     -fx-font-size: 26px;
+}
+.messageTextField
+{
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-font-size: 16px;
+}
+.navigate-pane
+{
+    -fx-background-color: #303841;
+}
+.message-navigate-pane
+{
+    -fx-background-color: #363e47;
+}
+
+.search-conversation
+{
+    -fx-background-color: #303841;
+    -fx-text-fill: #a2b2be;
+    -fx-prompt-text-fill: #a2b2be;
+}
+.online-circle
+{
+    -fx-fill: #54d38a;
+    -fx-stroke: transparent;
+}
+.offline-circle
+{
+    -fx-fill: #a2b2be;
+    -fx-stroke: transparent;
+}
+.cream-background
+{
+    -fx-background-color: #f2f7f7;
+}
+
+.message-notification
+{
+    -fx-background-color: #DB5461;
+    -fx-border-radius: 30;
+    -fx-background-radius: 30;
+    -fx-font-size: 10;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
+.message-component
+{
+    -fx-font-family: Monospaced;
+    -fx-max-width: 250px;
+    -fx-border-style: none;
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+    -fx-text-alignment: center;
+    -fx-font-size: 17px;
+}
+
+.message-component .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
+}
+.message-component .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+.message-component .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.message-component > .scroll-pane {
+
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
 }
 
 

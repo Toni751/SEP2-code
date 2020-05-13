@@ -107,6 +107,22 @@ public class SignUpViewModel {
         }
     }
 
+
+    /**
+     * Clears all fields
+     */
+    public void resetView()
+    {
+        usernameProperty.setValue("");
+        passwordProperty.setValue("");
+        confirmPasswordProperty.setValue("");
+        phoneProperty.setValue("");
+        streetProperty.setValue("");
+        numberProperty.setValue("");
+        cityProperty.setValue("");
+        postalCodeProperty.setValue("");
+    }
+
     /**
      * Returns value used in the bind process between a controller and view model
      * @return the value used in the phone text field

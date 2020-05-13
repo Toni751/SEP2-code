@@ -149,4 +149,18 @@ public class MessageDAOManager extends Database implements MessageDAO
 
     } catch (SQLException e) {e.printStackTrace();}
   }
+
+  @Override
+  public void makeMessageRead(Message message) {
+    try(Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement("UPDATE message SET read = ? WHERE receiver_id =?;");
+      statement.setBoolean(1, true);
+      statement.setInt(2, message.getReceiver().getUser_id());
+      System.out.println("Message mark as read");
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
 }

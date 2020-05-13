@@ -14,4 +14,6 @@ public interface RMIChatServer extends Remote
   List<Message> getLastMessageWithEveryone (User user) throws RemoteException;
   void addMessage (Message message) throws RemoteException;
   void deleteMessagesForUser (User user) throws RemoteException;
+  void registerChatCallback (RMIChatClient chatClient) throws RemoteException;
+  void makeMessageRead(Message message) throws RemoteException;
 }

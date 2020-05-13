@@ -1,5 +1,8 @@
 package ESharing.Client.Networking.user;
 
+import ESharing.Client.Networking.Connection;
+import ESharing.Server.Core.StubFactory;
+import ESharing.Server.Core.StubInterface;
 import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.Networking.user.RMIServer;
 import ESharing.Shared.TransferedObject.Events;
@@ -38,26 +41,10 @@ public class ClientHandler implements Client, RMIClient
     {
       e.printStackTrace();
     }
-    while (true)
-    {
-      try
-      {
-        server = (RMIServer) LocateRegistry.getRegistry("localhost", 1099).lookup("Server");
-        System.out.println("Client connected");
-        break;
-      }
-      catch (RemoteException | NotBoundException e)
-      {
-        try
-        {
-          System.out.println("Client can't connect with the server... trying again after 5 seconds");
-          Thread.sleep(5000);
-        }
-        catch (InterruptedException ex)
-        {
-          ex.printStackTrace();
-        }
-      }
+    try {
+      server = Connection.getStubInterface().getServerRMI();
+    } catch (RemoteException e) {
+      e.printStackTrace();
     }
   }
 

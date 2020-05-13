@@ -2,8 +2,10 @@ package ESharing.Server.Model.chat;
 
 import ESharing.Server.Persistance.MessageDAO;
 import ESharing.Server.Persistance.MessageDAOManager;
+import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
+import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -29,18 +31,19 @@ public class ServerChatModelManager implements ServerChatModel
   @Override
   public int getNoUnreadMessages(User user)
   {
-    return getNoUnreadMessages(user);
+    return messageDAO.getNoUnreadMessages(user);
   }
 
   @Override
   public List<Message> getLastMessageWithEveryone(User user)
   {
-    return getLastMessageWithEveryone(user);
+    return messageDAO.getLastMessageWithEveryone(user);
   }
 
   @Override
   public void addMessage(Message message)
   {
+    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
     messageDAO.addMessage(message);
   }
 
@@ -48,6 +51,11 @@ public class ServerChatModelManager implements ServerChatModel
   public void deleteMessagesForUser(User user)
   {
     messageDAO.deleteMessagesForUser(user);
+  }
+
+  @Override
+  public void makeMessageRead(Message message) {
+    messageDAO.makeMessageRead(message);
   }
 
   @Override

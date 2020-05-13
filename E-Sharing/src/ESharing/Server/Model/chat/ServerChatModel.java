@@ -13,4 +13,5 @@ public interface ServerChatModel extends PropertyChangeSubject
   List<Message> getLastMessageWithEveryone (User user);
   void addMessage (Message message);
   void deleteMessagesForUser (User user);
+  void makeMessageRead(Message message);
 }

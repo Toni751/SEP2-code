@@ -51,7 +51,6 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 user.setReportsNumber(reports);
                 user.setCreation_date(create_date);
                 users.add(user);
-                System.out.println("User added to the list");
             }
             return users;
 

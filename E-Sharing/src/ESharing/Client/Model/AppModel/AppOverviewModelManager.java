@@ -22,6 +22,7 @@ public class AppOverviewModelManager implements AppOverviewModel{
     {
         this.client = ClientFactory.getClientFactory().getClient();
         support = new PropertyChangeSupport(this);
+
     }
 
     @Override

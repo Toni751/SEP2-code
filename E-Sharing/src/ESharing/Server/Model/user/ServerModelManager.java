@@ -1,18 +1,15 @@
-package ESharing.Server.Model;
+package ESharing.Server.Model.user;
 
+import ESharing.Server.Model.user.ServerModel;
 import ESharing.Server.Persistance.AdministratorDAO;
 import ESharing.Server.Persistance.AdministratorDAOManager;
 import ESharing.Server.Persistance.UserDAO;
-import ESharing.Shared.TransferedObject.Conversation;
 import ESharing.Shared.TransferedObject.Events;
-import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 

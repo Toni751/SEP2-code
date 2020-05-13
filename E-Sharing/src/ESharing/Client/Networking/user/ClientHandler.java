@@ -1,11 +1,9 @@
-package ESharing.Client.Networking;
+package ESharing.Client.Networking.user;
 
-import ESharing.Client.Model.UserActions.LoggedUser;
-import ESharing.Shared.Networking.RMIClient;
-import ESharing.Shared.Networking.RMIServer;
+import ESharing.Shared.Networking.user.RMIClient;
+import ESharing.Shared.Networking.user.RMIServer;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -110,7 +108,7 @@ public class ClientHandler implements Client, RMIClient
   {
     try
     {
-      User loggedUser = server.loginUser(username, password, this);
+      User loggedUser = server.loginUser(username, password);
       if(loggedUser != null && loggedUser.isAdministrator()) {
         server.registerAdministratorCallback(this);
       }

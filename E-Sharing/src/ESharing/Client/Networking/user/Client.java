@@ -1,4 +1,4 @@
-package ESharing.Client.Networking;
+package ESharing.Client.Networking.user;
 
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;

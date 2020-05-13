@@ -1,4 +1,4 @@
-package ESharing.Server.Model;
+package ESharing.Server.Model.user;
 
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;

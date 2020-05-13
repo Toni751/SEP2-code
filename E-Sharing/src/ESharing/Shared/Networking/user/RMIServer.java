@@ -1,6 +1,6 @@
-package ESharing.Shared.Networking;
+package ESharing.Shared.Networking.user;
 
-import ESharing.Client.Networking.ClientHandler;
+import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.TransferedObject.User;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -48,11 +48,10 @@ public interface RMIServer extends Remote
    * registers the client for rmi inside listeners
    * @param username the username of the account
    * @param password the password of the account
-   * @param client the client to be registered
    * @return the user's account data, if the request was approved, null otherwise
    * @throws RemoteException if the method invocation fails
    */
-  User loginUser (String username, String password, RMIClient client) throws RemoteException;
+  User loginUser (String username, String password) throws RemoteException;
 
   /**
    * Initializes all callbacks which are related to the administrator account

@@ -226,6 +226,7 @@ public class UserDAOManager extends Database implements UserDAO
     {
       PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE user_id = ?;");
       statement.setInt(1, user.getUser_id());
+      MessageDAOManager.getInstance().deleteMessagesForUser(user);
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
       int affectedRows = statement.executeUpdate();
       if (noUsersLivingAtAddress == 1)

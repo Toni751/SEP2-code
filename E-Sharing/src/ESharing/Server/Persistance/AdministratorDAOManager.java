@@ -29,7 +29,7 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try(Connection connection = getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address;");
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {

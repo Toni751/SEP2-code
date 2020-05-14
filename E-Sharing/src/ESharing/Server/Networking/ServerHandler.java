@@ -96,4 +96,9 @@ public class ServerHandler implements RMIServer
   public List<User> getAllUsers(){
     return serverModel.getAllUsers();
   }
+
+  @Override
+  public void unRegisterUserAsAListener() throws RemoteException {
+    //Oliwer
+  }
 }

@@ -68,5 +68,7 @@ public interface RMIServer extends Remote
    * @throws RemoteException if the method invocation fails
    */
   List<User> getAllUsers() throws RemoteException;
+
+  void unRegisterUserAsAListener() throws RemoteException;
 }
 

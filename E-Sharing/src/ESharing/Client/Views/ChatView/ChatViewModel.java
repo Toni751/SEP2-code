@@ -54,7 +54,7 @@ public class ChatViewModel implements PropertyChangeSubject {
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
         Message message = (Message) propertyChangeEvent.getNewValue();
-        if (currentConversation != null && (LoggedUser.getLoggedUser().getUser().getUser_id() == currentConversation.get(0).getSender().getUser_id()
+        if (!currentConversation.isEmpty() && (LoggedUser.getLoggedUser().getUser().getUser_id() == currentConversation.get(0).getSender().getUser_id()
         || LoggedUser.getLoggedUser().getUser().getUser_id() == currentConversation.get(0).getReceiver().getUser_id())) {
             currentConversation.add(message);
             makeConversationRead();
@@ -101,8 +101,24 @@ public class ChatViewModel implements PropertyChangeSubject {
 
     public void loadConversation(User sender, User receiver)
     {
-        currentConversation = chatModel.loadConversation(sender, receiver);
-        System.out.println(currentConversation.size());
+        if(currentConversation.isEmpty()) {
+            currentConversation = chatModel.loadConversation(sender, receiver);
+            System.out.println(currentConversation.size());
+        }
+        else if(currentConversation.get(0).getReceiver().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+        {
+            if(currentConversation.get(0).getSender().getUser_id() != sender.getUser_id())
+            {
+                currentConversation = chatModel.loadConversation(sender,receiver);
+            }
+        }
+        else if(currentConversation.get(0).getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+        {
+            if(currentConversation.get(0).getReceiver().getUser_id() != receiver.getUser_id())
+            {
+                currentConversation = chatModel.loadConversation(sender, receiver);
+            }
+        }
     }
 
     public StringProperty getMessageProperty() {

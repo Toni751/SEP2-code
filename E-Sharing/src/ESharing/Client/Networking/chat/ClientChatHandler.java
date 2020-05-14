@@ -155,6 +155,11 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   }
 
   @Override
+  public void logoutUser() {
+    //Oliwer
+  }
+
+  @Override
   public void newMessageReceived(Message message) {
     if(LoggedUser.getLoggedUser().getUser().getUser_id() == message.getSender().getUser_id()
         || LoggedUser.getLoggedUser().getUser().getUser_id() == message.getReceiver().getUser_id())

@@ -117,6 +117,11 @@ public class ClientHandler implements Client, RMIClient
   }
 
   @Override
+  public void logout() {
+    //Oliwer
+  }
+
+  @Override
   public void newUserReceived(User newUser) {
     support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, newUser);
   }

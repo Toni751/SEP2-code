@@ -133,9 +133,14 @@ public class ChatViewController extends ViewController {
         VBox infoBox = new VBox();
         infoBox.setPrefHeight(50);
         infoBox.setPrefWidth(110);
-        Label username = new Label(conversation.getSender().getUsername());
-        if(conversation.getSender() == LoggedUser.getLoggedUser().getUser())
-            username.textProperty().setValue(conversation.getReceiver().getUsername());
+        Label username = null;
+        if(conversation.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+            username = new Label(conversation.getReceiver().getUsername());
+        else
+            username = new Label(conversation.getSender().getUsername());
+//        Label username = new Label(conversation.getSender().getUsername());
+//        if(conversation.getSender() == LoggedUser.getLoggedUser().getUser())
+//            username.textProperty().setValue(conversation.getReceiver().getUsername());
         Label lastMessage = new Label(conversation.getContent());
 
         infoBox.getChildren().addAll(username, lastMessage);

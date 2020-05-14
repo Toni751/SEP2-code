@@ -72,4 +72,9 @@ public class ServerChatHandler implements RMIChatServer
   public void makeMessageRead(Message message){
     chatModel.makeMessageRead(message);
   }
+
+  @Override
+  public void unRegisterUserAsAListener() throws RemoteException {
+    //Oliwer
+  }
 }

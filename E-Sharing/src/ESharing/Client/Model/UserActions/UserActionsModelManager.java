@@ -67,6 +67,11 @@ public class UserActionsModelManager implements UserActionsModel {
     }
 
     @Override
+    public void logoutUser() {
+
+    }
+
+    @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
         if ("".equals(eventName) || eventName == null)

@@ -45,7 +45,7 @@ public class MessageDAOManager extends Database implements MessageDAO
     List<Message> conversation = new ArrayList<>();
     try(Connection connection = getConnection()){
       PreparedStatement statement = connection.prepareStatement("SELECT * FROM message WHERE (sender_id = ? AND receiver_id = ?) OR"
-                                                                                    + " (sender_id = ? AND receiver_id = ?);");
+                                                                                    + " (sender_id = ? AND receiver_id = ?) ORDER BY id;");
       statement.setInt(1, sender.getUser_id());
       statement.setInt(2, receiver.getUser_id());
       statement.setInt(3, receiver.getUser_id());

@@ -47,4 +47,6 @@ public interface Client extends PropertyChangeSubject
    * @return the collection of all system users
    */
   List<User> getAllUsersRequest();
+
+  void logout();
 }

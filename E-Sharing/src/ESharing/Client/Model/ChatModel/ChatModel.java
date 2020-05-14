@@ -17,4 +17,6 @@ public interface ChatModel extends PropertyChangeSubject {
     List<Message> loadConversationShortcuts();
     List<Message> loadConversation(User sender, User receiver);
     int getAllUnreadMessages();
+    void userLoggedOut();
+
 }

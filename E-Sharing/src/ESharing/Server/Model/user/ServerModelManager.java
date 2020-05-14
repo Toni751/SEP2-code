@@ -11,6 +11,7 @@ import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class ServerModelManager implements ServerModel
   private UserDAO userDAO;
   private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
+  private ArrayList<User> onlineUsers;
 
   /**
    * A constructor initializes all fields
@@ -44,6 +46,7 @@ public class ServerModelManager implements ServerModel
     if(result)
       support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, user);
     return result;
+
   }
 
   @Override
@@ -69,12 +72,29 @@ public class ServerModelManager implements ServerModel
   @Override
   public User loginUser(String username, String password)
   {
-    return userDAO.readByUserNameAndPassword(username, password);
+   User user = userDAO.readByUserNameAndPassword(username, password);
+   if(user != null)
+   {
+     onlineUsers.add(user);
+     support.firePropertyChange(Events.USER_ONLINE.toString(), null, user);
+   }
+   return user;
   }
 
   @Override
   public List<User> getAllUsers() {
     return administratorDAO.getAllUsers();
+  }
+
+  @Override public void userLoggedOut(User user)
+  {
+    onlineUsers.remove(user);
+    support.firePropertyChange(Events.USER_OFFLINE.toString(),null,user);
+  }
+
+  @Override public ArrayList<User> getAllOnlineUsers()
+  {
+    return onlineUsers;
   }
 
   @Override

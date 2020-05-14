@@ -5,6 +5,7 @@ import ESharing.Shared.TransferedObject.User;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface RMIChatServer extends Remote
@@ -17,4 +18,6 @@ public interface RMIChatServer extends Remote
   void registerChatCallback (RMIChatClient chatClient) throws RemoteException;
   void makeMessageRead(Message message) throws RemoteException;
   void unRegisterUserAsAListener() throws RemoteException;
+  void userLoggedOut(User user) throws RemoteException;
+  ArrayList<User> getOnlineUsers();
 }

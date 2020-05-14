@@ -18,6 +18,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientChatHandler implements ClientChat, RMIChatClient
@@ -159,6 +160,23 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     //Oliwer
   }
 
+  @Override public void userLoggedOut()
+  {
+    try
+    {
+      server.userLoggedOut(LoggedUser.getLoggedUser().getUser());
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  @Override public ArrayList<User> getOnlineUsers()
+  {
+    return server.getOnlineUsers();
+  }
+
   @Override
   public void newMessageReceived(Message message) {
     if(LoggedUser.getLoggedUser().getUser().getUser_id() == message.getSender().getUser_id()
@@ -168,8 +186,16 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   }
 
   @Override
-  public void newUser(User user)
+  public void newOnlineUser(User user)
   {
-
+    support.firePropertyChange(Events.USER_ONLINE.toString(),null,user);
+    System.out.println("new user in networking");
   }
+
+  @Override public void newOfflineUser(User user) throws RemoteException
+  {
+    support.firePropertyChange(Events.USER_OFFLINE.toString(),null,user);
+    System.out.println("offline user in networking");
+  }
+
 }

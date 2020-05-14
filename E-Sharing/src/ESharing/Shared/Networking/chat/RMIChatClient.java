@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 public interface RMIChatClient extends Remote
 {
   void newMessageReceived(Message message) throws RemoteException;
-  void newUser(User user) throws RemoteException;
+  void newOnlineUser(User user) throws RemoteException;
+  void newOfflineUser(User user) throws RemoteException;
 }
 

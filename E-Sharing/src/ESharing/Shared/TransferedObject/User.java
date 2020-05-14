@@ -21,6 +21,7 @@ public class User implements Serializable
   private String creation_date;
   boolean administrator;
 
+
   /**
    * A constructor which sets all user fields
    * @param username the value of a user username
@@ -192,6 +193,7 @@ public class User implements Serializable
     this.creation_date = creation_date;
   }
 
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -202,4 +204,6 @@ public class User implements Serializable
             Objects.equals(phoneNumber, user.phoneNumber) &&
             address.equals(user.address);
   }
+
+
 }

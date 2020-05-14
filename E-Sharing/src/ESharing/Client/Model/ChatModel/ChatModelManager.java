@@ -26,6 +26,20 @@ public class ChatModelManager implements ChatModel{
         client = ClientFactory.getClientFactory().getChatClient();
         support = new PropertyChangeSupport(this);
         client.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
+        client.addPropertyChangeListener(Events.USER_ONLINE.toString(), this::newOnlineUser);
+        client.addPropertyChangeListener(Events.USER_OFFLINE.toString(),this::newOfflineUser);
+    }
+
+    private void newOfflineUser(PropertyChangeEvent event)
+    {
+        support.firePropertyChange(event);
+        System.out.println("chat model fired new offline user event");
+    }
+
+    private void newOnlineUser(PropertyChangeEvent event)
+    {
+        support.firePropertyChange(event);
+        System.out.println("chat model fired new user event");
     }
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
@@ -34,7 +48,7 @@ public class ChatModelManager implements ChatModel{
 
     @Override
     public ArrayList<User> getOnlineUsers() {
-        return null;
+        return client.getOnlineUsers();
     }
 
     @Override
@@ -66,6 +80,11 @@ public class ChatModelManager implements ChatModel{
     @Override
     public int getAllUnreadMessages() {
         return client.getNoUnreadMessages(LoggedUser.getLoggedUser().getUser());
+    }
+
+    @Override public void userLoggedOut()
+    {
+        client.userLoggedOut();
     }
 
     @Override

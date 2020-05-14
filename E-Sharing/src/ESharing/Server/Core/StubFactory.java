@@ -20,7 +20,7 @@ public class StubFactory implements StubInterface {
 
     public RMIChatServer getServerChatHandler() throws RemoteException {
         if(chatServerRMI == null)
-            chatServerRMI = new ServerChatHandler(ServerModelFactory.getInstance().getChatModel());
+            chatServerRMI = new ServerChatHandler(ServerModelFactory.getInstance().getChatModel(), ServerModelFactory.getInstance().getServerModel());
         return chatServerRMI;
     }
 

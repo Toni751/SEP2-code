@@ -93,4 +93,9 @@ public class MainAppViewModel implements PropertyChangeSubject {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
+
+  public void userLoggedOut()
+  {
+      chatModel.userLoggedOut();
+  }
 }

@@ -1,11 +1,9 @@
 package ESharing.Client.Model.AdministratorModel;
 
 import ESharing.Client.Core.ClientFactory;
-import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
-import ESharing.Client.Networking.Client;
+import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

@@ -1,7 +1,9 @@
 package ESharing.Client.Core;
 
-import ESharing.Client.Networking.Client;
-import ESharing.Client.Networking.ClientHandler;
+import ESharing.Client.Networking.chat.ClientChat;
+import ESharing.Client.Networking.chat.ClientChatHandler;
+import ESharing.Client.Networking.user.Client;
+import ESharing.Client.Networking.user.ClientHandler;
 
 /**
  * The class responsible for managing clients
@@ -10,6 +12,7 @@ import ESharing.Client.Networking.ClientHandler;
  */
 public class ClientFactory {
     private Client client;
+    private ClientChat chatClient;
     private static ClientFactory clientFactory;
 
     /**
@@ -32,5 +35,15 @@ public class ClientFactory {
         if(client == null)
             client = new ClientHandler();
         return client;
+    }
+
+    /**
+     * Returns a chat client object
+     * @return the chat client object
+     */
+    public ClientChat getChatClient() {
+        if(chatClient == null)
+            chatClient = new ClientChatHandler();
+        return chatClient;
     }
 }

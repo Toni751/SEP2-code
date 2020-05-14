@@ -11,12 +11,12 @@ public class UserDAOManager extends Database implements UserDAO
   private AddressDAO addressDAO;
 
   //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
-  private UserDAOManager(AddressDAO addressDAO)
+  private UserDAOManager()
   {
     try
     {
       DriverManager.registerDriver(new org.postgresql.Driver());
-      this.addressDAO = addressDAO;
+      this.addressDAO = AddressDAOManager.getInstance();
     }
     catch (SQLException e)
     {
@@ -24,11 +24,11 @@ public class UserDAOManager extends Database implements UserDAO
     }
   }
 
-  public static synchronized UserDAOManager getInstance(AddressDAO addressDAO)
+  public static synchronized UserDAOManager getInstance()
   {
     if (instance == null)
     {
-      instance = new UserDAOManager(addressDAO);
+      instance = new UserDAOManager();
     }
     return instance;
   }
@@ -226,6 +226,7 @@ public class UserDAOManager extends Database implements UserDAO
     {
       PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE user_id = ?;");
       statement.setInt(1, user.getUser_id());
+      MessageDAOManager.getInstance().deleteMessagesForUser(user);
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
       int affectedRows = statement.executeUpdate();
       if (noUsersLivingAtAddress == 1)

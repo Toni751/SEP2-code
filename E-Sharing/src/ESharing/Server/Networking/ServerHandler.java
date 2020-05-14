@@ -1,8 +1,8 @@
 package ESharing.Server.Networking;
 
-import ESharing.Server.Model.ServerModel;
-import ESharing.Shared.Networking.RMIClient;
-import ESharing.Shared.Networking.RMIServer;
+import ESharing.Server.Model.user.ServerModel;
+import ESharing.Shared.Networking.user.RMIClient;
+import ESharing.Shared.Networking.user.RMIServer;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
@@ -52,7 +52,7 @@ public class ServerHandler implements RMIServer
   }
 
   @Override
-  public User loginUser(String username, String password, RMIClient client)
+  public User loginUser(String username, String password)
   {
     return serverModel.loginUser(username, password);
   }
@@ -71,7 +71,7 @@ public class ServerHandler implements RMIServer
   }
 
   @Override
-  public void registerGeneralCallback(RMIClient client) throws RemoteException {
+  public void registerGeneralCallback(RMIClient client){
     listenForUserRemoved = evt -> {
       try {
         client.userRemoved((User) evt.getNewValue());
@@ -95,5 +95,10 @@ public class ServerHandler implements RMIServer
   @Override
   public List<User> getAllUsers(){
     return serverModel.getAllUsers();
+  }
+
+  @Override
+  public void unRegisterUserAsAListener() throws RemoteException {
+    //Oliwer
   }
 }

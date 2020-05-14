@@ -42,6 +42,11 @@ public class MainAppViewModel implements PropertyChangeSubject {
         administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::userRemoved);
         administratorActionsModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), this::userUpdated);
         chatModel.addPropertyChangeListener(Events.MAKE_CONVERSATION_READ.toString(), this::makeMessageRead);
+        chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
+    }
+
+    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     private void makeMessageRead(PropertyChangeEvent propertyChangeEvent) {

@@ -79,6 +79,7 @@ public class SignUpViewController extends ViewController {
 
         onOpenSetting();
         defaultView();
+        clearFields();
     }
 
     /**
@@ -129,7 +130,6 @@ public class SignUpViewController extends ViewController {
      * Starts a verification process of the personal fields and changes current pane to the pane with the address fields
      */
     public void onGoToAddressClick() {
-
         if(signUpViewModel.signUpPersonalRequest()) {
             GeneralFunctions.fadeNode("FadeOut", personalPane, 500);
             personalPane.setVisible(false);
@@ -213,18 +213,19 @@ public class SignUpViewController extends ViewController {
         });
     }
 
+    /**
+     * Calls method in the view model that clears all text fields
+     */
+    public void clearFields()
+    {
+        signUpViewModel.resetView();
+    }
 
+    /**
+     * Sets default view and style for javaFX components
+     */
     private void defaultView()
     {
-        usernameTextField.clear();
-        passwordTextField.clear();
-        confirmPasswordTextField.clear();
-        phoneTextField.clear();
-        streetTextField.clear();
-        streetNumberTextField.clear();
-        cityTextField.clear();
-        postalCodeTextField.clear();
-
         warningPane.setVisible(false);
 
         personalCircle.setRadius(16);
@@ -236,12 +237,9 @@ public class SignUpViewController extends ViewController {
         signUpCircle.setRadius(16);
         signUpCircle.setStyle("-fx-fill: #4cdbc4");
 
-        //personalPane.toFront();
         personalPane.setVisible(true);
         addressPane.setVisible(false);
         GeneralFunctions.fadeNode("fadeIn", personalPane, 500);
-        //warningPane.toFront();
-        //addressPane.toBack();
         rulesPane.toBack();
         arrowBack.setDisable(false);
         signUpButton.setDisable(false);

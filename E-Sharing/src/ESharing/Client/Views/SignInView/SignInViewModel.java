@@ -59,6 +59,14 @@ public class SignInViewModel {
     }
 
     /**
+     * Clears all text fields
+     */
+    public void resetView()
+    {
+        usernameProperty.setValue("");
+        passwordProperty.setValue("");
+    }
+    /**
      * Returns value used in the bind process between a controller and view model
      * @return the value used in the username text field
      */

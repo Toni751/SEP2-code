@@ -1,9 +1,7 @@
 package ESharing.Client.Model.UserActions;
 
 import ESharing.Client.Core.ClientFactory;
-import ESharing.Client.Networking.Client;
-import ESharing.Shared.TransferedObject.Address;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
@@ -66,6 +64,11 @@ public class UserActionsModelManager implements UserActionsModel {
         User accountToRemove = new User(LoggedUser.getLoggedUser());
         client.removeUserRequest(accountToRemove);
         LoggedUser.getLoggedUser().logoutUser();
+    }
+
+    @Override
+    public void logoutUser() {
+
     }
 
     @Override

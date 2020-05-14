@@ -73,10 +73,9 @@ public class SignInViewController extends ViewController {
     }
 
     /**
-     * Clears text fields
+     * Calls method in the view model that clears all text fields
      */
     private void clearFields() {
-        usernameTextField.clear();
-        passwordTextField.clear();
+        signInViewModel.resetView();
     }
 }

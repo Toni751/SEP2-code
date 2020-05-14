@@ -1,26 +1,35 @@
 package ESharing.Client.Model.ChatModel;
 
 import ESharing.Client.Core.ClientFactory;
-import ESharing.Client.Networking.Client;
+import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Networking.chat.ClientChat;
+import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.Conversation;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import ESharing.Shared.Util.PropertyChangeSubject;
+import jdk.jfr.Event;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatModelManager implements ChatModel{
 
-    private Client client;
+    private ClientChat client;
     private PropertyChangeSupport support;
 
     public ChatModelManager()
     {
-        client = ClientFactory.getClientFactory().getClient();
+        client = ClientFactory.getClientFactory().getChatClient();
         support = new PropertyChangeSupport(this);
+        client.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
+    }
+
+    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     @Override
@@ -29,8 +38,8 @@ public class ChatModelManager implements ChatModel{
     }
 
     @Override
-    public boolean sendPrivateMessage(Message message) {
-        return false;
+    public void sendPrivateMessage(Message message) {
+       client.addMessage(message);
     }
 
     @Override
@@ -39,8 +48,24 @@ public class ChatModelManager implements ChatModel{
     }
 
     @Override
-    public void makeConversationRead(Conversation conversation) {
-        support.firePropertyChange(Events.MAKE_CONVERSATION_READ.toString(), null, conversation);
+    public void makeMessageRead(Message message) {
+        client.makeMessageRead(message);
+        support.firePropertyChange(Events.MAKE_CONVERSATION_READ.toString(), null, message);
+    }
+
+    @Override
+    public List<Message> loadConversationShortcuts() {
+        return client.getLastMessageWithEveryone(LoggedUser.getLoggedUser().getUser());
+    }
+
+    @Override
+    public List<Message> loadConversation(User sender, User receiver) {
+        return client.loadConversation(sender, receiver);
+    }
+
+    @Override
+    public int getAllUnreadMessages() {
+        return client.getNoUnreadMessages(LoggedUser.getLoggedUser().getUser());
     }
 
     @Override

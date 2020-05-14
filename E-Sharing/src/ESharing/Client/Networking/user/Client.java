@@ -1,4 +1,4 @@
-package ESharing.Client.Networking;
+package ESharing.Client.Networking.user;
 
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
@@ -47,4 +47,6 @@ public interface Client extends PropertyChangeSubject
    * @return the collection of all system users
    */
   List<User> getAllUsersRequest();
+
+  void logout();
 }

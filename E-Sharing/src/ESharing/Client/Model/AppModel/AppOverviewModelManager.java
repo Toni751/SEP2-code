@@ -1,7 +1,7 @@
 package ESharing.Client.Model.AppModel;
 
 import ESharing.Client.Core.ClientFactory;
-import ESharing.Client.Networking.Client;
+import ESharing.Client.Networking.user.Client;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -22,6 +22,7 @@ public class AppOverviewModelManager implements AppOverviewModel{
     {
         this.client = ClientFactory.getClientFactory().getClient();
         support = new PropertyChangeSupport(this);
+
     }
 
     @Override

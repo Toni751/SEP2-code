@@ -1,4 +1,4 @@
-package ESharing.Shared.Networking;
+package ESharing.Shared.Networking.user;
 
 import ESharing.Shared.TransferedObject.User;
 

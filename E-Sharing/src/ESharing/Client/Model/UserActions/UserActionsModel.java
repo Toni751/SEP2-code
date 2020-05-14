@@ -37,4 +37,6 @@ public interface UserActionsModel extends PropertyChangeSubject
      * Removes account which belongs to current logged user and goes to the welcome view
      */
     void removeAccount();
+
+    void logoutUser();
 }

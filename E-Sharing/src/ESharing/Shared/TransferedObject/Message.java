@@ -7,7 +7,7 @@ public class Message implements Serializable {
     private User sender;
     private User receiver;
     private String content;
-    private String data;
+    private String date;
 
     public Message(User sender, User receiver, String content)
     {
@@ -28,11 +28,11 @@ public class Message implements Serializable {
         return content;
     }
 
-    public String getData() {
-        return data;
+    public String getDate() {
+        return date;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDate(String date) {
+        this.date = date;
     }
 }

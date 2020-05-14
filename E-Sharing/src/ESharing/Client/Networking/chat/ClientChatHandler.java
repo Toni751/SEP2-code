@@ -196,7 +196,7 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   @Override
   public void newOnlineUser(User user)
   {
-    support.firePropertyChange(Events.USER_ONLINE.toString(),null,user);
+    support.firePropertyChange(Events.USER_ONLINE.toString(),null, user);
     System.out.println("new user in networking");
   }
 

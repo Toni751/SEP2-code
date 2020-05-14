@@ -233,4 +233,12 @@ public class ViewHandler {
             }
         });
     }
+
+    /**
+     * Minimizes the javaFx stage
+     */
+    public void minimizeWindow()
+    {
+        currentStage.setIconified(true);
+    }
 }

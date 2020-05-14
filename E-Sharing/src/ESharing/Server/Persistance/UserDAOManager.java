@@ -44,8 +44,7 @@ public class UserDAOManager extends Database implements UserDAO
     {
       System.out.println("Connection established");
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO user_account (username,password,phoneNumber,address_id, creation_date) VALUES (?,?,?,?,?) "
-              + "ON CONFLICT ON CONSTRAINT unique_username DO NOTHING;");
+          "INSERT INTO user_account (username,password,phoneno,address_id, creation_date) VALUES (?,?,?,?,?) ");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
       statement.setString(3, user.getPhoneNumber());
@@ -77,14 +76,14 @@ public class UserDAOManager extends Database implements UserDAO
   {
     try(Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address WHERE user_id= ?;");
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address WHERE id= ?;");
       statement.setInt(1, user_id);
       ResultSet resultSet = statement.executeQuery();
       if (resultSet.next())
       {
         String username= resultSet.getString("username");
         String password= resultSet.getString("password");
-        String phoneNumber = resultSet.getString(" phoneNumber");
+        String phoneNumber = resultSet.getString("phoneno");
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
         String postcode = resultSet.getString("postcode");
@@ -118,12 +117,13 @@ public class UserDAOManager extends Database implements UserDAO
       resultSet = statement.executeQuery();
       if (resultSet.next())
       {
-        int user_id = resultSet.getInt("user_id");
+        int user_id = resultSet.getInt("id");
         String username= resultSet.getString("username");
         String password= resultSet.getString("password");
-        String phoneNumber = resultSet.getString("phoneNumber");
+        String phoneNumber = resultSet.getString("phoneno");
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
+        boolean administrator = resultSet.getBoolean("administrator");
         String postcode =resultSet.getString("postcode");
         String number = resultSet.getString("number");
         String city = resultSet.getString("city");
@@ -133,28 +133,31 @@ public class UserDAOManager extends Database implements UserDAO
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
         user.setCreation_date(creationDate);
+        System.out.println(user);
+        if(administrator)
+          user.setAsAdministrator();
         return user;
       }
       // Search in admin table
-      else if(!resultSet.next())
-      {
-        statement = connection.prepareStatement("SELECT * FROM admin_account WHERE admin_name = ? AND password = ?");
-        statement.setString(1, usernameRequest);
-        statement.setString(2, passwordRequest);
-        resultSet = statement.executeQuery();
-        if(resultSet.next())
-        {
-          int admin_id = resultSet.getInt("admin_id");
-          String admin_name = resultSet.getString("admin_name");
-          String password = resultSet.getString("password");
-          String phoneNo = resultSet.getString("phoneNo");
-
-          User admin = new User(admin_name, password, phoneNo, null);
-          admin.setAsAdministrator();
-          admin.setUser_id(admin_id);
-          return admin;
-        }
-      }
+//      else if(!resultSet.next())
+//      {
+//        statement = connection.prepareStatement("SELECT * FROM admin_account WHERE username = ? AND password = ?");
+//        statement.setString(1, usernameRequest);
+//        statement.setString(2, passwordRequest);
+//        resultSet = statement.executeQuery();
+//        if(resultSet.next())
+//        {
+//          int admin_id = resultSet.getInt("id");
+//          String admin_name = resultSet.getString("username");
+//          String password = resultSet.getString("password");
+//          String phoneNo = resultSet.getString("phoneno");
+//
+//          User admin = new User(admin_name, password, phoneNo, null);
+//          admin.setAsAdministrator();
+//          admin.setUser_id(admin_id);
+//          return admin;
+//        }
+//      }
     }
     catch (SQLException e)
     {
@@ -171,7 +174,7 @@ public class UserDAOManager extends Database implements UserDAO
       System.out.println(user.isAdministrator());
       if(user.isAdministrator())
       {
-        PreparedStatement statement = connection.prepareStatement("UPDATE admin_account SET admin_name = ?, password = ?, phoneno = ? WHERE admin_id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE admin_account SET username = ?, password = ?, phoneno = ? WHERE id = ?;");
         statement.setString(1, user.getUsername());
         statement.setString(2, user.getPassword());
         statement.setString(3, user.getPhoneNumber());
@@ -184,7 +187,7 @@ public class UserDAOManager extends Database implements UserDAO
       }
       else {
         PreparedStatement statement = connection.prepareStatement(
-                "UPDATE user_account SET  username = ?, password = ?, phoneNumber=? , address_id =? WHERE user_id=?;");
+                "UPDATE user_account SET  username = ?, password = ?, phoneno=? , address_id =? WHERE id=?;");
         statement.setString(1, user.getUsername());
         statement.setString(2, user.getPassword());
         statement.setString(3, user.getPhoneNumber());
@@ -195,7 +198,7 @@ public class UserDAOManager extends Database implements UserDAO
         int noUsersLivingAtAddress = 0;
         int oldAddressId = 0;
 
-        ResultSet resultSet = addressStatement.executeQuery("SELECT address_id AS plswork FROM user_account WHERE user_id = " + user.getUser_id() + ";");
+        ResultSet resultSet = addressStatement.executeQuery("SELECT address_id AS plswork FROM user_account WHERE id = " + user.getUser_id() + ";");
 
         if (resultSet.next()) {
           oldAddressId = resultSet.getInt("plswork");
@@ -224,7 +227,7 @@ public class UserDAOManager extends Database implements UserDAO
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE user_id = ?;");
+      PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE id = ?;");
       statement.setInt(1, user.getUser_id());
       MessageDAOManager.getInstance().deleteMessagesForUser(user);
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());

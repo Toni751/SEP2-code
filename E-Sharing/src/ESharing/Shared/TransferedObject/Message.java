@@ -8,12 +8,14 @@ public class Message implements Serializable {
     private User receiver;
     private String content;
     private String date;
+    private boolean read;
 
-    public Message(User sender, User receiver, String content)
+    public Message(User sender, User receiver, String content, boolean read)
     {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
+        this.read = read;
     }
 
     public User getSender() {
@@ -34,5 +36,13 @@ public class Message implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead() {
+        this.read = true;
     }
 }

@@ -3,11 +3,13 @@ package ESharing.Client.Views.AdminUsersView;
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,6 +25,7 @@ public class ManageUsersViewController extends ViewController {
     @FXML private Label reportedUserLabel;
     @FXML private JFXButton removeUserButton;
     @FXML private JFXButton goToEditButton;
+    @FXML private JFXButton goToMessageButton;
     @FXML private Pane warningPane;
     @FXML private Label warningLabel;
     @FXML private TableColumn<User, Integer> userIdColumn;
@@ -57,6 +60,7 @@ public class ManageUsersViewController extends ViewController {
         hideWarningPane();
         removeUserButton.setDisable(true);
         goToEditButton.setDisable(true);
+        goToMessageButton.setDisable(true);
     }
 
     public void onRemoveUserAction() {
@@ -95,6 +99,7 @@ public class ManageUsersViewController extends ViewController {
         AdministratorLists.getInstance().setSelectedUser((User) usersTable.getItems().get(index));
         removeUserButton.setDisable(false);
         goToEditButton.setDisable(false);
+        goToMessageButton.setDisable(false);
     }
 
     public void onKeyPressedInSearchBox() {
@@ -103,5 +108,9 @@ public class ManageUsersViewController extends ViewController {
 
     public void goToEditButton() {
         viewHandler.openAdminEditUserView();
+    }
+
+    public void goToChat(ActionEvent actionEvent) {
+        viewHandler.openChatView(null);
     }
 }

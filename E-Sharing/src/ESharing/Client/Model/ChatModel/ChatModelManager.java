@@ -57,11 +57,6 @@ public class ChatModelManager implements ChatModel{
     }
 
     @Override
-    public Conversation createNewConversation(User sender, User receiver) {
-        return null;
-    }
-
-    @Override
     public void makeMessageRead(Message message) {
         client.makeMessageRead(message);
         support.firePropertyChange(Events.MAKE_CONVERSATION_READ.toString(), null, message);

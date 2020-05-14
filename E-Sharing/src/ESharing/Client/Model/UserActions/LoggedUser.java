@@ -1,6 +1,10 @@
 package ESharing.Client.Model.UserActions;
 
+import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class represents a current logged user
@@ -11,6 +15,7 @@ public class LoggedUser {
 
     private User user;
     private static LoggedUser loggedUser;
+    private List<Message> currentOpenConversation = new ArrayList<>();
 
     /**
      * Returns LoggedUser object if it exists, otherwise creates new object
@@ -47,5 +52,13 @@ public class LoggedUser {
      */
     public User getUser() {
         return user;
+    }
+
+    public void setCurrentOpenConversation(List<Message> currentOpenConversation) {
+        this.currentOpenConversation = currentOpenConversation;
+    }
+
+    public List<Message> getCurrentOpenConversation() {
+        return currentOpenConversation;
     }
 }

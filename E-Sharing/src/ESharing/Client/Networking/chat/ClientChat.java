@@ -15,5 +15,8 @@ public interface ClientChat extends PropertyChangeSubject
   void deleteMessagesForUser (User user);
   void makeMessageRead(Message message);
 
+
   void logoutUser();
+  void userLoggedOut();
+  List<User> getOnlineUsers();
 }

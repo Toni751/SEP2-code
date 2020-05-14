@@ -68,6 +68,7 @@ public class MainAppViewController extends ViewController {
      * Logs out current user and opens a welcome view
      */
     public void onLogout() {
+        mainAppViewModel.userLoggedOut();
         LoggedUser.getLoggedUser().logoutUser();
         viewHandler.openWelcomeView();
     }

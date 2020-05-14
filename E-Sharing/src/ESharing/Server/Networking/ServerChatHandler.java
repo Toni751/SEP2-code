@@ -11,17 +11,22 @@ import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerChatHandler implements RMIChatServer
 {
   private ServerChatModel chatModel;
   private PropertyChangeListener listenForNewMessage;
+  private PropertyChangeListener listenForOnlineUser;
+  private PropertyChangeListener listenForOfflineUser;
+  private ServerModel serverModel;
 
-  public ServerChatHandler(ServerChatModel chatModel) throws RemoteException
+  public ServerChatHandler(ServerChatModel chatModel, ServerModel serverModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
     this.chatModel = chatModel;
+    this.serverModel =serverModel;
   }
 
   @Override
@@ -66,6 +71,32 @@ public class ServerChatHandler implements RMIChatServer
     };
 
     chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), listenForNewMessage);
+
+    listenForOnlineUser = evt ->{
+      try{
+        chatClient.newOnlineUser((User) evt.getNewValue());
+        System.out.println("new user online");
+      }
+      catch (RemoteException e)
+      {
+        e.printStackTrace();
+      }
+    };
+
+    serverModel.addPropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
+
+
+    listenForOfflineUser = evt ->{
+      try{
+        chatClient.newOfflineUser((User) evt.getNewValue());
+        System.out.println("the user is offline");
+      }
+      catch (RemoteException e)
+      {
+        e.printStackTrace();
+      }
+    };
+    serverModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
   }
 
   @Override
@@ -76,5 +107,15 @@ public class ServerChatHandler implements RMIChatServer
   @Override
   public void unRegisterUserAsAListener() throws RemoteException {
     //Oliwer
+  }
+
+  @Override public void userLoggedOut(User user) throws RemoteException
+  {
+    serverModel.userLoggedOut(user);
+  }
+
+  @Override public List<User> getOnlineUsers()
+  {
+    return serverModel.getAllOnlineUsers();
   }
 }

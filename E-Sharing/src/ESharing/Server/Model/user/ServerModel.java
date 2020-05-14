@@ -3,6 +3,7 @@ package ESharing.Server.Model.user;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,4 +47,6 @@ public interface ServerModel extends PropertyChangeSubject
    * @return the collection of all users existing in the system database
    */
   List<User> getAllUsers();
+  void userLoggedOut(User user);
+  List<User> getAllOnlineUsers();
 }

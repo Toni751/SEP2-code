@@ -37,6 +37,7 @@ public class LoggedUser {
      */
     public void logoutUser()
     {
+
         loggedUser = null;
     }
 

@@ -17,4 +17,6 @@ public interface RMIChatServer extends Remote
   void registerChatCallback (RMIChatClient chatClient) throws RemoteException;
   void makeMessageRead(Message message) throws RemoteException;
   void unRegisterUserAsAListener() throws RemoteException;
+  void userLoggedOut(User user) throws RemoteException;
+  List<User> getOnlineUsers() throws RemoteException;
 }

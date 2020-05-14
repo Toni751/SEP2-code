@@ -114,7 +114,7 @@ public class ServerChatHandler implements RMIChatServer
     serverModel.userLoggedOut(user);
   }
 
-  @Override public ArrayList<User> getOnlineUsers()
+  @Override public List<User> getOnlineUsers()
   {
     return serverModel.getAllOnlineUsers();
   }

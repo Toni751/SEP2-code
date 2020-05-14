@@ -48,5 +48,5 @@ public interface ServerModel extends PropertyChangeSubject
    */
   List<User> getAllUsers();
   void userLoggedOut(User user);
-  ArrayList<User> getAllOnlineUsers();
+  List<User> getAllOnlineUsers();
 }

@@ -25,7 +25,7 @@ public class ServerModelManager implements ServerModel
   private UserDAO userDAO;
   private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
-  private ArrayList<User> onlineUsers;
+  private List<User> onlineUsers;
 
   /**
    * A constructor initializes all fields
@@ -35,6 +35,7 @@ public class ServerModelManager implements ServerModel
     this.userDAO = UserDAOManager.getInstance();
     this.administratorDAO = AdministratorDAOManager.getInstance();
     support = new PropertyChangeSupport(this);
+    onlineUsers = new ArrayList<>();
   }
 
   @Override
@@ -92,7 +93,7 @@ public class ServerModelManager implements ServerModel
     support.firePropertyChange(Events.USER_OFFLINE.toString(),null,user);
   }
 
-  @Override public ArrayList<User> getAllOnlineUsers()
+  @Override public List<User> getAllOnlineUsers()
   {
     return onlineUsers;
   }

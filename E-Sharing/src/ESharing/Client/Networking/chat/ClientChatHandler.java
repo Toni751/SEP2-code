@@ -172,9 +172,17 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     }
   }
 
-  @Override public ArrayList<User> getOnlineUsers()
+  @Override public List<User> getOnlineUsers()
   {
-    return server.getOnlineUsers();
+    try
+    {
+      return server.getOnlineUsers();
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   @Override

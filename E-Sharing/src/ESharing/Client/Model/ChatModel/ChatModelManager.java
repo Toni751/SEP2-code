@@ -47,7 +47,7 @@ public class ChatModelManager implements ChatModel{
     }
 
     @Override
-    public ArrayList<User> getOnlineUsers() {
+    public List<User> getOnlineUsers() {
         return client.getOnlineUsers();
     }
 

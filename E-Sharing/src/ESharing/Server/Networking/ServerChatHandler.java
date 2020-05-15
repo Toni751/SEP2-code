@@ -106,7 +106,9 @@ public class ServerChatHandler implements RMIChatServer
 
   @Override
   public void unRegisterUserAsAListener() throws RemoteException {
-    //Oliwer
+    serverModel.removePropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
+    serverModel.removePropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
+    serverModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), listenForNewMessage);
   }
 
   @Override public void userLoggedOut(User user) throws RemoteException

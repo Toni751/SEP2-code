@@ -136,6 +136,7 @@ public class MainAppViewController extends ViewController {
     }
 
     public void onCloseButtonAction(MouseEvent mouseEvent) {
-        mainAppViewModel.onCloseRequest();
+        mainAppViewModel.userLoggedOut();
+        System.exit(0);
     }
 }

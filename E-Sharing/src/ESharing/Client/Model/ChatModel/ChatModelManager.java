@@ -80,6 +80,7 @@ public class ChatModelManager implements ChatModel{
     @Override public void userLoggedOut()
     {
         client.userLoggedOut();
+        client.logout();
     }
 
     @Override

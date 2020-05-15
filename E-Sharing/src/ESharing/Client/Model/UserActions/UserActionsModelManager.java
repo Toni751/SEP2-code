@@ -68,7 +68,7 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public void logoutUser() {
-
+      client.logout();
     }
 
     @Override

@@ -99,6 +99,8 @@ public class ServerHandler implements RMIServer
 
   @Override
   public void unRegisterUserAsAListener() throws RemoteException {
-    //Oliwer
+    serverModel.removePropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
+    serverModel.removePropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
+    serverModel.removePropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
   }
 }

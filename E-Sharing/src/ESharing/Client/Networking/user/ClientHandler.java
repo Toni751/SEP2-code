@@ -118,7 +118,14 @@ public class ClientHandler implements Client, RMIClient
 
   @Override
   public void logout() {
-    //Oliwer
+    try
+    {
+      server.unRegisterUserAsAListener();
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
   }
 
   @Override

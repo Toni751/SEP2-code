@@ -68,9 +68,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
             support.firePropertyChange(Events.USER_LOGOUT.toString(), null, "Your account has been removed from the system!");
     }
 
-    public void onCloseRequest() {
-        userActionsModel.logoutUser();
-    }
 
     @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener) {
@@ -103,5 +100,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
   public void userLoggedOut()
   {
       chatModel.userLoggedOut();
+      userActionsModel.logoutUser();
   }
 }

@@ -156,8 +156,15 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   }
 
   @Override
-  public void logoutUser() {
-    //Oliwer
+  public void logout() {
+    try
+    {
+      server.unRegisterUserAsAListener();
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
   }
 
   @Override public void userLoggedOut()

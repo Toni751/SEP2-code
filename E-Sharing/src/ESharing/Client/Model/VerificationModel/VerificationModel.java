@@ -49,4 +49,6 @@ public interface VerificationModel {
      * @return the result of the verification as a string object
      */
     String verifyUsernameAndPassword(String username, String password);
+
+
 }

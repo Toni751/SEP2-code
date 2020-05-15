@@ -29,6 +29,16 @@
             <Rectangle fx:id="messageRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="44.0" layoutY="268.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="4.0" />
             <Rectangle fx:id="settingRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="44.0" layoutY="310.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="4.0" />
             <Label fx:id="messageNotification" layoutX="36.0" layoutY="270.0" prefHeight="17.0" prefWidth="12.0" styleClass="message-notification" text="12" />
+            <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="20.0" layoutY="2.0" onMouseClicked="#onMinimizeAction" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/minimize.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="18.0" fitWidth="18.0" layoutX="2.0" layoutY="2.0" onMouseClicked="#onCloseButtonAction" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/close.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Pane fx:id="contentPane" layoutX="50.0" prefHeight="500.0" prefWidth="750.0" />

@@ -44,6 +44,7 @@ public class AdministratorLists {
     }
 
     public void setSelectedUser(User selectedUser) {
+        System.out.println(selectedUser);
         this.selectedUser = selectedUser;
     }
 

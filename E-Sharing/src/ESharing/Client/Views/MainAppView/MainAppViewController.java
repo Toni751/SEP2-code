@@ -14,11 +14,13 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import jdk.jfr.Event;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -62,6 +64,7 @@ public class MainAppViewController extends ViewController {
         hideNavigateRectangles();
         settingRectangle.setVisible(true);
         GeneralFunctions.fadeNode("FadeIn", settingRectangle, 500);
+        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
     }
 
     /**
@@ -117,6 +120,7 @@ public class MainAppViewController extends ViewController {
     private void setMessageNotification()
     {
         Platform.runLater(() -> {
+            messageNotification.textProperty().set("0");
             int unreadConversation = chatModel.getAllUnreadMessages();
             if(unreadConversation > 0) {
                 messageNotification.setVisible(true);
@@ -125,5 +129,13 @@ public class MainAppViewController extends ViewController {
             else
                 messageNotification.setVisible(false);
         });
+    }
+
+    public void onMinimizeAction(MouseEvent mouseEvent) {
+        viewHandler.minimizeWindow();
+    }
+
+    public void onCloseButtonAction(MouseEvent mouseEvent) {
+        mainAppViewModel.onCloseRequest();
     }
 }

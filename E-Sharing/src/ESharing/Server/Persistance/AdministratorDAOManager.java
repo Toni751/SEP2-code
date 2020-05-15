@@ -33,12 +33,13 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
-                int user_id = resultSet.getInt("user_id");
+                int user_id = resultSet.getInt("id");
                 String username= resultSet.getString("username");
                 String password= resultSet.getString("password");
-                String phoneNumber = resultSet.getString("phoneNumber");
+                String phoneNumber = resultSet.getString("phoneno");
                 int reports = resultSet.getInt("reports");
                 int address_id = resultSet.getInt("address_id");
+                boolean administrator = resultSet.getBoolean("administrator");
                 String street = resultSet.getString("street");
                 String postcode =resultSet.getString("postcode");
                 String number = resultSet.getString("number");
@@ -50,6 +51,8 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 user.setUser_id(user_id);
                 user.setReportsNumber(reports);
                 user.setCreation_date(create_date);
+                if(administrator)
+                    user.setAsAdministrator();
                 users.add(user);
             }
             return users;

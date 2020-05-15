@@ -57,11 +57,11 @@ public class MessageDAOManager extends Database implements MessageDAO
 
         if (sender.getUser_id() == resultSet.getInt("sender_id"))
         {
-          message = new Message(sender, receiver, resultSet.getString("content"));
+          message = new Message(sender, receiver, resultSet.getString("content"), resultSet.getBoolean("read"));
         }
         else
         {
-          message = new Message(receiver, sender, resultSet.getString("content"));
+          message = new Message(receiver, sender, resultSet.getString("content"), resultSet.getBoolean("read"));
         }
         conversation.add(message);
       }
@@ -109,16 +109,17 @@ public class MessageDAOManager extends Database implements MessageDAO
               Message message = null;
               if (user.getUser_id() == messageResultSet.getInt("sender_id"))
               {
-                message = new Message(user, allUser, messageResultSet.getString("content"));
+                message = new Message(user, allUser, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
               }
               else
               {
-                message = new Message(allUser, user, messageResultSet.getString("content"));
+                message = new Message(allUser, user, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
               }
               lastMessages.add(message);
             }
         }
       }
+      System.out.println(lastMessages.toString());
       return lastMessages;
 
     } catch (SQLException e) {e.printStackTrace();}

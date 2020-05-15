@@ -12,7 +12,6 @@ public interface ChatModel extends PropertyChangeSubject {
 
     List<User> getOnlineUsers();
     void sendPrivateMessage(Message message);
-    Conversation createNewConversation(User sender, User receiver);
     void makeMessageRead(Message message);
     List<Message> loadConversationShortcuts();
     List<Message> loadConversation(User sender, User receiver);

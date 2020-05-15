@@ -5,6 +5,7 @@ import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.ChatModel.ChatModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.TransferedObject.Events;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
@@ -26,6 +27,7 @@ public class MainAppViewModel implements PropertyChangeSubject {
 
     private AdministratorActionsModel administratorActionsModel;
     private ChatModel chatModel;
+    private UserActionsModel userActionsModel;
     private PropertyChangeSupport support;
 
     /**
@@ -36,6 +38,7 @@ public class MainAppViewModel implements PropertyChangeSubject {
         this.model = ModelFactory.getModelFactory().getAppOverviewModel();
         this.chatModel = ModelFactory.getModelFactory().getChatModel();
         this.loggedUser = LoggedUser.getLoggedUser();
+        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         support = new PropertyChangeSupport(this);
         administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
 
@@ -65,9 +68,12 @@ public class MainAppViewModel implements PropertyChangeSubject {
             support.firePropertyChange(Events.USER_LOGOUT.toString(), null, "Your account has been removed from the system!");
     }
 
+    public void onCloseRequest() {
+        userActionsModel.logoutUser();
+    }
+
     @Override
-    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
-    {
+    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener) {
         if ("".equals(eventName) || eventName == null)
             addPropertyChangeListener(listener);
         else

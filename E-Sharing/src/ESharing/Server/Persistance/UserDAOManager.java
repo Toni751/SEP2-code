@@ -173,7 +173,7 @@ public class UserDAOManager extends Database implements UserDAO
       System.out.println(user.isAdministrator());
       if(user.isAdministrator())
       {
-        PreparedStatement statement = connection.prepareStatement("UPDATE admin_account SET username = ?, password = ?, phoneno = ? WHERE id = ?;");
+        PreparedStatement statement = connection.prepareStatement("UPDATE user_account SET username = ?, password = ?, phoneno = ? WHERE id = ?;");
         statement.setString(1, user.getUsername());
         statement.setString(2, user.getPassword());
         statement.setString(3, user.getPhoneNumber());

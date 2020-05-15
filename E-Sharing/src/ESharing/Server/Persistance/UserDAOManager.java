@@ -124,7 +124,7 @@ public class UserDAOManager extends Database implements UserDAO
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
         boolean administrator = resultSet.getBoolean("administrator");
-        String postcode =resultSet.getString("postcode");
+        String postcode = resultSet.getString("postcode");
         String number = resultSet.getString("number");
         String city = resultSet.getString("city");
         String creationDate = resultSet.getString("creation_date");
@@ -133,7 +133,6 @@ public class UserDAOManager extends Database implements UserDAO
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
         user.setCreation_date(creationDate);
-        System.out.println(user);
         if(administrator)
           user.setAsAdministrator();
         return user;

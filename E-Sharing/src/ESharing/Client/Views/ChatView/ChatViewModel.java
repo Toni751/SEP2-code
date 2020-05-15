@@ -63,15 +63,16 @@ public class ChatViewModel implements PropertyChangeSubject {
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
         Message message = (Message) propertyChangeEvent.getNewValue();
         getConversations();
-        support.firePropertyChange(Events.UPDATE_CONVERSATION_LIST.toString(), null, null);
-        if (!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty() && (LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender().getUser_id()
-        || LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getReceiver().getUser_id())) {
+        if ((!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty() && (LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender().getUser_id()
+        || LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getReceiver().getUser_id())) || currentReceiver != null) {
+            if (currentReceiver != null)
+                currentReceiver = null;
             LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
             support.firePropertyChange(propertyChangeEvent);
             makeConversationRead();
             System.out.println("Message recived in view model");
         }
-
+        support.firePropertyChange(Events.UPDATE_CONVERSATION_LIST.toString(), null, null);
     }
 
     public void sendMessage() {
@@ -87,11 +88,11 @@ public class ChatViewModel implements PropertyChangeSubject {
         }
         if(currentReceiver != null)
         {
-            chatModel.sendPrivateMessage(new Message(LoggedUser.getLoggedUser().getUser(), currentReceiver, messageProperty.get(), false));
-            getConversations();
-            System.out.println("Reload conversations");
+            System.out.println(currentReceiver.getUser_id() + currentReceiver.getUsername());
             loadConversation(LoggedUser.getLoggedUser().getUser(), currentReceiver);
-            currentReceiver = null;
+            getConversations();
+            chatModel.sendPrivateMessage(new Message(LoggedUser.getLoggedUser().getUser(), currentReceiver, messageProperty.get(), false));
+            System.out.println("Reload conversations");
         }
     }
 
@@ -194,6 +195,7 @@ public class ChatViewModel implements PropertyChangeSubject {
 
         if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
             currentReceiver = anotherUser;
+            System.out.println("xxxxxxxxxxxxxxxx" + anotherUser);
             receiverProperty.setValue(anotherUser.getUsername());
             System.out.println("Current receiver is set");
         }

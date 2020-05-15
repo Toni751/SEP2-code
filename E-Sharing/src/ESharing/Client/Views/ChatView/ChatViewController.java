@@ -51,7 +51,6 @@ public class ChatViewController extends ViewController {
 
         setComponentsStyling();
         loadAllComponents();
-        messagesPane.getChildren().clear();
         viewModel.resetView();
 
         if(LoggedUser.getLoggedUser().getUser().isAdministrator())
@@ -66,7 +65,9 @@ public class ChatViewController extends ViewController {
 
     private void updateConversationList(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(() ->{
-            loadAllComponents();
+            conversationsPane.getChildren().clear();
+            for(Message conversation: viewModel.getConversations())
+                conversationsPane.getChildren().add(createConversationComponent(conversation));
         });
     }
 
@@ -123,6 +124,7 @@ public class ChatViewController extends ViewController {
     {
         conversationsPane.getChildren().clear();
         onlineUsersPane.getChildren().clear();
+        messagesPane.getChildren().clear();
         viewModel.clearList();
         System.out.println("reafreash");
         Platform.runLater(() -> {

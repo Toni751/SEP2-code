@@ -29,7 +29,7 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         try(Connection connection = getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address WHERE administrator = false;");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account NATURAL JOIN address;");
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next())
             {
@@ -39,6 +39,7 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 String phoneNumber = resultSet.getString("phoneno");
                 int reports = resultSet.getInt("reports");
                 int address_id = resultSet.getInt("address_id");
+                boolean administrator = resultSet.getBoolean("administrator");
                 String street = resultSet.getString("street");
                 String postcode =resultSet.getString("postcode");
                 String number = resultSet.getString("number");
@@ -50,6 +51,8 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 user.setUser_id(user_id);
                 user.setReportsNumber(reports);
                 user.setCreation_date(create_date);
+                if(administrator)
+                    user.setAsAdministrator();
                 users.add(user);
             }
             return users;

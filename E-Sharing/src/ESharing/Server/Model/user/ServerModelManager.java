@@ -84,7 +84,13 @@ public class ServerModelManager implements ServerModel
 
   @Override
   public List<User> getAllUsers() {
-    return administratorDAO.getAllUsers();
+    List<User> users = administratorDAO.getAllUsers();
+    for(int i = 0 ; i<users.size() ; i++)
+    {
+      if(users.get(i).isAdministrator())
+        users.remove(users.get(i));
+    }
+    return users;
   }
 
   @Override public void userLoggedOut(User user)

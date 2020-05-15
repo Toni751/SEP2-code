@@ -119,6 +119,7 @@ public class MessageDAOManager extends Database implements MessageDAO
             }
         }
       }
+      System.out.println(lastMessages.toString());
       return lastMessages;
 
     } catch (SQLException e) {e.printStackTrace();}

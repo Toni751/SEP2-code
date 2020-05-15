@@ -62,16 +62,44 @@ public class ChatViewModel implements PropertyChangeSubject {
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
         Message message = (Message) propertyChangeEvent.getNewValue();
-        getConversations();
-        if ((!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty() && (LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender().getUser_id()
-        || LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getReceiver().getUser_id())) || currentReceiver != null) {
-            if (currentReceiver != null)
-                currentReceiver = null;
-            LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
-            support.firePropertyChange(propertyChangeEvent);
-            makeConversationRead();
-            System.out.println("Message recived in view model");
-        }
+            getConversations();
+            if (!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
+                int loggedUserID = LoggedUser.getLoggedUser().getUser().getUser_id();
+                int senderID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getSender().getUser_id();
+                int receiverID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getReceiver().getUser_id();
+
+                if(usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getSender())
+                || usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getReceiver())
+            || currentReceiver != null)
+                {
+                    System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"+ currentReceiver);
+                    if (currentReceiver != null)
+                    currentReceiver = null;
+
+                    LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
+                    support.firePropertyChange(propertyChangeEvent);
+                    makeConversationRead();
+                    System.out.println("Message recived in view model");
+                }
+
+
+//                if ((loggedUserID == senderID && receiverID == message.getReceiver().getUser_id()) ||
+//                        (loggedUserID == receiverID && receiverID == message.getSender().getUser_id()) || currentReceiver != null) {
+//
+//
+//                }
+            }
+
+
+//        if ((!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty() && (LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender().getUser_id()
+//        || LoggedUser.getLoggedUser().getUser().getUser_id() == LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getReceiver().getUser_id())) || currentReceiver != null) {
+//            if (currentReceiver != null)
+//                currentReceiver = null;
+//            LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
+//            support.firePropertyChange(propertyChangeEvent);
+//            makeConversationRead();
+//            System.out.println("Message recived in view model");
+//        }
         support.firePropertyChange(Events.UPDATE_CONVERSATION_LIST.toString(), null, null);
     }
 
@@ -79,10 +107,10 @@ public class ChatViewModel implements PropertyChangeSubject {
         if(LoggedUser.getLoggedUser().getCurrentOpenConversation() != null && !LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
             if (verificationModel.verifyMessage(messageProperty.get())) {
                 User receiver;
-                if (LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
-                    receiver = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getReceiver();
+                if (LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size()-1).getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+                    receiver = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size()-1).getReceiver();
                 else
-                    receiver = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(0).getSender();
+                    receiver = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size()-1).getSender();
                 chatModel.sendPrivateMessage(new Message(LoggedUser.getLoggedUser().getUser(), receiver, messageProperty.get(), false));
             }
         }
@@ -125,6 +153,7 @@ public class ChatViewModel implements PropertyChangeSubject {
     }
 
     public void loadConversation(User sender, User receiver) {
+            currentReceiver = null;
             LoggedUser.getLoggedUser().setCurrentOpenConversation(chatModel.loadConversation(sender, receiver));
             if(sender.getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
                 receiverProperty.setValue(receiver.getUsername());
@@ -210,6 +239,26 @@ public class ChatViewModel implements PropertyChangeSubject {
     public void resetView()
     {
         receiverProperty.setValue("");
+    }
+
+
+    private boolean usersInCurrentConversation(User user1, User user2)
+    {
+        boolean user1InConversation = false;
+        boolean user2InConversation = false;
+        if(user1.getUser_id() != user2.getUser_id()) {
+            int senderID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getSender().getUser_id();
+            int receiverID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getReceiver().getUser_id();
+            if (user1.getUser_id() == senderID || user1.getUser_id() == receiverID)
+                user1InConversation = true;
+            if (user2.getUser_id() == senderID || user2.getUser_id() == receiverID)
+                user2InConversation = true;
+        }
+            if (user1InConversation && user2InConversation)
+                return true;
+            else
+                return false;
+
     }
 
 

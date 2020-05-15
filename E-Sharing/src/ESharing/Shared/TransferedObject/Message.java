@@ -45,4 +45,15 @@ public class Message implements Serializable {
     public void setRead() {
         this.read = true;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "sender=" + sender.getUsername() +
+                ", receiver=" + receiver.getUsername() +
+                ", content='" + content + '\'' +
+                ", date='" + date + '\'' +
+                ", read=" + read +
+                '}';
+    }
 }

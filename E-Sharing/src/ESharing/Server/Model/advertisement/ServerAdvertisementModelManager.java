@@ -10,15 +10,11 @@ import java.beans.PropertyChangeSupport;
 public class ServerAdvertisementModelManager implements ServerAdvertisementModel{
 
     private AdvertisementDAO advertisementDAO;
-    private AdministratorDAO administratorDAO;
-    private UserDAO userDAO;
     private PropertyChangeSupport support;
 
     public ServerAdvertisementModelManager()
     {
         this.advertisementDAO = AdvertisementDAOManager.getInstance();
-        this.administratorDAO = AdministratorDAOManager.getInstance();
-        this.userDAO = UserDAOManager.getInstance();
         support = new PropertyChangeSupport(this);
     }
 
@@ -27,18 +23,30 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     public boolean addAdvertisement(Advertisement advertisement) {
         boolean result = advertisementDAO.create(advertisement);
         if(result)
-            support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, advertisement);
+            support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisement);
         return result;
+    }
+
+    @Override
+    public void approveAdvertisement(Advertisement ad)
+    {
+        //send ad to be made approved in the database
+        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
     }
 
     @Override
     public boolean removeAdvertisement(Advertisement advertisement) {
         boolean result = advertisementDAO.removeAdvertisement(advertisement);
         if(result)
-            support.firePropertyChange(Events.USER_REMOVED.toString(), null, advertisement);
+            support.firePropertyChange(Events.AD_REMOVED.toString(), null, advertisement);
         return result;
     }
 
+    @Override
+    public boolean editAdvertisement(Advertisement ad)
+    {
+        return false;
+    }
 
     @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)

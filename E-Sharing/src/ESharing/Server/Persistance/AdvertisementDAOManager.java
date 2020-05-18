@@ -34,7 +34,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     {
       System.out.println("Connection established");
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO advertisement (id,title,owner_id,description,price,approved,date_creation,vehicle_type) VALUES (?,?,?,?,?,?,NOW()::DATE,?) ");
+          "INSERT INTO advertisement (id,title,owner_id,description,price,approved,date_creation,vehicle_type) VALUES (?,?,?,?,?,?,?,?) ");
       statement.setInt(1, advertisement.getAdvertisementID());
       statement.setString(2, advertisement.getTitle());
       statement.setInt(3, advertisement.getOwner().getUser_id());

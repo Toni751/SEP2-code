@@ -1,12 +1,22 @@
 package ESharing.Client.Model.UserActions;
 
 import ESharing.Client.Core.ClientFactory;
+import ESharing.Client.Networking.Connection;
+import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
+import javafx.scene.image.Image;
+import jdk.jfr.Event;
+
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * The class from the model layer which contains all user features and connects them with a networking part
@@ -16,7 +26,9 @@ import java.beans.PropertyChangeSupport;
 public class UserActionsModelManager implements UserActionsModel {
 
     private Client client;
+    private ClientChat clientChat;
     private PropertyChangeSupport support;
+    private Connection connection;
 
     /**
      * A constructor initializes all fields
@@ -24,11 +36,26 @@ public class UserActionsModelManager implements UserActionsModel {
     public UserActionsModelManager()
     {
         this.client = ClientFactory.getClientFactory().getClient();
+        this.clientChat = ClientFactory.getClientFactory().getChatClient();
         support = new PropertyChangeSupport(this);
+        connection = new Connection();
+
+        client.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), this::avatarUpdated);
+        connection.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
+    }
+
+    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    private void avatarUpdated(PropertyChangeEvent propertyChangeEvent) {
+        LoggedUser.getLoggedUser().getUser().setAvatar((byte[]) propertyChangeEvent.getNewValue());
     }
 
     @Override
     public String createNewUser(User newUser) {
+        client.initializeConnection();
+        clientChat.initializeConnection();
         boolean verification = client.addUserRequest(newUser);
         if(!verification)
             return VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR);
@@ -39,6 +66,9 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public String onLoginRequest(String username, String password) {
+        connection.closeConnection();
+        client.initializeConnection();
+        clientChat.initializeConnection();
             User requestedUser = client.loginUserRequest(username,password);
             if(requestedUser == null)
                 return VerificationList.getVerificationList().getVerifications().get(Verifications.USER_NOT_EXIST);
@@ -51,12 +81,7 @@ public class UserActionsModelManager implements UserActionsModel {
     @Override
     public boolean modifyUserInformation(User updatedUser) {
         boolean verification = client.editUserRequest(updatedUser);
-        if(verification) {
-            LoggedUser.getLoggedUser().loginUser(updatedUser);
-            return true;
-        }
-        else
-            return false;
+        return verification;
     }
 
     @Override
@@ -68,7 +93,20 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public void logoutUser() {
-      client.logout();
+        client.logout();
+        clientChat.userLoggedOut();
+        connection.closeConnection();
+        //LoggedUser.getLoggedUser().logoutUser();
+    }
+
+    @Override
+    public void changeAvatar(File avatarImage) {
+        try {
+            byte[] avatarByte = Files.readAllBytes(avatarImage.toPath().toAbsolutePath());
+            client.changeAvatar(avatarByte);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

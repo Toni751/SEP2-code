@@ -33,6 +33,8 @@ public class MainAccountSettingController extends ViewController {
         this.mainSettingViewModel = ViewModelFactory.getViewModelFactory().getMainSettingViewModel();
         this.loggedUser = LoggedUser.getLoggedUser();
         viewHandler.openUserInfoSettingView(userSettingPane);
+
+        System.out.println(LoggedUser.getLoggedUser().getUser());
     }
 
     /**

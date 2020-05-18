@@ -1,8 +1,9 @@
 package ESharing.Client.Model.AdministratorModel;
 
 import ESharing.Client.Core.ClientFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.user.Client;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeEvent;
@@ -25,8 +26,10 @@ public class AdministratorActionModelManager implements AdministratorActionsMode
     }
 
     private void userUpdated(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
         User updatedUser = (User) propertyChangeEvent.getNewValue();
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() == updatedUser.getUser_id())
+            LoggedUser.getLoggedUser().loginUser(updatedUser);
+        support.firePropertyChange(propertyChangeEvent);
         AdministratorLists.getInstance().updateUser(updatedUser.getUser_id(), updatedUser);
         System.out.println("Got updated user");
     }

@@ -3,7 +3,7 @@ package ESharing.Client.Views.AdminDashboardView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
@@ -108,7 +108,6 @@ public class AdminDashboardViewModel {
             data3Property.setValue(moreThan10Reports);
             System.out.println("pie chart");
     }
-
 
     public XYChart.Series getUsersSeries() {
         return usersSeries;

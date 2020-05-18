@@ -5,15 +5,23 @@ import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
+import ESharing.Shared.Util.Events;
+import ESharing.Shared.Util.PropertyChangeSubject;
+import ESharing.Shared.Util.VerificationList;
+import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 /**
  * The class in a view model layer contains all functions which are used in the signIn view.
  * @version 1.0
  * @author Group1
  */
-public class SignInViewModel {
+public class SignInViewModel implements PropertyChangeSubject {
 
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
@@ -21,6 +29,8 @@ public class SignInViewModel {
 
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
+
+    private PropertyChangeSupport support;
 
     /**
      * A constructor initializes model layer for a user features and all fields
@@ -31,6 +41,15 @@ public class SignInViewModel {
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
         warningProperty= new SimpleStringProperty();
+
+        support = new PropertyChangeSupport(this);
+
+        userActionsModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
+    }
+
+    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
+        warningProperty.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.SERVER_CONNECTION_ERROR));
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     /**
@@ -90,4 +109,32 @@ public class SignInViewModel {
         return warningProperty;
     }
 
+    @Override
+    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            addPropertyChangeListener(listener);
+        else
+            support.addPropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            removePropertyChangeListener(listener);
+        else
+            support.removePropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
 }

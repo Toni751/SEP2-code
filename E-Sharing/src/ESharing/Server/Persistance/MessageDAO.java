@@ -12,5 +12,5 @@ public interface MessageDAO
   List<Message> getLastMessageWithEveryone (User user);
   void addMessage (Message message);
   void deleteMessagesForUser (User user);
-  void makeMessageRead(Message message);
+  boolean makeMessageRead(Message message);
 }

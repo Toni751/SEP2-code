@@ -8,6 +8,8 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -17,6 +19,7 @@ import javafx.scene.layout.Pane;
 public class UserAddressSettingViewController extends ViewController {
 
     @FXML private Pane warningPane;
+    @FXML private Circle avatarCircle;
     @FXML private JFXTextField streetTextField;
     @FXML private JFXTextField numberTextField;
     @FXML private JFXTextField postalCodeTextField;
@@ -49,6 +52,8 @@ public class UserAddressSettingViewController extends ViewController {
 
         warningPane.setVisible(false);
         warningLabel.setVisible(false);
+
+        avatarCircle.setFill(new ImagePattern(LoggedUser.getLoggedUser().getUser().getAvatar()));
 
         viewModel.loadDefaultValues();
     }

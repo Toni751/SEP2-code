@@ -1,5 +1,7 @@
 package ESharing.Shared.Util;
 
+import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.TransferedObject.User;
 import com.jfoenix.controls.JFXPasswordField;
@@ -80,10 +82,10 @@ public class GeneralFunctions {
         return confirmationAlert;
     }
 
-    public static boolean sendEditRequest(User updatedUser, String verification, UserActionsModel userActionsModel, StringProperty warningLabel) {
+    public static boolean sendEditRequest(User updatedUser, String verification, StringProperty warningLabel) {
         if(verification == null)
         {
-            if(userActionsModel.modifyUserInformation(updatedUser)) {
+            if(ModelFactory.getModelFactory().getUserActionsModel().modifyUserInformation(updatedUser)) {
                 warningLabel.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
                 return true;
             }
@@ -121,6 +123,25 @@ public class GeneralFunctions {
                 progressBar.setProgress(progress);
             }
         }
+    }
+
+    public static boolean usersInCurrentConversation(User user1, User user2)
+    {
+        boolean user1InConversation = false;
+        boolean user2InConversation = false;
+        if(user1.getUser_id() != user2.getUser_id()) {
+            int senderID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getSender().getUser_id();
+            int receiverID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getReceiver().getUser_id();
+            if (user1.getUser_id() == senderID || user1.getUser_id() == receiverID)
+                user1InConversation = true;
+            if (user2.getUser_id() == senderID || user2.getUser_id() == receiverID)
+                user2InConversation = true;
+        }
+        if (user1InConversation && user2InConversation)
+            return true;
+        else
+            return false;
+
     }
 
 

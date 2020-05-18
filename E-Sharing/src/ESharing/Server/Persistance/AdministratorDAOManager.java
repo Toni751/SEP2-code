@@ -3,6 +3,9 @@ package ESharing.Server.Persistance;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,19 +48,21 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 String number = resultSet.getString("number");
                 String city = resultSet.getString("city");
                 String create_date = resultSet.getString("creation_date");
+                String avatarPath = resultSet.getString("avatarpath");
                 Address address = new Address(street,number,city,postcode);
                 address.setAddress_id(address_id);
                 User user = new User(username,password,phoneNumber,address);
                 user.setUser_id(user_id);
                 user.setReportsNumber(reports);
                 user.setCreation_date(create_date);
+                user.setAvatar(Files.readAllBytes(Path.of(avatarPath)));
                 if(administrator)
                     user.setAsAdministrator();
                 users.add(user);
             }
             return users;
 
-        } catch (SQLException e) {e.printStackTrace();}
+        } catch (SQLException | IOException e) {e.printStackTrace();}
         return null;
     }
 

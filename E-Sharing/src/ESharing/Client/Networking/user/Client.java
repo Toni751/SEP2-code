@@ -2,7 +2,9 @@ package ESharing.Client.Networking.user;
 
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
+import javafx.scene.image.Image;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -13,6 +15,8 @@ import java.util.List;
  */
 public interface Client extends PropertyChangeSubject
 {
+
+  void initializeConnection();
   /**
    * Sends a request for creating a new user and waits for the response
    * @param user the new user account to be created
@@ -49,4 +53,6 @@ public interface Client extends PropertyChangeSubject
   List<User> getAllUsersRequest();
 
   void logout();
+
+   void changeAvatar(byte[] avatarImage);
 }

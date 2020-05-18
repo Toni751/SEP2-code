@@ -5,6 +5,7 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
@@ -22,7 +23,6 @@ public class WelcomeViewController extends ViewController {
     private String signInPath;
     private String signUpPath;
 
-
     /**
      * Initializes and opens welcome view with all components
      */
@@ -31,7 +31,7 @@ public class WelcomeViewController extends ViewController {
         this.viewHandler = ViewHandler.getViewHandler();
         signInPath = "../SignInView/SignIn.fxml";
         signUpPath = "../SignUpView/SignUp.fxml";
-        moveTransitionPane(signInPath, 400);
+        moveTransitionPane(signInPath, 390);
     }
 
     /**
@@ -45,7 +45,7 @@ public class WelcomeViewController extends ViewController {
      * Initializes and opens a sign up view
      */
     public void onGoToSignIn() {
-        moveTransitionPane(signInPath, 400);
+        moveTransitionPane(signInPath, 390);
     }
 
     /**
@@ -64,4 +64,11 @@ public class WelcomeViewController extends ViewController {
         });
     }
 
+    public void onExitAction() {
+        System.exit(0);
+    }
+
+    public void onMinimizeAction() {
+        viewHandler.minimizeWindow();
+    }
 }

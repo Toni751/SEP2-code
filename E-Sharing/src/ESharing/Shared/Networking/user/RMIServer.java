@@ -1,7 +1,7 @@
 package ESharing.Shared.Networking.user;
 
-import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.TransferedObject.User;
+import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -70,5 +70,7 @@ public interface RMIServer extends Remote
   List<User> getAllUsers() throws RemoteException;
 
   void unRegisterUserAsAListener() throws RemoteException;
+
+  void changeUserAvatar(byte[] avatarImage, int userID) throws RemoteException;
 }
 

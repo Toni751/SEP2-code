@@ -1,24 +1,28 @@
 package ESharing.Server.Model.chat;
 
+import ESharing.Server.Persistance.AdministratorDAO;
+import ESharing.Server.Persistance.AdministratorDAOManager;
 import ESharing.Server.Persistance.MessageDAO;
 import ESharing.Server.Persistance.MessageDAOManager;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerChatModelManager implements ServerChatModel
 {
   private MessageDAO messageDAO;
+  private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
 
   public ServerChatModelManager()
   {
     this.messageDAO = MessageDAOManager.getInstance();
+    this.administratorDAO = AdministratorDAOManager.getInstance();
     support = new PropertyChangeSupport(this);
   }
 
@@ -43,8 +47,8 @@ public class ServerChatModelManager implements ServerChatModel
   @Override
   public void addMessage(Message message)
   {
-    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
     messageDAO.addMessage(message);
+    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
   }
 
   @Override
@@ -55,7 +59,9 @@ public class ServerChatModelManager implements ServerChatModel
 
   @Override
   public void makeMessageRead(Message message) {
-    messageDAO.makeMessageRead(message);
+    if(messageDAO.makeMessageRead(message)) {
+      support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, message);
+    }
   }
 
   @Override
@@ -86,5 +92,10 @@ public class ServerChatModelManager implements ServerChatModel
   public void removePropertyChangeListener(PropertyChangeListener listener)
   {
     support.removePropertyChangeListener(listener);
+  }
+
+  public void listeners()
+  {
+    System.out.println("LISTENERS CHAT:" + support.getPropertyChangeListeners().length);
   }
 }

@@ -2,6 +2,8 @@ package ESharing.Server.Persistance;
 
 import ESharing.Shared.TransferedObject.User;
 
+import java.nio.file.Path;
+
 public interface UserDAO
 {
   boolean create(User user);
@@ -10,4 +12,5 @@ public interface UserDAO
   boolean update(User user);
   boolean delete(User user);
 
+  boolean changeAvatar(String path, int userId);
 }

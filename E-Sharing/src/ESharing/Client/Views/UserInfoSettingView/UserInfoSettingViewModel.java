@@ -10,7 +10,10 @@ import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
+
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 
 /**
  * The class in a view model layer contains all functions which are used in the signUp view.
@@ -54,7 +57,10 @@ public class UserInfoSettingViewModel{
     {
        User updatedUser = LoggedUser.getLoggedUser().getUser();
        String verification = verificationModel.verifyUserInfo(usernameProperty.get(), phoneProperty.get());
-        return sendRequestToModel(updatedUser, verification);
+       updatedUser.setUsername(usernameProperty.get());
+       updatedUser.setPhoneNumber(phoneProperty.get());
+
+       return sendRequestToModel(updatedUser, verification);
     }
 
     /**
@@ -66,6 +72,8 @@ public class UserInfoSettingViewModel{
         User updatedUser = LoggedUser.getLoggedUser().getUser();
         System.out.println(LoggedUser.getLoggedUser().getUser().getPassword());
         String verification = verificationModel.verifyChangePassword(oldPasswordProperty.get(), newPasswordProperty.get(),confirmPasswordProperty.get());
+        updatedUser.setPassword(newPasswordProperty.get());
+
         return sendRequestToModel(updatedUser, verification);
     }
 
@@ -132,7 +140,10 @@ public class UserInfoSettingViewModel{
      * @return the result of the request
      */
     private boolean sendRequestToModel(User updatedUser, String verification) {
-        return GeneralFunctions.sendEditRequest(updatedUser, verification, userActionsModel, warningLabel);
+        return GeneralFunctions.sendEditRequest(updatedUser, verification, warningLabel);
     }
 
+    public void changeAvatarRequest(File avatarImage) {
+        userActionsModel.changeAvatar(avatarImage);
+    }
 }

@@ -68,6 +68,7 @@ public class ViewHandler {
      */
     public void openWelcomeView()
     {
+        ViewControllerFactory.clearViews();
         viewController = ViewControllerFactory.getViewController(Views.WELCOME_VIEW);
         showView(viewController,null);
     }
@@ -206,7 +207,6 @@ public class ViewHandler {
             else {
                 existingPane.getChildren().clear();
                 existingPane.getChildren().setAll(controller.getRoot());
-                System.out.println("Root : " + controller.getRoot());
             }
         });
 

@@ -3,6 +3,9 @@ package ESharing.Client.Model.UserActions;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
+import javafx.scene.image.Image;
+
+import java.io.File;
 
 /**
  * The interface used to connect a view model layer with a model layer for all user features.
@@ -39,4 +42,6 @@ public interface UserActionsModel extends PropertyChangeSubject
     void removeAccount();
 
     void logoutUser();
+
+    void changeAvatar(File avatarImage);
 }

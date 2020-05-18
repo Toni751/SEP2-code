@@ -3,6 +3,7 @@ package ESharing.Client.Views.SignUpView;
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -14,6 +15,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+
+import java.beans.PropertyChangeEvent;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -80,6 +83,13 @@ public class SignUpViewController extends ViewController {
         onOpenSetting();
         defaultView();
         clearFields();
+
+        signUpViewModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionError);
+    }
+
+    private void connectionError(PropertyChangeEvent propertyChangeEvent) {
+        warningPane.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", warningPane, 500);
     }
 
     /**

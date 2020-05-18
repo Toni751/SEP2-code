@@ -47,6 +47,7 @@ public class VerificationList {
         verifications.put(Verifications.INVALID_STREET, "Invalid street");
         verifications.put(Verifications.DATABASE_CONNECTION_ERROR, "Database connection error");
         verifications.put(Verifications.ACTION_SUCCESS, "Action successful");
+        verifications.put(Verifications.SERVER_CONNECTION_ERROR, "Server connection error");
     }
 
     /**

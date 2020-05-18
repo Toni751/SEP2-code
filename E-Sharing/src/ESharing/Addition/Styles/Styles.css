@@ -94,6 +94,10 @@
 {
     -fx-text-fill:  #4cdbc4;
 }
+.gray-label
+{
+    fx-background-color:  #a2b2be;
+}
 .dark-pane
 {
     -fx-background-color: #222828;
@@ -395,8 +399,13 @@
 }
 .navigate-pane
 {
-    -fx-background-color: #303841;
+    -fx-background-color: #303841 ;
 }
+.darker-navigate-pane
+{
+    -fx-background-color: #222833;
+}
+
 .message-navigate-pane
 {
     -fx-background-color: #363e47;
@@ -432,7 +441,17 @@
     -fx-alignment: center;
     -fx-text-fill: white;
 }
+.green-label
+{
+    -fx-text-fill: #54d38a;
+}
 
+.gray-button
+{
+    -fx-background-color: #363e47;
+    -fx-font-size: 12px;
+    -fx-text-fill: white;
+}
 .message-component
 {
     -fx-font-family: Monospaced;
@@ -460,6 +479,15 @@
 
     -fx-hbar-policy: never;
     -fx-vbar-policy: never;
+}
+
+.avatar
+{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+    -fx-min-height: 100;
+    -fx-min-width: 100;
+    -fx-pref-height: 100;
+    -fx-pref-width: 100;
 }
 
 

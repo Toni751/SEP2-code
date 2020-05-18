@@ -18,11 +18,6 @@ public class MessageDAOManager extends Database implements MessageDAO
   private static MessageDAOManager instance;
   private static Lock lock = new ReentrantLock();
 
-  private MessageDAOManager ()
-  {
-
-  }
-
   public static MessageDAOManager getInstance()
   {
     if (instance == null)
@@ -38,6 +33,7 @@ public class MessageDAOManager extends Database implements MessageDAO
   {
     return super.getConnection();
   }
+  
 
   @Override
   public List<Message> loadConversation(User sender, User receiver)
@@ -151,17 +147,24 @@ public class MessageDAOManager extends Database implements MessageDAO
     } catch (SQLException e) {e.printStackTrace();}
   }
 
+
+
+
   @Override
-  public void makeMessageRead(Message message) {
+  public boolean makeMessageRead(Message message) {
     try(Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement("UPDATE message SET read = ? WHERE receiver_id =?;");
       statement.setBoolean(1, true);
       statement.setInt(2, message.getReceiver().getUser_id());
       System.out.println("Message mark as read");
-      statement.executeUpdate();
+      int affectedRows = statement.executeUpdate();
+
+      if(affectedRows != 0)
+        return true;
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    return false;
   }
 }

@@ -4,6 +4,7 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -12,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+
+import java.beans.PropertyChangeEvent;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -41,6 +44,13 @@ public class SignInViewController extends ViewController {
         warningPane.setVisible(false);
 
         clearFields();
+
+        signInViewModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionError);
+    }
+
+    private void connectionError(PropertyChangeEvent propertyChangeEvent) {
+        warningPane.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", warningPane, 500);
     }
 
     /**

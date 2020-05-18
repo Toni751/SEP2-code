@@ -38,12 +38,18 @@
             </ImageView>
             <JFXButton layoutY="200.0" onAction="#onManageUsersAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Users" />
             <JFXButton layoutX="1.0" layoutY="300.0" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Advertisements" />
-            <JFXButton layoutX="1.0" layoutY="400.0" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;System Logs" />
+            <JFXButton layoutX="1.0" layoutY="400.0" onAction="#onGoToChat" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Messages&#10;" />
             <JFXButton layoutY="100.0" onAction="#onDashboardAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Dashboard" />
             <Label prefHeight="63.0" prefWidth="200.0" styleClass="logo-label" text="E-SHARING" />
-            <ImageView fitHeight="23.0" fitWidth="30.0" layoutX="3.0" layoutY="3.0" onMouseClicked="#onEditAdminAccount" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+            <ImageView fitHeight="23.0" fitWidth="30.0" layoutX="3.0" layoutY="32.0" onMouseClicked="#onEditAdminAccount" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../../Addition/Images/icons/settingIcon.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="messageNotification" layoutX="105.0" layoutY="402.0" prefHeight="23.0" prefWidth="23.0" styleClass="message-notification" text="12" />
+            <ImageView fitHeight="23.0" fitWidth="23.0" layoutX="3.0" layoutY="3.0" onMouseClicked="#onLogoutAction" pickOnBounds="true" preserveRatio="true" rotate="-180.0" style="-fx-cursor: hand;">
+               <image>
+                  <Image url="@../../../Addition/Images/icons/logout.png" />
                </image>
             </ImageView>
          </children>

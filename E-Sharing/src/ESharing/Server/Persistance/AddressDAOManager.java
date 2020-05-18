@@ -10,17 +10,6 @@ public class AddressDAOManager extends Database implements AddressDAO
   private static AddressDAOManager instance;
   // We need to create a unique constraint for the address
   // ALTER TABLE address ADD CONSTRAINT unique_address UNIQUE (street, number, city, postcode);
-  private AddressDAOManager()
-  {
-    try
-    {
-      DriverManager.registerDriver(new org.postgresql.Driver());
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
 
   public static synchronized AddressDAOManager getInstance()
   {

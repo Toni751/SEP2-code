@@ -1,4 +1,4 @@
-package ESharing.Shared.TransferedObject;
+package ESharing.Shared.Util;
 
 /**
  * The enum used for store all names of events which are used in the system
@@ -14,8 +14,9 @@ public enum Events
   USER_UPDATED,
   USER_LOGOUT,
   NEW_MESSAGE_RECEIVED,
-  MAKE_CONVERSATION_READ,
+  MAKE_MESSAGE_READ,
   USER_ONLINE,
   USER_OFFLINE,
-  UPDATE_CONVERSATION_LIST
+  UPDATE_CONVERSATION_LIST,
+  UPDATE_AVATAR,
 }

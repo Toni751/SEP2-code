@@ -5,11 +5,16 @@ import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.Events;
+import ESharing.Shared.Util.PropertyChangeSubject;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Date;
 
 /**
@@ -17,7 +22,7 @@ import java.util.Date;
  * @version 1.0
  * @author Group1
  */
-public class SignUpViewModel {
+public class SignUpViewModel implements PropertyChangeSubject {
 
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
@@ -32,6 +37,8 @@ public class SignUpViewModel {
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
 
+    private PropertyChangeSupport support;
+
     /**
      * A constructor initializes model layer for a user features and all fields
      */
@@ -39,6 +46,8 @@ public class SignUpViewModel {
 
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         this.verificationModel = ModelFactory.getModelFactory().getVerificationModel();
+
+        support = new PropertyChangeSupport(this);
 
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
@@ -50,8 +59,14 @@ public class SignUpViewModel {
         numberProperty = new SimpleStringProperty();
         cityProperty = new SimpleStringProperty();
         postalCodeProperty = new SimpleStringProperty();
+
+        userActionsModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
     }
 
+    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
+        warningLabel.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.SERVER_CONNECTION_ERROR));
+        support.firePropertyChange(propertyChangeEvent);
+    }
 
     /**
      * Sends a request to create a new user and waits for result
@@ -193,5 +208,34 @@ public class SignUpViewModel {
      */
     public StringProperty getWarningLabel() {
         return warningLabel;
+    }
+
+    @Override
+    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            addPropertyChangeListener(listener);
+        else
+            support.addPropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            removePropertyChangeListener(listener);
+        else
+            support.removePropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
     }
 }

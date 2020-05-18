@@ -67,7 +67,7 @@ public class EditAdminViewModel {
         String verification = verificationModel.verifyUserInfo(usernameProperty.get(), phoneProperty.get());
         updatedAdmin.setUsername(usernameProperty.get());
         updatedAdmin.setPhoneNumber(phoneProperty.get());
-        return GeneralFunctions.sendEditRequest(updatedAdmin, verification, userActionsModel, warningProperty);
+        return GeneralFunctions.sendEditRequest(updatedAdmin, verification, warningProperty);
     }
 
     public void loadDefaultValues() {

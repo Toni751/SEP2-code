@@ -41,6 +41,6 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="contentPane" layoutX="50.0" prefHeight="500.0" prefWidth="750.0" />
+      <Pane fx:id="contentPane" layoutX="50.0" prefHeight="500.0" prefWidth="750.0" styleClass="message-navigate-pane" />
    </children>
 </AnchorPane>

@@ -1,7 +1,9 @@
 package ESharing.Server.Core;
 
+import ESharing.Server.Networking.ServerAdvertisementHandler;
 import ESharing.Server.Networking.ServerChatHandler;
 import ESharing.Server.Networking.ServerHandler;
+import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Networking.user.RMIServer;
 
@@ -12,6 +14,7 @@ import java.rmi.server.UnicastRemoteObject;
 public class StubFactory implements StubInterface {
     private RMIChatServer chatServerRMI;
     private RMIServer serverRMI;
+    private RMIAdvertisementServer advertisementServerRMI;
 
     public StubFactory() throws RemoteException {
         UnicastRemoteObject.exportObject(this, 0);
@@ -20,13 +23,20 @@ public class StubFactory implements StubInterface {
 
     public RMIChatServer getServerChatHandler() throws RemoteException {
         if(chatServerRMI == null)
-            chatServerRMI = new ServerChatHandler(ServerModelFactory.getInstance().getChatModel(), ServerModelFactory.getInstance().getServerModel());
+            chatServerRMI = new ServerChatHandler();
         return chatServerRMI;
     }
 
     public RMIServer getServerRMI() throws RemoteException {
         if(serverRMI == null)
-            serverRMI = new ServerHandler(ServerModelFactory.getInstance().getServerModel());
+            serverRMI = new ServerHandler();
         return serverRMI;
+    }
+
+    @Override
+    public RMIAdvertisementServer getServerAdHandler() throws RemoteException {
+        if(advertisementServerRMI == null)
+            advertisementServerRMI = new ServerAdvertisementHandler();
+        return advertisementServerRMI;
     }
 }

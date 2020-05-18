@@ -42,9 +42,12 @@ public class ViewControllerFactory {
             else if(id == Views.EDIT_ADMIN_ACCOUNT) viewController = creatNewViewControllerObject("EditAdminView/EditAdminView.fxml");
             viewControllers.put(id, viewController);
         }
-        System.out.println(viewController);
         viewController.init();
         return viewController;
+    }
+
+    public static void clearViews() {
+       viewControllers.clear();
     }
 
     /**
@@ -66,4 +69,5 @@ public class ViewControllerFactory {
         }
         return controller;
     }
+
 }

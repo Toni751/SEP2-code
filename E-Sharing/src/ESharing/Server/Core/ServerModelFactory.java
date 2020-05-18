@@ -1,6 +1,7 @@
 package ESharing.Server.Core;
 
-import ESharing.Client.Model.ChatModel.ChatModel;
+import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
+import ESharing.Server.Model.advertisement.ServerAdvertisementModelManager;
 import ESharing.Server.Model.chat.ServerChatModel;
 import ESharing.Server.Model.chat.ServerChatModelManager;
 import ESharing.Server.Model.user.ServerModel;
@@ -9,6 +10,7 @@ import ESharing.Server.Model.user.ServerModelManager;
 public class ServerModelFactory {
     private ServerChatModel chatModel;
     private ServerModel serverModel;
+    private ServerAdvertisementModel serverAdvertisementModel;
 
     private static ServerModelFactory instance;
 
@@ -16,6 +18,7 @@ public class ServerModelFactory {
     {
         chatModel = new ServerChatModelManager();
         serverModel = new ServerModelManager();
+        serverAdvertisementModel = new ServerAdvertisementModelManager();
     }
 
     public static ServerModelFactory getInstance()
@@ -31,5 +34,9 @@ public class ServerModelFactory {
 
     public ServerModel getServerModel() {
         return serverModel;
+    }
+
+    public ServerAdvertisementModel getServerAdvertisementModel() {
+        return serverAdvertisementModel;
     }
 }

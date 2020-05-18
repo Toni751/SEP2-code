@@ -1,18 +1,19 @@
 package ESharing.Client.Networking.user;
 
+import ESharing.Client.Core.ClientFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.Connection;
-import ESharing.Server.Core.StubFactory;
-import ESharing.Server.Core.StubInterface;
+import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.Networking.user.RMIServer;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
+import javafx.scene.image.Image;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.rmi.NotBoundException;
+import java.io.File;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
 public class ClientHandler implements Client, RMIClient
 {
   private RMIServer server;
+  private RMIChatServer chatServer;
   private PropertyChangeSupport support;
 
   /**
@@ -41,10 +43,20 @@ public class ClientHandler implements Client, RMIClient
     {
       e.printStackTrace();
     }
+//    try {
+//      server = Connection.getStubInterface().getServerRMI();
+//    } catch (RemoteException e) {
+//      e.printStackTrace();
+//    }
+  }
+
+  public void initializeConnection()
+  {
     try {
-      server = Connection.getStubInterface().getServerRMI();
-    } catch (RemoteException e) {
-      e.printStackTrace();
+    server = Connection.getStubInterface().getServerRMI();
+    chatServer = Connection.getStubInterface().getServerChatHandler();
+  }
+    catch (RemoteException | NullPointerException e) {
     }
   }
 
@@ -95,6 +107,7 @@ public class ClientHandler implements Client, RMIClient
   {
     try
     {
+      //server = Connection.getStubInterface().getServerRMI();
       User loggedUser = server.loginUser(username, password);
       if(loggedUser != null && loggedUser.isAdministrator()) {
         server.registerAdministratorCallback(this);
@@ -129,6 +142,15 @@ public class ClientHandler implements Client, RMIClient
   }
 
   @Override
+  public void changeAvatar(byte[] avatarImage) {
+    try {
+      server.changeUserAvatar(avatarImage, LoggedUser.getLoggedUser().getUser().getUser_id());
+    } catch (RemoteException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
   public void newUserReceived(User newUser) {
     support.firePropertyChange(Events.NEW_USER_CREATED.toString(), null, newUser);
   }
@@ -141,6 +163,11 @@ public class ClientHandler implements Client, RMIClient
   @Override
   public void userUpdated(User user) {
     support.firePropertyChange(Events.USER_UPDATED.toString(), null, user);
+  }
+
+  @Override
+  public void avatarUpdated(byte[] avatar){
+    support.firePropertyChange(Events.UPDATE_AVATAR.toString(), null, avatar);
   }
 
   @Override

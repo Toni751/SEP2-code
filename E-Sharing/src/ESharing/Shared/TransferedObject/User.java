@@ -1,7 +1,10 @@
 package ESharing.Shared.TransferedObject;
 
 import ESharing.Client.Model.UserActions.LoggedUser;
-import java.io.Serializable;
+import javafx.scene.image.Image;
+
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -20,6 +23,7 @@ public class User implements Serializable
   private int reportsNumber;
   private String creation_date;
   boolean administrator;
+  byte[] avatar;
 
 
   /**
@@ -193,6 +197,15 @@ public class User implements Serializable
     this.creation_date = creation_date;
   }
 
+  public void setAvatar(byte[] avatar)
+  {
+    this.avatar = avatar;
+  }
+
+  public Image getAvatar() {
+    Image avatar = new Image(new ByteArrayInputStream(this.avatar));
+    return avatar;
+  }
 
   @Override
   public boolean equals(Object o) {

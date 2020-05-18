@@ -1,20 +1,19 @@
 package ESharing.Client.Views.ChatView;
 
+import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.TransferedObject.Conversation;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -26,12 +25,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import jdk.jfr.Event;
 
 import java.beans.PropertyChangeEvent;
-import java.nio.file.LinkOption;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatViewController extends ViewController {
+    @FXML private ImageView administratorBackImage;
+    @FXML private ScrollPane scrollPane;
     @FXML private TextField searchConversationBox;
     @FXML private TextField messageTextField;
     @FXML private VBox conversationsPane;
@@ -39,12 +42,14 @@ public class ChatViewController extends ViewController {
     @FXML private VBox messagesPane;
     @FXML private Label receiverUsernameLabel;
 
+    private ViewHandler viewHandler;
     private ChatViewModel viewModel;
 
     public void init()
     {
 
         viewModel = ViewModelFactory.getViewModelFactory().getChatViewModel();
+        viewHandler = ViewHandler.getViewHandler();
         searchConversationBox.textProperty().bindBidirectional(viewModel.getSearchProperty());
         messageTextField.textProperty().bindBidirectional(viewModel.getMessageProperty());
         receiverUsernameLabel.textProperty().bind(viewModel.getReceiverProperty());
@@ -52,15 +57,14 @@ public class ChatViewController extends ViewController {
         setComponentsStyling();
         loadAllComponents();
         viewModel.resetView();
+        checkIfUserIsAdmin();
 
-        if(LoggedUser.getLoggedUser().getUser().isAdministrator())
-            viewModel.ifConversationExists(AdministratorLists.getInstance().getSelectedUser());
-
-
-        viewModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
-        viewModel.addPropertyChangeListener(Events.USER_ONLINE.toString(), this::newOnlineUser);
-        viewModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), this::userOffline);
-        viewModel.addPropertyChangeListener(Events.UPDATE_CONVERSATION_LIST.toString(), this::updateConversationList);
+        if(!viewModel.ifViewModelHasListeners()) {
+            viewModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
+            viewModel.addPropertyChangeListener(Events.USER_ONLINE.toString(), this::newOnlineUser);
+            viewModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), this::userOffline);
+            viewModel.addPropertyChangeListener(Events.UPDATE_CONVERSATION_LIST.toString(), this::updateConversationList);
+        }
     }
 
     private void updateConversationList(PropertyChangeEvent propertyChangeEvent) {
@@ -72,10 +76,12 @@ public class ChatViewController extends ViewController {
     }
 
     private void userOffline(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("OFFLINE USER CHAT CONTROLLER");
         Platform.runLater(() ->{
-            User userToRemove = (User) propertyChangeEvent.getNewValue();
-            onlineUsersPane.getChildren().remove(creatOnlineUserComponent(userToRemove));
-            System.out.println("User removed from the view");
+            onlineUsersPane.getChildren().clear();
+            for(User user : viewModel.getUsers())
+                if(user.getUser_id() != LoggedUser.getLoggedUser().getUser().getUser_id())
+                    onlineUsersPane.getChildren().add(creatOnlineUserComponent(user));
         });
 
     }
@@ -84,24 +90,22 @@ public class ChatViewController extends ViewController {
         Platform.runLater(() ->{
             User newOnlineUser = (User) propertyChangeEvent.getNewValue();
             onlineUsersPane.getChildren().add(creatOnlineUserComponent(newOnlineUser));
-            System.out.println("User added to the view");
         });
     }
-
-
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(() ->{
+            System.out.println(LoggedUser.getLoggedUser().getUser());
             Message newMessage = (Message) propertyChangeEvent.getNewValue();
-            System.out.println("New message received");
-
-            if(newMessage.getReceiver().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
-                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_LEFT, "#fff"));
-            else
-                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_RIGHT, "#54d38a"));
+            if(newMessage.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
+                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
+            }
+            else {
+                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_LEFT, "#fff", newMessage.getSender().getAvatar()));
+            }
+            scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
         });
     }
-
 
     public void searchConversation() {
         viewModel.searchConversation();
@@ -119,14 +123,12 @@ public class ChatViewController extends ViewController {
         messageTextField.clear();
     }
 
-
     private void loadAllComponents()
     {
         conversationsPane.getChildren().clear();
         onlineUsersPane.getChildren().clear();
         messagesPane.getChildren().clear();
         viewModel.clearList();
-        System.out.println("reafreash");
         Platform.runLater(() -> {
             for(Message conversation: viewModel.getConversations())
                 conversationsPane.getChildren().add(createConversationComponent(conversation));
@@ -141,11 +143,10 @@ public class ChatViewController extends ViewController {
     {
         HBox onlineUser = new HBox(10);
         Circle circle = new Circle();
-        Image userAvatar = new Image("ESharing/Addition/Images/icons/avatar-icon.png");
         Label username = new Label(user.getUsername());
         username.setStyle("-fx-text-fill: black; -fx-font-size: 14px;");
         circle.setRadius(20);
-        circle.setFill(new ImagePattern(userAvatar));
+        circle.setFill(new ImagePattern(user.getAvatar()));
         onlineUser.setAlignment(Pos.CENTER_LEFT);
 
         onlineUser.getChildren().setAll(circle, username);
@@ -158,23 +159,12 @@ public class ChatViewController extends ViewController {
             messagesPane.getChildren().clear();
             for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()){
                 if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
-                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a"));
-                    System.out.println("my message");
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
                 }
                 else {
-                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff"));
-                    System.out.println("not my message");
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff", message.getSender().getAvatar()));
                 }
             }
-//            Conversation conversation = viewModel.createNewConversation(user);
-//            if(!conversation.getMessages().isEmpty()) {
-//                for (Message message : conversation.getMessages()) {
-//                    if (message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
-//                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a"));
-//                    else
-//                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff"));
-//                }
-//            }
         });
         return  onlineUser;
     }
@@ -186,7 +176,7 @@ public class ChatViewController extends ViewController {
         conversationHBox.setPrefWidth(170);
         conversationHBox.setPrefHeight(50);
 
-        ImageView userImage = new ImageView(new Image("ESharing/Addition/Images/icons/avatar-icon.png"));
+        ImageView userImage = new ImageView();
         userImage.setFitWidth(40);
         userImage.setFitHeight(40);
 
@@ -194,10 +184,14 @@ public class ChatViewController extends ViewController {
         infoBox.setPrefHeight(50);
         infoBox.setPrefWidth(110);
         Label username = null;
-        if(conversation.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
+        if(conversation.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
             username = new Label(conversation.getReceiver().getUsername());
-        else
+            userImage.setImage(conversation.getReceiver().getAvatar());
+        }
+        else{
             username = new Label(conversation.getSender().getUsername());
+            userImage.setImage(conversation.getSender().getAvatar());
+        }
         Label lastMessage = new Label(conversation.getContent());
 
         infoBox.getChildren().addAll(username, lastMessage);
@@ -213,31 +207,28 @@ public class ChatViewController extends ViewController {
                 viewModel.loadConversation(LoggedUser.getLoggedUser().getUser(), conversation.getReceiver());
             else
                 viewModel.loadConversation(conversation.getSender(), LoggedUser.getLoggedUser().getUser());
-            System.out.println("wtf");
             viewModel.makeConversationRead();
             messagesPane.getChildren().clear();
             for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()){
                 if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
-                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a"));
-                    System.out.println("my message");
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
                 }
                 else {
-                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff"));
-                    System.out.println("not my message");
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff", message.getSender().getAvatar()));
                 }
             }
+            scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
         });
         return conversationHBox;
     }
 
-    private HBox createMessageComponent(Message message, Pos pos, String color)
+    private HBox createMessageComponent(Message message, Pos pos, String color, Image avatar)
     {
         HBox messageComponent = new HBox(10);
         Circle avatarCircle = new Circle();
-        Image userAvatar = new Image("ESharing/Addition/Images/icons/avatar-icon.png");
 
         avatarCircle.setRadius(20);
-        avatarCircle.setFill(new ImagePattern(userAvatar));
+        avatarCircle.setFill(new ImagePattern(avatar));
         TextArea messageArea = new TextArea(message.getContent());
         messageArea.getStyleClass().add("message-component");
         if(message.getContent().length() > 22)
@@ -270,5 +261,42 @@ public class ChatViewController extends ViewController {
         messagesPane.setSpacing(15);
         conversationsPane.getChildren().clear();
         onlineUsersPane.getChildren().clear();
+        administratorBackImage.setVisible(false);
+        administratorBackImage.setDisable(true);
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+    }
+
+    private void adminStyling()
+    {
+        administratorBackImage.setVisible(true);
+        administratorBackImage.setDisable(false);
+    }
+
+    public void onAdministratorBack() {
+        if(LoggedUser.getLoggedUser().getUser().isAdministrator()){
+
+            viewHandler.openAdminMainView();
+        }
+    }
+
+    private void checkIfUserIsAdmin(){
+        if(LoggedUser.getLoggedUser().getUser().isAdministrator()) {
+            if(AdministratorLists.getInstance().getSelectedUser() != null) {
+                viewModel.ifConversationExists(AdministratorLists.getInstance().getSelectedUser());
+                messagesPane.getChildren().clear();
+                for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()){
+                    if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
+                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
+                    }
+                    else {
+                        messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff", message.getSender().getAvatar()));
+                    }
+                }
+                    scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
+                }
+            adminStyling();
+        }
     }
 }

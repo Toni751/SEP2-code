@@ -8,15 +8,13 @@ import java.util.List;
 
 public interface ClientChat extends PropertyChangeSubject
 {
+  void initializeConnection();
   List<Message> loadConversation (User sender, User receiver);
   int getNoUnreadMessages (User user);
   List<Message> getLastMessageWithEveryone (User user);
   void addMessage (Message message);
   void deleteMessagesForUser (User user);
   void makeMessageRead(Message message);
-
-
-  void logout();
   void userLoggedOut();
   List<User> getOnlineUsers();
 }

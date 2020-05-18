@@ -2,6 +2,15 @@ package ESharing.Server.Persistance;
 
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
+import javafx.scene.image.Image;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 
 public class UserDAOManager extends Database implements UserDAO
@@ -89,14 +98,16 @@ public class UserDAOManager extends Database implements UserDAO
         String postcode = resultSet.getString("postcode");
         String number = resultSet.getString("number");
         String city = resultSet.getString("city");
+        String avatarPath = resultSet.getString("avatarpath");
         Address address = new Address(street, number,city,postcode);
         address.setAddress_id(address_id);
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
+        user.setAvatar(Files.readAllBytes(Paths.get(avatarPath)));
         return user;
       }
     }
-    catch (SQLException e)
+    catch (SQLException | IOException e)
     {
       e.printStackTrace();
     }
@@ -128,11 +139,15 @@ public class UserDAOManager extends Database implements UserDAO
         String number = resultSet.getString("number");
         String city = resultSet.getString("city");
         String creationDate = resultSet.getString("creation_date");
+        String avatarPath = resultSet.getString("avatarpath");
         Address address = new Address(street,number,city,postcode);
         address.setAddress_id(address_id);
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
         user.setCreation_date(creationDate);
+
+        user.setAvatar(Files.readAllBytes(Path.of(avatarPath)));
+
         if(administrator)
           user.setAsAdministrator();
         return user;
@@ -158,7 +173,7 @@ public class UserDAOManager extends Database implements UserDAO
 //        }
 //      }
     }
-    catch (SQLException e)
+    catch (SQLException | IOException e)
     {
       e.printStackTrace();
     }
@@ -185,6 +200,7 @@ public class UserDAOManager extends Database implements UserDAO
 
       }
       else {
+        System.out.println(user.getUsername());
         PreparedStatement statement = connection.prepareStatement(
                 "UPDATE user_account SET  username = ?, password = ?, phoneno=? , address_id =? WHERE id=?;");
         statement.setString(1, user.getUsername());
@@ -212,6 +228,7 @@ public class UserDAOManager extends Database implements UserDAO
           addressDAO.delete(oldAddressId);
 
         if (affectedRows == 1)
+          System.out.println("Updated");
           return true;
       }
     }
@@ -239,6 +256,24 @@ public class UserDAOManager extends Database implements UserDAO
     }
     catch (SQLException e)
     {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  @Override
+  public boolean changeAvatar(String path, int userId) {
+    try(Connection connection = getConnection())
+    {
+      PreparedStatement preparedStatement = connection.prepareStatement("UPDATE user_account SET avatarpath = ? WHERE id =?;");
+      preparedStatement.setString(1, path);
+      preparedStatement.setInt(2, userId);
+
+      int affectedRows = preparedStatement.executeUpdate();
+      if(affectedRows == 1)
+        return true;
+    }
+    catch (SQLException  e) {
       e.printStackTrace();
     }
     return false;

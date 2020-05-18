@@ -5,10 +5,14 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+
+import java.awt.*;
 
 /**
  * The controller class used to manage all functions and components from the fxml file
@@ -22,6 +26,7 @@ public class MainAdminViewController extends ViewController {
     @FXML private Rectangle advertisementsRectangle;
     @FXML private Rectangle systemLogsRectangle;
     @FXML private Pane contentPane;
+    @FXML private Label messageNotification;
     private ViewHandler viewHandler;
     private MainAdminViewModel mainAdminViewModel;
 
@@ -32,8 +37,12 @@ public class MainAdminViewController extends ViewController {
     {
         viewHandler = ViewHandler.getViewHandler();
         mainAdminViewModel = ViewModelFactory.getViewModelFactory().getMainAdminViewModel();
+
+        messageNotification.textProperty().bind(mainAdminViewModel.getNotificationProperty());
+
         if(AdministratorLists.getInstance().getUserList().isEmpty())
             mainAdminViewModel.loadUsersListRequest();
+        mainAdminViewModel.loadNotifications();
         hideRectanglesStyle();
         onDashboardAction();
     }
@@ -71,5 +80,15 @@ public class MainAdminViewController extends ViewController {
 
     public void onEditAdminAccount() {
         viewHandler.openEditAdminView(contentPane);
+    }
+
+    public void onLogoutAction() {
+        mainAdminViewModel.onLogoutRequest();
+        viewHandler.openWelcomeView();
+    }
+
+    public void onGoToChat() {
+        AdministratorLists.getInstance().setSelectedUser(null);
+        viewHandler.openChatView(null);
     }
 }

@@ -17,4 +17,6 @@ public interface RMIClient extends Remote
     void userRemoved(User user) throws RemoteException;
 
     void userUpdated(User user) throws RemoteException;
+
+    void avatarUpdated(byte[] avatar) throws RemoteException;
 }

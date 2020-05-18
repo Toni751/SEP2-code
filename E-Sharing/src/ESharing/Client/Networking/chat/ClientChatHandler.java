@@ -2,23 +2,16 @@ package ESharing.Client.Networking.chat;
 
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.Connection;
-import ESharing.Server.Core.StubFactory;
-import ESharing.Server.Core.StubInterface;
 import ESharing.Shared.Networking.chat.RMIChatClient;
 import ESharing.Shared.Networking.chat.RMIChatServer;
-import ESharing.Shared.Networking.user.RMIServer;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ClientChatHandler implements ClientChat, RMIChatClient
@@ -40,11 +33,21 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     {
       e.printStackTrace();
     }
+//    try {
+//      server = Connection.getStubInterface().getServerChatHandler();
+//      server.registerChatCallback(this);
+//    } catch (RemoteException e) {
+//      e.printStackTrace();
+//    }
+  }
+
+  public void initializeConnection()
+  {
     try {
-      server = Connection.getStubInterface().getServerChatHandler();
-      server.registerChatCallback(this);
+        server = Connection.getStubInterface().getServerChatHandler();
+        server.registerChatCallback(this);
     } catch (RemoteException e) {
-      e.printStackTrace();
+      //support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
     }
   }
 
@@ -156,22 +159,12 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   }
 
   @Override
-  public void logout() {
-    try
-    {
-      server.unRegisterUserAsAListener();
-    }
-    catch (RemoteException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override public void userLoggedOut()
+  public void userLoggedOut()
   {
     try
     {
       server.userLoggedOut(LoggedUser.getLoggedUser().getUser());
+      server.unRegisterUserAsAListener();
     }
     catch (RemoteException e)
     {
@@ -194,10 +187,7 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
 
   @Override
   public void newMessageReceived(Message message) {
-    if(LoggedUser.getLoggedUser().getUser().getUser_id() == message.getSender().getUser_id()
-        || LoggedUser.getLoggedUser().getUser().getUser_id() == message.getReceiver().getUser_id())
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
-    System.out.println("new message on client side");
   }
 
   @Override
@@ -207,10 +197,15 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     System.out.println("new user in networking");
   }
 
-  @Override public void newOfflineUser(User user) throws RemoteException
+  @Override public void newOfflineUser(User user)
   {
     support.firePropertyChange(Events.USER_OFFLINE.toString(),null,user);
     System.out.println("offline user in networking");
+  }
+
+  @Override
+  public void messageRead(Message message){
+    support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, message);
   }
 
 }

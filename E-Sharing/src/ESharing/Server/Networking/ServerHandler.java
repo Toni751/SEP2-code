@@ -1,11 +1,16 @@
 package ESharing.Server.Networking;
 
+import ESharing.Server.Core.ServerModelFactory;
 import ESharing.Server.Model.user.ServerModel;
 import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.Networking.user.RMIServer;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
+import javafx.scene.image.Image;
+
 import java.beans.PropertyChangeListener;
+import java.io.*;
+import java.nio.file.Files;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -21,16 +26,16 @@ public class ServerHandler implements RMIServer
   private PropertyChangeListener listenForNewUser;
   private PropertyChangeListener listenForUserRemoved;
   private PropertyChangeListener listenForUserUpdated;
+  private PropertyChangeListener listenForAvatarUpdated;
 
   /**
    * A constructor initializes fields and starts the internet connection
-   * @param serverModel the server model which manages all requests
    * @throws RemoteException if the method invocation fails
    */
-  public ServerHandler(ServerModel serverModel) throws RemoteException
+  public ServerHandler() throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
-    this.serverModel = serverModel;
+    this.serverModel = ServerModelFactory.getInstance().getServerModel();
   }
 
   @Override
@@ -87,10 +92,19 @@ public class ServerHandler implements RMIServer
         e.printStackTrace();
       }
     };
+
+    listenForAvatarUpdated = evt -> {
+      try {
+        client.avatarUpdated((byte[]) evt.getNewValue());
+      } catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    };
+
     serverModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
     serverModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
+    serverModel.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
   }
-
 
   @Override
   public List<User> getAllUsers(){
@@ -98,9 +112,18 @@ public class ServerHandler implements RMIServer
   }
 
   @Override
-  public void unRegisterUserAsAListener() throws RemoteException {
+  public void unRegisterUserAsAListener() {
+
     serverModel.removePropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
     serverModel.removePropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
     serverModel.removePropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
+    serverModel.removePropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
+
+    serverModel.listeners();
+  }
+
+  @Override
+  public void changeUserAvatar(byte[] avatarImage, int userId){
+    serverModel.changeUserAvatar(avatarImage, userId);
   }
 }

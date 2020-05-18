@@ -3,18 +3,17 @@ package ESharing.Client.Model.ChatModel;
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.chat.ClientChat;
-import ESharing.Client.Networking.user.Client;
-import ESharing.Shared.TransferedObject.Conversation;
-import ESharing.Shared.TransferedObject.Events;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
+import ESharing.Shared.Util.GeneralFunctions;
+import com.sun.javafx.image.impl.General;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarOutputStream;
 
 public class ChatModelManager implements ChatModel{
 
@@ -25,25 +24,41 @@ public class ChatModelManager implements ChatModel{
     {
         client = ClientFactory.getClientFactory().getChatClient();
         support = new PropertyChangeSupport(this);
+
         client.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
         client.addPropertyChangeListener(Events.USER_ONLINE.toString(), this::newOnlineUser);
         client.addPropertyChangeListener(Events.USER_OFFLINE.toString(),this::newOfflineUser);
+        client.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), this::readMessageReceived);
+    }
+
+    private void readMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("READ MESSAGE RECEIVED IN CHAT MODEL");
+        Message newMessage = (Message) propertyChangeEvent.getNewValue();
+        if(loggedUserPartOfTheMessage(newMessage)) {
+            support.firePropertyChange(propertyChangeEvent);
+        }
     }
 
     private void newOfflineUser(PropertyChangeEvent event)
     {
         support.firePropertyChange(event);
-        System.out.println("chat model fired new offline user event");
     }
 
     private void newOnlineUser(PropertyChangeEvent event)
     {
         support.firePropertyChange(event);
-        System.out.println("chat model fired new user event");
     }
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
+        Message newMessage = (Message) propertyChangeEvent.getNewValue();
+        if(loggedUserPartOfTheMessage(newMessage)) {
+            support.firePropertyChange(propertyChangeEvent);
+            if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty())
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
+            else if(!GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getSender())
+               && !GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getReceiver()))
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
+        }
     }
 
     @Override
@@ -57,9 +72,12 @@ public class ChatModelManager implements ChatModel{
     }
 
     @Override
-    public void makeMessageRead(Message message) {
-        client.makeMessageRead(message);
-        support.firePropertyChange(Events.MAKE_CONVERSATION_READ.toString(), null, message);
+    public void makeMessageRead() {
+        for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()) {
+            if (message.getSender().getUser_id() != LoggedUser.getLoggedUser().getUser().getUser_id())
+                if (!message.isRead())
+                    client.makeMessageRead(message);
+        }
     }
 
     @Override
@@ -77,11 +95,6 @@ public class ChatModelManager implements ChatModel{
         return client.getNoUnreadMessages(LoggedUser.getLoggedUser().getUser());
     }
 
-    @Override public void userLoggedOut()
-    {
-        client.userLoggedOut();
-        client.logout();
-    }
 
     @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
@@ -110,5 +123,18 @@ public class ChatModelManager implements ChatModel{
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
+    }
+
+
+    private boolean loggedUserPartOfTheMessage(Message newMessage)
+    {
+        System.out.println(LoggedUser.getLoggedUser().getUser().getUsername());
+        System.out.println(newMessage.getSender().getUsername());
+        System.out.println(newMessage.getReceiver().getUsername());
+
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() == newMessage.getSender().getUser_id()
+                || LoggedUser.getLoggedUser().getUser().getUser_id() == newMessage.getReceiver().getUser_id())
+            return true;
+        return false;
     }
 }

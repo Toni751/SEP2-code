@@ -50,5 +50,15 @@ public interface VerificationModel {
      */
     String verifyUsernameAndPassword(String username, String password);
 
+    /**
+     * Verifies values from creation a new advertisement
+     * @param title the given title of the advertisement
+     * @param type the given type of the vehicle
+     * @param description the given description of the advertisement
+     * @param price the price per day of the advertisement
+     * @return the result of the verification as a string object
+     */
+    String verifyAdvertisement(String title, String type, String description, String price, int images);
+
 
 }

@@ -70,4 +70,22 @@ public class VerificationModelManager implements VerificationModel{
         else
             return null;
     }
+
+    @Override
+    public String verifyAdvertisement(String title, String type, String description, String price, int images) {
+        if(title == null || title.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get((Verifications.INVALID_TITLE));
+        if(description == null || description.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get((Verifications.INVALID_DESCRIPTION));
+        if(type == null || type.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get((Verifications.INVALID_VEHICLE_TYPE));
+        if(price == null || price.equals(""))
+            return VerificationList.getVerificationList().getVerifications().get((Verifications.INVALID_PRICE));
+        if(images == 0)
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.NO_ADVERTISEMENT_PHOTOS);
+        try { Double.parseDouble(price); } catch (NumberFormatException e) {
+            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_PRICE);
+        }
+        return null;
+    }
 }

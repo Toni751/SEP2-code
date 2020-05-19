@@ -185,6 +185,11 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
+    public void openAddAdvertisementView(Pane existingPane) {
+        viewController = ViewControllerFactory.getViewController(Views.ADD_ADVERTISEMENT_VIEW);
+        showView(viewController, existingPane);
+    }
+
     /**
      * Shows views in a current scene or already loaded pane, using the ViewController class
      * @param controller the ViewController class which inheritances all view controllers
@@ -241,4 +246,5 @@ public class ViewHandler {
     {
         currentStage.setIconified(true);
     }
+
 }

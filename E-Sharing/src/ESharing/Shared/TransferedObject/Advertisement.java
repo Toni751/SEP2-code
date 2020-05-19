@@ -1,16 +1,19 @@
 package ESharing.Shared.TransferedObject;
 
+import ESharing.Shared.Util.AdImages;
 import javafx.scene.image.Image;
-
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Advertisement {
+public class Advertisement implements Serializable {
     private int advertisementID;
     private User owner;
-    private List<byte[]> photos;
+    private Map<String, byte[]> photos;
+    private Map<String, String> serverPaths;
     private String type;
     private List<LocalDate> unavailability;
     private double price;
@@ -19,7 +22,7 @@ public class Advertisement {
     private LocalDate creationDate;
     private boolean approved;
 
-    public Advertisement(User owner, List<byte[]> photos, String type, List<LocalDate> unavailability, double price, String title, String description) {
+    public Advertisement(User owner, Map<String, byte[]> photos, String type, List<LocalDate> unavailability, double price, String title, String description) {
         this.owner = owner;
         this.photos = photos;
         this.type = type;
@@ -28,6 +31,8 @@ public class Advertisement {
         this.title = title;
         this.description = description;
         this.approved = false;
+
+        serverPaths = new HashMap<>();
     }
 
     public int getAdvertisementID() {
@@ -38,11 +43,47 @@ public class Advertisement {
         return owner;
     }
 
-    public List<Image> getPhotos() {
-        List<Image> images = new ArrayList<>();
-        for(int i = 0 ; i < photos.size() ; i++)
-            images.add(new Image(new ByteArrayInputStream(photos.get(i))));
+    public Map<String, Image> getPhotos() {
+        Map<String, Image> images = new HashMap<>();
+        if(photos.containsKey(AdImages.MAIN_IMAGE.toString()))
+            images.put(AdImages.MAIN_IMAGE.toString(), new Image(new ByteArrayInputStream(photos.get(AdImages.MAIN_IMAGE.toString()))));
+        if(photos.containsKey(AdImages.SUB_IMAGE1.toString()))
+            images.put(AdImages.SUB_IMAGE1.toString(), new Image(new ByteArrayInputStream(photos.get(AdImages.SUB_IMAGE1.toString()))));
+        if(photos.containsKey(AdImages.SUB_IMAGE2.toString()))
+            images.put(AdImages.SUB_IMAGE2.toString(), new Image(new ByteArrayInputStream(photos.get(AdImages.SUB_IMAGE2.toString()))));
+        if(photos.containsKey(AdImages.SUB_IMAGE3.toString()))
+            images.put(AdImages.SUB_IMAGE3.toString(), new Image(new ByteArrayInputStream(photos.get(AdImages.SUB_IMAGE3.toString()))));
+        if(photos.containsKey(AdImages.SUB_IMAGE4.toString()))
+            images.put(AdImages.SUB_IMAGE4.toString(), new Image(new ByteArrayInputStream(photos.get(AdImages.SUB_IMAGE4.toString()))));
         return images;
+    }
+
+    public Image getPhoto(String id)
+    {
+        return new Image(new ByteArrayInputStream(photos.get(id)));
+    }
+
+    public void setServerPath(Map<String, String> paths)
+    {
+        serverPaths.put(AdImages.MAIN_IMAGE.toString(), paths.get(AdImages.MAIN_IMAGE.toString()));
+        if(paths.containsKey(AdImages.SUB_IMAGE1.toString()))
+            serverPaths.put(AdImages.SUB_IMAGE1.toString(), paths.get(AdImages.SUB_IMAGE1.toString()));
+        if(paths.containsKey(AdImages.SUB_IMAGE2.toString()))
+            serverPaths.put(AdImages.SUB_IMAGE2.toString(), paths.get(AdImages.SUB_IMAGE2.toString()));
+        if(paths.containsKey(AdImages.SUB_IMAGE3.toString()))
+            serverPaths.put(AdImages.SUB_IMAGE3.toString(), paths.get(AdImages.SUB_IMAGE3.toString()));
+        if(paths.containsKey(AdImages.SUB_IMAGE4.toString()))
+            serverPaths.put(AdImages.SUB_IMAGE4.toString(), paths.get(AdImages.SUB_IMAGE4.toString()));
+    }
+
+    public Map<String, String> getServerPaths()
+    {
+        return serverPaths;
+    }
+
+    public String getServerPath(String id)
+    {
+        return serverPaths.get(id);
     }
 
     public String getType() {
@@ -51,6 +92,11 @@ public class Advertisement {
 
     public List<LocalDate> getUnavailability() {
         return unavailability;
+    }
+
+    public Map<String, byte[]> getBytePhotos()
+    {
+        return photos;
     }
 
     public double getPrice() {

@@ -3,6 +3,7 @@ package ESharing.Client.Core;
 import ESharing.Client.Views.AdminDashboardView.AdminDashboardViewModel;
 import ESharing.Client.Views.AdminEditUserView.AdminEditUserViewModel;
 import ESharing.Client.Views.ChatView.ChatViewModel;
+import ESharing.Client.Views.CreateAdView.CreateAdViewModel;
 import ESharing.Client.Views.EditAdminView.EditAdminViewModel;
 import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
 import ESharing.Client.Views.MainAdminView.MainAdminViewModel;
@@ -34,6 +35,7 @@ public class ViewModelFactory {
     private AdminEditUserViewModel adminEditUserViewModel;
     private ChatViewModel chatViewModel;
     private EditAdminViewModel editAdminViewModel;
+    private CreateAdViewModel adViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -54,6 +56,7 @@ public class ViewModelFactory {
         adminEditUserViewModel = new AdminEditUserViewModel();
         chatViewModel= new ChatViewModel();
         editAdminViewModel = new EditAdminViewModel();
+        adViewModel = new CreateAdViewModel();
     }
 
     /**
@@ -169,5 +172,13 @@ public class ViewModelFactory {
      */
     public EditAdminViewModel getEditAdminViewModel() {
         return editAdminViewModel;
+    }
+
+    /**
+     * Returns initialized view model of the create advertisement view
+     * @return the initialized CreateAdViewModel
+     */
+    public CreateAdViewModel getAdViewModel() {
+        return adViewModel;
     }
 }

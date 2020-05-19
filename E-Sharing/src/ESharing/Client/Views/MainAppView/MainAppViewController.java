@@ -26,7 +26,8 @@ import java.util.ArrayList;
  */
 public class MainAppViewController extends ViewController {
 
-    public Label messageNotification;
+    @FXML private Label messageNotification;
+    @FXML private Rectangle addAdvertisementRectangle;
     @FXML private Rectangle messageRectangle;
     @FXML private Rectangle settingRectangle;
     @FXML private Pane contentPane;
@@ -50,7 +51,6 @@ public class MainAppViewController extends ViewController {
         mainAppViewModel.loadNotifications();
 
         mainAppViewModel.addPropertyChangeListener(Events.USER_LOGOUT.toString(), this::onAdminRemoveAccount);
-        //mainAppViewModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
     }
 
     /**
@@ -81,22 +81,6 @@ public class MainAppViewController extends ViewController {
         GeneralFunctions.fadeNode("FadeIn", messageRectangle, 500);
     }
 
-//    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-//        Message message = (Message) propertyChangeEvent.getNewValue();
-//        if(LoggedUser.getLoggedUser().getUser().getUser_id() != message.getSender().getUser_id()) {
-//            Platform.runLater(() -> {
-//                if (!messageNotification.isVisible())
-//                    messageNotification.setVisible(true);
-//                if (!messageNotification.textProperty().get().equals("")) {
-//                    int currentNotification = Integer.parseInt(messageNotification.textProperty().get());
-//                    currentNotification++;
-//                    messageNotification.textProperty().set(String.valueOf(currentNotification));
-//                } else
-//                    messageNotification.textProperty().set("1");
-//            });
-//        }
-//    }
-
     private void onAdminRemoveAccount(PropertyChangeEvent propertyChangeEvent) {
         viewHandler.openWelcomeView();
     }
@@ -104,6 +88,7 @@ public class MainAppViewController extends ViewController {
     private void hideNavigateRectangles() {
         messageRectangle.setVisible(false);
         settingRectangle.setVisible(false);
+        addAdvertisementRectangle.setVisible(false);
     }
 
     public void onMinimizeAction() {
@@ -113,5 +98,12 @@ public class MainAppViewController extends ViewController {
     public void onCloseButtonAction() {
         mainAppViewModel.userLoggedOut();
         System.exit(0);
+    }
+
+    public void onGoToAddAdvertisement() {
+        viewHandler.openAddAdvertisementView(contentPane);
+        hideNavigateRectangles();
+        addAdvertisementRectangle.setVisible(true);
+        GeneralFunctions.fadeNode("FadeIn", addAdvertisementRectangle, 500);
     }
 }

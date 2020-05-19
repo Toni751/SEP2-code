@@ -1,5 +1,7 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
+import ESharing.Client.Model.AdvertisementModel.AdvertisementModelManager;
 import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.AppModel.AppOverviewModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
@@ -22,6 +24,7 @@ public class ModelFactory {
     private AdministratorActionsModel administratorActionsModel;
     private VerificationModel verificationModel;
     private ChatModel chatModel;
+    private AdvertisementModel advertisementModel;
 
     private static ModelFactory modelFactory;
 
@@ -35,6 +38,7 @@ public class ModelFactory {
         administratorActionsModel = new AdministratorActionModelManager();
         verificationModel = new VerificationModelManager();
         chatModel = new ChatModelManager();
+        advertisementModel = new AdvertisementModelManager();
     }
 
     /**
@@ -85,5 +89,13 @@ public class ModelFactory {
      */
     public ChatModel getChatModel() {
         return chatModel;
+    }
+
+    /**
+     * Returns initialized model for the advertisement
+     * @return initialized model for the advertisement
+     */
+    public AdvertisementModel getAdvertisementModel() {
+        return advertisementModel;
     }
 }

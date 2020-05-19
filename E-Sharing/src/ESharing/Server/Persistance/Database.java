@@ -23,6 +23,6 @@ public abstract class Database {
     {
         return DriverManager.getConnection(
                 "jdbc:postgresql://localhost:5432/sep2",
-                "postgres", "29312112");
+                "postgres", "password");
     }
 }

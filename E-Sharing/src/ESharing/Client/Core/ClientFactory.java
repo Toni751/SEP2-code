@@ -1,5 +1,7 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Networking.advertisement.ClientAdvertisement;
+import ESharing.Client.Networking.advertisement.ClientAdvertisementManager;
 import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.chat.ClientChatHandler;
 import ESharing.Client.Networking.user.Client;
@@ -13,6 +15,7 @@ import ESharing.Client.Networking.user.ClientHandler;
 public class ClientFactory {
     private Client client;
     private ClientChat chatClient;
+    private ClientAdvertisement clientAdvertisement;
     private static ClientFactory clientFactory;
 
     /**
@@ -45,5 +48,11 @@ public class ClientFactory {
         if(chatClient == null)
             chatClient = new ClientChatHandler();
         return chatClient;
+    }
+
+    public ClientAdvertisement getClientAdvertisement() {
+        if(clientAdvertisement == null)
+            clientAdvertisement = new ClientAdvertisementManager();
+        return clientAdvertisement;
     }
 }

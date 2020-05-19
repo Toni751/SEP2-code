@@ -48,6 +48,11 @@ public class VerificationList {
         verifications.put(Verifications.DATABASE_CONNECTION_ERROR, "Database connection error");
         verifications.put(Verifications.ACTION_SUCCESS, "Action successful");
         verifications.put(Verifications.SERVER_CONNECTION_ERROR, "Server connection error");
+        verifications.put(Verifications.INVALID_PRICE, "Invalid price");
+        verifications.put(Verifications.INVALID_TITLE, "Invalid title");
+        verifications.put(Verifications.INVALID_DESCRIPTION, "Invalid description");
+        verifications.put(Verifications.INVALID_VEHICLE_TYPE, "Invalid vehicle type");
+        verifications.put(Verifications.NO_ADVERTISEMENT_PHOTOS, "You have to select at least one photo");
     }
 
     /**

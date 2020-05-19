@@ -2,6 +2,7 @@ package ESharing.Client.Model.UserActions;
 
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.Connection;
+import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.User;
@@ -27,6 +28,7 @@ public class UserActionsModelManager implements UserActionsModel {
 
     private Client client;
     private ClientChat clientChat;
+    private ClientAdvertisement clientAdvertisement;
     private PropertyChangeSupport support;
     private Connection connection;
 
@@ -37,6 +39,7 @@ public class UserActionsModelManager implements UserActionsModel {
     {
         this.client = ClientFactory.getClientFactory().getClient();
         this.clientChat = ClientFactory.getClientFactory().getChatClient();
+        this.clientAdvertisement = ClientFactory.getClientFactory().getClientAdvertisement();
         support = new PropertyChangeSupport(this);
         connection = new Connection();
 
@@ -52,10 +55,10 @@ public class UserActionsModelManager implements UserActionsModel {
         LoggedUser.getLoggedUser().getUser().setAvatar((byte[]) propertyChangeEvent.getNewValue());
     }
 
+
     @Override
     public String createNewUser(User newUser) {
-        client.initializeConnection();
-        clientChat.initializeConnection();
+        initializeConnections();
         boolean verification = client.addUserRequest(newUser);
         if(!verification)
             return VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR);
@@ -66,9 +69,8 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public String onLoginRequest(String username, String password) {
-        connection.closeConnection();
-        client.initializeConnection();
-        clientChat.initializeConnection();
+       // connection.closeConnection();
+        initializeConnections();
             User requestedUser = client.loginUserRequest(username,password);
             if(requestedUser == null)
                 return VerificationList.getVerificationList().getVerifications().get(Verifications.USER_NOT_EXIST);
@@ -136,5 +138,12 @@ public class UserActionsModelManager implements UserActionsModel {
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
+    }
+
+    private void initializeConnections()
+    {
+        client.initializeConnection();
+        clientChat.initializeConnection();
+        clientAdvertisement.initializeConnection();
     }
 }

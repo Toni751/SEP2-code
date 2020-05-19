@@ -32,10 +32,10 @@ public class ServerHandler implements RMIServer
    * A constructor initializes fields and starts the internet connection
    * @throws RemoteException if the method invocation fails
    */
-  public ServerHandler() throws RemoteException
+  public ServerHandler(ServerModel serverModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
-    this.serverModel = ServerModelFactory.getInstance().getServerModel();
+    this.serverModel = serverModel;
   }
 
   @Override

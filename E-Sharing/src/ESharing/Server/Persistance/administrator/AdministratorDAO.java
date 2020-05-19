@@ -1,4 +1,4 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.administrator;
 
 import ESharing.Shared.TransferedObject.User;
 

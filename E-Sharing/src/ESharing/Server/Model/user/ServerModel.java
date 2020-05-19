@@ -53,5 +53,5 @@ public interface ServerModel extends PropertyChangeSubject
 
     void changeUserAvatar(byte[] avatarImage, int userId);
 
-    public void listeners();
+    void listeners();
 }

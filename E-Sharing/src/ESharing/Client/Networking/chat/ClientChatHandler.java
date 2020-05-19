@@ -45,6 +45,8 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   {
     try {
         server = Connection.getStubInterface().getServerChatHandler();
+      System.out.println(server);
+        server.unRegisterUserAsAListener();
         server.registerChatCallback(this);
     } catch (RemoteException e) {
       //support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);

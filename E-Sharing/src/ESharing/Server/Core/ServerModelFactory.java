@@ -6,37 +6,45 @@ import ESharing.Server.Model.chat.ServerChatModel;
 import ESharing.Server.Model.chat.ServerChatModelManager;
 import ESharing.Server.Model.user.ServerModel;
 import ESharing.Server.Model.user.ServerModelManager;
+import ESharing.Server.Persistance.DAOFactory;
 
-public class ServerModelFactory {
+public class ServerModelFactory
+{
     private ServerChatModel chatModel;
     private ServerModel serverModel;
     private ServerAdvertisementModel serverAdvertisementModel;
+    private DAOFactory daoFactory;
 
-    private static ServerModelFactory instance;
-
-    private ServerModelFactory()
+    public ServerModelFactory(DAOFactory daoFactory)
     {
-        chatModel = new ServerChatModelManager();
-        serverModel = new ServerModelManager();
-        serverAdvertisementModel = new ServerAdvertisementModelManager();
+        this.daoFactory = daoFactory;
     }
+//
+//    public static ServerModelFactory getInstance()
+//    {
+//        if(instance == null)
+//            instance = new ServerModelFactory();
+//        return instance;
+//    }
 
-    public static ServerModelFactory getInstance()
+    public ServerChatModel getChatModel()
     {
-        if(instance == null)
-            instance = new ServerModelFactory();
-        return instance;
-    }
-
-    public ServerChatModel getChatModel() {
+        if (chatModel == null)
+            chatModel = new ServerChatModelManager(daoFactory.getMessageDAO(), daoFactory.getAdministratorDAO());
         return chatModel;
     }
 
-    public ServerModel getServerModel() {
+    public ServerModel getServerModel()
+    {
+        if (serverModel == null)
+            serverModel = new ServerModelManager(daoFactory.getUserDAO(), daoFactory.getAdministratorDAO());
         return serverModel;
     }
 
-    public ServerAdvertisementModel getServerAdvertisementModel() {
+    public ServerAdvertisementModel getServerAdvertisementModel()
+    {
+        if (serverAdvertisementModel == null)
+            serverAdvertisementModel = new ServerAdvertisementModelManager(daoFactory.getAdvertisementDAO());
         return serverAdvertisementModel;
     }
 }

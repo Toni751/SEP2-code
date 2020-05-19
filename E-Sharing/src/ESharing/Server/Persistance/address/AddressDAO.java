@@ -1,4 +1,4 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.address;
 
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
@@ -10,6 +10,6 @@ public interface AddressDAO
 {
   int create(Address address); //returns the id of the address
   Address readById(int address_id);
-  Address readByAddress (String street, String number, String city, String postcode);
+  Address readByAddress (String street, String number);
   void delete(int address_id);
 }

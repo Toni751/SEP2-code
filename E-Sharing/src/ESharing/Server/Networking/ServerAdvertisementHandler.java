@@ -20,12 +20,12 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   private PropertyChangeListener listenToUpdatedAd;
   private PropertyChangeListener listenToDeletedAd;
 
-  public ServerAdvertisementHandler()
+  public ServerAdvertisementHandler(ServerAdvertisementModel serverModel)
   {
     try
     {
       UnicastRemoteObject.exportObject(this, 0);
-      serverModel = ServerModelFactory.getInstance().getServerAdvertisementModel();
+      this.serverModel = serverModel;
     }
     catch (RemoteException e)
     {

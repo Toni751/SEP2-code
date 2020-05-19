@@ -24,11 +24,11 @@ public class ServerChatHandler implements RMIChatServer
   private PropertyChangeListener listenForMessageRead;
   private ServerModel serverModel;
 
-  public ServerChatHandler() throws RemoteException
+  public ServerChatHandler(ServerChatModel chatModel, ServerModel serverModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
-    this.chatModel = ServerModelFactory.getInstance().getChatModel();
-    this.serverModel = ServerModelFactory.getInstance().getServerModel();
+    this.chatModel = chatModel;
+    this.serverModel = serverModel;
   }
 
   @Override
@@ -132,8 +132,11 @@ public class ServerChatHandler implements RMIChatServer
     System.out.println("A USER IS REMOVED AS A SERVER LISTENER");
     serverModel.removePropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
     serverModel.removePropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
+    System.out.print("Before: ");
+    chatModel.listeners();
     chatModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), listenForNewMessage);
     chatModel.removePropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), listenForMessageRead);
-   chatModel.listeners();
+    System.out.print("After: ");
+    chatModel.listeners();
   }
 }

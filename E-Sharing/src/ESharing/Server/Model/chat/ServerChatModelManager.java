@@ -1,16 +1,15 @@
 package ESharing.Server.Model.chat;
 
-import ESharing.Server.Persistance.AdministratorDAO;
-import ESharing.Server.Persistance.AdministratorDAOManager;
-import ESharing.Server.Persistance.MessageDAO;
-import ESharing.Server.Persistance.MessageDAOManager;
+import ESharing.Server.Persistance.administrator.AdministratorDAO;
+import ESharing.Server.Persistance.administrator.AdministratorDAOManager;
+import ESharing.Server.Persistance.message.MessageDAO;
+import ESharing.Server.Persistance.message.MessageDAOManager;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerChatModelManager implements ServerChatModel
@@ -19,10 +18,10 @@ public class ServerChatModelManager implements ServerChatModel
   private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
 
-  public ServerChatModelManager()
+  public ServerChatModelManager(MessageDAO messageDAO, AdministratorDAO administratorDAO)
   {
-    this.messageDAO = MessageDAOManager.getInstance();
-    this.administratorDAO = AdministratorDAOManager.getInstance();
+    this.messageDAO = messageDAO;
+    this.administratorDAO = administratorDAO;
     support = new PropertyChangeSupport(this);
   }
 

@@ -15,28 +15,39 @@ public class StubFactory implements StubInterface {
     private RMIChatServer chatServerRMI;
     private RMIServer serverRMI;
     private RMIAdvertisementServer advertisementServerRMI;
+    private ServerModelFactory serverFactory;
 
-    public StubFactory() throws RemoteException {
+    public StubFactory(ServerModelFactory serverFactory) throws RemoteException
+    {
+        this.serverFactory = serverFactory;
         UnicastRemoteObject.exportObject(this, 0);
     }
 
 
     public RMIChatServer getServerChatHandler() throws RemoteException {
+        System.out.println("Get server chat called in stub");
         if(chatServerRMI == null)
-            chatServerRMI = new ServerChatHandler();
+        {
+            System.out.println("Server chat was null in stub");
+            chatServerRMI = new ServerChatHandler(serverFactory.getChatModel(), serverFactory.getServerModel());
+        }
         return chatServerRMI;
     }
 
     public RMIServer getServerRMI() throws RemoteException {
+        System.out.println("Get server called in stub");
         if(serverRMI == null)
-            serverRMI = new ServerHandler();
+        {
+            System.out.println("Server was null in stub");
+            serverRMI = new ServerHandler(serverFactory.getServerModel());
+        }
         return serverRMI;
     }
 
     @Override
     public RMIAdvertisementServer getServerAdHandler() throws RemoteException {
         if(advertisementServerRMI == null)
-            advertisementServerRMI = new ServerAdvertisementHandler();
+            advertisementServerRMI = new ServerAdvertisementHandler(serverFactory.getServerAdvertisementModel());
         return advertisementServerRMI;
     }
 }

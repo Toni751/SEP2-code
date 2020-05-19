@@ -1,13 +1,14 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.user;
 
+import ESharing.Server.Persistance.Database;
+import ESharing.Server.Persistance.address.AddressDAO;
+import ESharing.Server.Persistance.address.AddressDAOManager;
+import ESharing.Server.Persistance.message.MessageDAO;
+import ESharing.Server.Persistance.message.MessageDAOManager;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
-import javafx.scene.image.Image;
 
-import javax.swing.*;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,14 +19,16 @@ public class UserDAOManager extends Database implements UserDAO
 
   private static UserDAOManager instance;
   private AddressDAO addressDAO;
+  private MessageDAO messageDAO;
 
   //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
-  private UserDAOManager()
+  public UserDAOManager(AddressDAO addressDAO, MessageDAO messageDAO)
   {
     try
     {
       DriverManager.registerDriver(new org.postgresql.Driver());
-      this.addressDAO = AddressDAOManager.getInstance();
+      this.addressDAO = addressDAO;
+      this.messageDAO = messageDAO;
     }
     catch (SQLException e)
     {
@@ -33,14 +36,14 @@ public class UserDAOManager extends Database implements UserDAO
     }
   }
 
-  public static synchronized UserDAOManager getInstance()
-  {
-    if (instance == null)
-    {
-      instance = new UserDAOManager();
-    }
-    return instance;
-  }
+//  public static synchronized UserDAOManager getInstance()
+//  {
+//    if (instance == null)
+//    {
+//      instance = new UserDAOManager();
+//    }
+//    return instance;
+//  }
 
   public Connection getConnection() throws SQLException {
     return super.getConnection();
@@ -95,11 +98,9 @@ public class UserDAOManager extends Database implements UserDAO
         String phoneNumber = resultSet.getString("phoneno");
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
-        String postcode = resultSet.getString("postcode");
         String number = resultSet.getString("number");
-        String city = resultSet.getString("city");
         String avatarPath = resultSet.getString("avatarpath");
-        Address address = new Address(street, number,city,postcode);
+        Address address = new Address(street, number);
         address.setAddress_id(address_id);
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
@@ -135,12 +136,10 @@ public class UserDAOManager extends Database implements UserDAO
         int address_id = resultSet.getInt("address_id");
         String street = resultSet.getString("street");
         boolean administrator = resultSet.getBoolean("administrator");
-        String postcode = resultSet.getString("postcode");
         String number = resultSet.getString("number");
-        String city = resultSet.getString("city");
         String creationDate = resultSet.getString("creation_date");
         String avatarPath = resultSet.getString("avatarpath");
-        Address address = new Address(street,number,city,postcode);
+        Address address = new Address(street,number);
         address.setAddress_id(address_id);
         User user = new User(username,password,phoneNumber,address);
         user.setUser_id(user_id);
@@ -228,8 +227,10 @@ public class UserDAOManager extends Database implements UserDAO
           addressDAO.delete(oldAddressId);
 
         if (affectedRows == 1)
+        {
           System.out.println("Updated");
           return true;
+        }
       }
     }
     catch (SQLException e)
@@ -245,7 +246,7 @@ public class UserDAOManager extends Database implements UserDAO
     {
       PreparedStatement statement = connection.prepareStatement("DELETE FROM user_account WHERE id = ?;");
       statement.setInt(1, user.getUser_id());
-      MessageDAOManager.getInstance().deleteMessagesForUser(user);
+      messageDAO.deleteMessagesForUser(user);
       int noUsersLivingAtAddress = getNoUsersLivingAtAddress(user.getAddress().getAddress_id());
       int affectedRows = statement.executeUpdate();
       if (noUsersLivingAtAddress == 1)

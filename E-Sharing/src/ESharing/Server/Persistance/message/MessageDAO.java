@@ -1,4 +1,4 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.message;
 
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.Message;

@@ -1,5 +1,6 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.address;
 
+import ESharing.Server.Persistance.Database;
 import ESharing.Shared.TransferedObject.Address;
 
 import java.sql.*;
@@ -9,17 +10,17 @@ public class AddressDAOManager extends Database implements AddressDAO
 
   private static AddressDAOManager instance;
   // We need to create a unique constraint for the address
-  // ALTER TABLE address ADD CONSTRAINT unique_address UNIQUE (street, number, city, postcode);
+  // ALTER TABLE address ADD CONSTRAINT unique_address UNIQUE (street, number);
 
-  public static synchronized AddressDAOManager getInstance()
-  {
-
-    if (instance == null)
-    {
-      instance = new AddressDAOManager();
-    }
-    return instance;
-  }
+//  public static synchronized AddressDAOManager getInstance()
+//  {
+//
+//    if (instance == null)
+//    {
+//      instance = new AddressDAOManager();
+//    }
+//    return instance;
+//  }
 
   public Connection getConnection() throws SQLException {
     return super.getConnection();
@@ -31,12 +32,10 @@ public class AddressDAOManager extends Database implements AddressDAO
     {
       System.out.println(address);
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO address (street,number,city,postcode) VALUES (?,?,?,?)"
+          "INSERT INTO address (street,number) VALUES (?,?) "
               + "ON CONFLICT ON CONSTRAINT unique_address DO NOTHING;");
       statement.setString(1, address.getStreet());
       statement.setString(2, address.getNumber());
-      statement.setString(3, address.getCity());
-      statement.setString(4, address.getPostcode());
       int rowCount = statement.executeUpdate();
       System.out.println("Rows affected by create address: " + rowCount);
 
@@ -50,7 +49,7 @@ public class AddressDAOManager extends Database implements AddressDAO
       }
       else
       {
-        return readByAddress(address.getStreet(), address.getNumber(), address.getCity(), address.getPostcode()).getAddress_id();
+        return readByAddress(address.getStreet(), address.getNumber()).getAddress_id();
       }
     }
     catch (SQLException e)
@@ -71,9 +70,7 @@ public class AddressDAOManager extends Database implements AddressDAO
       {
         String street = resultSet.getString("street");
         String number = resultSet.getString("number");
-        String city = resultSet.getString("city");
-        String postcode = resultSet.getString("postcode");
-        Address address = new Address(street, number, city, postcode);
+        Address address = new Address(street, number);
         address.setAddress_id(address_id);
         return address;
       }
@@ -86,19 +83,17 @@ public class AddressDAOManager extends Database implements AddressDAO
   }
 
   @Override
-  public Address readByAddress(String street, String number, String city, String postcode)
+  public Address readByAddress(String street, String number)
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM address WHERE street = ? AND number = ? AND city = ? AND postcode = ?;");
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM address WHERE street = ? AND number = ?;");
       statement.setString(1, street);
       statement.setString(2, number);
-      statement.setString(3, city);
-      statement.setString(4, postcode);
       ResultSet resultSet = statement.executeQuery();
       if (resultSet.next())
       {
-        Address address = new Address(street, number, city, postcode);
+        Address address = new Address(street, number);
         address.setAddress_id(resultSet.getInt("address_id"));
         return address;
       }

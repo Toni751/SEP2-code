@@ -13,22 +13,16 @@ public class Address implements Serializable
   private int address_id;
   private String street;
   private String number;
-  private String city;
-  private String postcode;
 
   /**
    * A constructor which sets all fields
    * @param street the value of street field
    * @param number the value of house number field
-   * @param city the value of city field
-   * @param postcode the value of postal code field
    */
-  public Address(String street, String number, String city, String postcode)
+  public Address(String street, String number)
   {
     this.street = street;
     this.number = number;
-    this.city = city;
-    this.postcode = postcode;
   }
 
   /**
@@ -59,24 +53,6 @@ public class Address implements Serializable
   }
 
   /**
-   * Returns value of a city
-   * @return the city value
-   */
-  public String getCity()
-  {
-    return city;
-  }
-
-  /**
-   * Returns value of a postal code
-   * @return the postal code value
-   */
-  public String getPostcode()
-  {
-    return postcode;
-  }
-
-  /**
    * Returns value of an address_id
    * @return the address_id value
    */
@@ -101,38 +77,19 @@ public class Address implements Serializable
     this.number = number;
   }
 
-  /**
-   * Sets value of city
-   * @param city the value of city
-   */
-  public void setCity(String city) {
-    this.city = city;
-  }
-
-  /**
-   * Sets value of postal code
-   * @param postcode the value of postal code
-   */
-  public void setPostcode(String postcode) {
-    this.postcode = postcode;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Address address = (Address) o;
     return Objects.equals(street, address.street) &&
-            Objects.equals(number, address.number) &&
-            Objects.equals(city, address.city) &&
-            Objects.equals(postcode, address.postcode);
+            Objects.equals(number, address.number);
   }
 
   @Override
   public String toString()
   {
     return "Address{" + "address_id=" + address_id + ", street='" + street
-        + '\'' + ", number='" + number + '\'' + ", city='" + city + '\''
-        + ", postcode='" + postcode + '\'' + '}';
+        + '\'' + ", number='" + number + '}';
   }
 }

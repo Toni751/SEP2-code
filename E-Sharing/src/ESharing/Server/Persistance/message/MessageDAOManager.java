@@ -1,14 +1,13 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.message;
 
-import ESharing.Shared.TransferedObject.Address;
-import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Server.Persistance.Database;
+import ESharing.Server.Persistance.address.AddressDAOManager;
+import ESharing.Server.Persistance.administrator.AdministratorDAO;
+import ESharing.Server.Persistance.administrator.AdministratorDAOManager;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
@@ -17,15 +16,29 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MessageDAOManager extends Database implements MessageDAO {
   private static MessageDAOManager instance;
   private static Lock lock = new ReentrantLock();
+  private AdministratorDAO administratorDAO;
 
-  public static MessageDAOManager getInstance() {
-    if (instance == null)
-      synchronized (lock) {
-        if (instance == null)
-          instance = new MessageDAOManager();
-      }
-    return instance;
+  public MessageDAOManager (AdministratorDAO administratorDAO)
+  {
+    try
+    {
+      DriverManager.registerDriver(new org.postgresql.Driver());
+      this.administratorDAO = administratorDAO;
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
   }
+
+//  public static MessageDAOManager getInstance() {
+//    if (instance == null)
+//      synchronized (lock) {
+//        if (instance == null)
+//          instance = new MessageDAOManager();
+//      }
+//    return instance;
+//  }
 
   public Connection getConnection() throws SQLException {
     return super.getConnection();
@@ -80,7 +93,7 @@ public class MessageDAOManager extends Database implements MessageDAO {
   public List<Message> getLastMessageWithEveryone(User user) {
     List<Message> lastMessages = new ArrayList<>();
     try (Connection connection = getConnection()) {
-      List<User> allUsers = AdministratorDAOManager.getInstance().getAllUsers();
+      List<User> allUsers = administratorDAO.getAllUsers();
       for (User allUser : allUsers) {
         PreparedStatement statement = connection.prepareStatement("SELECT * FROM get_messages(?, ?) ORDER BY message_id DESC LIMIT 1;");
         statement.setInt(1, user.getUser_id());

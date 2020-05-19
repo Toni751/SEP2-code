@@ -55,6 +55,7 @@ public class ClientHandler implements Client, RMIClient
     try {
     server = Connection.getStubInterface().getServerRMI();
     chatServer = Connection.getStubInterface().getServerChatHandler();
+      System.out.println(chatServer);
   }
     catch (RemoteException | NullPointerException e) {
     }

@@ -1,4 +1,4 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.advertisement;
 
 import ESharing.Shared.TransferedObject.Advertisement;
 
@@ -10,7 +10,7 @@ public interface AdvertisementDAO {
   boolean removeAdvertisement(Advertisement advertisement);
   void addImagesAndDates(Advertisement advertisement);
   List<Advertisement> getAllAdvertisements();
-  boolean approveAdvertisement(Advertisement advertisement);
+  void approveAdvertisement(Advertisement advertisement);
 
 
 

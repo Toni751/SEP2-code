@@ -1,5 +1,6 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.administrator;
 
+import ESharing.Server.Persistance.Database;
 import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 
@@ -22,11 +23,11 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
         return super.getConnection();
     }
 
-    public static synchronized AdministratorDAOManager getInstance() {
-        if(instance == null)
-            instance = new AdministratorDAOManager();
-        return instance;
-    }
+//    public static synchronized AdministratorDAOManager getInstance() {
+//        if(instance == null)
+//            instance = new AdministratorDAOManager();
+//        return instance;
+//    }
 
     @Override
     public List<User> getAllUsers() {
@@ -44,12 +45,10 @@ public class AdministratorDAOManager extends Database implements AdministratorDA
                 int address_id = resultSet.getInt("address_id");
                 boolean administrator = resultSet.getBoolean("administrator");
                 String street = resultSet.getString("street");
-                String postcode =resultSet.getString("postcode");
                 String number = resultSet.getString("number");
-                String city = resultSet.getString("city");
                 String create_date = resultSet.getString("creation_date");
                 String avatarPath = resultSet.getString("avatarpath");
-                Address address = new Address(street,number,city,postcode);
+                Address address = new Address(street,number);
                 address.setAddress_id(address_id);
                 User user = new User(username,password,phoneNumber,address);
                 user.setUser_id(user_id);

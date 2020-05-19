@@ -1,5 +1,9 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Persistance.advertisement;
 
+import ESharing.Server.Persistance.Database;
+import ESharing.Server.Persistance.address.AddressDAOManager;
+import ESharing.Server.Persistance.user.UserDAO;
+import ESharing.Server.Persistance.user.UserDAOManager;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.AdImages;
@@ -15,16 +19,30 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
 {
 
   private static AdvertisementDAOManager instance;
+  private UserDAO userDAO;
 
-  public static synchronized AdvertisementDAOManager getInstance()
+  public AdvertisementDAOManager(UserDAO userDAO)
   {
-    if (instance == null)
+    try
     {
-      instance = new AdvertisementDAOManager();
+      DriverManager.registerDriver(new org.postgresql.Driver());
+      this.userDAO = userDAO;
     }
-    return instance;
-
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
   }
+
+//  public static synchronized AdvertisementDAOManager getInstance()
+//  {
+//    if (instance == null)
+//    {
+//      instance = new AdvertisementDAOManager();
+//    }
+//    return instance;
+//
+//  }
 
   public Connection getConnection() throws SQLException
   {
@@ -42,7 +60,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       statement.setString(1, advertisement.getTitle());
       statement.setInt(2, advertisement.getOwner().getUser_id());
       statement.setString(3, advertisement.getDescription());
-      statement.setInt(4, (int) advertisement.getPrice());
+      statement.setDouble(4, advertisement.getPrice());
       statement.setBoolean(5, advertisement.ifAdApproved());
       statement.setDate(6, Date.valueOf(LocalDate.now()));
       statement.setString(7, advertisement.getType());
@@ -68,24 +86,20 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
 
     try (Connection connection = getConnection())
     {
+      PreparedStatement statement1 = connection.prepareStatement("DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
+      statement1.setInt(1,advertisement.getAdvertisementID());
+      statement1.executeUpdate();
+
+      PreparedStatement statement2 = connection.prepareStatement("DELETE FROM ad_picture WHERE advertisement_id = ?;");
+      statement2.setInt(1,advertisement.getAdvertisementID());
+      statement2.executeUpdate();
+
       System.out.println("Deleting advertisement at id: " + advertisement.getAdvertisementID());
       PreparedStatement statement = connection.prepareStatement("DELETE FROM advertisement WHERE id = ?;");
       statement.setInt(1, advertisement.getAdvertisementID());
       int affectedRows = statement.executeUpdate();
       if (affectedRows == 1)
         return true;
-      PreparedStatement statement1 = connection.prepareStatement("DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
-      statement.setInt(1,advertisement.getAdvertisementID());
-      int affectedDates = statement.executeUpdate();
-      if (affectedDates != 0)
-        return true;
-
-      PreparedStatement statement2 = connection.prepareStatement("DELETE FROM ad_picture WHERE advertisement_id = ?;");
-      statement.setInt(1,advertisement.getAdvertisementID());
-      int affectedPictures = statement.executeUpdate();
-      if (affectedPictures != 0)
-        return true;
-
     }
     catch (SQLException e)
     {
@@ -124,7 +138,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     List<Advertisement> advertisements = new ArrayList<>();
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement");
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement;");
       // + "AS ad INNER JOIN ad_picture as pic ON ad.advertisementID = pic.advertisementID INNER JOIN ad_unavailability AS unav ON pic.advertisementID = unav.advertisementID");
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next())
@@ -134,7 +148,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
             advertisementID);
         String title = resultSet.getString("title");
         int owner_id = resultSet.getInt("owner_id");
-        User user = UserDAOManager.getInstance().readById(owner_id);
+        User user = userDAO.readById(owner_id);
         String description = resultSet.getString("description");
         int price = resultSet.getInt("price");
         boolean approved = resultSet.getBoolean("approved");
@@ -160,22 +174,19 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public boolean approveAdvertisement(Advertisement advertisement)
+  @Override public void approveAdvertisement(Advertisement advertisement)
   {
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE advertisement_id=?");
       statement.setBoolean(1,true);
       statement.setInt(2,advertisement.getAdvertisementID());
-      int affectedRows = statement.executeUpdate();
-      if(affectedRows == 1)
-        return true;
+      statement.executeUpdate();
     }
     catch (SQLException e)
     {
       e.printStackTrace();
     }
-    return false;
   }
 
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)
@@ -263,7 +274,4 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
 
   }
-
-
-
 }

@@ -1,6 +1,7 @@
 package ESharing.Server.Model.advertisement;
 
-import ESharing.Server.Persistance.*;
+import ESharing.Server.Persistance.advertisement.AdvertisementDAO;
+import ESharing.Server.Persistance.advertisement.AdvertisementDAOManager;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
@@ -8,12 +9,10 @@ import ESharing.Shared.Util.Events;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,9 +22,9 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     private AdvertisementDAO advertisementDAO;
     private PropertyChangeSupport support;
 
-    public ServerAdvertisementModelManager()
+    public ServerAdvertisementModelManager(AdvertisementDAO advertisementDAO)
     {
-        this.advertisementDAO = AdvertisementDAOManager.getInstance();
+        this.advertisementDAO = advertisementDAO;
         support = new PropertyChangeSupport(this);
     }
 
@@ -92,6 +91,7 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     public void approveAdvertisement(Advertisement ad)
     {
         //send ad to be made approved in the database
+        advertisementDAO.approveAdvertisement(ad);
         support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
     }
 
@@ -119,7 +119,8 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
                    advertisement.setImageByte(AdImages.MAIN_IMAGE.toString(), Files.readAllBytes(Paths.get(advertisement.getServerPath(AdImages.MAIN_IMAGE.toString()))));
 
-           } return advertisements;
+           }
+           return advertisements;
 
            } catch (IOException e) {
             e.printStackTrace(); }

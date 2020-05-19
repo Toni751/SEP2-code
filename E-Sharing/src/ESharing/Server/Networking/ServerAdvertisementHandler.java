@@ -10,6 +10,7 @@ import ESharing.Shared.Util.Events;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 public class ServerAdvertisementHandler implements RMIAdvertisementServer
 {
@@ -112,5 +113,10 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
     serverModel.removePropertyChangeListener(Events.NEW_APPROVED_AD.toString(), listenToAdApproved);
     serverModel.removePropertyChangeListener(Events.AD_REMOVED.toString(), listenToDeletedAd);
     serverModel.removePropertyChangeListener(Events.AD_UPDATED.toString(), listenToUpdatedAd);
+  }
+
+  @Override
+  public List<Advertisement> selectAllAdvertisements() {
+    return serverModel.selectAllAdvertisements();
   }
 }

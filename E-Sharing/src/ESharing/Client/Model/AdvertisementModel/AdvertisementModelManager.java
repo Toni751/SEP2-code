@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdvertisementModelManager implements AdvertisementModel{
@@ -38,6 +39,11 @@ public class AdvertisementModelManager implements AdvertisementModel{
         return convertedImages;
     }
 
+    @Override
+    public List<Advertisement> selectAllAdvertisements() {
+        return clientAdvertisement.selectAllAdvertisement();
+    }
+
     private byte[] convertImageFile(File image)
     {
         try {
@@ -47,4 +53,6 @@ public class AdvertisementModelManager implements AdvertisementModel{
         }
         return null;
     }
+
+
 }

@@ -12,8 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ServerAdvertisementModelManager implements ServerAdvertisementModel{
@@ -105,6 +107,24 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     public boolean editAdvertisement(Advertisement ad)
     {
         return false;
+    }
+
+    @Override
+    public List<Advertisement> selectAllAdvertisements() {
+       Map<String, byte[]> imagesByte = new HashMap<>();
+       List<Advertisement> advertisements = advertisementDAO.getAllAdvertisements();
+       for(Advertisement advertisement : advertisements) {
+           try {
+           for(int i = 0; i<advertisement.getServerPaths().size(); i++) {
+
+                   advertisement.setImageByte(AdImages.MAIN_IMAGE.toString(), Files.readAllBytes(Paths.get(advertisement.getServerPath(AdImages.MAIN_IMAGE.toString()))));
+
+           } return advertisements;
+
+           } catch (IOException e) {
+            e.printStackTrace(); }
+       }
+       return null;
     }
 
     @Override

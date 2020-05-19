@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdvertisementClient {
 
@@ -121,6 +122,19 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Advertisement> selectAllAdvertisement() {
+        try
+        {
+            return server.selectAllAdvertisements();
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

@@ -137,4 +137,8 @@ public class Advertisement implements Serializable {
     {
         return approved;
     }
+
+    public void setImageByte(String id, byte[] imageByte) {
+        photos.put(id, imageByte);
+    }
 }

@@ -12,4 +12,5 @@ public interface AdvertisementModel {
 
     boolean addNewAdvertisement(Advertisement advertisement);
     Map<String, byte[]> convertedImages(Map<String, File> images);
+    List<Advertisement> selectAllAdvertisements();
 }

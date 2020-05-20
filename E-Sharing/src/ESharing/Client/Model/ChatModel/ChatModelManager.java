@@ -7,13 +7,11 @@ import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
-import com.sun.javafx.image.impl.General;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
-import java.util.jar.JarOutputStream;
 
 public class ChatModelManager implements ChatModel{
 

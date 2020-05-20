@@ -8,6 +8,7 @@ import ESharing.Shared.Util.AdImages;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -26,6 +27,7 @@ public class CreateAdViewModel {
     private StringProperty descriptionProperty;
     private StringProperty warningProperty;
     private BooleanProperty warningVisibleProperty;
+    private ObjectProperty<String> typeItemsProperty;
 
     private ObjectProperty<Image> mainImageProperty;
     private ObjectProperty<Image> subImage1Property;
@@ -41,7 +43,7 @@ public class CreateAdViewModel {
     private List<LocalDate> selectedDates;
     private Map<String, File> imageFiles;
 
-    private final Image defaultImage = new Image("ESharing/Addition/Images/icons/uploadImage.png");
+    private final Image defaultImage = new Image("ESharing/Addition/Images/icons/image.png");
     public CreateAdViewModel()
     {
         titleProperty = new SimpleStringProperty();
@@ -50,6 +52,7 @@ public class CreateAdViewModel {
         priceProperty = new SimpleStringProperty();
         warningProperty = new SimpleStringProperty();
         warningVisibleProperty = new SimpleBooleanProperty();
+        typeItemsProperty = new SimpleObjectProperty<>();
 
         mainImageProperty = new SimpleObjectProperty<>();
         subImage1Property = new SimpleObjectProperty<>();
@@ -178,7 +181,12 @@ public class CreateAdViewModel {
         subImage2Property.setValue(defaultImage);
         subImage3Property.setValue(defaultImage);
         subImage4Property.setValue(defaultImage);
+        typeItemsProperty.setValue("car");
 
         LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+    }
+
+    public ObjectProperty<String> getTypeItemsProperty() {
+        return typeItemsProperty;
     }
 }

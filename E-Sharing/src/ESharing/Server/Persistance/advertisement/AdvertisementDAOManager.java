@@ -209,6 +209,11 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
+  @Override
+  public List<CatalogueAd> getAdvertisementsByUser(int user_id) {
+    return null;
+  }
+
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)
   {
     try (Connection connection = getConnection())

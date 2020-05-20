@@ -3,6 +3,7 @@ package ESharing.Client.Views.CreateAdView;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.AdImages;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -42,7 +43,7 @@ public class CreateAdViewController extends ViewController {
     @FXML private ImageView subImage3;
     @FXML private ImageView subImage4;
     @FXML private JFXTextField titleTextField;
-    @FXML private JFXTextField typeTextField;
+    @FXML private JFXComboBox<String> typeComboBox;
     @FXML private JFXTextField priceTextField;
     @FXML private JFXTextArea descriptionTextField;
     @FXML private DatePicker datePicker;
@@ -55,7 +56,7 @@ public class CreateAdViewController extends ViewController {
         viewModel = ViewModelFactory.getViewModelFactory().getAdViewModel();
 
         titleTextField.textProperty().bindBidirectional(viewModel.getTitleProperty());
-        typeTextField.textProperty().bindBidirectional(viewModel.getTypeProperty());
+        typeComboBox.valueProperty().bindBidirectional(viewModel.getTypeItemsProperty());
         priceTextField.textProperty().bindBidirectional(viewModel.getPriceProperty());
         descriptionTextField.textProperty().bindBidirectional(viewModel.getDescriptionProperty());
         warningLabel.textProperty().bind(viewModel.getWarningProperty());

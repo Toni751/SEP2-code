@@ -4,6 +4,7 @@ import ESharing.Client.Networking.Connection;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementClient;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Events;
 
 import java.beans.PropertyChangeListener;
@@ -144,10 +145,15 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public void newApprovedAd(Advertisement ad)
-    {
-        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
+    public void newApprovedAd(CatalogueAd ad) throws RemoteException {
+        //gg
     }
+
+    //@Override
+    //public void newApprovedAd(Advertisement ad)
+    //{
+        //support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
+    //}
 
     @Override
     public void updatedAd(Advertisement ad)

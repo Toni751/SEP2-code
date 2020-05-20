@@ -3,6 +3,7 @@ package ESharing.Server.Model.advertisement;
 import ESharing.Server.Persistance.advertisement.AdvertisementDAO;
 import ESharing.Server.Persistance.advertisement.AdvertisementDAOManager;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
 
@@ -90,8 +91,8 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public void approveAdvertisement(Advertisement ad)
     {
-        advertisementDAO.approveAdvertisement(ad);
-        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
+        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(ad);
+        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
     }
 
     @Override
@@ -128,6 +129,18 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
             e.printStackTrace(); }
        }
        return null;
+    }
+
+    @Override
+    public List<CatalogueAd> getAdvertisementsCatalogue()
+    {
+        return null;
+    }
+
+    @Override
+    public Advertisement getAdvertisementById(int id)
+    {
+        return null;
     }
 
     @Override

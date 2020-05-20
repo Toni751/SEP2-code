@@ -1,6 +1,7 @@
 package ESharing.Shared.Networking.advertisement;
 
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -15,4 +16,7 @@ public interface RMIAdvertisementServer extends Remote
   void registerClientCallback (RMIAdvertisementClient client) throws RemoteException;
   void unRegisterUserAsAListener() throws RemoteException;
   List<Advertisement> selectAllAdvertisements() throws RemoteException;
+  List<CatalogueAd> getAdvertisementsCatalogue();
+  Advertisement getAdvertisementById (int id);
+  List<CatalogueAd> getAdvertisementsByUser(int user_id);
 }

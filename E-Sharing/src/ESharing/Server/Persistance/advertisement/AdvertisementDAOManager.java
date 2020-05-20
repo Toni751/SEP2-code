@@ -5,6 +5,7 @@ import ESharing.Server.Persistance.address.AddressDAOManager;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.AdImages;
 
@@ -180,7 +181,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public void approveAdvertisement(Advertisement advertisement)
+  @Override public CatalogueAd approveAdvertisement(Advertisement advertisement)
   {
     try (Connection connection = getConnection())
     {
@@ -193,6 +194,19 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     {
       e.printStackTrace();
     }
+    return null;
+  }
+
+  @Override
+  public List<CatalogueAd> getAdvertisementsCatalogue()
+  {
+    return null;
+  }
+
+  @Override
+  public Advertisement getAdvertisementById(int id)
+  {
+    return null;
   }
 
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)

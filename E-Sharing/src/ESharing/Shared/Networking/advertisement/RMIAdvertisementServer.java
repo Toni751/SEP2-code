@@ -18,4 +18,5 @@ public interface RMIAdvertisementServer extends Remote
   List<Advertisement> selectAllAdvertisements() throws RemoteException;
   List<CatalogueAd> getAdvertisementsCatalogue();
   Advertisement getAdvertisementById (int id);
+  List<CatalogueAd> getAdvertisementsByUser(int user_id);
 }

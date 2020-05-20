@@ -15,4 +15,5 @@ public interface AdvertisementDAO {
   CatalogueAd approveAdvertisement(Advertisement advertisement);
   List<CatalogueAd> getAdvertisementsCatalogue();
   Advertisement getAdvertisementById (int id);
+  List<CatalogueAd> getAdvertisementsByUser(int user_id);
 }

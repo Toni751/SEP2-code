@@ -5,6 +5,7 @@ import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementClient;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Events;
 
 import java.beans.PropertyChangeListener;
@@ -73,7 +74,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
     listenToAdApproved = evt -> {
       try
       {
-        client.newApprovedAd((Advertisement) evt.getNewValue());
+        client.newApprovedAd((CatalogueAd) evt.getNewValue());
       }
       catch (RemoteException e)
       {
@@ -118,5 +119,23 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   @Override
   public List<Advertisement> selectAllAdvertisements() {
     return serverModel.selectAllAdvertisements();
+  }
+
+  @Override
+  public List<CatalogueAd> getAdvertisementsCatalogue()
+  {
+    return null;
+  }
+
+  @Override
+  public Advertisement getAdvertisementById(int id)
+  {
+    return null;
+  }
+
+  @Override
+  public List<CatalogueAd> getAdvertisementsByUser(int user_id)
+  {
+    return null;
   }
 }

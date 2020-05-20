@@ -9,6 +9,7 @@ import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.net.URI;
 import java.util.List;
 import java.util.Random;
 
@@ -35,8 +36,11 @@ public class AdministratorActionModelManager implements AdministratorActionsMode
     }
 
     private void userRemovedFromTheSystem(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-        AdministratorLists.getInstance().getUserList().remove((User) propertyChangeEvent.getNewValue());
+        User removedUser = (User) propertyChangeEvent.getNewValue();
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() == removedUser.getUser_id() ||
+            LoggedUser.getLoggedUser().getUser().isAdministrator())
+                support.firePropertyChange(propertyChangeEvent);
+        AdministratorLists.getInstance().getUserList().remove(removedUser);
         System.out.println("Got removed user request");
     }
 

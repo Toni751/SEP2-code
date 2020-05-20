@@ -12,44 +12,43 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="750.0" styleClass="cream-background" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.CreateAdView.CreateAdViewController">
    <children>
-      <ImageView fx:id="mainImage" fitHeight="200.0" fitWidth="200.0" layoutX="16.0" layoutY="16.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="mainImage" fitHeight="200.0" fitWidth="200.0" layoutX="315.0" layoutY="25.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="subImage2" fitHeight="80.0" fitWidth="80.0" layoutX="194.0" layoutY="79.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/upload.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="subImage2" fitHeight="80.0" fitWidth="80.0" layoutX="149.0" layoutY="252.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="subImage1" fitHeight="80.0" fitWidth="80.0" layoutX="71.0" layoutY="79.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/upload.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="subImage1" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="252.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="subImage3" fitHeight="80.0" fitWidth="80.0" layoutX="656.0" layoutY="85.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/upload.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="subImage3" fitHeight="80.0" fitWidth="80.0" layoutX="36.0" layoutY="353.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="subImage4" fitHeight="80.0" fitWidth="80.0" layoutX="549.0" layoutY="85.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/upload.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="subImage4" fitHeight="80.0" fitWidth="80.0" layoutX="149.0" layoutY="353.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/upload.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="277.0" layoutY="21.0" styleClass="big-label" text="CREATE ADVERTISEMENT" />
-      <JFXTextField fx:id="titleTextField" layoutX="277.0" layoutY="103.0" prefHeight="26.0" prefWidth="331.0" />
-      <Label layoutX="277.0" layoutY="87.0" styleClass="text-field-label" text="Title" />
-      <JFXTextField fx:id="typeTextField" layoutX="277.0" layoutY="181.0" prefHeight="26.0" prefWidth="331.0" />
-      <Label layoutX="277.0" layoutY="165.0" styleClass="text-field-label" text="Vehicle Type" />
-      <JFXTextField fx:id="priceTextField" layoutX="275.0" layoutY="340.0" prefHeight="26.0" prefWidth="87.0" />
-      <Label layoutX="274.0" layoutY="324.0" styleClass="text-field-label" text="Price/Day" />
-      <JFXTextArea fx:id="descriptionTextField" layoutX="277.0" layoutY="250.0" prefHeight="26.0" prefWidth="331.0" />
-      <Label layoutX="277.0" layoutY="235.0" styleClass="text-field-label" text="Description" />
-      <Label layoutX="429.0" layoutY="345.0" text="Select unavailable days" />
-      <JFXButton layoutX="472.0" layoutY="393.0" onAction="#onAddAdvertisementAction" styleClass="gray-button" text="Add Advertisement" />
-      <DatePicker fx:id="datePicker" layoutX="559.0" layoutY="340.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
-      <ImageView fitHeight="38.0" fitWidth="36.0" layoutX="566.0" layoutY="335.0" onMouseClicked="#openCalendar" pickOnBounds="true" preserveRatio="true">
+      <JFXTextField fx:id="titleTextField" layoutX="68.0" layoutY="256.0" prefHeight="26.0" prefWidth="331.0" />
+      <Label layoutX="68.0" layoutY="243.0" prefHeight="16.0" prefWidth="36.0" styleClass="text-field-label" text="Title" />
+      <JFXTextField fx:id="typeTextField" layoutX="442.0" layoutY="256.0" prefHeight="26.0" prefWidth="294.0" />
+      <Label layoutX="442.0" layoutY="243.0" styleClass="text-field-label" text="Vehicle Type" />
+      <JFXTextField fx:id="priceTextField" layoutX="66.0" layoutY="417.0" prefHeight="26.0" prefWidth="87.0" />
+      <Label layoutX="66.0" layoutY="404.0" styleClass="text-field-label" text="Price/Day" />
+      <JFXTextArea fx:id="descriptionTextField" layoutX="66.0" layoutY="321.0" prefHeight="59.0" prefWidth="666.0" />
+      <Label layoutX="68.0" layoutY="305.0" styleClass="text-field-label" text="Description" />
+      <Label layoutX="194.0" layoutY="416.0" text="Select unavailable days" />
+      <JFXButton layoutX="561.0" layoutY="402.0" onAction="#onAddAdvertisementAction" prefHeight="46.0" prefWidth="170.0" text="Add Advertisement" />
+      <DatePicker fx:id="datePicker" layoutX="315.0" layoutY="412.0" prefHeight="26.0" prefWidth="52.0" visible="false" />
+      <ImageView fitHeight="38.0" fitWidth="36.0" layoutX="323.0" layoutY="407.0" onMouseClicked="#openCalendar" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/calendar.png" />
          </image>

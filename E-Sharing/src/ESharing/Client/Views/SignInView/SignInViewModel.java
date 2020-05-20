@@ -1,31 +1,28 @@
 package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.Util.Events;
-import ESharing.Shared.Util.PropertyChangeSubject;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
+import javafx.beans.property.*;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * The class in a view model layer contains all functions which are used in the signIn view.
+ * The class in a view model layer contains all functions which are used in the sign in view.
  * @version 1.0
  * @author Group1
  */
-public class SignInViewModel implements PropertyChangeSubject {
+public class SignInViewModel{
 
     private StringProperty usernameProperty;
     private StringProperty passwordProperty;
     private StringProperty warningProperty;
+    private StringProperty warningStyleProperty;
+    private BooleanProperty warningVisibleProperty;
 
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
@@ -33,61 +30,63 @@ public class SignInViewModel implements PropertyChangeSubject {
     private PropertyChangeSupport support;
 
     /**
-     * A constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a sign up features and all fields
      */
     public SignInViewModel() {
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         this.verificationModel = ModelFactory.getModelFactory().getVerificationModel();
+
         usernameProperty = new SimpleStringProperty();
         passwordProperty = new SimpleStringProperty();
-        warningProperty= new SimpleStringProperty();
+        warningProperty = new SimpleStringProperty();
+        warningStyleProperty = new SimpleStringProperty();
+        warningVisibleProperty = new SimpleBooleanProperty();
 
         support = new PropertyChangeSupport(this);
 
         userActionsModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
     }
 
-    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
-        warningProperty.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.SERVER_CONNECTION_ERROR));
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
     /**
-     * Sends the login request to the model layer and waits for the verification result
-     * @return the boolean value with the result of the verification
+     * Sends a request to the model layer for singing in user with the given username and password
+     * Sets a property of the warning pane regarding the result
      */
-    public boolean loginRequest()
-    {
+    public String loginRequest() {
         String verificationFields = verificationModel.verifyUsernameAndPassword(usernameProperty.get(), passwordProperty.get());
         {
-            if(verificationFields == null)
-            {
+            if (verificationFields == null) {
                 String verificationUser = userActionsModel.onLoginRequest(usernameProperty.get(), passwordProperty.get());
-                if(verificationUser == null)
-                    return true;
-                else{
+                if (verificationUser == null) {
+                    if (LoggedUser.getLoggedUser().getUser().isAdministrator())
+                        return "ADMIN";
+                    else
+                        return "USER";
+                } else {
                     warningProperty.set(verificationUser);
-                    return false;
+                    warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
+                    warningVisibleProperty.setValue(true);
                 }
-            }
-            else{
+            } else {
                 warningProperty.set(verificationFields);
-                return false;
+                warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
+                warningVisibleProperty.setValue(true);
             }
         }
+        return null;
     }
 
     /**
-     * Clears all text fields
+     * Sets a default view and values
      */
-    public void resetView()
-    {
+    public void defaultView() {
         usernameProperty.setValue("");
         passwordProperty.setValue("");
+        warningVisibleProperty.setValue(false);
     }
+
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the username text field
+     * @return the string property of a username text field
      */
     public StringProperty getUsernameProperty() {
         return usernameProperty;
@@ -95,7 +94,7 @@ public class SignInViewModel implements PropertyChangeSubject {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the password text field
+     * @return the string property of a password text field
      */
     public StringProperty getPasswordProperty() {
         return passwordProperty;
@@ -103,38 +102,35 @@ public class SignInViewModel implements PropertyChangeSubject {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the warning notification
+     * @return the string property of a warning label
      */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }
 
-    @Override
-    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
-    {
-        if ("".equals(eventName) || eventName == null)
-            addPropertyChangeListener(listener);
-        else
-            support.addPropertyChangeListener(eventName, listener);
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of a warning pane
+     */
+    public BooleanProperty getWarningVisibleProperty() {
+        return warningVisibleProperty;
     }
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
-        support.addPropertyChangeListener(listener);
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the style property of a warning pane
+     */
+    public StringProperty getWarningStyleProperty() {
+        return warningStyleProperty;
     }
 
-    @Override
-    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
-    {
-        if ("".equals(eventName) || eventName == null)
-            removePropertyChangeListener(listener);
-        else
-            support.removePropertyChangeListener(eventName, listener);
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener) {
-        support.removePropertyChangeListener(listener);
+    /**
+     * Sets properties of the warning pane when the server connection error event appears
+     * @param propertyChangeEvent the server connection error event
+     */
+    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
+        warningProperty.setValue(VerificationList.getVerificationList().getVerifications().get(Verifications.SERVER_CONNECTION_ERROR));
+        warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
+        warningVisibleProperty.setValue(true);
     }
 }

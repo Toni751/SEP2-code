@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminEditUserView.AdminEditUserController">
    <children>
-      <Pane fx:id="contentPane" layoutX="-1.0" prefHeight="502.0" prefWidth="800.0">
+      <Pane layoutX="-1.0" prefHeight="502.0" prefWidth="800.0">
          <children>
             <Pane fx:id="warningPane" layoutY="433.0" prefHeight="68.0" prefWidth="800.0" styleClass="warning-pane">
                <children>
@@ -60,14 +60,14 @@
                   <String fx:value="blue-label" />
                </styleClass>
             </Label>
-            <JFXTextField fx:id="cityTextfield" focusColor="#c0c000" layoutX="566.0" layoutY="285.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="116.0" styleClass="gray-textfield" />
+            <JFXTextField fx:id="cityTextfield" editable="false" focusColor="#c0c000" layoutX="566.0" layoutY="285.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="116.0" styleClass="gray-textfield" />
             <Label layoutX="566.0" layoutY="265.0" text="City">
                <styleClass>
                   <String fx:value="text-field-label" />
                   <String fx:value="blue-label" />
                </styleClass>
             </Label>
-            <JFXTextField fx:id="postalCodeTextfield" focusColor="#c0c000" layoutX="486.0" layoutY="285.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="75.0" styleClass="gray-textfield" />
+            <JFXTextField fx:id="postalCodeTextfield" editable="false" focusColor="#c0c000" layoutX="486.0" layoutY="285.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="75.0" styleClass="gray-textfield" />
             <Label layoutX="485.0" layoutY="265.0" text="Postal Code">
                <styleClass>
                   <String fx:value="text-field-label" />

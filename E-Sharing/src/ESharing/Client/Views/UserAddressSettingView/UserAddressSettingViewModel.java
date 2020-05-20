@@ -8,11 +8,12 @@ import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 
 /**
- * The class in a view model layer contains all functions which are used in the UserAddressSetting view.
+ * The class in a view model layer contains all functions which are used in the edit user address view.
  * @version 1.0
  * @author Group1
  */
@@ -25,13 +26,16 @@ public class UserAddressSettingViewModel {
     private StringProperty cityProperty;
     private StringProperty postalCodeProperty;
     private StringProperty warningProperty;
+    private StringProperty warningStyleProperty;
+    private BooleanProperty warningVisibleProperty;
+    private ObjectProperty<Paint> avatarCircleFillProperty;
 
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
     private LoggedUser loggedUser;
 
     /**
-     * A constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a edit user features and all fields
      */
     public UserAddressSettingViewModel() {
         loggedUser = LoggedUser.getLoggedUser();
@@ -45,29 +49,35 @@ public class UserAddressSettingViewModel {
         streetProperty = new SimpleStringProperty();
         usernameProperty = new SimpleStringProperty();
         phoneNumberProperty = new SimpleStringProperty();
+        warningStyleProperty = new SimpleStringProperty();
+        warningVisibleProperty = new SimpleBooleanProperty();
+        avatarCircleFillProperty = new SimpleObjectProperty<>();
     }
 
     /**
-     * Fills all text fields with a current logged user information
+     * Sets a default view and values
      */
-    public void loadDefaultValues() {
+    public void loadDefaultView() {
         usernameProperty.set(loggedUser.getUser().getUsername());
         phoneNumberProperty.set(loggedUser.getUser().getPhoneNumber());
-
         numberProperty.set(loggedUser.getUser().getAddress().getNumber());
         streetProperty.set(loggedUser.getUser().getAddress().getStreet());
-        cityProperty.set(loggedUser.getUser().getAddress().getCity());
-        postalCodeProperty.set(loggedUser.getUser().getAddress().getPostcode());
+
+        cityProperty.setValue("Horsens");
+        postalCodeProperty.setValue("8700");
+
+        warningVisibleProperty.setValue(false);
+        avatarCircleFillProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getUser().getAvatar()));
     }
 
     /**
-     * Calls the modify function in model, waits for results and sets the information label
-     * @return the verification result
+     * Sends a request to the model layer for changing the user address
+     * Sets a property of the warning pane regarding the result
      */
-    public boolean modifyAddressRequest() {
+    public void modifyAddressRequest() {
 
-        User updatedUser = LoggedUser.getLoggedUser().getUser();
-        Address updatedAddress = new Address(streetProperty.get(), numberProperty.get(), cityProperty.get(), postalCodeProperty.get());
+        User updatedUser = loggedUser.getUser();
+        Address updatedAddress = new Address(streetProperty.get(), numberProperty.get());
         String addressVerification = verificationModel.verifyAddress(updatedAddress);
         if(addressVerification == null)
         {
@@ -75,19 +85,26 @@ public class UserAddressSettingViewModel {
             if(userActionsModel.modifyUserInformation(updatedUser))
             {
                 warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
-                return true;
+                warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
             }
         }
         else{
             warningProperty.set(addressVerification);
-            return false;
+            warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
         }
-        return false;
+        warningVisibleProperty.setValue(true);
+    }
+
+    /**
+     * Sets the visible property for the warning pane
+     */
+    public void hideWarningPane() {
+        warningVisibleProperty.setValue(false);
     }
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the username label
+     * @return the string property of a username label
      */
     public StringProperty getUsernameProperty() {
         return usernameProperty;
@@ -95,7 +112,7 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the city text field
+     * @return the string property of a city text field
      */
     public StringProperty getCityProperty() {
         return cityProperty;
@@ -103,7 +120,7 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the number text field
+     * @return the string property of a street number text field
      */
     public StringProperty getNumberProperty() {
         return numberProperty;
@@ -111,7 +128,7 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the phone number label
+     * @return the string property of a phone number label
      */
     public StringProperty getPhoneNumberProperty() {
         return phoneNumberProperty;
@@ -119,7 +136,7 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the postal code text field
+     * @return the string property of a postal code text field
      */
     public StringProperty getPostalCodeProperty() {
         return postalCodeProperty;
@@ -127,7 +144,7 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the street text field
+     * @return the string property of a street text field
      */
     public StringProperty getStreetProperty() {
         return streetProperty;
@@ -135,9 +152,33 @@ public class UserAddressSettingViewModel {
 
     /**
      * Returns value used in the bind process between a controller and view model
-     * @return the value used in the warning label
+     * @return the string property of a warning label
      */
     public StringProperty getWarningProperty() {
         return warningProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the fill property of a avatar circle
+     */
+    public ObjectProperty<Paint> getAvatarCircleFillProperty() {
+        return avatarCircleFillProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of a warning pane
+     */
+    public BooleanProperty getWarningVisibleProperty() {
+        return warningVisibleProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the style property of a warning pane
+     */
+    public StringProperty getWarningStyleProperty() {
+        return warningStyleProperty;
     }
 }

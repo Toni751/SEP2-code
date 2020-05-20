@@ -5,12 +5,11 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
 import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
 /**
- * The controller class used to manage all functions and components from the fxml file
+ * The controller class used to display the welcome view with all JavaFX components
  * @version 1.0
  * @author Group1
  */
@@ -20,17 +19,17 @@ public class WelcomeViewController extends ViewController {
     private Pane transitionPane;
     private WelcomeViewModel welcomeViewModel;
     private ViewHandler viewHandler;
-    private String signInPath;
-    private String signUpPath;
+
+    private final String signInPath = "../SignInView/SignIn.fxml";
+    private final String signUpPath = "../SignUpView/SignUp.fxml";
 
     /**
-     * Initializes and opens welcome view with all components
+     * Initializes and opens welcome view with all components,
+     * initializes a binding properties of the JavaFX components
      */
     public void init() {
         this.welcomeViewModel = ViewModelFactory.getViewModelFactory().getWelcomeViewModel();
         this.viewHandler = ViewHandler.getViewHandler();
-        signInPath = "../SignInView/SignIn.fxml";
-        signUpPath = "../SignUpView/SignUp.fxml";
         moveTransitionPane(signInPath, 390);
     }
 
@@ -49,6 +48,20 @@ public class WelcomeViewController extends ViewController {
     }
 
     /**
+     * Closes application
+     */
+    public void onExitAction() {
+        System.exit(0);
+    }
+
+    /**
+     * Sends a request to the view handler for minimizing the application stage
+     */
+    public void onMinimizeAction() {
+        viewHandler.minimizeWindow();
+    }
+
+    /**
      * Starts an animation used to changing the current view and loads fxml file to the transitionPane by the given values
      *
      * @param fxmlName  the path to the fxml file which will be load after an animation
@@ -62,13 +75,5 @@ public class WelcomeViewController extends ViewController {
             if (fxmlName.equals(signInPath)) viewHandler.openSignInView(transitionPane);
             else viewHandler.openSignUpView(transitionPane);
         });
-    }
-
-    public void onExitAction() {
-        System.exit(0);
-    }
-
-    public void onMinimizeAction() {
-        viewHandler.minimizeWindow();
     }
 }

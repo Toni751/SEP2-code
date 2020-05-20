@@ -1,9 +1,7 @@
 package ESharing.Client.Views.SignUpView;
 
-import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -16,10 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
-import java.beans.PropertyChangeEvent;
-
 /**
- * The controller class used to manage all functions and components from the fxml file
+ * The controller class used to display the sign up view with all JavaFX components
  * @version 1.0
  * @author Group1
  */
@@ -44,20 +40,18 @@ public class SignUpViewController extends ViewController {
     @FXML private Pane rulesPane;
     @FXML private Pane addressPane;
     @FXML private Label warningLabel;
-    @FXML private Label rulesTitle;
-    @FXML private Label signUpTitle;
     @FXML private Button signUpButton;
 
     private SignUpViewModel signUpViewModel;
-    private ViewHandler viewHandler;
 
     /**
-     * Initializes and opens signUn view with all components adds on focus and out focus events to the text fields
+     * Initializes and opens the sign up view with all components,
+     * initializes a binding properties of the JavaFX components
      */
     public void init()
     {
         this.signUpViewModel = ViewModelFactory.getViewModelFactory().getSignUpViewModel();
-        this.viewHandler = ViewHandler.getViewHandler();
+        signUpViewModel.resetView();
 
         usernameTextField.textProperty().bindBidirectional(signUpViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signUpViewModel.getPasswordProperty());
@@ -70,6 +64,24 @@ public class SignUpViewController extends ViewController {
         cityTextField.textProperty().bindBidirectional(signUpViewModel.getCityProperty());
         postalCodeTextField.textProperty().bindBidirectional(signUpViewModel.getPostalCodeProperty());
 
+        signUpCircle.styleProperty().bindBidirectional(signUpViewModel.getSignUpCircleStyleProperty());
+        addressCircle.styleProperty().bindBidirectional(signUpViewModel.getAddressCircleStyleProperty());
+        personalCircle.styleProperty().bindBidirectional(signUpViewModel.getPersonalCircleStyleProperty());
+        signUpCircle.radiusProperty().bindBidirectional(signUpViewModel.getSignUpCircleRadiusProperty());
+        personalCircle.radiusProperty().bindBidirectional(signUpViewModel.getPersonalCircleRadiusProperty());
+        addressCircle.radiusProperty().bindBidirectional(signUpViewModel.getAddressCircleRadiusProperty());
+
+        signUpButton.disableProperty().bindBidirectional(signUpViewModel.getSignUpButtonDisableProperty());
+        warningPane.styleProperty().bindBidirectional(signUpViewModel.getWarningStyleProperty());
+        warningPane.visibleProperty().bindBidirectional(signUpViewModel.getWarningVisibleProperty());
+        arrowBack.disableProperty().bindBidirectional(signUpViewModel.backArrowDisableProperty());
+        creatingProgressBar1.progressProperty().bindBidirectional(signUpViewModel.getProgressBar1Property());
+        creatingProgressBar2.progressProperty().bindBidirectional(signUpViewModel.getProgressBar2Property());
+
+        personalPane.visibleProperty().bindBidirectional(signUpViewModel.getPersonalPaneVisibleProperty());
+        addressPane.visibleProperty().bindBidirectional(signUpViewModel.getAddressPaneVisibleProperty());
+        rulesPane.visibleProperty().bindBidirectional(signUpViewModel.getRulesVisibleProperty());
+
         addOnOutFocusEvent(usernameTextField, creatingProgressBar1);
         addOnOutFocusEvent(passwordTextField, creatingProgressBar1);
         addOnOutFocusEvent(confirmPasswordTextField, creatingProgressBar1);
@@ -79,136 +91,43 @@ public class SignUpViewController extends ViewController {
         addOnOutFocusEvent(streetNumberTextField, creatingProgressBar2);
         addOnOutFocusEvent(cityTextField, creatingProgressBar2);
         addOnOutFocusEvent(postalCodeTextField, creatingProgressBar2);
-
-        onOpenSetting();
-        defaultView();
-        clearFields();
-
-        signUpViewModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionError);
-    }
-
-    private void connectionError(PropertyChangeEvent propertyChangeEvent) {
-        warningPane.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", warningPane, 500);
     }
 
     /**
-     * Starts a verification process of the address fields and sends request to create new user in the system
+     * Sends a request to the view model layer for signing up a new user
      */
     public void onSignUpButton() {
-        if(signUpViewModel.signUpAddressRequest()) {
-            addressCircle.setRadius(16);
-            addressCircle.setStyle("-fx-fill: #4cdbc4");
-
-            signUpCircle.setRadius(20);
-            signUpCircle.setStyle("-fx-fill: orange");
-
-
-            warningPane.setStyle("-fx-background-color: #DB5461");
-            warningLabel.setStyle("-fx-text-fill: white");
-            GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
-            warningPane.setVisible(true);
-
-            if(signUpViewModel.createNewUser())
-            {
-                warningPane.setStyle("-fx-background-color: #4cdbc4");
-                warningLabel.setStyle("-fx-text-fill: black");
-                arrowBack.setDisable(true);
-                signUpButton.setDisable(true);
-            }
-        }
-        else {
-            warningPane.setVisible(true);
-            GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
-        }
+        signUpViewModel.setSignUpCircleSelectedProperties();
+        signUpViewModel.signUpAddressRequest();
     }
 
     /**
-     * Displays rules and conditions of the system
+     * Sends a request to the view model layer for setting the visible property of the rule pane object
      */
     public void onRulesClick() {
-        GeneralFunctions.fadeNode("FadeOut", addressPane, 500);
-        addressPane.setVisible(false);
-        signUpTitle.setVisible(false);
         rulesPane.toFront();
-        GeneralFunctions.fadeNode("FadeIn", rulesPane, 500);
-        rulesPane.setVisible(true);
-        rulesTitle.setVisible(true);
+        signUpViewModel.setRulesPaneSelected();
     }
 
     /**
-     * Starts a verification process of the personal fields and changes current pane to the pane with the address fields
+     * Sends a request to the view model layer for checking address values and continuing the creation process
      */
     public void onGoToAddressClick() {
-        if(signUpViewModel.signUpPersonalRequest()) {
-            GeneralFunctions.fadeNode("FadeOut", personalPane, 500);
-            personalPane.setVisible(false);
-            GeneralFunctions.fadeNode("FadeIn", addressPane, 500);
-            addressPane.setDisable(false);
-            addressPane.setVisible(true);
-
-            personalCircle.setRadius(16);
-            personalCircle.setStyle("-fx-fill: #4cdbc4");
-            addressCircle.setRadius(20);
-            addressCircle.setStyle("-fx-fill: orange");
-            if(warningPane.visibleProperty().get())
-                warningPane.setVisible(false);
-        }
-        else {
-            warningPane.setVisible(true);
-            GeneralFunctions.fadeNode("fadeIn", warningPane, 500);
-        }
+        signUpViewModel.signUpPersonalRequest();
     }
 
     /**
-     * Closes the rules view and goes back to the address view
-     */
-    public void onBackToSignUp() {
-        GeneralFunctions.fadeNode("FadeOut", rulesPane, 500);
-        rulesTitle.setVisible(false);
-        rulesPane.setVisible(false);
-        rulesPane.toBack();
-        GeneralFunctions.fadeNode("FadeIn", addressPane, 500);
-        addressPane.setVisible(true);
-        signUpTitle.setVisible(true);
-    }
-
-    /**
-     * Changes pane with address fields to the pane with the personal fields
+     * Sends a request to the view model layer for setting the visible property of the personal pane object
      */
     public void onGoToPersonalClick() {
-        GeneralFunctions.fadeNode("fadeOut", addressPane, 500);
-        if(warningPane.visibleProperty().get()) warningPane.setVisible(false);
-        addressPane.setVisible(false);
-        addressPane.setDisable(true);
-        addressCircle.setRadius(16);
-        addressCircle.setStyle("-fx-fill: #4cdbc4");
-
-        GeneralFunctions.fadeNode("fadeIn", personalPane, 500);
-        personalPane.setVisible(true);
-        personalCircle.setStyle("-fx-fill: orange");
-        personalCircle.setRadius(20);
+        signUpViewModel.setPersonalPaneSelected();
     }
 
     /**
-     * Hides warning notification after each keyPressed action in the text fields
+     * Sends a request to the view model layer for setting the visible property of the warning pane to false
      */
     public void onKeyPressed() {
-        if(warningPane.visibleProperty().get())
-        {
-            warningPane.setVisible(false);
-        }
-    }
-
-    /**
-     * Sets all view configurations during the initialization process
-     */
-    private void onOpenSetting()
-    {
-        addressPane.setVisible(false);
-        warningPane.setVisible(false);
-        personalCircle.setStyle("-fx-fill: orange");
-        personalCircle.setRadius(20);
+        signUpViewModel.hideWarningPane();
     }
 
     /**
@@ -221,40 +140,5 @@ public class SignUpViewController extends ViewController {
         node.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (!newValue) GeneralFunctions.setFormProgressBar(progressBar, node, 0.25);
         });
-    }
-
-    /**
-     * Calls method in the view model that clears all text fields
-     */
-    public void clearFields()
-    {
-        signUpViewModel.resetView();
-    }
-
-    /**
-     * Sets default view and style for javaFX components
-     */
-    private void defaultView()
-    {
-        warningPane.setVisible(false);
-
-        personalCircle.setRadius(16);
-        personalCircle.setStyle("-fx-fill: #4cdbc4");
-
-        addressCircle.setRadius(16);
-        addressCircle.setStyle("-fx-fill: #4cdbc4");
-
-        signUpCircle.setRadius(16);
-        signUpCircle.setStyle("-fx-fill: #4cdbc4");
-
-        personalPane.setVisible(true);
-        addressPane.setVisible(false);
-        GeneralFunctions.fadeNode("fadeIn", personalPane, 500);
-        rulesPane.toBack();
-        arrowBack.setDisable(false);
-        signUpButton.setDisable(false);
-
-        creatingProgressBar1.setProgress(0);
-        creatingProgressBar2.setProgress(0);
     }
 }

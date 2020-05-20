@@ -1,26 +1,17 @@
 package ESharing.Client.Views.MainAppView;
 
-import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Model.ChatModel.ChatModel;
-import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.Events;
-import ESharing.Shared.TransferedObject.Message;
-import ESharing.Shared.Util.GeneralFunctions;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 
 /**
- * The controller class used to manage all functions and components from the fxml file
+ * The controller class used to display the the main system view with all JavaFX components
  * @version 1.0
  * @author Group1
  */
@@ -33,77 +24,84 @@ public class MainAppViewController extends ViewController {
     @FXML private Pane contentPane;
     private ViewHandler viewHandler;
     private MainAppViewModel mainAppViewModel;
-    private ChatModel chatModel;
-    private LoggedUser loggerUser;
 
     /**
-     * Initializes controller with all components
+     * Initializes and opens the main system view with all components,
+     * initializes a binding properties of the JavaFX components
      */
     public void init()
     {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
-        this.chatModel = ModelFactory.getModelFactory().getChatModel();
-        this.loggerUser = LoggedUser.getLoggedUser();
+        mainAppViewModel.resetRectanglesVisibleProperty();
 
         messageNotification.textProperty().bind(mainAppViewModel.getNotificationProperty());
-        hideNavigateRectangles();
+        addAdvertisementRectangle.visibleProperty().bindBidirectional(mainAppViewModel.getAdRectangleVisibleProperty());
+        settingRectangle.visibleProperty().bindBidirectional(mainAppViewModel.getSettingRectangleVisibleProperty());
+        messageRectangle.visibleProperty().bindBidirectional(mainAppViewModel.getMessageRectangleVisibleProperty());
+
         mainAppViewModel.loadNotifications();
 
         mainAppViewModel.addPropertyChangeListener(Events.USER_LOGOUT.toString(), this::onAdminRemoveAccount);
     }
 
     /**
-     * Opens a user setting view
+     * Sends a request to the view model layer to setting visible property of the setting rectangle object
+     * Sends a request to the view handler to open the main user setting view
      */
     public void onSettingButton()
     {
+        mainAppViewModel.setSettingRectangleSelected();
         viewHandler.openMainSettingView(contentPane);
-        hideNavigateRectangles();
-        settingRectangle.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", settingRectangle, 500);
-        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
     }
 
     /**
-     * Logs out current user and opens a welcome view
+     * Sends a request to the view model layer to setting visible property of the message rectangle object
+     * Sends a request to the view handler to open the chat view
+     */
+    public void onChatButton()
+    {
+        mainAppViewModel.setMessageRectangleSelected();
+        viewHandler.openChatView(contentPane);
+    }
+
+    /**
+     * Sends a request to the view model layer to setting visible property of the add advertisement rectangle object
+     * Sends a request to the view handler to open the create advertisement view
+     */
+    public void onGoToAddAdvertisement() {
+        mainAppViewModel.setAdRectangleSelected();
+        viewHandler.openAddAdvertisementView(contentPane);
+    }
+
+    /**
+     * Logs out current user and sends a request to the view handler to open the welcome view
      */
     public void onLogout() {
         mainAppViewModel.userLoggedOut();
         viewHandler.openWelcomeView();
     }
 
-    public void onChatButton()
-    {
-        viewHandler.openChatView(contentPane);
-        hideNavigateRectangles();
-        messageRectangle.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", messageRectangle, 500);
-    }
-
-    private void onAdminRemoveAccount(PropertyChangeEvent propertyChangeEvent) {
-        viewHandler.openWelcomeView();
-    }
-
-    private void hideNavigateRectangles() {
-        messageRectangle.setVisible(false);
-        settingRectangle.setVisible(false);
-        addAdvertisementRectangle.setVisible(false);
-    }
-
+    /**
+     * Sends a request to the view handler to minimizing the current stage
+     */
     public void onMinimizeAction() {
         viewHandler.minimizeWindow();
     }
 
+    /**
+     * Sends a request to the view model layer to logout the user and closes the application
+     */
     public void onCloseButtonAction() {
         mainAppViewModel.userLoggedOut();
         System.exit(0);
     }
 
-    public void onGoToAddAdvertisement() {
-        viewHandler.openAddAdvertisementView(contentPane);
-        hideNavigateRectangles();
-        addAdvertisementRectangle.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", addAdvertisementRectangle, 500);
+    /**
+     * Sends a request to the view handler to open a welcome view when an administrator removes the account of a current logged user
+     * @param propertyChangeEvent the administrator removing account event
+     */
+    private void onAdminRemoveAccount(PropertyChangeEvent propertyChangeEvent) {
+        viewHandler.openWelcomeView();
     }
 }

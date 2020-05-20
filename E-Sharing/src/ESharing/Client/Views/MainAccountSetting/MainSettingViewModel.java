@@ -1,30 +1,27 @@
 package ESharing.Client.Views.MainAccountSetting;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 
 /**
- * The class in a view model layer contains all functions which are used in the signUp view.
+ * The class in a view model layer contains all functions which are used in the main user setting view.
  * @version 1.0
  * @author Group1
  */
 public class MainSettingViewModel {
 
     private UserActionsModel userActionsModel;
-    private LoggedUser loggedUser;
 
     /**
-     * A constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a user setting features
      */
     public MainSettingViewModel()
     {
-        this.loggedUser = LoggedUser.getLoggedUser();
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
     }
 
     /**
-     * Sends the remove current logged user request to the view model
+     * Sends a request to the model layer to removing the current logged user
      */
     public void removeAccount() {
             userActionsModel.removeAccount();

@@ -2,10 +2,7 @@ package ESharing.Client.Views.SignInView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.Util.Events;
-import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
@@ -14,10 +11,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
-import java.beans.PropertyChangeEvent;
-
 /**
- * The controller class used to manage all functions and components from the fxml file
+ * The controller class used to display the sign in view with all JavaFX components
  * @version 1.0
  * @author Group1
  */
@@ -30,62 +25,43 @@ public class SignInViewController extends ViewController {
 
     private SignInViewModel signInViewModel;
     private ViewHandler viewHandler;
-
     /**
-     * Initializes and opens signIn view with all components
+     * Initializes and opens the sign in  view with all components,
+     * initializes a binding properties of the JavaFX components
      */
-    public void init()
-    {
+    public void init() {
         this.viewHandler = ViewHandler.getViewHandler();
         this.signInViewModel = ViewModelFactory.getViewModelFactory().getSignInViewModel();
+        signInViewModel.defaultView();
+
         usernameTextField.textProperty().bindBidirectional(signInViewModel.getUsernameProperty());
         passwordTextField.textProperty().bindBidirectional(signInViewModel.getPasswordProperty());
         warningLabel.textProperty().bind(signInViewModel.getWarningProperty());
-        warningPane.setVisible(false);
-
-        clearFields();
-
-        signInViewModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionError);
-    }
-
-    private void connectionError(PropertyChangeEvent propertyChangeEvent) {
-        warningPane.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", warningPane, 500);
+        warningPane.visibleProperty().bindBidirectional(signInViewModel.getWarningVisibleProperty());
+        warningPane.styleProperty().bindBidirectional(signInViewModel.getWarningStyleProperty());
     }
 
     /**
-     * Starts a verification process of the login fields and sends login request to a model layer
+     * Sends a request to the view model layer for signing in
+     * Opens the application view regarding the request result
+     * ADMIN - sends a request to the view handler for opening the main administrator view
+     * USER - sends a request to the view handler for opening the main user view
      */
     public void onSignInButton() {
-            if (!signInViewModel.loginRequest()) {
-                warningPane.setVisible(true);
-                GeneralFunctions.fadeNode("FadeIn", warningPane, 400);
-            } else {
-                warningPane.setVisible(false);
-                if (!LoggedUser.getLoggedUser().getUser().isAdministrator())
-                    viewHandler.openMainAppView();
-                else
-                    viewHandler.openAdminMainView();
-            }
+        String result = signInViewModel.loginRequest();
+        if (result != null && result.equals("ADMIN"))
+            viewHandler.openAdminMainView();
+        else if (result != null && result.equals("USER"))
+            viewHandler.openMainAppView();
     }
 
     /**
-     * Hides warning notification after each keyPressed action in the text fields
+     * Goes to the sing in request when the 'enter' key is pressed by a user
+     * @param keyEvent the key pressed event
      */
     public void onKeyPressed(KeyEvent keyEvent) {
-        if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             onSignInButton();
         }
-        else if(warningPane.visibleProperty().get())
-        {
-            warningPane.setVisible(false);
-        }
-    }
-
-    /**
-     * Calls method in the view model that clears all text fields
-     */
-    private void clearFields() {
-        signInViewModel.resetView();
     }
 }

@@ -9,15 +9,14 @@ import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.beans.PropertyChangeEvent;
 
 /**
- * The class in a view model layer contains all functions which are used in the manage users view.
+ * The class in a view model layer contains all functions which are used in the administrator users list view.
  * @version 1.0
  * @author Group1
  */
@@ -26,7 +25,11 @@ public class ManageUsersViewModel{
     private StringProperty totalUsersProperty;
     private StringProperty reportedUsersProperty;
     private StringProperty searchProperty;
-
+    private StringProperty warningStyleProperty;
+    private BooleanProperty editUserDisableProperty;
+    private BooleanProperty removeUserDisableProperty;
+    private BooleanProperty messageUserDisableProperty;
+    private BooleanProperty warningVisibleProperty;
 
     private AdministratorActionsModel administratorActionsModel;
     private UserActionsModel userActionsModel;
@@ -34,88 +37,96 @@ public class ManageUsersViewModel{
     private User selectedUser;
 
     /**
-     * A constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a administrator features and all fields
      */
     public ManageUsersViewModel()
     {
-        users = FXCollections.observableArrayList();
         administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
+
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         warningLabelProperty = new SimpleStringProperty();
         totalUsersProperty = new SimpleStringProperty();
         reportedUsersProperty = new SimpleStringProperty();
         searchProperty = new SimpleStringProperty();
+        removeUserDisableProperty = new SimpleBooleanProperty();
+        editUserDisableProperty = new SimpleBooleanProperty();
+        messageUserDisableProperty = new SimpleBooleanProperty();
+        warningVisibleProperty = new SimpleBooleanProperty();
+        warningStyleProperty = new SimpleStringProperty();
+
+        users = FXCollections.observableArrayList();
 
         administratorActionsModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), this::updateUserTableView);
         administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::updateUserTableView);
         administratorActionsModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), this::updateUserTableView);
     }
 
-
     /**
-     * Loads all users exisitng in the system to the JavaFx collection
-     * @return the JavaFx collection with all users existing in the system
+     * Loads all users which are a part of the system to the users table
+     * @return the collection of the all users which are part of the system
      */
     public ObservableList<User> loadAllUsers()
     {
         Platform.runLater(() ->{
-            users.clear();
             users.setAll(AdministratorLists.getInstance().getUserList());
-           for(int i = 0 ; i < users.size() ; i++)
-           {
-               System.out.println(users.get(i).getUsername());
-           }
-            totalUsersProperty.setValue(AdministratorLists.getInstance().getUserList().size() +"");
-            reportedUsersProperty.setValue(AdministratorLists.getInstance().reportedUsers() + "");
+            totalUsersProperty.setValue(String.valueOf(AdministratorLists.getInstance().getUserList().size()));
+            reportedUsersProperty.setValue(String.valueOf(AdministratorLists.getInstance().reportedUsers()));
         });
         return users;
     }
 
     /**
-     * Sends a request to remove selected user from the system
-     * @return the result of the action as a boolean
+     * Sends a request to the model layer for removing selected user
      */
-    public boolean removeSelectedUser()
+    public void removeSelectedUser()
     {
         if(administratorActionsModel.removeUserAccount(AdministratorLists.getInstance().getSelectedUser())) {
             warningLabelProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
+            warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
             selectedUser = null;
-            return true;
         }
         else {
             warningLabelProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR));
-            return false;
+            warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
         }
+        warningVisibleProperty.setValue(true);
+        disableUserManagingProperty();
     }
-
 
     /**
-     * Returns value used in the bind process between a controller and view model
-     * @return the value used in the warning label
+     * Sets a disable property for the manage user components as false
      */
-    public StringProperty getWarningLabelProperty() {
-        return warningLabelProperty;
+    public void disableUserManagingProperty()
+    {
+        editUserDisableProperty.setValue(true);
+        removeUserDisableProperty.setValue(true);
+        messageUserDisableProperty.setValue(true);
     }
 
-    public StringProperty getReportedUsersProperty() {
-        return reportedUsersProperty;
+    /**
+     * Sets a disable property for the manage user components as true
+     */
+    public void enableUserManagingProperty()
+    {
+        editUserDisableProperty.setValue(false);
+        removeUserDisableProperty.setValue(false);
+        messageUserDisableProperty.setValue(false);
     }
 
-    public StringProperty getTotalUsersProperty() {
-        return totalUsersProperty;
+    /**
+     * Sets a default view and values
+     */
+    public void loadDefaultView()
+    {
+        users.clear();
+        warningVisibleProperty.setValue(false);
+        disableUserManagingProperty();
+        loadAllUsers();
     }
 
-    private void updateUserTableView(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(() -> {
-            loadAllUsers();
-            System.out.println("Admin knows that it is necessary to update table");
-        });
-    }
-
-    public StringProperty getSearchProperty() {
-        return searchProperty;
-    }
-
+    /**
+     * Select user form the table regarding values inserted by a user in the search text field
+     */
     public void searchInTable() {
         Platform.runLater(() -> {
             users.clear();
@@ -126,4 +137,87 @@ public class ManageUsersViewModel{
             }
         });
     }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a warning label
+     */
+    public StringProperty getWarningLabelProperty() {
+        return warningLabelProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a reported user label
+     */
+    public StringProperty getReportedUsersProperty() {
+        return reportedUsersProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a total user label
+     */
+    public StringProperty getTotalUsersProperty() {
+        return totalUsersProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a search text field
+     */
+    public StringProperty getSearchProperty() {
+        return searchProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable property of a remove user button
+     */
+    public BooleanProperty getRemoveUserDisableProperty() {
+        return removeUserDisableProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable property of a edit user button
+     */
+    public BooleanProperty getEditUserDisableProperty() {
+        return editUserDisableProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable property of a message user button
+     */
+    public BooleanProperty getMessageUserDisableProperty() {
+        return messageUserDisableProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the style property of a warning pane
+     */
+    public StringProperty getWarningStyleProperty() {
+        return warningStyleProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable property of a remove user button
+     */
+    public BooleanProperty getWarningVisibleProperty() {
+        return warningVisibleProperty;
+    }
+
+    /**
+     * Updated users list when a new event appears
+     * @param propertyChangeEvent the given event
+     */
+    private void updateUserTableView(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(() -> {
+            loadAllUsers();
+        });
+    }
+
 }

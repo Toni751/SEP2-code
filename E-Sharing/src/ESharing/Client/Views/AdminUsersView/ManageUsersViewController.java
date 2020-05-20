@@ -3,13 +3,11 @@ package ESharing.Client.Views.AdminUsersView;
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
-import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -17,9 +15,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import java.util.Optional;
 
+/**
+ * The controller class used to display the administrator users list view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class ManageUsersViewController extends ViewController {
 
-    @FXML private Pane contentPane;
     @FXML private TextField searchBox;
     @FXML private Label totalUserLabel;
     @FXML private Label reportedUserLabel;
@@ -37,80 +39,78 @@ public class ManageUsersViewController extends ViewController {
     private ViewHandler viewHandler;
 
     /**
-     * Initializes controller with all components
+     * Initializes and opens the administrator users list view with all components,
+     * initializes a binding properties of the JavaFX components
      */
     public void init()
     {
-
         viewHandler = ViewHandler.getViewHandler();
         manageUsersViewModel = ViewModelFactory.getViewModelFactory().getManageUsersViewModel();
+        manageUsersViewModel.loadDefaultView();
 
-        usersTable.getItems().clear();
         userIdColumn.setCellValueFactory(new PropertyValueFactory<User, Integer>("user_id"));
         usernameColumn.setCellValueFactory(new PropertyValueFactory<User, String>("username"));
         phoneNumberColumn.setCellValueFactory(new PropertyValueFactory<User, String>("phoneNumber"));
         reportsColumn.setCellValueFactory(new PropertyValueFactory<User, String>("reportsNumber"));
+
         warningLabel.textProperty().bind(manageUsersViewModel.getWarningLabelProperty());
         totalUserLabel.textProperty().bind(manageUsersViewModel.getTotalUsersProperty());
         reportedUserLabel.textProperty().bind(manageUsersViewModel.getReportedUsersProperty());
         searchBox.textProperty().bindBidirectional(manageUsersViewModel.getSearchProperty());
+        warningPane.styleProperty().bindBidirectional(manageUsersViewModel.getWarningStyleProperty());
+        warningPane.visibleProperty().bindBidirectional(manageUsersViewModel.getWarningVisibleProperty());
+        removeUserButton.disableProperty().bindBidirectional(manageUsersViewModel.getRemoveUserDisableProperty());
+        goToEditButton.disableProperty().bindBidirectional(manageUsersViewModel.getEditUserDisableProperty());
+        goToMessageButton.disableProperty().bindBidirectional(manageUsersViewModel.getMessageUserDisableProperty());
 
         usersTable.setItems(manageUsersViewModel.loadAllUsers());
+
         usersTable.setOnMouseClicked(this :: selectUser);
-        hideWarningPane();
-        removeUserButton.setDisable(true);
-        goToEditButton.setDisable(true);
-        goToMessageButton.setDisable(true);
     }
 
+    /**
+     * Sends a request to the view model layer for removing selected user
+     */
     public void onRemoveUserAction() {
         Platform.runLater(() ->{
             Alert removeConfirmation =  GeneralFunctions.ShowConfirmationAlert("Confirm removing", "Are you sure? This operation can not be restored");
             Optional<ButtonType> result = removeConfirmation.showAndWait();
             if (result.get() == ButtonType.OK) {
-                setWarningVisibleAndDefault();
-                if(manageUsersViewModel.removeSelectedUser())
-                    setWarningPaneAsSuccess();
+                manageUsersViewModel.removeSelectedUser();
             } else {
                 removeConfirmation.close();
             }
         });
     }
 
-    @FXML
-    private void hideWarningPane() {
-        warningPane.setVisible(false);
-    }
-
-    private void setWarningPaneAsSuccess() {
-        warningPane.setVisible(true);
-        warningPane.setStyle("-fx-background-color: #4cdbc4");
-        warningLabel.setStyle("-fx-text-fill: black");
-    }
-
-    private void setWarningVisibleAndDefault() {
-        warningPane.setVisible(true);
-        warningPane.setStyle("-fx-background-color: #DB5461");
-        warningLabel.setStyle("-fx-text-fill: white");
-    }
-
-    private void selectUser(MouseEvent mouseEvent) {
-        int index = usersTable.getSelectionModel().getSelectedIndex();
-        AdministratorLists.getInstance().setSelectedUser((User) usersTable.getItems().get(index));
-        removeUserButton.setDisable(false);
-        goToEditButton.setDisable(false);
-        goToMessageButton.setDisable(false);
-    }
-
+    /**
+     * Sends a request to the view model layer for searching users in the table
+     */
     public void onKeyPressedInSearchBox() {
         manageUsersViewModel.searchInTable();
     }
 
+    /**
+     * Sends a request to the view handler for opening the administrator edit user view
+     */
     public void goToEditButton() {
         viewHandler.openAdminEditUserView();
     }
 
-    public void goToChat(ActionEvent actionEvent) {
+    /**
+     * Sends a request to the view handler for opening the chat view with the selected user
+     */
+    public void goToChat() {
         viewHandler.openChatView(null);
+    }
+
+    /**
+     * The mouse click event assigned in the users table.
+     * Stores user, selected from the table in the AdministratorList class
+     */
+    private void selectUser(MouseEvent mouseEvent) {
+        int index = usersTable.getSelectionModel().getSelectedIndex();
+        AdministratorLists.getInstance().setSelectedUser((User) usersTable.getItems().get(index));
+        manageUsersViewModel.enableUserManagingProperty();
     }
 }

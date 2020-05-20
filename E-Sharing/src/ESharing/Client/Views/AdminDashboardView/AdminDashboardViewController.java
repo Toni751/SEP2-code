@@ -9,54 +9,35 @@ import javafx.geometry.Side;
 import javafx.scene.chart.*;
 import javafx.scene.control.Label;
 
+/**
+ * The controller class used to display the administrator dashboard view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class AdminDashboardViewController extends ViewController {
 
     @FXML private AreaChart areaChart;
-    @FXML private CategoryAxis xAxis;
-    @FXML private NumberAxis yAxis;
     @FXML private Label userNumberLabel;
     @FXML private PieChart pieChart;
 
-    private PieChart.Data data1;
-    private PieChart.Data data2;
-    private PieChart.Data data3;
-
     private AdminDashboardViewModel viewModel;
 
+    /**
+     * Initializes and opens administrator dashboard view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewModel = ViewModelFactory.getViewModelFactory().getAdminDashboardViewModel();
+        viewModel.defaultView();
 
-        pieChart.setLegendVisible(true);
-        xAxis.setGapStartAndEnd(false);
-        areaChart.getXAxis().setAutoRanging(true);
-        areaChart.getYAxis().setAutoRanging(true);
-        pieChart.setLegendSide(Side.RIGHT);
-
-        data1 = new PieChart.Data("0 Reports", 0);
-        data2 = new PieChart.Data(">10 Reports", 0);
-        data3 = new PieChart.Data(">5 Reports", 0);
-
+        pieChart.legendSideProperty().bindBidirectional(viewModel.getPieChartLegendProperty());
+        pieChart.legendVisibleProperty().bindBidirectional(viewModel.getPieChartLegendVisibleProperty());
+        areaChart.getXAxis().autoRangingProperty().bindBidirectional(viewModel.getXAxisRanging());
+        areaChart.getYAxis().autoRangingProperty().bindBidirectional(viewModel.getYAxisRanging());
+        pieChart.dataProperty().bind(viewModel.getPieChartDate());
         userNumberLabel.textProperty().bind(viewModel.getUserNumberProperty());
-        data1.pieValueProperty().bindBidirectional(viewModel.getData1Property());
-        data2.pieValueProperty().bindBidirectional(viewModel.getData2Property());
-        data3.pieValueProperty().bindBidirectional(viewModel.getData3Property());
-
-
-
-        ObservableList<PieChart.Data> userReportsData = FXCollections.observableArrayList(data1, data2, data3);
         ObservableList<XYChart.Series> userAccounts = FXCollections.observableArrayList(viewModel.getUsersSeries());
-
-        pieChart.setData(userReportsData);
         areaChart.setData(userAccounts);
-
-        updateCharts();
-    }
-
-
-    public void updateCharts()
-    {
-        viewModel.loadLastWeekCreatedUsers();
-        viewModel.loadPieChartValues();
     }
 }

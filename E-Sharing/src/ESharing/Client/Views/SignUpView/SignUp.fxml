@@ -28,7 +28,7 @@
                <TextArea editable="false" prefHeight="372.0" prefWidth="348.0" text="E-sharing targets to provide an eco-friendly sharing vehicle-system which will help the citizens of Horsens by giving the opportunity to rent different means of transportation.&#10;&#10;Condition of terms:&#10;&#10;1.&#9;Remember to include the all details regarding the vehicle specification, so it’s easier for the potential users to search for a certain type. &#10;2.&#9;Keep in mind that having a multiple account used for scamming is prohibited and it will be banned. &#10;3.&#9;Making a fake offer or cloning is prohibited. &#10;4.&#9;Showing a different vehicle on pictures than it is in real life might be reported. &#10;5.&#9;Reposting the same vehicle is acceptable, once it is returned back to the owner.&#10;6.&#9;If a user loses the connection with the server, an administrator can be contacted through the e-mail. &#10;7.&#9;This system only supports sharing, so no vehicle can be sold.&#10;8.&#9;Once a user faces any issues with posting a vehicle, contact the administration.&#10;9.&#9;All the bugs related to the app should be reported. &#10;10.&#9;All the pictures of the vehicle should represent its present state. &#10;I hereby confirm that I have read all the terms above and I agree to stick with them. " wrapText="true" />
             </content>
          </ScrollPane>
-         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="7.0" layoutY="435.0" onMouseClicked="#onBackToSignUp" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
+         <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="7.0" layoutY="435.0" onMouseClicked="#onGoToAddressClick" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">
             <image>
                <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
             </image>
@@ -59,7 +59,7 @@
       <children>
          <JFXTextField fx:id="phoneTextField" focusColor="#4cdbc4" layoutX="80.0" layoutY="215.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="📱 Phone" unFocusColor="#324a5e" />
             <JFXTextField fx:id="usernameTextField" focusColor="#4cdbc4" layoutX="83.0" layoutY="34.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="184.0" promptText="👨 Username" unFocusColor="#324a5e" />
-         <JFXButton layoutX="89.0" layoutY="272.0" onAction="#onSignUpButton" onMouseClicked="#onGoToAddressClick" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Next " />
+         <JFXButton layoutX="89.0" layoutY="272.0" onAction="#onGoToAddressClick" onMouseClicked="#onGoToAddressClick" prefHeight="45.0" prefWidth="172.0" styleClass="button-light" text="Next " />
          <JFXPasswordField fx:id="passwordTextField" focusColor="#4cdbc4" layoutX="80.0" layoutY="95.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="🔒 Password" />
          <JFXPasswordField fx:id="confirmPasswordTextField" focusColor="#4cdbc4" layoutX="80.0" layoutY="151.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="🔒 Confirm Password" />
       </children>
@@ -77,8 +77,8 @@
                <Font size="10.0" />
             </font>
          </Text>
-         <JFXTextField fx:id="postalCodeTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="211.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="190.0" promptText="Postal Code" />
-         <JFXTextField fx:id="cityTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="158.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="190.0" promptText="City" />
+         <JFXTextField fx:id="postalCodeTextField" editable="false" focusColor="#4cdbc4" layoutX="78.0" layoutY="211.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="190.0" promptText="Postal Code" />
+         <JFXTextField fx:id="cityTextField" editable="false" focusColor="#4cdbc4" layoutX="78.0" layoutY="158.0" onKeyPressed="#onKeyPressed" prefHeight="25.0" prefWidth="190.0" promptText="City" />
          <JFXTextField fx:id="streetNumberTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="94.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="Number" unFocusColor="#324a5e" />
          <JFXTextField fx:id="streetTextField" focusColor="#4cdbc4" layoutX="78.0" layoutY="32.0" onKeyPressed="#onKeyPressed" prefHeight="32.0" prefWidth="190.0" promptText="Street" unFocusColor="#324a5e" />
          <ImageView fx:id="arrowBack" fitHeight="40.0" fitWidth="40.0" layoutX="38.0" layoutY="269.0" onMouseClicked="#onGoToPersonalClick" pickOnBounds="true" preserveRatio="true" rotate="180.0" style="-fx-cursor: hand;">

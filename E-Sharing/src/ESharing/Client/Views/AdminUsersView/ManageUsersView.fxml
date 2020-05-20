@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="600.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminUsersView.ManageUsersViewController">
    <children>
-      <Pane fx:id="contentPane" layoutY="-1.0">
+      <Pane layoutY="-1.0">
          <children>
             <JFXButton fx:id="removeUserButton" layoutX="227.0" layoutY="152.0" onAction="#onRemoveUserAction" prefHeight="30.0" prefWidth="108.0" styleClass="button-warning" text="Remove User" />
             <JFXButton fx:id="goToEditButton" layoutX="14.0" layoutY="152.0" onAction="#goToEditButton" prefHeight="30.0" prefWidth="98.0" styleClass="button-blue" text="Edit User" />

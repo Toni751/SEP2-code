@@ -41,7 +41,7 @@ public class CreateAdViewModel {
     private List<LocalDate> selectedDates;
     private Map<String, File> imageFiles;
 
-    private final Image defaultImage = new Image("ESharing/Addition/Images/icons/upload.png");
+    private final Image defaultImage = new Image("ESharing/Addition/Images/icons/uploadImage.png");
     public CreateAdViewModel()
     {
         titleProperty = new SimpleStringProperty();
@@ -178,5 +178,7 @@ public class CreateAdViewModel {
         subImage2Property.setValue(defaultImage);
         subImage3Property.setValue(defaultImage);
         subImage4Property.setValue(defaultImage);
+
+        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
     }
 }

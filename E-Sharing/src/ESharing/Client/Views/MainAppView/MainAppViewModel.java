@@ -7,78 +7,164 @@ import ESharing.Client.Model.ChatModel.ChatModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Shared.Util.Events;
-import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-
+import javafx.beans.property.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 
 /**
- * The class in a view model layer contains all functions which are used in the signUp view.
+ * The class in a view model layer contains all functions which are used in the main system view.
  * @version 1.0
  * @author Group1
  */
 public class MainAppViewModel implements PropertyChangeSubject {
 
-    private AppOverviewModel model;
-    private LoggedUser loggedUser;
 
+    private BooleanProperty adRectangleVisibleProperty;
+    private BooleanProperty messageRectangleVisibleProperty;
+    private BooleanProperty settingRectangleVisibleProperty;
     private StringProperty notificationProperty;
+
+    private PropertyChangeSupport support;
 
     private AdministratorActionsModel administratorActionsModel;
     private ChatModel chatModel;
     private UserActionsModel userActionsModel;
-    private PropertyChangeSupport support;
+    private AppOverviewModel model;
 
     /**
-     * A constructor initializes model layer for a user features and all fields
+     * A constructor initializes model layer for a main system features and all fields
      */
     public MainAppViewModel() {
         this.model = ModelFactory.getModelFactory().getAppOverviewModel();
         this.chatModel = ModelFactory.getModelFactory().getChatModel();
-        this.loggedUser = LoggedUser.getLoggedUser();
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
-        support = new PropertyChangeSupport(this);
-        administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
+        this.administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
 
         notificationProperty = new SimpleStringProperty();
+        settingRectangleVisibleProperty = new SimpleBooleanProperty();
+        adRectangleVisibleProperty = new SimpleBooleanProperty();
+        messageRectangleVisibleProperty = new SimpleBooleanProperty();
+
+        support = new PropertyChangeSupport(this);
 
         administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::userRemoved);
         chatModel.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), this::makeMessageRead);
         chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
     }
 
+    /**
+     * Sets default visible properties for rectangles objects
+     */
+    public void resetRectanglesVisibleProperty()
+    {
+        messageRectangleVisibleProperty.setValue(false);
+        adRectangleVisibleProperty.setValue(false);
+        settingRectangleVisibleProperty.setValue(false);
+
+        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+    }
+
+    /**
+     * Sets visible property of the setting rectangle object as true
+     */
+    public void setSettingRectangleSelected()
+    {
+        resetRectanglesVisibleProperty();
+        settingRectangleVisibleProperty.setValue(true);
+    }
+
+    /**
+     * Sets visible property of the advertisement rectangle object as true
+     */
+    public void setAdRectangleSelected()
+    {
+        resetRectanglesVisibleProperty();
+        adRectangleVisibleProperty.setValue(true);
+    }
+
+    /**
+     * Sets visible property of the message rectangle object as true
+     */
+    public void setMessageRectangleSelected()
+    {
+        resetRectanglesVisibleProperty();
+        messageRectangleVisibleProperty.setValue(true);
+    }
+
+    /**
+     * Sends a request to the model layer for logging out current logged user
+     */
+    public void userLoggedOut() {
+        userActionsModel.logoutUser();
+    }
+
+    /**
+     * Sends a request to the model layer for loading all unread messages as a text property of the notification label
+     */
+    public void loadNotifications(){
+        notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a notification label
+     */
+    public StringProperty getNotificationProperty() {
+        return notificationProperty; }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of a advertisement rectangle
+     */
+    public BooleanProperty getAdRectangleVisibleProperty() {
+        return adRectangleVisibleProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of a setting rectangle
+     */
+    public BooleanProperty getSettingRectangleVisibleProperty() {
+        return settingRectangleVisibleProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of a message rectangle
+     */
+    public BooleanProperty getMessageRectangleVisibleProperty() {
+        return messageRectangleVisibleProperty;
+    }
+
+    /**
+     * Reloads the text property of the notification label when new message appears
+     * @param propertyChangeEvent the new message received event
+     */
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
         support.firePropertyChange(propertyChangeEvent);
     }
 
+    /**
+     * Sends an event to the view when administrator removed the current logged user account
+     * @param propertyChangeEvent the administrator remove account event
+     */
     private void userRemoved(PropertyChangeEvent propertyChangeEvent) {
-        if (LoggedUser.getLoggedUser().getUser().equals(propertyChangeEvent.getNewValue()))
-            support.firePropertyChange(Events.USER_LOGOUT.toString(), null, "Your account has been removed from the system!");
+        support.firePropertyChange(Events.USER_LOGOUT.toString(), null, null);
     }
 
-    public void userLoggedOut() {
-        userActionsModel.logoutUser();
-        //chatModel.userLoggedOut();
-    }
-
-    public StringProperty getNotificationProperty() {
-        return notificationProperty; }
-
+    /**
+     * Reloads the text property of the notification label when read message event appears
+     * @param propertyChangeEvent the read message event
+     */
     private void makeMessageRead(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(() ->{
             System.out.println("MESSAGE BECOME READ IN MAIN VIEW MODEL");
             notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
         });
-    }
-
-    public void loadNotifications(){
-        notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
     }
 
     @Override
@@ -106,4 +192,5 @@ public class MainAppViewModel implements PropertyChangeSubject {
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
+
 }

@@ -108,6 +108,12 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return false;
   }
 
+  @Override
+  public boolean updateAdvertisement(Advertisement advertisement)
+  {
+    return false;
+  }
+
   @Override public void addImagesAndDates(Advertisement advertisement)
   {
     addAdvertisementPictures(advertisement.getServerPath(AdImages.MAIN_IMAGE.toString()),

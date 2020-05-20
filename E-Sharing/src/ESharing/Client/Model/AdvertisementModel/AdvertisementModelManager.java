@@ -4,6 +4,11 @@ import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.Util.AdImages;
+import ESharing.Shared.Util.Events;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,9 +19,35 @@ import java.util.Map;
 public class AdvertisementModelManager implements AdvertisementModel{
 
     private ClientAdvertisement clientAdvertisement;
+    private PropertyChangeSupport support;
 
     public AdvertisementModelManager() {
         this.clientAdvertisement = ClientFactory.getClientFactory().getClientAdvertisement();
+        support = new PropertyChangeSupport(this);
+        clientAdvertisement.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::newAdRequest);
+        clientAdvertisement.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
+        clientAdvertisement.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
+        clientAdvertisement.addPropertyChangeListener(Events.AD_UPDATED.toString(), this::adUpdated);
+    }
+
+    private void adUpdated(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    private void newApprovedAd(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    private void newAdRequest(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     @Override
@@ -54,5 +85,32 @@ public class AdvertisementModelManager implements AdvertisementModel{
         return null;
     }
 
+    @Override
+    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            addPropertyChangeListener(listener);
+        else
+            support.addPropertyChangeListener(eventName, listener);
+    }
 
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            removePropertyChangeListener(listener);
+        else
+            support.removePropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        support.removePropertyChangeListener(listener);
+    }
 }

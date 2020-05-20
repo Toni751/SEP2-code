@@ -8,6 +8,7 @@ public interface AdvertisementDAO {
 
   int create(Advertisement advertisement);
   boolean removeAdvertisement(Advertisement advertisement);
+  boolean updateAdvertisement(Advertisement advertisement);
   void addImagesAndDates(Advertisement advertisement);
   List<Advertisement> getAllAdvertisements();
   void approveAdvertisement(Advertisement advertisement);

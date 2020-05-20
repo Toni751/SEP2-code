@@ -58,6 +58,7 @@ public class ServerChatModelManager implements ServerChatModel
 
   @Override
   public void makeMessageRead(Message message) {
+    System.out.println("Attempting to make message read");
     if(messageDAO.makeMessageRead(message)) {
       support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, message);
     }

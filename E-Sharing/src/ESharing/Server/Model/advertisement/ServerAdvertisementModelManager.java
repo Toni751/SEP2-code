@@ -90,7 +90,6 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public void approveAdvertisement(Advertisement ad)
     {
-        //send ad to be made approved in the database
         advertisementDAO.approveAdvertisement(ad);
         support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
     }
@@ -106,7 +105,10 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public boolean editAdvertisement(Advertisement ad)
     {
-        return false;
+        boolean result = advertisementDAO.updateAdvertisement(ad);
+        if(result)
+            support.firePropertyChange(Events.AD_UPDATED.toString(), null, ad);
+        return result;
     }
 
     @Override

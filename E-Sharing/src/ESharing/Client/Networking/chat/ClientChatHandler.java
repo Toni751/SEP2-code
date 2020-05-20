@@ -45,9 +45,8 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   {
     try {
         server = Connection.getStubInterface().getServerChatHandler();
-      System.out.println(server);
-        server.unRegisterUserAsAListener();
-        server.registerChatCallback(this);
+      System.out.println("Connected from Client Chat Handler");
+//        server.unRegisterUserAsAListener();
     } catch (RemoteException e) {
       //support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
     }
@@ -166,7 +165,7 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     try
     {
       server.userLoggedOut(LoggedUser.getLoggedUser().getUser());
-      server.unRegisterUserAsAListener();
+      server.unRegisterUserAsAListener(this);
     }
     catch (RemoteException e)
     {
@@ -188,7 +187,21 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   }
 
   @Override
+  public void registerForCallBack()
+  {
+    try
+    {
+      server.registerChatCallback(this);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  @Override
   public void newMessageReceived(Message message) {
+    System.out.println("\t\t\t\tReceived new message in Client Chat Handler");
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
   }
 
@@ -208,6 +221,12 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
   @Override
   public void messageRead(Message message){
     support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, message);
+  }
+
+  @Override
+  public User getLoggedUser()
+  {
+    return LoggedUser.getLoggedUser().getUser();
   }
 
 }

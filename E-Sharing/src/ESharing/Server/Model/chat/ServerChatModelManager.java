@@ -47,7 +47,7 @@ public class ServerChatModelManager implements ServerChatModel
   public void addMessage(Message message)
   {
     messageDAO.addMessage(message);
-    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString(), null, message);
+    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
   }
 
   @Override
@@ -60,7 +60,7 @@ public class ServerChatModelManager implements ServerChatModel
   public void makeMessageRead(Message message) {
     System.out.println("Attempting to make message read");
     if(messageDAO.makeMessageRead(message)) {
-      support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, message);
+      support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString() + message.getReceiver().getUser_id(), null, message);
     }
   }
 
@@ -82,10 +82,20 @@ public class ServerChatModelManager implements ServerChatModel
   @Override
   public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
   {
-    if ("".equals(eventName) || eventName == null)
-      removePropertyChangeListener(listener);
-    else
-      support.removePropertyChangeListener(eventName, listener);
+//    if ("".equals(eventName) || eventName == null)
+//      removePropertyChangeListener(listener);
+//    else
+//    {
+//      System.out.println("Support has listener for event: " + eventName + "? " + support.hasListeners(eventName));
+//      support.removePropertyChangeListener(eventName, listener);
+//    }
+    PropertyChangeListener[] listeners = support.getPropertyChangeListeners(eventName);
+    System.out.println("Number of listeners for event:" + eventName + " = " + listeners.length);
+    for (int i = 0; i < listeners.length; i++)
+    {
+      support.removePropertyChangeListener(eventName, listeners[i]);
+    }
+    System.out.println("Support has listener for event: " + eventName + "? " + support.hasListeners(eventName));
   }
 
   @Override

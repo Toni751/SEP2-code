@@ -16,7 +16,7 @@ public interface RMIAdvertisementServer extends Remote
   void registerClientCallback (RMIAdvertisementClient client) throws RemoteException;
   void unRegisterUserAsAListener() throws RemoteException;
   List<Advertisement> selectAllAdvertisements() throws RemoteException;
-  List<CatalogueAd> getAdvertisementsCatalogue();
-  Advertisement getAdvertisementById (int id);
-  List<CatalogueAd> getAdvertisementsByUser(int user_id);
+  List<CatalogueAd> getAdvertisementsCatalogue() throws RemoteException;
+  Advertisement getAdvertisementById (int id) throws RemoteException;
+  List<CatalogueAd> getAdvertisementsByUser(int user_id) throws RemoteException;
 }

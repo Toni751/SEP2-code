@@ -145,15 +145,10 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public void newApprovedAd(CatalogueAd ad) throws RemoteException {
-        //gg
+    public void newApprovedAd(CatalogueAd ad)
+    {
+        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
     }
-
-    //@Override
-    //public void newApprovedAd(Advertisement ad)
-    //{
-        //support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
-    //}
 
     @Override
     public void updatedAd(Advertisement ad)

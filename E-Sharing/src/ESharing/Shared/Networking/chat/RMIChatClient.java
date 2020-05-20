@@ -12,5 +12,6 @@ public interface RMIChatClient extends Remote
   void newOnlineUser(User user) throws RemoteException;
   void newOfflineUser(User user) throws RemoteException;
   void messageRead(Message message) throws RemoteException;
+  User getLoggedUser() throws RemoteException;
 }
 

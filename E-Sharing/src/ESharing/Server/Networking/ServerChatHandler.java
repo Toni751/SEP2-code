@@ -71,7 +71,15 @@ public class ServerChatHandler implements RMIChatServer
       }
     };
 
-    chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), listenForNewMessage);
+    try
+    {
+      System.out.println("Registering in SCH user: " + chatClient.getLoggedUser().getUsername());
+      chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + chatClient.getLoggedUser().getUser_id(), listenForNewMessage);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
 
     listenForOnlineUser = evt ->{
       try{
@@ -107,7 +115,14 @@ public class ServerChatHandler implements RMIChatServer
       }
     };
 
-    chatModel.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), listenForMessageRead);
+    try
+    {
+      chatModel.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString() + chatClient.getLoggedUser().getUser_id(), listenForMessageRead);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
 
     chatModel.listeners();
   }
@@ -128,14 +143,21 @@ public class ServerChatHandler implements RMIChatServer
   }
 
   @Override
-  public void unRegisterUserAsAListener(){
+  public void unRegisterUserAsAListener(RMIChatClient client){
     System.out.println("A USER IS REMOVED AS A SERVER LISTENER");
     serverModel.removePropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
     serverModel.removePropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
     System.out.print("Before: ");
     chatModel.listeners();
-    chatModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), listenForNewMessage);
-    chatModel.removePropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), listenForMessageRead);
+    try
+    {
+      chatModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + client.getLoggedUser().getUser_id(), listenForNewMessage);
+      chatModel.removePropertyChangeListener(Events.MAKE_MESSAGE_READ.toString()  + client.getLoggedUser().getUser_id(), listenForMessageRead);
+    }
+    catch (RemoteException e)
+    {
+      e.printStackTrace();
+    }
     System.out.print("After: ");
     chatModel.listeners();
   }

@@ -76,6 +76,7 @@ public class UserActionsModelManager implements UserActionsModel {
                 return VerificationList.getVerificationList().getVerifications().get(Verifications.USER_NOT_EXIST);
             else {
                 LoggedUser.getLoggedUser().loginUser(requestedUser);
+                clientChat.registerForCallBack();
                 return null;
             }
     }

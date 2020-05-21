@@ -6,6 +6,8 @@ import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Vehicles;
+import ESharing.Shared.Util.VerificationList;
+import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -80,6 +82,7 @@ public class CreateAdViewModel {
             Map<String, byte[]> convertedImages = advertisementModel.convertedImages(imageFiles);
             double convertedPrice = Double.parseDouble(priceProperty.get());
             advertisementModel.addNewAdvertisement(new Advertisement(LoggedUser.getLoggedUser().getUser(), convertedImages, typeValueProperty.get(), selectedDates, convertedPrice, titleProperty.get(), descriptionProperty.get()));
+            warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
         }
         else{

@@ -5,6 +5,7 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
@@ -53,7 +54,6 @@ public class ChatViewController extends ViewController {
         setComponentsStyling();
         loadAllComponents();
         viewModel.resetView();
-        checkIfUserIsAdmin();
 
         if(!viewModel.ifViewModelHasListeners()) {
             viewModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
@@ -61,6 +61,9 @@ public class ChatViewController extends ViewController {
             viewModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), this::userOffline);
             viewModel.addPropertyChangeListener(Events.UPDATE_CONVERSATION_LIST.toString(), this::updateConversationList);
         }
+
+        checkIfUserIsAdmin();
+        checkIfThereIsSelectedUser();
     }
 
     private void updateConversationList(PropertyChangeEvent propertyChangeEvent) {
@@ -293,6 +296,26 @@ public class ChatViewController extends ViewController {
                     scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
                 }
             adminStyling();
+        }
+    }
+
+    private void checkIfThereIsSelectedUser()
+    {
+        Advertisement advertisement = LoggedUser.getLoggedUser().getSelectedAdvertisement();
+        if(advertisement != null)
+        {
+            viewModel.ifConversationExists(advertisement.getOwner());
+            messagesPane.getChildren().clear();
+            for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()){
+                if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
+                }
+                else {
+                    messagesPane.getChildren().add(createMessageComponent(message, Pos.CENTER_LEFT, "#fff", message.getSender().getAvatar()));
+                }
+            }
+            scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
+            System.out.println("finished");
         }
     }
 }

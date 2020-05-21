@@ -14,5 +14,5 @@ public interface UserDAO
 
   boolean changeAvatar(String path, int userId);
 
-    boolean addNewUserReport(int user_id);
+  int addNewUserReport(int user_id);
 }

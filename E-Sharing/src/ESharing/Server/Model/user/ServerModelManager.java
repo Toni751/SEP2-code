@@ -157,7 +157,12 @@ public class ServerModelManager implements ServerModel
 
   @Override
   public boolean addNewUserReport(int user_id) {
-    return userDAO.addNewUserReport(user_id);
+    int reports = userDAO.addNewUserReport(user_id);
+    if(reports != -1){
+      support.firePropertyChange(Events.NEW_USER_REPORT.toString(), user_id, reports);
+      return true;
+    }
+    return false;
   }
 
 }

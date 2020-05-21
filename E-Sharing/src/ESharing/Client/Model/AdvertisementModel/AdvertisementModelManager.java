@@ -2,6 +2,7 @@ package ESharing.Client.Model.AdvertisementModel;
 
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.advertisement.ClientAdvertisement;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
@@ -28,6 +29,11 @@ public class AdvertisementModelManager implements AdvertisementModel{
         clientAdvertisement.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::newAdRequest);
         clientAdvertisement.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
         clientAdvertisement.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
+        clientAdvertisement.addPropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), this::newReportReceived);
+    }
+
+    private void newReportReceived(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     private void adRemoved(PropertyChangeEvent propertyChangeEvent)
@@ -66,8 +72,8 @@ public class AdvertisementModelManager implements AdvertisementModel{
     }
 
     @Override
-    public boolean removeAdvertisement(Advertisement advertisement) {
-        return clientAdvertisement.removeAdvertisement(advertisement);
+    public boolean removeAdvertisement(int id) {
+        return clientAdvertisement.removeAdvertisement(id);
     }
 
     @Override
@@ -76,8 +82,8 @@ public class AdvertisementModelManager implements AdvertisementModel{
     }
 
     @Override
-    public boolean approveAdvertisement(Advertisement selectedAdvertisement) {
-        return clientAdvertisement.approveAdvertisement(selectedAdvertisement);
+    public boolean approveAdvertisement(int id) {
+        return clientAdvertisement.approveAdvertisement(id);
     }
 
     @Override
@@ -93,6 +99,16 @@ public class AdvertisementModelManager implements AdvertisementModel{
     @Override
     public Advertisement getAdvertisement(int advertisementID) {
         return clientAdvertisement.getAdvertisement(advertisementID);
+    }
+
+    @Override
+    public List<CatalogueAd> getAllCataloguesForUser(int user_id) {
+        return clientAdvertisement.getAllUserCatalogues(user_id);
+    }
+
+    @Override
+    public List<AdCatalogueAdmin> getAllAdminCatalogues() {
+        return clientAdvertisement.getAdminAdCatalogue();
     }
 
     private byte[] convertImageFile(File image)

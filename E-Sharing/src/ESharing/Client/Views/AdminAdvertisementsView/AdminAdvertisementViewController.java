@@ -4,6 +4,7 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -28,12 +29,12 @@ public class AdminAdvertisementViewController extends ViewController {
     @FXML private JFXButton approveAdvertisementButton;
     @FXML private Pane warningPane;
     @FXML private Label warningLabel;
-    @FXML private TableColumn<Advertisement, Integer> adIdColumn;
-    @FXML private TableColumn<Advertisement, String> adTitleColumn;
-    @FXML private TableColumn<Advertisement, String> adTypeColumn;
-    @FXML private TableColumn<Advertisement, Integer> adReportsColumn;
+    @FXML private TableColumn<AdCatalogueAdmin, Integer> adIdColumn;
+    @FXML private TableColumn<AdCatalogueAdmin, String> adTitleColumn;
+    @FXML private TableColumn<AdCatalogueAdmin, String> adTypeColumn;
+    @FXML private TableColumn<AdCatalogueAdmin, Integer> adReportsColumn;
 
-    @FXML private TableView<Advertisement> advertisementTable;
+    @FXML private TableView<AdCatalogueAdmin> advertisementTable;
 
     private ViewHandler viewHandler;
     private AdminAdvertisementsViewModel adminAdvertisementsViewModel;
@@ -63,7 +64,7 @@ public class AdminAdvertisementViewController extends ViewController {
 
         advertisementTable.setItems(adminAdvertisementsViewModel.getAllAdvertisement());
 
-        advertisementTable.setOnMouseClicked(this :: selectUser);
+        advertisementTable.setOnMouseClicked(this :: selectAdvertisement);
     }
 
     public void approveSelectedAdvertisement() {
@@ -82,10 +83,9 @@ public class AdminAdvertisementViewController extends ViewController {
         adminAdvertisementsViewModel.searchAdvertisements();
     }
 
-    private void selectUser(MouseEvent mouseEvent) {
+    private void selectAdvertisement(MouseEvent mouseEvent) {
         int index = advertisementTable.getSelectionModel().getSelectedIndex();
-        LoggedUser.getLoggedUser().selectAdvertisement(advertisementTable.getItems().get(index));
-        adminAdvertisementsViewModel.enableUserManagingProperty();
+        adminAdvertisementsViewModel.selectAdvertisement(advertisementTable.getItems().get(index));
     }
 
 }

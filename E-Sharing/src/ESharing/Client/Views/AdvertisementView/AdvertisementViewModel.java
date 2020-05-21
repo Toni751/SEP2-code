@@ -131,7 +131,7 @@ public class AdvertisementViewModel {
 
     public String sendAdvertisementRemoveRequest()
     {
-        boolean requestResult = advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement());
+        boolean requestResult = advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID());
         if(!requestResult) {
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.DATABASE_CONNECTION_ERROR));
             warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");

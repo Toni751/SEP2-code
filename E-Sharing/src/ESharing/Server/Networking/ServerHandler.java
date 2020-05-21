@@ -27,6 +27,7 @@ public class ServerHandler implements RMIServer
   private PropertyChangeListener listenForUserRemoved;
   private PropertyChangeListener listenForUserUpdated;
   private PropertyChangeListener listenForAvatarUpdated;
+  private PropertyChangeListener listenForNewUserReported;
 
   /**
    * A constructor initializes fields and starts the internet connection
@@ -101,9 +102,18 @@ public class ServerHandler implements RMIServer
       }
     };
 
+    listenForNewUserReported = evt -> {
+      try {
+        client.userReported((int) evt.getOldValue(), (int) evt.getNewValue());
+      } catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    };
+
     serverModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
     serverModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
     serverModel.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
+    serverModel.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
   }
 
   @Override
@@ -118,6 +128,7 @@ public class ServerHandler implements RMIServer
     serverModel.removePropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
     serverModel.removePropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
     serverModel.removePropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
+    serverModel.removePropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
 
     serverModel.listeners();
   }

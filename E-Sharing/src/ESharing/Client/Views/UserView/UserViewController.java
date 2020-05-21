@@ -43,7 +43,10 @@ public class UserViewController extends ViewController {
     }
 
     public void onGoToChat() {
-        viewHandler.openMainAppView();
+        if(LoggedUser.getLoggedUser().getUser().isAdministrator())
+            viewHandler.openChatView(null);
+        else
+            viewHandler.openMainAppView();
     }
 
     public void onGoBackAction(){

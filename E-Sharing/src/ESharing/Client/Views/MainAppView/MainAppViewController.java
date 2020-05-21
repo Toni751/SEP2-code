@@ -14,6 +14,7 @@ import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.Vehicles;
 import com.jfoenix.controls.JFXComboBox;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -80,75 +81,77 @@ public class MainAppViewController extends ViewController {
         createMainView();
 
         mainAppViewModel.addPropertyChangeListener(Events.USER_LOGOUT.toString(), this::onAdminRemoveAccount);
-        mainAppViewModel.addPropertyChangeListener(Events.FILTER_AD_LIST.toString(), this::onFilterList);
+        mainAppViewModel.addPropertyChangeListener(Events.UPDATE_AD_LIST.toString(), this::onUpdateList);
     }
 
-    private void onFilterList(PropertyChangeEvent propertyChangeEvent) {
+    private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
         System.out.println("EVENT");
-        mainVBox.getChildren().clear();
-        List<CatalogueAd> advertisements = (ArrayList) propertyChangeEvent.getNewValue();
+        Platform.runLater(() -> {
+            mainVBox.getChildren().clear();
+            List<CatalogueAd> advertisements = (ArrayList) propertyChangeEvent.getNewValue();
 
-        System.out.println(advertisements);
-        int rows = advertisements.size() / 3;
-        int rest = advertisements.size() % 3;
-        int currentAdvertisement = 0;
+            System.out.println(advertisements);
+            int rows = advertisements.size() / 3;
+            int rest = advertisements.size() % 3;
+            int currentAdvertisement = 0;
 
-        for (int i = 0; i < rows; i++) {
-            HBox row = new HBox(37.5);
-            for (int j = 0; j < 3; j++) {
-                VBox advertisement = new VBox(5);
-                advertisement.setPrefWidth(200);
-                advertisement.setPrefHeight(180);
+            for (int i = 0; i < rows; i++) {
+                HBox row = new HBox(37.5);
+                for (int j = 0; j < 3; j++) {
+                    VBox advertisement = new VBox(5);
+                    advertisement.setPrefWidth(200);
+                    advertisement.setPrefHeight(180);
 
-                ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                mainImage.setFitWidth(200);
-                mainImage.setFitHeight(106);
-                mainImage.preserveRatioProperty();
-                Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
+                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
+                    mainImage.setFitWidth(200);
+                    mainImage.setFitHeight(106);
+                    mainImage.preserveRatioProperty();
+                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
+                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
 
-                int finalCurrentAdvertisement = currentAdvertisement;
-                advertisement.getChildren().addAll(mainImage, title, price);
-                advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    System.out.println("Clicked");
-                    mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                    viewHandler.openAdvertisementView();
-                });
+                    int finalCurrentAdvertisement = currentAdvertisement;
+                    advertisement.getChildren().addAll(mainImage, title, price);
+                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                        System.out.println("Clicked");
+                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
+                        viewHandler.openAdvertisementView();
+                    });
 
-                row.getChildren().add(advertisement);
-                currentAdvertisement++;
+                    row.getChildren().add(advertisement);
+                    currentAdvertisement++;
 
+                }
+                mainVBox.getChildren().add(row);
             }
-            mainVBox.getChildren().add(row);
-        }
 
-        if (rest != 0) {
-            HBox row = new HBox(37.5);
-            for (int i = 0; i < rest; i++) {
-                VBox advertisement = new VBox(5);
-                advertisement.setPrefWidth(200);
-                advertisement.setPrefHeight(180);
+            if (rest != 0) {
+                HBox row = new HBox(37.5);
+                for (int i = 0; i < rest; i++) {
+                    VBox advertisement = new VBox(5);
+                    advertisement.setPrefWidth(200);
+                    advertisement.setPrefHeight(180);
 
-                ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                mainImage.setFitWidth(200);
-                mainImage.setFitHeight(106);
-                mainImage.preserveRatioProperty();
-                Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
+                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
+                    mainImage.setFitWidth(200);
+                    mainImage.setFitHeight(106);
+                    mainImage.preserveRatioProperty();
+                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
+                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
 
-                advertisement.getChildren().addAll(mainImage, title, price);
+                    advertisement.getChildren().addAll(mainImage, title, price);
 
-                int finalCurrentAdvertisement = currentAdvertisement;
-                advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    System.out.println("Clicked");
-                    mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                    viewHandler.openAdvertisementView();
-                });
-                row.getChildren().add(advertisement);
-                currentAdvertisement++;
+                    int finalCurrentAdvertisement = currentAdvertisement;
+                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                        System.out.println("Clicked");
+                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
+                        viewHandler.openAdvertisementView();
+                    });
+                    row.getChildren().add(advertisement);
+                    currentAdvertisement++;
+                }
+                mainVBox.getChildren().add(row);
             }
-            mainVBox.getChildren().add(row);
-        }
+        });
     }
 
     public void createMainView() {
@@ -282,30 +285,30 @@ public class MainAppViewController extends ViewController {
 
 
     //TEST!!!!!
-    public void onOpenAdvertisement() {
-        AdvertisementModel advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
-        Map<String, File> images = new HashMap<>();
-        File mainImage = new File("E-Sharing/src/ESharing/Addition/Images/icons/ad-icon.png");
-        images.put(AdImages.MAIN_IMAGE.toString(), mainImage);
-
-
-        Map<String, byte[]> imagesConverted = advertisementModel.convertedImages(images);
-
-        User owner = new User("TestUser", "TestPassword", "TestPhone", new Address("TestStreet", "TestCity"));
-
-        ArrayList<LocalDate> dates = new ArrayList<>();
-        dates.add(LocalDate.now().plusDays(1));
-        dates.add(LocalDate.now().plusDays(2));
-        dates.add(LocalDate.now().plusDays(3));
-
-
-
-        Advertisement advertisement = new Advertisement(LoggedUser.getLoggedUser().getUser(), imagesConverted, Vehicles.Bike.toString(), dates, 30, "Test title", "Test description");
-        advertisement.setCreationDate(LocalDate.now());
-        LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
-
-        viewHandler.openAdvertisementView();
-    }
+//    public void onOpenAdvertisement() {
+//        AdvertisementModel advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
+//        Map<String, File> images = new HashMap<>();
+//        File mainImage = new File("E-Sharing/src/ESharing/Addition/Images/icons/ad-icon.png");
+//        images.put(AdImages.MAIN_IMAGE.toString(), mainImage);
+//
+//
+//        Map<String, byte[]> imagesConverted = advertisementModel.convertedImages(images);
+//
+//        User owner = new User("TestUser", "TestPassword", "TestPhone", new Address("TestStreet", "TestCity"));
+//
+//        ArrayList<LocalDate> dates = new ArrayList<>();
+//        dates.add(LocalDate.now().plusDays(1));
+//        dates.add(LocalDate.now().plusDays(2));
+//        dates.add(LocalDate.now().plusDays(3));
+//
+//
+//
+//        Advertisement advertisement = new Advertisement(LoggedUser.getLoggedUser().getUser(), imagesConverted, Vehicles.Bike.toString(), dates, 30, "Test title", "Test description");
+//        advertisement.setCreationDate(LocalDate.now());
+//        LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
+//
+//        viewHandler.openAdvertisementView();
+//    }
 
     public void onHomeAction() {
         mainAppViewModel.setHomeRectangleSelected();

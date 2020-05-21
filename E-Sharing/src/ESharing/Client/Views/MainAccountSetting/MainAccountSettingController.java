@@ -4,6 +4,7 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.GeneralFunctions;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -60,5 +61,9 @@ public class MainAccountSettingController extends ViewController {
      */
     public void loadAddressPane() {
         viewHandler.openUserAddressSettingView(userSettingPane);
+    }
+
+    public void loadAdvertisementsPane() {
+        viewHandler.openUserAdvertisementView(userSettingPane);
     }
 }

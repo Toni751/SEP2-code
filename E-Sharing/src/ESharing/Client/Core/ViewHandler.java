@@ -210,6 +210,12 @@ public class ViewHandler {
         showView(viewController, null);
     }
 
+    public void openUserAdvertisementView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.USER_ADVERTISEMENT_VIEW);
+        showView(viewController, existingPane);
+    }
+
     public void openPicturePreview(Image image)
     {
         Stage previewStage = new Stage();

@@ -74,6 +74,26 @@ public class MainAppViewModel implements PropertyChangeSubject {
         administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::userRemoved);
         chatModel.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), this::makeMessageRead);
         chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::newMessageReceived);
+        advertisementModel.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
+        advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
+    }
+
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int advertisementID = (int) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < catalogueAds.size() ; i++){
+            if(catalogueAds.get(i).getAdvertisementID() == advertisementID) {
+                catalogueAds.remove(catalogueAds.get(i));
+                support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, catalogueAds);
+            }
+        }
+
+    }
+
+    private void newApprovedAd(PropertyChangeEvent propertyChangeEvent) {
+        CatalogueAd newCatalogue = (CatalogueAd) propertyChangeEvent.getNewValue();
+        catalogueAds.add(newCatalogue);
+
+        support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, catalogueAds);
     }
 
     /**
@@ -93,7 +113,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
             searchItemsProperty.add(Vehicles.values()[i].toString());
         }
 
-        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
         LoggedUser.getLoggedUser().selectAdvertisement(null);
     }
 
@@ -103,7 +122,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
        catalogueAds.addAll(advertisementModel.getAllCatalogues());
        return catalogueAds;
    }
-
 
 
 
@@ -195,7 +213,10 @@ public class MainAppViewModel implements PropertyChangeSubject {
      * @param propertyChangeEvent the new message received event
      */
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
+        Platform.runLater(() ->{
+            notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
+        });
+        //support.firePropertyChange(propertyChangeEvent);
     }
 
     /**
@@ -271,6 +292,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
             }
         }
 
-        support.firePropertyChange(Events.FILTER_AD_LIST.toString(), null, filteredAds);
+        support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, filteredAds);
     }
 }

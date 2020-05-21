@@ -2,6 +2,7 @@ package ESharing.Client.Networking.user;
 
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.Connection;
+import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.Networking.user.RMIServer;
@@ -24,6 +25,7 @@ public class ClientHandler implements Client, RMIClient
 {
   private RMIServer server;
   private RMIChatServer chatServer;
+  private RMIAdvertisementServer rmiAdvertisementServer;
   private PropertyChangeSupport support;
 
   /**
@@ -52,6 +54,7 @@ public class ClientHandler implements Client, RMIClient
     try {
     server = Connection.getStubInterface().getServerRMI();
     chatServer = Connection.getStubInterface().getServerChatHandler();
+    rmiAdvertisementServer = Connection.getStubInterface().getServerAdHandler();
       System.out.println(chatServer);
   }
     catch (RemoteException | NullPointerException e) {
@@ -176,6 +179,11 @@ public class ClientHandler implements Client, RMIClient
   @Override
   public void avatarUpdated(byte[] avatar){
     support.firePropertyChange(Events.UPDATE_AVATAR.toString(), null, avatar);
+  }
+
+  @Override
+  public void userReported(int userID, int reports){
+    support.firePropertyChange(Events.NEW_USER_REPORT.toString(), userID, reports);
   }
 
   @Override

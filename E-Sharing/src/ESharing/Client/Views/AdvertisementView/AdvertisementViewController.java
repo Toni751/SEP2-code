@@ -93,7 +93,8 @@ public class AdvertisementViewController extends ViewController {
     }
 
     public void onGoToUserView() {
-        viewHandler.openUserView();
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() != LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id())
+            viewHandler.openUserView();
     }
 
     public void onRemovedAction() {

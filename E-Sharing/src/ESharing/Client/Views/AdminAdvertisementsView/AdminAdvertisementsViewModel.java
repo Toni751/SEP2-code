@@ -3,13 +3,19 @@ package ESharing.Client.Views.AdminAdvertisementsView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.Vehicles;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jdk.jfr.Event;
+
+import java.beans.PropertyChangeEvent;
 
 public class AdminAdvertisementsViewModel {
 
@@ -24,7 +30,7 @@ public class AdminAdvertisementsViewModel {
     private BooleanProperty approveAdDisableProperty;
 
     private ObservableList<String> comboItems;
-    private ObservableList<Advertisement> advertisementList;
+    private ObservableList<AdCatalogueAdmin> advertisementList;
 
     private AdvertisementModel advertisementModel;
 
@@ -45,23 +51,29 @@ public class AdminAdvertisementsViewModel {
 
         comboItems = FXCollections.observableArrayList();
         advertisementList = FXCollections.observableArrayList();
+
+        advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
+        advertisementModel.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::newAdRequest);
+        advertisementModel.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
+        advertisementModel.addPropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), this::newReportReceived);
     }
 
     public void loadDefaultView() {
         LoggedUser.getLoggedUser().selectAdvertisement(null);
         advertisementList.clear();
         if(advertisementModel.selectAllAdvertisements() != null)
-            advertisementList.setAll(advertisementModel.selectAllAdvertisements());
+            advertisementList.setAll(advertisementModel.getAllAdminCatalogues());
 
         removeAdDisableProperty.setValue(true);
         openAdDisableProperty.setValue(true);
         approveAdDisableProperty.set(true);
+        warningVisibleProperty.setValue(false);
 
         totalProperty.set(String.valueOf(advertisementList.size()));
 
         int notApproved = 0;
-        for(Advertisement advertisement : advertisementList){
-            if(!advertisement.ifAdApproved())
+        for(AdCatalogueAdmin advertisement : advertisementList){
+            if(!advertisement.isApproved())
                 notApproved++;
         }
         notApprovedProperty.set(String.valueOf(notApproved));
@@ -97,30 +109,28 @@ public class AdminAdvertisementsViewModel {
         disableUserManagingProperty();
 
         if(comboValueProperty.get().equals("Not Approved")){
-            for(Advertisement advertisement : advertisementModel.selectAllAdvertisements()) {
-                if(!advertisement.ifAdApproved())
+            for(AdCatalogueAdmin advertisement : advertisementList) {
+                if(!advertisement.isApproved())
                     advertisementList.add(advertisement);
             }
         }
         else if(comboValueProperty.get().equals("Approved"))
-            for(Advertisement advertisement : advertisementModel.selectAllAdvertisements()) {
-                if(advertisement.ifAdApproved())
+            for(AdCatalogueAdmin advertisement : advertisementList) {
+                if(advertisement.isApproved())
                     advertisementList.add(advertisement);
-                System.out.println(advertisement.ifAdApproved());
+                System.out.println(advertisement.isApproved());
             }
         else{
-            for(Advertisement advertisement : advertisementModel.selectAllAdvertisements()) {
-                for (int i = 0; i < Vehicles.values().length; i++) {
-                    if (comboValueProperty.get().equals(Vehicles.values()[i].toString()))
+            for(AdCatalogueAdmin advertisement : advertisementList) {
+                    if (comboValueProperty.get().equals(advertisement.getType()))
                         advertisementList.add(advertisement);
-                }
             }
         }
 
     }
 
     public void approveAdvertisement() {
-        if(advertisementModel.approveAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement())){
+        if(advertisementModel.approveAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID())){
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
         }
@@ -134,7 +144,7 @@ public class AdminAdvertisementsViewModel {
     }
 
     public void removeSelectedAdvertisement() {
-        if(advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement())){
+        if(advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID())){
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
         }
@@ -143,6 +153,14 @@ public class AdminAdvertisementsViewModel {
             warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
         }
         warningVisibleProperty.set(true);
+    }
+
+    public void selectAdvertisement(AdCatalogueAdmin adCatalogueAdmin) {
+        Advertisement advertisement = advertisementModel.getAdvertisement(adCatalogueAdmin.getAdvertisementID());
+        if(advertisement != null){
+            LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
+            enableUserManagingProperty();
+        }
     }
 
     public BooleanProperty getOpenAdDisableProperty() {
@@ -181,11 +199,52 @@ public class AdminAdvertisementsViewModel {
         return warningStyleProperty;
     }
 
-    public ObservableList<Advertisement> getAllAdvertisement() {
-        return  advertisementList;
+    public ObservableList<AdCatalogueAdmin> getAllAdvertisement() {
+        return advertisementList;
     }
 
     public StringProperty getComboValueProperty() {
         return comboValueProperty;
+    }
+
+    private void newReportReceived(PropertyChangeEvent propertyChangeEvent) {
+
+        int advertisementID = (int) propertyChangeEvent.getOldValue();
+        int reports = (int) propertyChangeEvent.getNewValue();
+
+        for(int i = 0 ; i < advertisementList.size() ; i++)
+        {
+            if(advertisementList.get(i).getAdvertisementID() == advertisementID) {
+                AdCatalogueAdmin updated = advertisementList.get(i);
+                updated.setReports(reports);
+                advertisementList.set(i, updated);
+            }
+        }
+    }
+
+    private void newApprovedAd(PropertyChangeEvent propertyChangeEvent) {
+        CatalogueAd newAd = (CatalogueAd) propertyChangeEvent.getNewValue();
+        for(AdCatalogueAdmin catalogueAdmin : advertisementList)
+        {
+            if(catalogueAdmin.getAdvertisementID() == newAd.getAdvertisementID())
+                catalogueAdmin.makeApproved();
+        }
+        disableUserManagingProperty();
+    }
+
+    private void newAdRequest(PropertyChangeEvent propertyChangeEvent) {
+        AdCatalogueAdmin newAdvertisement = (AdCatalogueAdmin) propertyChangeEvent.getNewValue();
+        advertisementList.add(newAdvertisement);
+        disableUserManagingProperty();
+    }
+
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int removedID = (int) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < advertisementList.size() ; i++)
+        {
+            if(advertisementList.get(i).getAdvertisementID() == removedID)
+                advertisementList.remove(advertisementList.get(i));
+        }
+        disableUserManagingProperty();
     }
 }

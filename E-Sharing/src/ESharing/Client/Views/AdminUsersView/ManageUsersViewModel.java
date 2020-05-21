@@ -4,6 +4,7 @@ import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
@@ -12,6 +13,7 @@ import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 
 import java.beans.PropertyChangeEvent;
 
@@ -56,9 +58,49 @@ public class ManageUsersViewModel{
 
         users = FXCollections.observableArrayList();
 
-        administratorActionsModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), this::updateUserTableView);
-        administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::updateUserTableView);
-        administratorActionsModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), this::updateUserTableView);
+        administratorActionsModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), this::newUserCreated);
+        administratorActionsModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::userRemoved);
+        administratorActionsModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), this::updatedUser);
+        userActionsModel.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), this::newUserReported);
+    }
+
+    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("USER reported");
+        int userID = (int) propertyChangeEvent.getOldValue();
+        int reports = (int) propertyChangeEvent.getNewValue();
+        System.out.println(userID);
+        System.out.println(reports);
+
+
+        for(int i = 0 ; i < users.size() ; i++)
+        {
+            if(users.get(i).getUser_id() == userID) {
+                User updated = users.get(i);
+                updated.setReportsNumber(reports);
+                users.set(i, updated);
+            }
+        }
+    }
+
+    private void updatedUser(PropertyChangeEvent propertyChangeEvent) {
+        User updatedUser = (User) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < users.size() ; i++){
+            if(users.get(i).getUser_id() == updatedUser.getUser_id()){
+                users.set(i, updatedUser);
+            }
+        }
+    }
+
+    private void userRemoved(PropertyChangeEvent propertyChangeEvent) {
+        User removedUser = (User) propertyChangeEvent.getNewValue();
+        users.remove(removedUser);
+        disableUserManagingProperty();
+    }
+
+    private void newUserCreated(PropertyChangeEvent propertyChangeEvent) {
+        User newUser = (User) propertyChangeEvent.getNewValue();
+        users.add(newUser);
+        disableUserManagingProperty();
     }
 
     /**
@@ -68,7 +110,7 @@ public class ManageUsersViewModel{
     public ObservableList<User> loadAllUsers()
     {
         Platform.runLater(() ->{
-            users.setAll(AdministratorLists.getInstance().getUserList());
+            users.setAll(administratorActionsModel.getAllUsers());
             totalUsersProperty.setValue(String.valueOf(AdministratorLists.getInstance().getUserList().size()));
             reportedUsersProperty.setValue(String.valueOf(AdministratorLists.getInstance().reportedUsers()));
         });
@@ -128,14 +170,17 @@ public class ManageUsersViewModel{
      * Select user form the table regarding values inserted by a user in the search text field
      */
     public void searchInTable() {
-        Platform.runLater(() -> {
-            users.clear();
-            for(User user : AdministratorLists.getInstance().getUserList())
-            {
-                if(user.getUsername().contains(searchProperty.get()))
-                    users.add(user);
+        ObservableList<User> filteredList = FXCollections.observableArrayList();
+        Platform.runLater(() ->{
+            for (User user : users) {
+                if (user.getUsername().contains(searchProperty.get()))
+                    filteredList.add(user);
             }
+            users.setAll(filteredList);
+            if(searchProperty.get().equals(""))
+                loadAllUsers();
         });
+
     }
 
     /**
@@ -208,16 +253,6 @@ public class ManageUsersViewModel{
      */
     public BooleanProperty getWarningVisibleProperty() {
         return warningVisibleProperty;
-    }
-
-    /**
-     * Updated users list when a new event appears
-     * @param propertyChangeEvent the given event
-     */
-    private void updateUserTableView(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(() -> {
-            loadAllUsers();
-        });
     }
 
 }

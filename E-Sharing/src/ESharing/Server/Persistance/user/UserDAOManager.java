@@ -281,7 +281,7 @@ public class UserDAOManager extends Database implements UserDAO
   }
 
   @Override
-  public boolean addNewUserReport(int user_id) {
+  public int addNewUserReport(int user_id) {
     try (Connection connection = getConnection())
     {
 
@@ -299,13 +299,13 @@ public class UserDAOManager extends Database implements UserDAO
         updateStatement.setInt(2, user_id);
 
         if(updateStatement.executeUpdate() == 1)
-          return true;
+          return reports;
       }
 
     } catch (SQLException e) {
       e.printStackTrace();
     }
-    return false;
+    return -1;
   }
 
   private int getNoUsersLivingAtAddress (int address_id)

@@ -9,13 +9,14 @@ import java.util.List;
 public interface AdvertisementDAO {
 
   int create(Advertisement advertisement);
-  boolean removeAdvertisement(Advertisement advertisement);
+  int removeAdvertisement(int id);
   void addImagesAndDates(Advertisement advertisement);
   List<Advertisement> getAllAdvertisements();
-  CatalogueAd approveAdvertisement(Advertisement advertisement);
+  CatalogueAd approveAdvertisement(int id);
   List<CatalogueAd> getAdvertisementsCatalogue();
   Advertisement getAdvertisementById (int id);
   List<CatalogueAd> getAdvertisementsByUser(int user_id);
-  boolean addNewAdvertisementReport(int advertisementID);
+  int addNewAdvertisementReport(int advertisementID);
   List<AdCatalogueAdmin> getAdminAdCatalogue();
+  AdCatalogueAdmin getAdminAdCatalogue(int id);
 }

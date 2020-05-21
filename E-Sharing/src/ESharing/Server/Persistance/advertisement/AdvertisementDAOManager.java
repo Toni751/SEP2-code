@@ -82,33 +82,38 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return -1;
   }
 
-  @Override public boolean removeAdvertisement(Advertisement advertisement)
+  @Override public int removeAdvertisement(int id)
   {
-
+    int ownerId = -1;
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement1 = connection.prepareStatement(
-          "DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
-      statement1.setInt(1, advertisement.getAdvertisementID());
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement WHERE id = ?;");
+      statement.setInt(1, id);
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next()) {
+        ownerId = resultSet.getInt("owner_id");
+      }
+
+      PreparedStatement statement1 = connection.prepareStatement("DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
+      statement1.setInt(1,id);
       statement1.executeUpdate();
 
-      PreparedStatement statement2 = connection.prepareStatement(
-          "DELETE FROM ad_picture WHERE advertisement_id = ?;");
-      statement2.setInt(1, advertisement.getAdvertisementID());
+      PreparedStatement statement2 = connection.prepareStatement("DELETE FROM ad_picture WHERE advertisement_id = ?;");
+      statement2.setInt(1,id);
       statement2.executeUpdate();
 
-      System.out.println("Deleting advertisement at id: " + advertisement.getAdvertisementID());
-      PreparedStatement statement = connection.prepareStatement("DELETE FROM advertisement WHERE id = ?;");
-      statement.setInt(1, advertisement.getAdvertisementID());
-      int affectedRows = statement.executeUpdate();
+      System.out.println("Deleting advertisement at id: " + id);
+      PreparedStatement statement3 = connection.prepareStatement("DELETE FROM advertisement WHERE id = ?;");
+      statement3.setInt(1, id);
+      int affectedRows = statement3.executeUpdate();
       if (affectedRows == 1)
-        return true;
+        return ownerId;
     }
     catch (SQLException e)
     {
       e.printStackTrace();
     }
-    return false;
+    return -1;
   }
 
   @Override public void addImagesAndDates(Advertisement advertisement)
@@ -177,17 +182,35 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public CatalogueAd approveAdvertisement(Advertisement advertisement)
-  {
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE id=?");
-      statement.setBoolean(1, true);
-      statement.setInt(2, advertisement.getAdvertisementID());
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
+  @Override public CatalogueAd approveAdvertisement(int id) {
+    try (Connection connection = getConnection()) {
+
+      PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM advertisement WHERE id = ?;");
+      selectStatement.setInt(1, id);
+      ResultSet resultSet = selectStatement.executeQuery();
+      while (resultSet.next()) {
+        int advertisementID = resultSet.getInt("id");
+        String title = resultSet.getString("title");
+        int price = resultSet.getInt("price");
+        String vehicle_type = resultSet.getString("vehicle_type");
+        String mainImageServerPath = null;
+
+        PreparedStatement mainImageStatement = connection.prepareStatement("SELECT * FROM ad_picture WHERE advertisement_id = ? AND picture_name = ?;");
+        mainImageStatement.setInt(1, advertisementID);
+        mainImageStatement.setString(2, AdImages.MAIN_IMAGE.toString());
+        ResultSet mainImageResult = mainImageStatement.executeQuery();
+        while (mainImageResult.next()) {
+          mainImageServerPath = mainImageResult.getString("path");
+        }
+
+        PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE id=?");
+        statement.setBoolean(1, true);
+        statement.setInt(2, id);
+        statement.executeUpdate();
+
+        return new CatalogueAd(id, title, mainImageServerPath, price, vehicle_type);
+      }
+    } catch (SQLException e) {
       e.printStackTrace();
     }
     return null;
@@ -253,10 +276,10 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         String phoneNumber = null;
         String avatarpath = null;
         int address_id = 0;
+        int owner_id = 0;
 
         Map<String, String> pictures = getPicturesForAdvertisement(id);
-        ArrayList<LocalDate> unavailableDates = getUnavailabilityForAdvertisement(
-            id);
+        ArrayList<LocalDate> unavailableDates = getUnavailabilityForAdvertisement(id);
 
         PreparedStatement ownerStatement = connection.prepareStatement("SELECT * FROM user_account WHERE id=?;");
         ownerStatement.setInt(1, ownerID);
@@ -284,12 +307,15 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         Address ownerAddress = new Address(street, number);
         User owner = new User(username, null, phoneNumber, ownerAddress);
         owner.setAvatarServerPath(avatarpath);
+        owner.setUser_id(ownerID);
         Advertisement advertisement = new Advertisement(owner, null, type,
             unavailableDates, price, title, description);
         advertisement.setServerPath(pictures);
         advertisement.setAdvertisementID(id);
         advertisement.setReports(reports);
         advertisement.setCreationDate(dateCreation);
+
+        System.out.println("ADvertismen" + id);
 
         return advertisement;
       }
@@ -301,7 +327,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public boolean addNewAdvertisementReport(int advertisementID)
+  @Override public int addNewAdvertisementReport(int advertisementID)
   {
     try (Connection connection = getConnection())
     {
@@ -320,7 +346,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         updateStatement.setInt(2, advertisementID);
 
         if (updateStatement.executeUpdate() == 1)
-          return true;
+          return reports;
       }
 
     }
@@ -328,7 +354,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     {
       e.printStackTrace();
     }
-    return false;
+    return -1;
   }
 
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)
@@ -458,7 +484,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement(
-          "SELECT id,title,vehicle_type,reports FROM advertisement;");
+          "SELECT id,title,vehicle_type,reports,approved FROM advertisement;");
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next())
       {
@@ -466,8 +492,9 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         String title = resultSet.getString("title");
         String type = resultSet.getString("vehicle_type");
         int reports = resultSet.getInt("reports");
+        boolean approved = resultSet.getBoolean("approved");
 
-        catalogueAdAdmin.add(new AdCatalogueAdmin(advertisementID, title, type, reports));
+        catalogueAdAdmin.add(new AdCatalogueAdmin(advertisementID, title, type, reports, approved));
       }
       System.out.println(catalogueAdAdmin);
       return catalogueAdAdmin;
@@ -478,4 +505,25 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     }
     return null;
   }
-}
+
+  @Override
+  public AdCatalogueAdmin getAdminAdCatalogue(int id) {
+    try (Connection connection = getConnection()) {
+      PreparedStatement statement = connection.prepareStatement(
+              "SELECT id,title,vehicle_type,reports,approved FROM advertisement;");
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next()) {
+        int advertisementID = resultSet.getInt("id");
+        String title = resultSet.getString("title");
+        String type = resultSet.getString("vehicle_type");
+        int reports = resultSet.getInt("reports");
+        boolean approved = resultSet.getBoolean("approved");
+
+        return new AdCatalogueAdmin(id, title, type, reports, approved);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+  }

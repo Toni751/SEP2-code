@@ -45,6 +45,11 @@ public class UserActionsModelManager implements UserActionsModel {
 
         client.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), this::avatarUpdated);
         connection.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
+        client.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), this::newUserReported);
+    }
+
+    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
 
     private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
@@ -77,6 +82,7 @@ public class UserActionsModelManager implements UserActionsModel {
             else {
                 LoggedUser.getLoggedUser().loginUser(requestedUser);
                 clientChat.registerForCallBack();
+                clientAdvertisement.registerForCallBack();
                 return null;
             }
     }

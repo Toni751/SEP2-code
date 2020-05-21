@@ -86,11 +86,11 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public boolean approveAdvertisement(Advertisement ad)
+    public boolean approveAdvertisement(int id)
     {
         try
         {
-            return server.approveAdvertisement(ad);
+            return server.approveAdvertisement(id);
         }
         catch (RemoteException e)
         {
@@ -100,11 +100,11 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public boolean removeAdvertisement(Advertisement ad)
+    public boolean removeAdvertisement(int id)
     {
         try
         {
-            return server.removeAdvertisement(ad);
+            return server.removeAdvertisement(id);
         }
         catch (RemoteException e)
         {
@@ -112,20 +112,6 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
         }
         return false;
     }
-
-//    @Override
-//    public boolean editAdvertisement(Advertisement ad)
-//    {
-//        try
-//        {
-//            return server.editAdvertisement(ad);
-//        }
-//        catch (RemoteException e)
-//        {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
 
     @Override
     public List<Advertisement> selectAllAdvertisement() {
@@ -185,7 +171,26 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public void newAdRequest(Advertisement ad)
+    public void registerForCallBack() {
+        try {
+            server.registerClientCallback(this);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<CatalogueAd> getAllUserCatalogues(int user_id) {
+        try {
+            return server.getAdvertisementsByUser(user_id);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void newAdRequest(AdCatalogueAdmin ad)
     {
         support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, ad);
     }
@@ -197,8 +202,13 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public void removedAd(Advertisement ad)
+    public void removedAd(int id)
     {
-        support.firePropertyChange(Events.AD_REMOVED.toString(), null, ad);
+        support.firePropertyChange(Events.AD_REMOVED.toString(), null, id);
+    }
+
+    @Override
+    public void newReportReceived(int id, int newValue){
+        support.firePropertyChange(Events.NEW_ADVERTISEMENT_REPORT.toString(), id, newValue);
     }
 }

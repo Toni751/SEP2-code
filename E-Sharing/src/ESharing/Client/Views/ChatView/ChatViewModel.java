@@ -87,6 +87,7 @@ public class ChatViewModel implements PropertyChangeSubject {
     }
 
     public void sendMessage() {
+        System.out.println(LoggedUser.getLoggedUser().getCurrentOpenConversation().size());
         if(LoggedUser.getLoggedUser().getCurrentOpenConversation() != null && !LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
             if (verificationModel.verifyMessage(messageProperty.get())) {
                 User receiver;
@@ -141,6 +142,7 @@ public class ChatViewModel implements PropertyChangeSubject {
                 receiverProperty.setValue(receiver.getUsername());
             else
                 receiverProperty.setValue(sender.getUsername());
+        System.out.println(LoggedUser.getLoggedUser().getCurrentOpenConversation().size());
     }
 
     public StringProperty getMessageProperty() {
@@ -203,7 +205,6 @@ public class ChatViewModel implements PropertyChangeSubject {
                 makeConversationRead();
             }
         }
-
         if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
             currentReceiver = anotherUser;
             receiverProperty.setValue(anotherUser.getUsername());

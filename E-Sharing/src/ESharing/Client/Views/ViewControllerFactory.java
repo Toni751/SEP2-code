@@ -44,6 +44,7 @@ public class ViewControllerFactory {
             else if(id == Views.ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("AdvertisementView/AdvertisementView.fxml");
             else if(id == Views.MANAGE_ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("AdminAdvertisementsView/AdminAdvertisementView.fxml");
             else if(id == Views.USER_VIEW) viewController = creatNewViewControllerObject("UserView/UserView.fxml");
+            else if(id == Views.USER_ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("UserAdvertisementView/UserAdvertisementView.fxml");
             viewControllers.put(id, viewController);
         }
         viewController.init();

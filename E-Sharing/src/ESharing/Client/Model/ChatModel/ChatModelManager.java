@@ -30,10 +30,14 @@ public class ChatModelManager implements ChatModel{
     }
 
     private void readMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("READ MESSAGE RECEIVED IN CHAT MODEL");
         Message newMessage = (Message) propertyChangeEvent.getNewValue();
         if(loggedUserPartOfTheMessage(newMessage)) {
             support.firePropertyChange(propertyChangeEvent);
+            if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty())
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
+            else if(!GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getSender())
+                    && !GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getReceiver()))
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
         }
     }
 
@@ -48,14 +52,10 @@ public class ChatModelManager implements ChatModel{
     }
 
     private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("ESSAGE RECEIVED IN CHAT MODEL");
         Message newMessage = (Message) propertyChangeEvent.getNewValue();
         if(loggedUserPartOfTheMessage(newMessage)) {
             support.firePropertyChange(propertyChangeEvent);
-            if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty())
-                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
-            else if(!GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getSender())
-               && !GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getReceiver()))
-                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
         }
     }
 

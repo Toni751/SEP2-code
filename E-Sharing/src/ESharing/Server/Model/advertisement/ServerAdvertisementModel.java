@@ -10,11 +10,12 @@ import java.util.List;
 public interface ServerAdvertisementModel extends PropertyChangeSubject {
 
     boolean addAdvertisement(Advertisement advertisement);
-    boolean approveAdvertisement (Advertisement ad);
-    boolean removeAdvertisement(Advertisement advertisement);
+    boolean approveAdvertisement (int id);
+    boolean removeAdvertisement(int id);
 //    boolean editAdvertisement (Advertisement ad);
     List<Advertisement> selectAllAdvertisements();
     List<CatalogueAd> getAdvertisementsCatalogue();
+    List<CatalogueAd> getAdvertisementsCatalogueForUser(int id);
     Advertisement getAdvertisementById (int id);
     boolean addNewAdvertisementReport(int advertisementID);
     List<AdCatalogueAdmin> getAdminAdCatalogue();

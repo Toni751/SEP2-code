@@ -20,6 +20,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   private PropertyChangeListener listenToNewAdReq;
   private PropertyChangeListener listenToAdApproved;
   private PropertyChangeListener listenToDeletedAd;
+  private PropertyChangeListener listenToNewReport;
 
   public ServerAdvertisementHandler(ServerAdvertisementModel serverModel)
   {
@@ -41,15 +42,15 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   }
 
   @Override
-  public boolean approveAdvertisement(Advertisement ad)
+  public boolean approveAdvertisement(int id)
   {
-    return serverModel.approveAdvertisement(ad);
+    return serverModel.approveAdvertisement(id);
   }
 
   @Override
-  public boolean removeAdvertisement(Advertisement ad)
+  public boolean removeAdvertisement(int id)
   {
-    return serverModel.removeAdvertisement(ad);
+    return serverModel.removeAdvertisement(id);
   }
 
 //  @Override
@@ -64,7 +65,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
     listenToNewAdReq = evt -> {
       try
       {
-        client.newAdRequest((Advertisement) evt.getNewValue());
+        client.newAdRequest((AdCatalogueAdmin) evt.getNewValue());
       }
       catch (RemoteException e)
       {
@@ -84,16 +85,26 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
     listenToDeletedAd = evt -> {
       try
       {
-        client.removedAd((Advertisement) evt.getNewValue());
+        client.removedAd((int) evt.getNewValue());
       }
       catch (RemoteException e)
       {
         e.printStackTrace();
       }
     };
+
+    listenToNewReport = evt -> {
+
+      try {
+        client.newReportReceived((int)evt.getOldValue() ,(int) evt.getNewValue());
+      } catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    };
     serverModel.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), listenToNewAdReq);
     serverModel.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), listenToAdApproved);
     serverModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), listenToDeletedAd);
+    serverModel.addPropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), listenToNewReport);
   }
 
   @Override
@@ -102,6 +113,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
     serverModel.removePropertyChangeListener(Events.NEW_AD_REQUEST.toString(), listenToNewAdReq);
     serverModel.removePropertyChangeListener(Events.NEW_APPROVED_AD.toString(), listenToAdApproved);
     serverModel.removePropertyChangeListener(Events.AD_REMOVED.toString(), listenToDeletedAd);
+    serverModel.removePropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), listenToNewReport);
   }
 
   @Override
@@ -124,7 +136,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   @Override
   public List<CatalogueAd> getAdvertisementsByUser(int user_id)
   {
-    return null;
+    return serverModel.getAdvertisementsCatalogueForUser(user_id);
   }
 
   @Override

@@ -7,6 +7,7 @@ import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
+import com.sun.javafx.reflect.FieldUtil;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
@@ -39,7 +40,7 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         if(result != -1) {
                 advertisement = uploadPhotos(advertisement, result);
                 advertisementDAO.addImagesAndDates(advertisement);
-                support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisement);
+                support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisementDAO.getAdminAdCatalogue(advertisement.getAdvertisementID()));
                 return true;
         }
         return false;
@@ -113,10 +114,15 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public boolean approveAdvertisement(Advertisement ad)
+    public boolean approveAdvertisement(int id)
     {
-        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(ad);
+        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(id);
         if(catalogueAd != null) {
+            try
+            {
+                catalogueAd.setMainImage(Files.readAllBytes(new File(catalogueAd.getMainImageServerPath()).toPath()));
+            } catch (IOException e) {e.printStackTrace();}
+            System.out.println("Appropved event fired");
             support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
             return true;
         }
@@ -124,11 +130,15 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public boolean removeAdvertisement(Advertisement advertisement) {
-        boolean result = advertisementDAO.removeAdvertisement(advertisement);
-        if(result) // add removing part for pictures
-            support.firePropertyChange(Events.AD_REMOVED.toString(), null, advertisement);
-        return result;
+    public boolean removeAdvertisement(int id) {
+        int ownerID = advertisementDAO.removeAdvertisement(id);
+        if(ownerID != -1) {
+            // add removing part for pictures
+            deleteDirectory(new File("E-Sharing/Resources/User" + ownerID + "/Advertisement" + id));
+            support.firePropertyChange(Events.AD_REMOVED.toString(), null, id);
+            return true;
+        }
+        return false;
     }
 
 //    @Override
@@ -167,6 +177,20 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
+    public List<CatalogueAd> getAdvertisementsCatalogueForUser(int id) {
+        List<CatalogueAd> catalogues = advertisementDAO.getAdvertisementsByUser(id);
+        for(CatalogueAd catalogueAd : catalogues)
+        {
+            String mainImageServerPath = catalogueAd.getMainImageServerPath();
+            try
+            {
+                catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+        return catalogues;
+    }
+
+    @Override
     public Advertisement getAdvertisementById(int id)
     {
         Advertisement advertisement = advertisementDAO.getAdvertisementById(id);
@@ -177,7 +201,13 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
     @Override
     public boolean addNewAdvertisementReport(int advertisementID) {
-        return advertisementDAO.addNewAdvertisementReport(advertisementID);
+        System.out.println("REPORT ADDED");
+        int reports = advertisementDAO.addNewAdvertisementReport(advertisementID);
+        if(reports != -1) {
+            support.firePropertyChange(Events.NEW_ADVERTISEMENT_REPORT.toString(), advertisementID, reports);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -246,6 +276,16 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean deleteDirectory(File directory) {
+        File[] allContents = directory.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directory.delete();
     }
 
 }

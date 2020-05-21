@@ -48,6 +48,7 @@ public class ServerChatModelManager implements ServerChatModel
   {
     messageDAO.addMessage(message);
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
+    support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getSender().getUser_id(), null, message);
   }
 
   @Override

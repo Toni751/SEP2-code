@@ -11,8 +11,8 @@ public interface ClientAdvertisement extends PropertyChangeSubject
 {
   void initializeConnection();
   boolean addAdvertisement (Advertisement ad);
-  boolean approveAdvertisement (Advertisement ad);
-  boolean removeAdvertisement (Advertisement ad);
+  boolean approveAdvertisement (int id);
+  boolean removeAdvertisement (int id);
 //  boolean editAdvertisement (Advertisement ad);
   List<Advertisement> selectAllAdvertisement();
 
@@ -21,4 +21,8 @@ public interface ClientAdvertisement extends PropertyChangeSubject
     List<CatalogueAd> getAllCatalogues();
   List<AdCatalogueAdmin> getAdminAdCatalogue();
   Advertisement getAdvertisement(int advertisementID);
+
+    void registerForCallBack();
+
+    List<CatalogueAd> getAllUserCatalogues(int user_id);
 }

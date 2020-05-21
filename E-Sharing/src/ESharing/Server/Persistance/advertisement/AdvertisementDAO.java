@@ -1,5 +1,6 @@
 package ESharing.Server.Persistance.advertisement;
 
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 
@@ -9,7 +10,6 @@ public interface AdvertisementDAO {
 
   int create(Advertisement advertisement);
   boolean removeAdvertisement(Advertisement advertisement);
-  boolean updateAdvertisement(Advertisement advertisement);
   void addImagesAndDates(Advertisement advertisement);
   List<Advertisement> getAllAdvertisements();
   CatalogueAd approveAdvertisement(Advertisement advertisement);
@@ -17,4 +17,5 @@ public interface AdvertisementDAO {
   Advertisement getAdvertisementById (int id);
   List<CatalogueAd> getAdvertisementsByUser(int user_id);
   boolean addNewAdvertisementReport(int advertisementID);
+  List<AdCatalogueAdmin> getAdminAdCatalogue();
 }

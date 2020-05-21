@@ -6,10 +6,7 @@ import ESharing.Server.Persistance.address.AddressDAO;
 import ESharing.Server.Persistance.address.AddressDAOManager;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
-import ESharing.Shared.TransferedObject.Address;
-import ESharing.Shared.TransferedObject.Advertisement;
-import ESharing.Shared.TransferedObject.CatalogueAd;
-import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.TransferedObject.*;
 import ESharing.Shared.Util.AdImages;
 
 import java.sql.*;
@@ -109,12 +106,6 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     {
       e.printStackTrace();
     }
-    return false;
-  }
-
-  @Override
-  public boolean updateAdvertisement(Advertisement advertisement)
-  {
     return false;
   }
 
@@ -332,6 +323,12 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       e.printStackTrace();
     }
     return false;
+  }
+
+  @Override
+  public List<AdCatalogueAdmin> getAdminAdCatalogue()
+  {
+    return null;
   }
 
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)

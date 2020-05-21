@@ -10,6 +10,5 @@ public interface RMIAdvertisementClient extends Remote
 {
   void newAdRequest (Advertisement ad) throws RemoteException;
   void newApprovedAd (CatalogueAd ad) throws RemoteException;
-  void updatedAd (Advertisement ad) throws RemoteException;
   void removedAd (Advertisement ad) throws RemoteException;
 }

@@ -2,6 +2,7 @@ package ESharing.Server.Model.advertisement;
 
 import ESharing.Server.Persistance.advertisement.AdvertisementDAO;
 import ESharing.Server.Persistance.advertisement.AdvertisementDAOManager;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
@@ -34,6 +35,18 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public boolean addAdvertisement(Advertisement advertisement) {
 
+        int result = advertisementDAO.create(advertisement);
+        if(result != -1) {
+                advertisement = uploadPhotos(advertisement, result);
+                advertisementDAO.addImagesAndDates(advertisement);
+                support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisement);
+                return true;
+        }
+        return false;
+    }
+
+    private Advertisement uploadPhotos (Advertisement advertisement, int result)
+    {
         Map<String, String> serverPaths = new HashMap<>();
         FileOutputStream outputStream;
         File mainImage;
@@ -42,50 +55,61 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         File subImage3;
         File subImage4;
 
-        int result = advertisementDAO.create(advertisement);
-        if(result != -1) {
-            advertisement.setAdvertisementID(result);
-            System.out.println(advertisement.getBytePhotos());
-            try {
-                mainImage = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/mainImage.jpg");
-                mainImage.getParentFile().mkdirs();
-                outputStream = new FileOutputStream(mainImage);
-                outputStream.write(advertisement.getBytePhotos().get(AdImages.MAIN_IMAGE.toString()));
-                serverPaths.put(AdImages.MAIN_IMAGE.toString(), mainImage.getPath());
-                if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE1.toString())) {
-                    subImage1 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage1.jpg");
-                    outputStream = new FileOutputStream(subImage1);
-                    outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE1.toString()));
-                    serverPaths.put(AdImages.SUB_IMAGE1.toString(), subImage1.getPath());
-                }
-                if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE2.toString())) {
-                    subImage2 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage2.jpg");
-                    outputStream = new FileOutputStream(subImage2);
-                    outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE2.toString()));
-                    serverPaths.put(AdImages.SUB_IMAGE2.toString(), subImage2.getPath());
-                }
-                if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE3.toString())) {
-                    subImage3 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage3.jpg");
-                    outputStream = new FileOutputStream(subImage3);
-                    outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE3.toString()));
-                    serverPaths.put(AdImages.SUB_IMAGE3.toString(), subImage3.getPath());
-                }
-                if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE4.toString())) {
-                    subImage4 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage4.jpg");
-                    outputStream = new FileOutputStream(subImage4);
-                    outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE4.toString()));
-                    serverPaths.put(AdImages.SUB_IMAGE4.toString(), subImage4.getPath());
-                }
-                outputStream.close();
-                advertisement.setServerPath(serverPaths);
-                advertisementDAO.addImagesAndDates(advertisement);
-                support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisement);
-                return true;
-            } catch (IOException e) {
-                e.printStackTrace();
+        advertisement.setAdvertisementID(result);
+        System.out.println(advertisement.getBytePhotos());
+        try
+        {
+            mainImage = new File(
+                "E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement
+                    .getAdvertisementID() + "/mainImage.jpg");
+            mainImage.getParentFile().mkdirs();
+            outputStream = new FileOutputStream(mainImage);
+            outputStream.write(advertisement.getBytePhotos().get(AdImages.MAIN_IMAGE.toString()));
+            serverPaths.put(AdImages.MAIN_IMAGE.toString(), mainImage.getPath());
+            if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE1.toString()))
+            {
+                subImage1 = new File(
+                    "E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement
+                        .getAdvertisementID() + "/subImage1.jpg");
+                outputStream = new FileOutputStream(subImage1);
+                outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE1.toString()));
+                serverPaths.put(AdImages.SUB_IMAGE1.toString(), subImage1.getPath());
             }
+            if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE2.toString()))
+            {
+                subImage2 = new File(
+                    "E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement
+                        .getAdvertisementID() + "/subImage2.jpg");
+                outputStream = new FileOutputStream(subImage2);
+                outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE2.toString()));
+                serverPaths.put(AdImages.SUB_IMAGE2.toString(), subImage2.getPath());
+            }
+            if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE3.toString()))
+            {
+                subImage3 = new File(
+                    "E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement
+                        .getAdvertisementID() + "/subImage3.jpg");
+                outputStream = new FileOutputStream(subImage3);
+                outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE3.toString()));
+                serverPaths.put(AdImages.SUB_IMAGE3.toString(), subImage3.getPath());
+            }
+            if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE4.toString()))
+            {
+                subImage4 = new File(
+                    "E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement
+                        .getAdvertisementID() + "/subImage4.jpg");
+                outputStream = new FileOutputStream(subImage4);
+                outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE4.toString()));
+                serverPaths.put(AdImages.SUB_IMAGE4.toString(), subImage4.getPath());
+            }
+            outputStream.close();
+            advertisement.setServerPath(serverPaths);
+            return advertisement;
         }
-        return false;
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override
@@ -102,19 +126,19 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public boolean removeAdvertisement(Advertisement advertisement) {
         boolean result = advertisementDAO.removeAdvertisement(advertisement);
-        if(result)
+        if(result) // add removing part for pictures
             support.firePropertyChange(Events.AD_REMOVED.toString(), null, advertisement);
         return result;
     }
 
-    @Override
-    public boolean editAdvertisement(Advertisement ad)
-    {
-        boolean result = advertisementDAO.updateAdvertisement(ad);
-        if(result)
-            support.firePropertyChange(Events.AD_UPDATED.toString(), null, ad);
-        return result;
-    }
+//    @Override
+//    public boolean editAdvertisement(Advertisement ad)
+//    {
+//        boolean result = advertisementDAO.updateAdvertisement(ad);
+//        if(result)
+//            support.firePropertyChange(Events.AD_UPDATED.toString(), null, ad);
+//        return result;
+//    }
 
     @Override
     public List<Advertisement> selectAllAdvertisements() {
@@ -154,6 +178,12 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public boolean addNewAdvertisementReport(int advertisementID) {
         return advertisementDAO.addNewAdvertisementReport(advertisementID);
+    }
+
+    @Override
+    public List<AdCatalogueAdmin> getAdminAdCatalogue()
+    {
+        return advertisementDAO.getAdminAdCatalogue();
     }
 
     @Override

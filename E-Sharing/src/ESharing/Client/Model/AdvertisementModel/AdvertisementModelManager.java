@@ -28,12 +28,6 @@ public class AdvertisementModelManager implements AdvertisementModel{
         clientAdvertisement.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::newAdRequest);
         clientAdvertisement.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
         clientAdvertisement.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
-        clientAdvertisement.addPropertyChangeListener(Events.AD_UPDATED.toString(), this::adUpdated);
-    }
-
-    private void adUpdated(PropertyChangeEvent propertyChangeEvent)
-    {
-        support.firePropertyChange(propertyChangeEvent);
     }
 
     private void adRemoved(PropertyChangeEvent propertyChangeEvent)

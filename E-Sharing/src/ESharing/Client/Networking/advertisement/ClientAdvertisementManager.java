@@ -3,6 +3,7 @@ package ESharing.Client.Networking.advertisement;
 import ESharing.Client.Networking.Connection;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementClient;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
+import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Events;
@@ -112,19 +113,19 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
         return false;
     }
 
-    @Override
-    public boolean editAdvertisement(Advertisement ad)
-    {
-        try
-        {
-            return server.editAdvertisement(ad);
-        }
-        catch (RemoteException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    @Override
+//    public boolean editAdvertisement(Advertisement ad)
+//    {
+//        try
+//        {
+//            return server.editAdvertisement(ad);
+//        }
+//        catch (RemoteException e)
+//        {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
     @Override
     public List<Advertisement> selectAllAdvertisement() {
@@ -160,6 +161,20 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
+    public List<AdCatalogueAdmin> getAdminAdCatalogue()
+    {
+        try
+        {
+            return server.getAdminAdCatalogue();
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
     public Advertisement getAdvertisement(int advertisementID) {
         try {
             return server.getAdvertisementById(advertisementID);
@@ -179,12 +194,6 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     public void newApprovedAd(CatalogueAd ad)
     {
         support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, ad);
-    }
-
-    @Override
-    public void updatedAd(Advertisement ad)
-    {
-        support.firePropertyChange(Events.AD_UPDATED.toString(), null, ad);
     }
 
     @Override

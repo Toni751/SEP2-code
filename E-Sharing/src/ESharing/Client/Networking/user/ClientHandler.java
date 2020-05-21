@@ -1,6 +1,5 @@
 package ESharing.Client.Networking.user;
 
-import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.Connection;
 import ESharing.Shared.Networking.chat.RMIChatServer;
@@ -8,11 +7,9 @@ import ESharing.Shared.Networking.user.RMIClient;
 import ESharing.Shared.Networking.user.RMIServer;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
-import javafx.scene.image.Image;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.File;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -149,6 +146,16 @@ public class ClientHandler implements Client, RMIClient
     } catch (RemoteException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public boolean addNewUserReport(int user_id) {
+    try {
+      return server.addNewUserReport(user_id);
+    } catch (RemoteException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   @Override

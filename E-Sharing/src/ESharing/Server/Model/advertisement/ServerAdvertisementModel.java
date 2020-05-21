@@ -9,10 +9,11 @@ import java.util.List;
 public interface ServerAdvertisementModel extends PropertyChangeSubject {
 
     boolean addAdvertisement(Advertisement advertisement);
-    void approveAdvertisement (Advertisement ad);
+    boolean approveAdvertisement (Advertisement ad);
     boolean removeAdvertisement(Advertisement advertisement);
     boolean editAdvertisement (Advertisement ad);
     List<Advertisement> selectAllAdvertisements();
     List<CatalogueAd> getAdvertisementsCatalogue();
     Advertisement getAdvertisementById (int id);
+    boolean addNewAdvertisementReport(int advertisementID);
 }

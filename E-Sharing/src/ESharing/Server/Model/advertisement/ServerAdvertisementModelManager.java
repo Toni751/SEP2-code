@@ -7,6 +7,7 @@ import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
 
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
@@ -46,31 +47,31 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
             advertisement.setAdvertisementID(result);
             System.out.println(advertisement.getBytePhotos());
             try {
-                mainImage = new File("E-Sharing/src/ESharing/Server/Resources/Advertisements/user" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/mainImage.jpg");
+                mainImage = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/mainImage.jpg");
                 mainImage.getParentFile().mkdirs();
                 outputStream = new FileOutputStream(mainImage);
                 outputStream.write(advertisement.getBytePhotos().get(AdImages.MAIN_IMAGE.toString()));
                 serverPaths.put(AdImages.MAIN_IMAGE.toString(), mainImage.getPath());
                 if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE1.toString())) {
-                    subImage1 = new File("E-Sharing/src/ESharing/Server/Resources/Advertisements/user" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage1.jpg");
+                    subImage1 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage1.jpg");
                     outputStream = new FileOutputStream(subImage1);
                     outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE1.toString()));
                     serverPaths.put(AdImages.SUB_IMAGE1.toString(), subImage1.getPath());
                 }
                 if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE2.toString())) {
-                    subImage2 = new File("E-Sharing/src/ESharing/Server/Resources/Advertisements/user" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage2.jpg");
+                    subImage2 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage2.jpg");
                     outputStream = new FileOutputStream(subImage2);
                     outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE2.toString()));
                     serverPaths.put(AdImages.SUB_IMAGE2.toString(), subImage2.getPath());
                 }
                 if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE3.toString())) {
-                    subImage3 = new File("E-Sharing/src/ESharing/Server/Resources/Advertisements/user" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage3.jpg");
+                    subImage3 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage3.jpg");
                     outputStream = new FileOutputStream(subImage3);
                     outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE3.toString()));
                     serverPaths.put(AdImages.SUB_IMAGE3.toString(), subImage3.getPath());
                 }
                 if (advertisement.getBytePhotos().containsKey(AdImages.SUB_IMAGE4.toString())) {
-                    subImage4 = new File("E-Sharing/src/ESharing/Server/Resources/Advertisements/user" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage4.jpg");
+                    subImage4 = new File("E-Sharing/Resources/User" + advertisement.getOwner().getUser_id() + "/advertisement" + advertisement.getAdvertisementID() + "/subImage4.jpg");
                     outputStream = new FileOutputStream(subImage4);
                     outputStream.write(advertisement.getBytePhotos().get(AdImages.SUB_IMAGE4.toString()));
                     serverPaths.put(AdImages.SUB_IMAGE4.toString(), subImage4.getPath());
@@ -84,15 +85,18 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
                 e.printStackTrace();
             }
         }
-
         return false;
     }
 
     @Override
-    public void approveAdvertisement(Advertisement ad)
+    public boolean approveAdvertisement(Advertisement ad)
     {
         CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(ad);
-        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
+        if(catalogueAd != null) {
+            support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -114,33 +118,42 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
     @Override
     public List<Advertisement> selectAllAdvertisements() {
-       Map<String, byte[]> imagesByte = new HashMap<>();
        List<Advertisement> advertisements = advertisementDAO.getAllAdvertisements();
        for(Advertisement advertisement : advertisements) {
-           try {
-           for(int i = 0; i<advertisement.getServerPaths().size(); i++) {
-
-                   advertisement.setImageByte(AdImages.MAIN_IMAGE.toString(), Files.readAllBytes(Paths.get(advertisement.getServerPath(AdImages.MAIN_IMAGE.toString()))));
-
-           }
-           return advertisements;
-
-           } catch (IOException e) {
-            e.printStackTrace(); }
+             advertisement.setPhotos(convertAdvertisementPictures(advertisement));
        }
-       return null;
+           return advertisements;
     }
 
     @Override
     public List<CatalogueAd> getAdvertisementsCatalogue()
     {
-        return null;
+        List<CatalogueAd> catalogueAds = advertisementDAO.getAdvertisementsCatalogue();
+        if(catalogueAds != null) {
+            for (CatalogueAd catalogueAd : catalogueAds) {
+                String mainImageServerPath = catalogueAd.getMainImageServerPath();
+                try {
+                    catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return catalogueAds;
     }
 
     @Override
     public Advertisement getAdvertisementById(int id)
     {
-        return null;
+        Advertisement advertisement = advertisementDAO.getAdvertisementById(id);
+        advertisement.getOwner().setAvatar(convertUserAvatar(advertisement.getOwner().getAvatarServerPath()));
+        advertisement.setPhotos(convertAdvertisementPictures(advertisement));
+        return advertisement;
+    }
+
+    @Override
+    public boolean addNewAdvertisementReport(int advertisementID) {
+        return advertisementDAO.addNewAdvertisementReport(advertisementID);
     }
 
     @Override
@@ -172,4 +185,37 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     {
         support.removePropertyChangeListener(listener);
     }
+
+    private Map<String, byte[]> convertAdvertisementPictures(Advertisement advertisement)
+    {
+        Map<String, byte[]> convertedImages = new HashMap<>();
+        for(int i = 0; i < advertisement.getServerPaths().size(); i++) {
+            System.out.println(advertisement.getServerPaths());
+            try {
+                convertedImages.put(AdImages.MAIN_IMAGE.toString(), Files.readAllBytes(new File(advertisement.getServerPath(AdImages.MAIN_IMAGE.toString())).toPath()));
+                if (advertisement.getServerPaths().containsKey(AdImages.SUB_IMAGE1.toString()))
+                    convertedImages.put(AdImages.SUB_IMAGE1.toString(), Files.readAllBytes(new File(advertisement.getServerPath(AdImages.SUB_IMAGE1.toString())).toPath()));
+                if (advertisement.getServerPaths().containsKey(AdImages.SUB_IMAGE2.toString()))
+                    convertedImages.put(AdImages.SUB_IMAGE2.toString(), Files.readAllBytes(new File(advertisement.getServerPath(AdImages.SUB_IMAGE2.toString())).toPath()));
+                if (advertisement.getServerPaths().containsKey(AdImages.SUB_IMAGE3.toString()))
+                    convertedImages.put(AdImages.SUB_IMAGE3.toString(), Files.readAllBytes(new File(advertisement.getServerPath(AdImages.SUB_IMAGE3.toString())).toPath()));
+                if (advertisement.getServerPaths().containsKey(AdImages.SUB_IMAGE4.toString()))
+                    convertedImages.put(AdImages.SUB_IMAGE4.toString(), Files.readAllBytes(new File(advertisement.getServerPath(AdImages.SUB_IMAGE4.toString())).toPath()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return convertedImages;
+    }
+
+    private byte[] convertUserAvatar(String serverPath)
+    {
+        try {
+            return Files.readAllBytes(new File(serverPath).toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

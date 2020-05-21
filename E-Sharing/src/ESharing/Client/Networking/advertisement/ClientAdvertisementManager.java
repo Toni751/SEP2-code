@@ -85,16 +85,17 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public void approveAdvertisement(Advertisement ad)
+    public boolean approveAdvertisement(Advertisement ad)
     {
         try
         {
-            server.approveAdvertisement(ad);
+            return server.approveAdvertisement(ad);
         }
         catch (RemoteException e)
         {
             e.printStackTrace();
         }
+        return false;
     }
 
     @Override
@@ -133,6 +134,36 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
         }
         catch (RemoteException e)
         {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean reportAdvertisement(int advertisementID) {
+        try {
+            return server.addNewAdvertisementReport(advertisementID);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public List<CatalogueAd> getAllCatalogues() {
+        try {
+            return server.getAdvertisementsCatalogue();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Advertisement getAdvertisement(int advertisementID) {
+        try {
+            return server.getAdvertisementById(advertisementID);
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
         return null;

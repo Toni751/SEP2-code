@@ -8,6 +8,8 @@ import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.ChatModel.ChatModel;
 import ESharing.Client.Model.ChatModel.ChatModelManager;
+import ESharing.Client.Model.ReservationModel.ReservationModel;
+import ESharing.Client.Model.ReservationModel.ReservationModelManager;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.UserActions.UserActionsModelManager;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
@@ -25,6 +27,7 @@ public class ModelFactory {
     private VerificationModel verificationModel;
     private ChatModel chatModel;
     private AdvertisementModel advertisementModel;
+    private ReservationModel reservationModel;
 
     private static ModelFactory modelFactory;
 
@@ -39,6 +42,7 @@ public class ModelFactory {
         verificationModel = new VerificationModelManager();
         chatModel = new ChatModelManager();
         advertisementModel = new AdvertisementModelManager();
+        reservationModel = new ReservationModelManager();
     }
 
     /**
@@ -97,5 +101,13 @@ public class ModelFactory {
      */
     public AdvertisementModel getAdvertisementModel() {
         return advertisementModel;
+    }
+
+    /**
+     * Returns initialized model for the reservation
+     * @return initialized model for the reservation
+     */
+    public ReservationModel getReservationModel() {
+        return reservationModel;
     }
 }

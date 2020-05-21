@@ -56,11 +56,15 @@ public class CreateAdViewController extends ViewController {
         viewModel = ViewModelFactory.getViewModelFactory().getAdViewModel();
 
         titleTextField.textProperty().bindBidirectional(viewModel.getTitleProperty());
-        typeComboBox.valueProperty().bindBidirectional(viewModel.getTypeItemsProperty());
         priceTextField.textProperty().bindBidirectional(viewModel.getPriceProperty());
         descriptionTextField.textProperty().bindBidirectional(viewModel.getDescriptionProperty());
         warningLabel.textProperty().bind(viewModel.getWarningProperty());
         datePicker.valueProperty().bindBidirectional(viewModel.getDateProperty());
+        typeComboBox.valueProperty().bindBidirectional(viewModel.getTypeValueProperty());
+        warningPane.visibleProperty().bindBidirectional(viewModel.warningVisibleProperty());
+        warningPane.styleProperty().bindBidirectional(viewModel.getWarningStyleProperty());
+
+        typeComboBox.setItems(viewModel.getTypeItemsProperty());
 
         mainImage.imageProperty().bind(viewModel.getMainImageProperty());
         subImage1.imageProperty().bind(viewModel.getSubImage1Property());
@@ -71,8 +75,6 @@ public class CreateAdViewController extends ViewController {
         viewModel.setDefaultView();
         initializeDatePicker();
         dataPickerEvent();
-
-        warningPane.visibleProperty().bindBidirectional(viewModel.warningVisibleProperty());
     }
 
     public void addImage(MouseEvent mouseEvent) {
@@ -96,6 +98,10 @@ public class CreateAdViewController extends ViewController {
 
     public void onAddAdvertisementAction() {
         viewModel.addAdvertisementRequest();
+    }
+
+    public void openCalendar() {
+        datePicker.show();
     }
 
     private void selectAndLoadImage(String imageId)
@@ -123,7 +129,7 @@ public class CreateAdViewController extends ViewController {
                         if (item.isBefore(LocalDate.now())) {
                             setDisable(true);
                         }
-                        if(item.isAfter(LocalDate.now().plusMonths(1))){
+                        if(item.isAfter(LocalDate.now().plusDays(30))){
                             setDisable(true);
                         }
                         if (!empty) {
@@ -149,9 +155,5 @@ public class CreateAdViewController extends ViewController {
             }
             clickEvent.consume();
         };
-    }
-
-    public void openCalendar() {
-        datePicker.show();
     }
 }

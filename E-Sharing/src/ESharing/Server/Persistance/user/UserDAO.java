@@ -13,4 +13,6 @@ public interface UserDAO
   boolean delete(User user);
 
   boolean changeAvatar(String path, int userId);
+
+    boolean addNewUserReport(int user_id);
 }

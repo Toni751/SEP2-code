@@ -280,6 +280,34 @@ public class UserDAOManager extends Database implements UserDAO
     return false;
   }
 
+  @Override
+  public boolean addNewUserReport(int user_id) {
+    try (Connection connection = getConnection())
+    {
+
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM user_account WHERE id=?;");
+      statement.setInt(1, user_id);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next())
+      {
+        System.out.println("report user");
+        int reports = resultSet.getInt("reports");
+        reports++;
+        PreparedStatement updateStatement = connection.prepareStatement("UPDATE user_account SET reports =? WHERE id =?;");
+        updateStatement.setInt(1, reports);
+        updateStatement.setInt(2, user_id);
+
+        if(updateStatement.executeUpdate() == 1)
+          return true;
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
   private int getNoUsersLivingAtAddress (int address_id)
   {
     try (Connection connection = getConnection())

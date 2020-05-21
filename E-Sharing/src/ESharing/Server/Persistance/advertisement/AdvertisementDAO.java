@@ -16,4 +16,5 @@ public interface AdvertisementDAO {
   List<CatalogueAd> getAdvertisementsCatalogue();
   Advertisement getAdvertisementById (int id);
   List<CatalogueAd> getAdvertisementsByUser(int user_id);
+  boolean addNewAdvertisementReport(int advertisementID);
 }

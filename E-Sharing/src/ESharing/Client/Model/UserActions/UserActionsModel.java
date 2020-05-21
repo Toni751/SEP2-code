@@ -44,4 +44,6 @@ public interface UserActionsModel extends PropertyChangeSubject
     void logoutUser();
 
     void changeAvatar(File avatarImage);
+
+    boolean addNewUserReport(int user_id);
 }

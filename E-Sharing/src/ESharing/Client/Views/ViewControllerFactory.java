@@ -41,6 +41,9 @@ public class ViewControllerFactory {
             else if(id == Views.CHAT_VIEW) viewController = creatNewViewControllerObject("ChatView/ChatView.fxml");
             else if(id == Views.EDIT_ADMIN_ACCOUNT) viewController = creatNewViewControllerObject("EditAdminView/EditAdminView.fxml");
             else if(id == Views.ADD_ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("CreateAdView/CreateAdView.fxml");
+            else if(id == Views.ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("AdvertisementView/AdvertisementView.fxml");
+            else if(id == Views.MANAGE_ADVERTISEMENT_VIEW) viewController = creatNewViewControllerObject("AdminAdvertisementsView/AdminAdvertisementView.fxml");
+            else if(id == Views.USER_VIEW) viewController = creatNewViewControllerObject("UserView/UserView.fxml");
             viewControllers.put(id, viewController);
         }
         viewController.init();

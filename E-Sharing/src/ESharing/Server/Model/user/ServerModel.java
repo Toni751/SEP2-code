@@ -54,4 +54,6 @@ public interface ServerModel extends PropertyChangeSubject
     void changeUserAvatar(byte[] avatarImage, int userId);
 
     void listeners();
+
+    boolean addNewUserReport(int user_id);
 }

@@ -3,17 +3,19 @@ package ESharing.Client.Core;
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
 import ESharing.Shared.Util.Views;
+import com.sun.glass.ui.View;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
-import javax.swing.text.View;
 
 /**
  * The class responsible for managing views
@@ -190,6 +192,46 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
+    public void openAdvertisementView()
+    {
+        viewController = ViewControllerFactory.getViewController(Views.ADVERTISEMENT_VIEW);
+        showView(viewController, null);
+    }
+
+    public void openAdminAdvertisementView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.MANAGE_ADVERTISEMENT_VIEW);
+        showView(viewController, existingPane);
+    }
+
+    public void openUserView()
+    {
+        viewController = ViewControllerFactory.getViewController(Views.USER_VIEW);
+        showView(viewController, null);
+    }
+
+    public void openPicturePreview(Image image)
+    {
+        Stage previewStage = new Stage();
+        previewStage.setWidth(800);
+        previewStage.setHeight(412);
+
+
+        System.out.println(image.getWidth());
+        BorderPane root = new BorderPane();
+        Scene imageScene = new Scene(root);
+
+        ImageView imageView = new ImageView(image);
+        imageView.fitWidthProperty().bind(previewStage.widthProperty());
+        imageView.fitHeightProperty().bind(previewStage.widthProperty());
+        imageView.setPreserveRatio(true);
+        root.getChildren().add(imageView);
+
+
+        previewStage.setScene(imageScene);
+        previewStage.show();
+    }
+
     /**
      * Shows views in a current scene or already loaded pane, using the ViewController class
      * @param controller the ViewController class which inheritances all view controllers
@@ -247,4 +289,7 @@ public class ViewHandler {
         currentStage.setIconified(true);
     }
 
+    public void resetMainView() {
+        ViewControllerFactory.clearViews();
+    }
 }

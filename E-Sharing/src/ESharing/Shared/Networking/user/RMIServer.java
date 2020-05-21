@@ -72,5 +72,7 @@ public interface RMIServer extends Remote
   void unRegisterUserAsAListener() throws RemoteException;
 
   void changeUserAvatar(byte[] avatarImage, int userID) throws RemoteException;
+
+  boolean addNewUserReport(int user_id) throws RemoteException;
 }
 

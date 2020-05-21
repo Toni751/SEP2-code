@@ -1,7 +1,9 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Views.AdminAdvertisementsView.AdminAdvertisementsViewModel;
 import ESharing.Client.Views.AdminDashboardView.AdminDashboardViewModel;
 import ESharing.Client.Views.AdminEditUserView.AdminEditUserViewModel;
+import ESharing.Client.Views.AdvertisementView.AdvertisementViewModel;
 import ESharing.Client.Views.ChatView.ChatViewModel;
 import ESharing.Client.Views.CreateAdView.CreateAdViewModel;
 import ESharing.Client.Views.EditAdminView.EditAdminViewModel;
@@ -13,6 +15,7 @@ import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
 import ESharing.Client.Views.UserAddressSettingView.UserAddressSettingViewModel;
 import ESharing.Client.Views.UserInfoSettingView.UserInfoSettingViewModel;
+import ESharing.Client.Views.UserView.UserViewModel;
 import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
 
 /**
@@ -36,6 +39,9 @@ public class ViewModelFactory {
     private ChatViewModel chatViewModel;
     private EditAdminViewModel editAdminViewModel;
     private CreateAdViewModel adViewModel;
+    private AdminAdvertisementsViewModel adminAdvertisementsViewModel;
+    private AdvertisementViewModel advertisementViewModel;
+    private UserViewModel userViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -57,6 +63,9 @@ public class ViewModelFactory {
         chatViewModel= new ChatViewModel();
         editAdminViewModel = new EditAdminViewModel();
         adViewModel = new CreateAdViewModel();
+        advertisementViewModel = new AdvertisementViewModel();
+        adminAdvertisementsViewModel = new AdminAdvertisementsViewModel();
+        userViewModel = new UserViewModel();
     }
 
     /**
@@ -180,5 +189,17 @@ public class ViewModelFactory {
      */
     public CreateAdViewModel getAdViewModel() {
         return adViewModel;
+    }
+
+    public AdminAdvertisementsViewModel getAdminAdvertisementsViewModel() {
+        return adminAdvertisementsViewModel;
+    }
+
+    public AdvertisementViewModel getAdvertisementViewModel() {
+        return advertisementViewModel;
+    }
+
+    public UserViewModel getUserViewModel() {
+        return userViewModel;
     }
 }

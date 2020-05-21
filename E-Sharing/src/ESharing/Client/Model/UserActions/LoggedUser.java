@@ -1,5 +1,6 @@
 package ESharing.Client.Model.UserActions;
 
+import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 
@@ -16,6 +17,7 @@ public class LoggedUser {
     private User user;
     private static LoggedUser loggedUser;
     private List<Message> currentOpenConversation = new ArrayList<>();
+    private Advertisement selectedAdvertisement;
 
     /**
      * Returns LoggedUser object if it exists, otherwise creates new object
@@ -42,7 +44,6 @@ public class LoggedUser {
      */
     public void logoutUser()
     {
-
         loggedUser = null;
     }
 
@@ -56,6 +57,16 @@ public class LoggedUser {
 
     public void setCurrentOpenConversation(List<Message> currentOpenConversation) {
         this.currentOpenConversation = currentOpenConversation;
+    }
+
+    public Advertisement getSelectedAdvertisement()
+    {
+        return selectedAdvertisement;
+    }
+
+    public void selectAdvertisement(Advertisement selectedAdvertisement)
+    {
+        this.selectedAdvertisement = selectedAdvertisement;
     }
 
     public List<Message> getCurrentOpenConversation() {

@@ -91,4 +91,8 @@ public class MainAdminViewController extends ViewController {
         AdministratorLists.getInstance().setSelectedUser(null);
         viewHandler.openChatView(null);
     }
+
+    public void onGoToAdvertisements() {
+        viewHandler.openAdminAdvertisementView(contentPane);
+    }
 }

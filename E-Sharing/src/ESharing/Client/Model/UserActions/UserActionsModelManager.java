@@ -113,6 +113,11 @@ public class UserActionsModelManager implements UserActionsModel {
     }
 
     @Override
+    public boolean addNewUserReport(int user_id) {
+        return client.addNewUserReport(user_id);
+    }
+
+    @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
         if ("".equals(eventName) || eventName == null)

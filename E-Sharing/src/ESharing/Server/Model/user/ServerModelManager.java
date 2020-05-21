@@ -109,7 +109,7 @@ public class ServerModelManager implements ServerModel
   @Override
   public void changeUserAvatar(byte[] avatarByte, int userId) {
     try {
-      File avatar = new File("E-Sharing/src/ESharing/Server/Resources/Avatars/avatar"+ userId + ".jpg");
+      File avatar = new File("E-Sharing/Resources/User"+ userId + "/avatar.jpg");
       FileOutputStream out = new FileOutputStream(avatar);
       out.write(avatarByte);
       out.close();
@@ -153,6 +153,11 @@ public class ServerModelManager implements ServerModel
   public void listeners()
   {
     System.out.println("LISTENERS USER ACTION:" + support.getPropertyChangeListeners().length);
+  }
+
+  @Override
+  public boolean addNewUserReport(int user_id) {
+    return userDAO.addNewUserReport(user_id);
   }
 
 }

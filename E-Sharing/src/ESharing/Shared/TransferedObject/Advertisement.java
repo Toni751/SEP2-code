@@ -21,6 +21,7 @@ public class Advertisement implements Serializable {
     private String description;
     private LocalDate creationDate;
     private boolean approved;
+    private int reportsNumber;
 
     public Advertisement(User owner, Map<String, byte[]> photos, String type, List<LocalDate> unavailability, double price, String title, String description) {
         this.owner = owner;
@@ -33,6 +34,7 @@ public class Advertisement implements Serializable {
         this.approved = false;
 
         serverPaths = new HashMap<>();
+
     }
 
     public int getAdvertisementID() {
@@ -90,6 +92,11 @@ public class Advertisement implements Serializable {
         return type;
     }
 
+    public void addNewReport()
+    {
+        reportsNumber++;
+    }
+
     public List<LocalDate> getUnavailability() {
         return unavailability;
     }
@@ -119,6 +126,7 @@ public class Advertisement implements Serializable {
         this.advertisementID = advertisementID;
     }
 
+
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
@@ -138,7 +146,15 @@ public class Advertisement implements Serializable {
         return approved;
     }
 
-    public void setImageByte(String id, byte[] imageByte) {
-        photos.put(id, imageByte);
+    public void setPhotos(Map<String, byte[]> photos) {
+        this.photos = photos;
+    }
+
+    public int getReportsNumber() {
+        return reportsNumber;
+    }
+
+    public void setReports(int reports) {
+        this.reportsNumber = reports;
     }
 }

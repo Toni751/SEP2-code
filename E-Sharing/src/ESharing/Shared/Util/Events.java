@@ -23,4 +23,5 @@ public enum Events
   NEW_APPROVED_AD,
   AD_REMOVED,
   AD_UPDATED,
+  FILTER_AD_LIST
 }

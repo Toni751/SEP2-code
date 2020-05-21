@@ -37,7 +37,7 @@
                </image>
             </ImageView>
             <JFXButton layoutY="200.0" onAction="#onManageUsersAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Users" />
-            <JFXButton layoutX="1.0" layoutY="300.0" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Advertisements" />
+            <JFXButton layoutX="1.0" layoutY="300.0" onAction="#onGoToAdvertisements" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Advertisements" />
             <JFXButton layoutX="1.0" layoutY="400.0" onAction="#onGoToChat" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Messages&#10;" />
             <JFXButton layoutY="100.0" onAction="#onDashboardAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Dashboard" />
             <Label prefHeight="63.0" prefWidth="200.0" styleClass="logo-label" text="E-SHARING" />

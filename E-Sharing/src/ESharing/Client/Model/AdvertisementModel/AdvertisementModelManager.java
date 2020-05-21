@@ -3,6 +3,7 @@ package ESharing.Client.Model.AdvertisementModel;
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
 
@@ -71,8 +72,33 @@ public class AdvertisementModelManager implements AdvertisementModel{
     }
 
     @Override
+    public boolean removeAdvertisement(Advertisement advertisement) {
+        return clientAdvertisement.removeAdvertisement(advertisement);
+    }
+
+    @Override
     public List<Advertisement> selectAllAdvertisements() {
         return clientAdvertisement.selectAllAdvertisement();
+    }
+
+    @Override
+    public boolean approveAdvertisement(Advertisement selectedAdvertisement) {
+        return clientAdvertisement.approveAdvertisement(selectedAdvertisement);
+    }
+
+    @Override
+    public boolean reportAdvertisement(int advertisementID) {
+        return clientAdvertisement.reportAdvertisement(advertisementID);
+    }
+
+    @Override
+    public List<CatalogueAd> getAllCatalogues() {
+        return clientAdvertisement.getAllCatalogues();
+    }
+
+    @Override
+    public Advertisement getAdvertisement(int advertisementID) {
+        return clientAdvertisement.getAdvertisement(advertisementID);
     }
 
     private byte[] convertImageFile(File image)

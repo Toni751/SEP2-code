@@ -23,6 +23,7 @@ public class User implements Serializable
   private int reportsNumber;
   private String creation_date;
   boolean administrator;
+  private String avatarServerPath;
   byte[] avatar;
 
 
@@ -200,6 +201,14 @@ public class User implements Serializable
   public void setAvatar(byte[] avatar)
   {
     this.avatar = avatar;
+  }
+
+  public String getAvatarServerPath() {
+    return avatarServerPath;
+  }
+
+  public void setAvatarServerPath(String avatarServerPath) {
+    this.avatarServerPath = avatarServerPath;
   }
 
   public Image getAvatar() {

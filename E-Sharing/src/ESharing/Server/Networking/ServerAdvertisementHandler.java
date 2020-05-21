@@ -41,9 +41,9 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   }
 
   @Override
-  public void approveAdvertisement(Advertisement ad)
+  public boolean approveAdvertisement(Advertisement ad)
   {
-    serverModel.approveAdvertisement(ad);
+    return serverModel.approveAdvertisement(ad);
   }
 
   @Override
@@ -124,18 +124,23 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   @Override
   public List<CatalogueAd> getAdvertisementsCatalogue()
   {
-    return null;
+    return serverModel.getAdvertisementsCatalogue();
   }
 
   @Override
   public Advertisement getAdvertisementById(int id)
   {
-    return null;
+    return serverModel.getAdvertisementById(id);
   }
 
   @Override
   public List<CatalogueAd> getAdvertisementsByUser(int user_id)
   {
     return null;
+  }
+
+  @Override
+  public boolean addNewAdvertisementReport(int advertisementID) {
+    return serverModel.addNewAdvertisementReport(advertisementID);
   }
 }

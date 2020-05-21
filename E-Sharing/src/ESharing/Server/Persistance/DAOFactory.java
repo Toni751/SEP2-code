@@ -24,8 +24,8 @@ public class DAOFactory
     addressDAO = new AddressDAOManager();
     administratorDAO = new AdministratorDAOManager();
     messageDAO = new MessageDAOManager(administratorDAO);
-    advertisementDAO = new AdvertisementDAOManager(userDAO);
     userDAO = new UserDAOManager(addressDAO, messageDAO);
+    advertisementDAO = new AdvertisementDAOManager(userDAO);
   }
 
   public AddressDAO getAddressDAO()

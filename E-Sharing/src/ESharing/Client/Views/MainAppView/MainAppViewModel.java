@@ -2,18 +2,26 @@ package ESharing.Client.Views.MainAppView;
 
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
+import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.AppModel.AppOverviewModel;
 import ESharing.Client.Model.ChatModel.ChatModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.PropertyChangeSubject;
+import ESharing.Shared.Util.Vehicles;
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class in a view model layer contains all functions which are used in the main system view.
@@ -26,28 +34,40 @@ public class MainAppViewModel implements PropertyChangeSubject {
     private BooleanProperty adRectangleVisibleProperty;
     private BooleanProperty messageRectangleVisibleProperty;
     private BooleanProperty settingRectangleVisibleProperty;
+    private BooleanProperty homeRectangleVisibleProperty;
     private StringProperty notificationProperty;
+    private StringProperty searchValueProperty;
+    private ObservableList<String> searchItemsProperty;
 
     private PropertyChangeSupport support;
+
+    private List<CatalogueAd> catalogueAds;
 
     private AdministratorActionsModel administratorActionsModel;
     private ChatModel chatModel;
     private UserActionsModel userActionsModel;
+    private AdvertisementModel advertisementModel;
     private AppOverviewModel model;
 
     /**
      * A constructor initializes model layer for a main system features and all fields
      */
     public MainAppViewModel() {
-        this.model = ModelFactory.getModelFactory().getAppOverviewModel();
-        this.chatModel = ModelFactory.getModelFactory().getChatModel();
-        this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
-        this.administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
+        model = ModelFactory.getModelFactory().getAppOverviewModel();
+        chatModel = ModelFactory.getModelFactory().getChatModel();
+        userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
+        administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
+        advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
 
         notificationProperty = new SimpleStringProperty();
         settingRectangleVisibleProperty = new SimpleBooleanProperty();
         adRectangleVisibleProperty = new SimpleBooleanProperty();
+        homeRectangleVisibleProperty = new SimpleBooleanProperty();
         messageRectangleVisibleProperty = new SimpleBooleanProperty();
+        searchValueProperty = new SimpleStringProperty();
+
+        catalogueAds = new ArrayList<>();
+        searchItemsProperty = FXCollections.observableArrayList();
 
         support = new PropertyChangeSupport(this);
 
@@ -61,12 +81,36 @@ public class MainAppViewModel implements PropertyChangeSubject {
      */
     public void resetRectanglesVisibleProperty()
     {
+        catalogueAds.addAll(advertisementModel.getAllCatalogues());
+
         messageRectangleVisibleProperty.setValue(false);
         adRectangleVisibleProperty.setValue(false);
         settingRectangleVisibleProperty.setValue(false);
+        homeRectangleVisibleProperty.setValue(false);
+
+        searchItemsProperty.clear();
+        for(int i = 0; i < Vehicles.values().length ; i++) {
+            searchItemsProperty.add(Vehicles.values()[i].toString());
+        }
 
         LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+        LoggedUser.getLoggedUser().selectAdvertisement(null);
     }
+
+   public List<CatalogueAd> getCatalogueAds()
+   {
+       catalogueAds.clear();
+       catalogueAds.addAll(advertisementModel.getAllCatalogues());
+       return catalogueAds;
+   }
+
+
+
+
+
+
+
+
 
     /**
      * Sets visible property of the setting rectangle object as true
@@ -93,6 +137,12 @@ public class MainAppViewModel implements PropertyChangeSubject {
     {
         resetRectanglesVisibleProperty();
         messageRectangleVisibleProperty.setValue(true);
+    }
+
+    public void setHomeRectangleSelected()
+    {
+        resetRectanglesVisibleProperty();
+        homeRectangleVisibleProperty.setValue(true);
     }
 
     /**
@@ -193,4 +243,34 @@ public class MainAppViewModel implements PropertyChangeSubject {
         support.removePropertyChangeListener(listener);
     }
 
+    public void selectAdvertisement(CatalogueAd catalogueAd) {
+        LoggedUser.getLoggedUser().selectAdvertisement(advertisementModel.getAdvertisement(catalogueAd.getAdvertisementID()));
+    }
+
+    public BooleanProperty getHomeRectangleVisibleProperty() {
+        return homeRectangleVisibleProperty;
+    }
+
+    public ObservableList<String> getSearchItemsProperty() {
+        return searchItemsProperty;
+    }
+
+    public StringProperty getSearchValueProperty() {
+        return searchValueProperty;
+    }
+
+    public void searchAdvertisements() {
+        System.out.println("search");
+        List<CatalogueAd> filteredAds = new ArrayList<>();
+
+        for(CatalogueAd catalogueAd : catalogueAds)
+        {
+            System.out.println(catalogueAd.getVehicleType());
+            if(catalogueAd.getVehicleType().equals(searchValueProperty.getValue())) {
+                filteredAds.add(catalogueAd);
+            }
+        }
+
+        support.firePropertyChange(Events.FILTER_AD_LIST.toString(), null, filteredAds);
+    }
 }

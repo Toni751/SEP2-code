@@ -5,6 +5,7 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.Util.AdImages;
+import ESharing.Shared.Util.Vehicles;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,12 +23,13 @@ import java.util.Map;
 public class CreateAdViewModel {
 
     private StringProperty titleProperty;
-    private StringProperty typeProperty;
     private StringProperty priceProperty;
     private StringProperty descriptionProperty;
     private StringProperty warningProperty;
+    private StringProperty typeValueProperty;
     private BooleanProperty warningVisibleProperty;
-    private ObjectProperty<String> typeItemsProperty;
+    private ObservableList<String> typeItemsProperty;
+    private StringProperty warningStyleProperty;
 
     private ObjectProperty<Image> mainImageProperty;
     private ObjectProperty<Image> subImage1Property;
@@ -47,19 +49,21 @@ public class CreateAdViewModel {
     public CreateAdViewModel()
     {
         titleProperty = new SimpleStringProperty();
-        typeProperty = new SimpleStringProperty();
         descriptionProperty = new SimpleStringProperty();
         priceProperty = new SimpleStringProperty();
         warningProperty = new SimpleStringProperty();
         warningVisibleProperty = new SimpleBooleanProperty();
-        typeItemsProperty = new SimpleObjectProperty<>();
+        dateProperty = new SimpleObjectProperty<>();
+        typeItemsProperty = new SimpleListProperty<>();
+        warningStyleProperty = new SimpleStringProperty();
+        typeValueProperty = new SimpleStringProperty();
 
         mainImageProperty = new SimpleObjectProperty<>();
         subImage1Property = new SimpleObjectProperty<>();
         subImage2Property = new SimpleObjectProperty<>();
         subImage3Property = new SimpleObjectProperty<>();
         subImage4Property = new SimpleObjectProperty<>();
-        dateProperty = new SimpleObjectProperty<>();
+        typeItemsProperty = FXCollections.observableArrayList();
 
         imageFiles = new HashMap<>();
         selectedDates = new ArrayList<>();
@@ -68,23 +72,21 @@ public class CreateAdViewModel {
         verificationModel = ModelFactory.getModelFactory().getVerificationModel();
     }
 
-    public ObjectProperty<Image> getMainImageProperty() {
-        return mainImageProperty;
-    }
-
     public void addAdvertisementRequest()
     {
-        String verification = verificationModel.verifyAdvertisement(titleProperty.get(), typeProperty.get(), descriptionProperty.get(),priceProperty.get(), imageFiles.size());
+        String verification = verificationModel.verifyAdvertisement(titleProperty.get(), typeValueProperty.get(), descriptionProperty.get(),priceProperty.get(), imageFiles.size());
 
         if(verification == null) {
             Map<String, byte[]> convertedImages = advertisementModel.convertedImages(imageFiles);
             double convertedPrice = Double.parseDouble(priceProperty.get());
-            advertisementModel.addNewAdvertisement(new Advertisement(LoggedUser.getLoggedUser().getUser(), convertedImages, typeProperty.get(), selectedDates, convertedPrice, titleProperty.get(), descriptionProperty.get()));
+            advertisementModel.addNewAdvertisement(new Advertisement(LoggedUser.getLoggedUser().getUser(), convertedImages, typeValueProperty.get(), selectedDates, convertedPrice, titleProperty.get(), descriptionProperty.get()));
+            warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
         }
         else{
             warningProperty.setValue(verification);
-            warningVisibleProperty.setValue(true);
+            warningStyleProperty.setValue("-fx-background-color: #DB5461; -fx-text-fill: white");
         }
+        warningVisibleProperty.setValue(true);
     }
 
     public void addImageFile(String imageId, File imageFile)
@@ -118,6 +120,29 @@ public class CreateAdViewModel {
             selectedDates.add(dateProperty.getValue());
     }
 
+    public void setDefaultView()
+    {
+        warningVisibleProperty.setValue(false);
+        descriptionProperty.setValue("");
+        titleProperty.setValue("");
+        typeValueProperty.setValue("");
+        priceProperty.setValue("");
+
+        mainImageProperty.setValue(defaultImage);
+        subImage1Property.setValue(defaultImage);
+        subImage2Property.setValue(defaultImage);
+        subImage3Property.setValue(defaultImage);
+        subImage4Property.setValue(defaultImage);
+
+        selectedDates = new ArrayList<>();
+        typeItemsProperty.clear();
+        for(int i = 0 ; i <Vehicles.values().length ; i++) {
+            typeItemsProperty.add(Vehicles.values()[i].toString());
+        }
+
+        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+    }
+
     public List<LocalDate> getSelectedDates()
     {
         return selectedDates;
@@ -127,16 +152,16 @@ public class CreateAdViewModel {
         return titleProperty;
     }
 
-    public StringProperty getTypeProperty() {
-        return typeProperty;
-    }
-
     public StringProperty getPriceProperty() {
         return priceProperty;
     }
 
     public StringProperty getDescriptionProperty() {
         return descriptionProperty;
+    }
+
+    public ObjectProperty<Image> getMainImageProperty() {
+        return mainImageProperty;
     }
 
     public ObjectProperty<Image> getSubImage1Property() {
@@ -167,26 +192,15 @@ public class CreateAdViewModel {
         return warningVisibleProperty;
     }
 
-    public void setDefaultView()
-    {
-        warningVisibleProperty.setValue(false);
-        descriptionProperty.setValue("");
-        titleProperty.setValue("");
-        typeProperty.setValue("");
-        priceProperty.setValue("");
-        selectedDates = new ArrayList<>();
-
-        mainImageProperty.setValue(defaultImage);
-        subImage1Property.setValue(defaultImage);
-        subImage2Property.setValue(defaultImage);
-        subImage3Property.setValue(defaultImage);
-        subImage4Property.setValue(defaultImage);
-        typeItemsProperty.setValue("car");
-
-        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+    public ObservableList<String> getTypeItemsProperty() {
+        return typeItemsProperty;
     }
 
-    public ObjectProperty<String> getTypeItemsProperty() {
-        return typeItemsProperty;
+    public StringProperty getTypeValueProperty() {
+        return typeValueProperty;
+    }
+
+    public StringProperty getWarningStyleProperty() {
+        return warningStyleProperty;
     }
 }

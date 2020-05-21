@@ -1,9 +1,12 @@
 package ESharing.Server.Persistance.advertisement;
 
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Server.Persistance.Database;
+import ESharing.Server.Persistance.address.AddressDAO;
 import ESharing.Server.Persistance.address.AddressDAOManager;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.TransferedObject.User;
@@ -146,11 +149,10 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     try (Connection connection = getConnection())
     {
       PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement;");
-      // + "AS ad INNER JOIN ad_picture as pic ON ad.advertisementID = pic.advertisementID INNER JOIN ad_unavailability AS unav ON pic.advertisementID = unav.advertisementID");
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next())
       {
-        int advertisementID = resultSet.getInt("advertisement_id");
+        int advertisementID = resultSet.getInt("id");
         List<LocalDate> unavailability = getUnavailabilityForAdvertisement(
             advertisementID);
         String title = resultSet.getString("title");
@@ -158,16 +160,16 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         User user = userDAO.readById(owner_id);
         String description = resultSet.getString("description");
         int price = resultSet.getInt("price");
+        int reports = resultSet.getInt("reports");
         boolean approved = resultSet.getBoolean("approved");
-        Date date_creation = resultSet.getDate(String.valueOf(Date.valueOf(LocalDate.now())));
-        String vehicle_type = resultSet.getString("type");
-        // int advertisement_id = resultSet.getInt("advertisement_id");
-        // String path = resultSet.getString("path");
-        // String picture_name =resultSet.getString("picture_name");
-        // int advertisementId = resultSet.getInt("advertisement_id");
-        // Date unavailable_date = resultSet.getDate(String.valueOf(Date.valueOf(LocalDate.now())));
+        Date date_creation = resultSet.getDate("date_creation");
+        String vehicle_type = resultSet.getString("vehicle_type");
          Advertisement advertisement = new Advertisement(user,null,vehicle_type,unavailability,price,title,description);
          advertisement.setAdvertisementID(advertisementID);
+         advertisement.setReports(reports);
+         advertisement.setCreationDate(date_creation.toLocalDate());
+         if(approved)
+           advertisement.setAdApproved();
          advertisement.setServerPath(getPicturesForAdvertisement(advertisementID));
          advertisements.add(advertisement);
 
@@ -185,7 +187,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
   {
     try (Connection connection = getConnection())
     {
-      PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE advertisement_id=?");
+      PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE id=?");
       statement.setBoolean(1,true);
       statement.setInt(2,advertisement.getAdvertisementID());
       statement.executeUpdate();
@@ -200,18 +202,136 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
   @Override
   public List<CatalogueAd> getAdvertisementsCatalogue()
   {
+    List<CatalogueAd> catalogueAds = new ArrayList<>();
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement WHERE approved = ?;");
+      statement.setBoolean(1, true);
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next())
+      {
+        int advertisementID = resultSet.getInt("id");
+        String title = resultSet.getString("title");
+        int price = resultSet.getInt("price");
+        String vehicle_type = resultSet.getString("vehicle_type");
+        String mainImageServerPath = null;
+
+        PreparedStatement mainImageStatement = connection.prepareStatement("SELECT * FROM ad_picture WHERE advertisement_id = ? AND picture_name = ?;");
+        mainImageStatement.setInt(1, advertisementID);
+        mainImageStatement.setString(2, AdImages.MAIN_IMAGE.toString());
+        ResultSet mainImageResult = mainImageStatement.executeQuery();
+        while (mainImageResult.next())
+        {
+          mainImageServerPath = mainImageResult.getString("path");
+        }
+        catalogueAds.add(new CatalogueAd(advertisementID, title, mainImageServerPath, price, vehicle_type));
+      }
+      System.out.println(catalogueAds);
+      return catalogueAds;
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
     return null;
   }
 
   @Override
   public Advertisement getAdvertisementById(int id)
   {
+    try(Connection connection = getConnection()){
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement WHERE id=?;");
+      statement.setInt(1, id);
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next())
+      {
+        String title = resultSet.getString("title");
+        String type = resultSet.getString("vehicle_type");
+        int price = resultSet.getInt("price");
+        String description = resultSet.getString("description");
+        LocalDate dateCreation = resultSet.getDate("date_creation").toLocalDate();
+        int reports = resultSet.getInt("reports");
+        int ownerID = resultSet.getInt("owner_id");
+
+        String username = null;
+        String phoneNumber = null;
+        String avatarpath = null;
+        int address_id = 0;
+
+        Map<String, String> pictures = getPicturesForAdvertisement(id);
+        ArrayList<LocalDate> unavailableDates = getUnavailabilityForAdvertisement(id);
+
+        PreparedStatement ownerStatement = connection.prepareStatement("SELECT * FROM user_account WHERE id=?;");
+        ownerStatement.setInt(1, ownerID);
+        ResultSet ownerResult = ownerStatement.executeQuery();
+        while (ownerResult.next())
+        {
+          username = ownerResult.getString("username");
+          phoneNumber = ownerResult.getString("phoneno");
+          avatarpath = ownerResult.getString("avatarpath");
+          address_id = ownerResult.getInt("address_id");
+        }
+        
+        String street = null;
+        String number = null;
+        
+        PreparedStatement addressStatement = connection.prepareStatement("SELECT * FROM address WHERE address_id=?;");
+        addressStatement.setInt(1, address_id);
+        ResultSet addressResult = addressStatement.executeQuery();
+        while (ownerResult.next())
+        {
+          street = addressResult.getString("street");
+          number = addressResult.getString("number");
+        }
+
+        Address ownerAddress = new Address(street, number);
+        User owner = new User(username, null, phoneNumber, ownerAddress);
+        owner.setAvatarServerPath(avatarpath);
+        Advertisement advertisement = new Advertisement(owner, null, type, unavailableDates, price, title,description);
+        advertisement.setServerPath(pictures);
+        advertisement.setAdvertisementID(id);
+        advertisement.setReports(reports);
+        advertisement.setCreationDate(dateCreation);
+
+
+        return advertisement;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
   @Override
   public List<CatalogueAd> getAdvertisementsByUser(int user_id) {
     return null;
+  }
+
+  @Override
+  public boolean addNewAdvertisementReport(int advertisementID) {
+    try (Connection connection = getConnection())
+    {
+
+      PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement WHERE id=?;");
+      statement.setInt(1, advertisementID);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next())
+      {
+        int reports = resultSet.getInt("reports");
+        reports++;
+        PreparedStatement updateStatement = connection.prepareStatement("UPDATE advertisement SET reports =? WHERE id =?;");
+        updateStatement.setInt(1, reports);
+        updateStatement.setInt(2, advertisementID);
+
+        if(updateStatement.executeUpdate() == 1)
+          return true;
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)

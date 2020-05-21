@@ -2,9 +2,7 @@ package ESharing.Client.Networking.user;
 
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
-import javafx.scene.image.Image;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -55,4 +53,6 @@ public interface Client extends PropertyChangeSubject
   void logout();
 
    void changeAvatar(byte[] avatarImage);
+
+    boolean addNewUserReport(int user_id);
 }

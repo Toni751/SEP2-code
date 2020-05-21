@@ -126,4 +126,9 @@ public class ServerHandler implements RMIServer
   public void changeUserAvatar(byte[] avatarImage, int userId){
     serverModel.changeUserAvatar(avatarImage, userId);
   }
+
+  @Override
+  public boolean addNewUserReport(int user_id){
+    return serverModel.addNewUserReport(user_id);
+  }
 }

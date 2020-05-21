@@ -56,7 +56,7 @@ public class UserDAOManager extends Database implements UserDAO
     {
       System.out.println("Connection established");
       PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO user_account (username,password,phoneno,address_id, creation_date) VALUES (?,?,?,?,?) ON CONFLICT ON CONSTRAINT unique_username DO NOTHING; ");
+          "INSERT INTO user_account (username,password,phoneno,address_id, creation_date) VALUES (?,?,?,?,?) ON CONFLICT ON CONSTRAINT unique_username DO NOTHING ; ");
       statement.setString(1, user.getUsername());
       statement.setString(2, user.getPassword());
       statement.setString(3, user.getPhoneNumber());

@@ -1,19 +1,21 @@
-package ESharing.Client.Model.ReservationModel;
+package ESharing.Server.Model.reservation;
 
 import ESharing.Shared.TransferedObject.Reservation;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.time.LocalDate;
 import java.util.List;
 
-public class ReservationModelManager implements ReservationModel{
+public class ServerReservationModelManager implements ServerReservationModel{
 
     private PropertyChangeSupport support;
 
-    public ReservationModelManager() {
+
+    public ServerReservationModelManager(){
         support = new PropertyChangeSupport(this);
     }
+
+
 
     @Override
     public boolean makeNewReservation(Reservation reservation) {

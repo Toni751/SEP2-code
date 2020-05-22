@@ -9,6 +9,7 @@ import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
@@ -29,6 +30,7 @@ public class AdvertisementViewModel {
     private StringProperty warningProperty;
     private StringProperty warningStyleProperty;
     private StringProperty ownerUsernameProperty;
+    private DoubleProperty ratingProperty;
     private ObjectProperty<Paint> avatarCircleProperty;
     private BooleanProperty warningVisibleProperty;
     private BooleanProperty removeVisibleProperty;
@@ -57,6 +59,7 @@ public class AdvertisementViewModel {
         dateProperty = new SimpleObjectProperty<>();
         typeProperty = new SimpleStringProperty();
         warningProperty = new SimpleStringProperty();
+        ratingProperty = new SimpleDoubleProperty();
         ownerUsernameProperty = new SimpleStringProperty();
         warningStyleProperty = new SimpleStringProperty();
         warningVisibleProperty = new SimpleBooleanProperty();
@@ -104,6 +107,7 @@ public class AdvertisementViewModel {
         }
 
         dateProperty.setValue(null);
+        ratingProperty.setValue(3); //Load average rating from database
         selectedDates.clear();
     }
 
@@ -158,6 +162,21 @@ public class AdvertisementViewModel {
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
             warningVisibleProperty.setValue(true);
         }
+    }
+
+    public void sendRatingRequest() {
+        System.out.println(ratingProperty.get());
+        //send a request with the rating to database
+        //if result is true ; disabled rating component
+    }
+
+    public void clearRatingsProperty() {
+        ratingProperty.setValue(0);
+    }
+
+    public void setDefaultRatingsProperty() {
+        ratingProperty.setValue(3);
+        //Load default ratings average from database
     }
 
     public List<LocalDate> getSelectedDates() {
@@ -236,4 +255,7 @@ public class AdvertisementViewModel {
         return reserveVisibleProperty;
     }
 
+    public DoubleProperty getRatingProperty() {
+        return ratingProperty;
+    }
 }

@@ -1,17 +1,18 @@
-package ESharing.Client.Model.ReservationModel;
+package ESharing.Client.Networking.reservation;
 
+import ESharing.Shared.Networking.reservation.RMIReservationClient;
 import ESharing.Shared.TransferedObject.Reservation;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.time.LocalDate;
+import java.rmi.RemoteException;
 import java.util.List;
 
-public class ReservationModelManager implements ReservationModel{
+public class ReservationClientHandler implements ReservationClient, RMIReservationClient {
 
     private PropertyChangeSupport support;
 
-    public ReservationModelManager() {
+    public ReservationClientHandler() {
         support = new PropertyChangeSupport(this);
     }
 
@@ -33,6 +34,16 @@ public class ReservationModelManager implements ReservationModel{
     @Override
     public List<Reservation> getReservationForAdvertisement(int advertisementID) {
         return null;
+    }
+
+    @Override
+    public void newReservationCreated(Reservation reservation) throws RemoteException {
+
+    }
+
+    @Override
+    public void reservationRemoved(int advertisementID, int userID) throws RemoteException {
+
     }
 
     @Override
@@ -60,8 +71,7 @@ public class ReservationModelManager implements ReservationModel{
     }
 
     @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
 }

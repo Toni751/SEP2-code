@@ -9,27 +9,22 @@ import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 import javafx.util.Callback;
+import org.controlsfx.control.Rating;
 
 import java.time.LocalDate;
 
 public class AdvertisementViewController extends ViewController {
 
     @FXML private ImageView adminBackArrow;
+    @FXML private Rating ratings;
     @FXML private JFXButton removeButton;
     @FXML private JFXButton reserveButton;
     @FXML private ImageView mainImageView;
@@ -70,6 +65,7 @@ public class AdvertisementViewController extends ViewController {
         avatarCircle.fillProperty().bindBidirectional(advertisementViewModel.getAvatarCircleProperty());
         removeButton.visibleProperty().bindBidirectional(advertisementViewModel.getRemoveVisibleProperty());
         reserveButton.visibleProperty().bindBidirectional(advertisementViewModel.getReserveVisibleProperty());
+        ratings.ratingProperty().bindBidirectional(advertisementViewModel.getRatingProperty());
 
         datePicker.dayCellFactoryProperty().bindBidirectional(advertisementViewModel.getCellFactoryProperty());
 
@@ -154,6 +150,18 @@ public class AdvertisementViewController extends ViewController {
             viewHandler.openAdminMainView();
         else
             viewHandler.openMainAppView();
+    }
+
+    public void sendRatings() {
+        advertisementViewModel.sendRatingRequest();
+    }
+
+    public void clearRatings() {
+        advertisementViewModel.clearRatingsProperty();
+    }
+
+    public void fillRatings() {
+        advertisementViewModel.setDefaultRatingsProperty();
     }
 
     public void onReportAdvertisement() {

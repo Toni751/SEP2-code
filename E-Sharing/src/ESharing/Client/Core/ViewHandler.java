@@ -3,7 +3,6 @@ package ESharing.Client.Core;
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
 import ESharing.Shared.Util.Views;
-import com.sun.glass.ui.View;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;

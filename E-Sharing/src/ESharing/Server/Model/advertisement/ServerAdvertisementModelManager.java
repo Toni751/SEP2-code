@@ -7,7 +7,6 @@ import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
-import com.sun.javafx.reflect.FieldUtil;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;

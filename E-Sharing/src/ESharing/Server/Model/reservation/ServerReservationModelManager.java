@@ -1,14 +1,18 @@
 package ESharing.Server.Model.reservation;
 
+import ESharing.Server.Persistance.reservation.ReservationDAO;
 import ESharing.Shared.TransferedObject.Reservation;
+import ESharing.Shared.Util.Events;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.util.List;
 
 public class ServerReservationModelManager implements ServerReservationModel{
 
     private PropertyChangeSupport support;
+    private ReservationDAO reservationDAO;
 
 
     public ServerReservationModelManager(){
@@ -19,22 +23,34 @@ public class ServerReservationModelManager implements ServerReservationModel{
 
     @Override
     public boolean makeNewReservation(Reservation reservation) {
+        int result = reservationDAO.makeNewReservation(reservation);
+        if(result != -1) {
+            reservationDAO.makeNewReservation(reservation);
+            support.firePropertyChange(Events.NEW_RESERVATION_CREATED.toString(), null, reservationDAO);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean removeReservation(int advertisementID, int userID) {
+        int result = reservationDAO.removeReservation(advertisementID, userID);
+        if(result != -1) {
+            reservationDAO.removeReservation(advertisementID, userID);
+            support.firePropertyChange(Events.RESERVATION_REMOVED.toString(), null, reservationDAO);
+            return true;
+        }
         return false;
     }
 
     @Override
     public List<Reservation> getUserReservations(int userID) {
-        return null;
+        return reservationDAO.getUserReservations(userID);
     }
 
     @Override
     public List<Reservation> getReservationForAdvertisement(int advertisementID) {
-        return null;
+        return reservationDAO.getReservationForAdvertisement(advertisementID);
     }
 
     @Override

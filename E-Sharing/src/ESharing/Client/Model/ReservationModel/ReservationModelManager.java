@@ -1,5 +1,6 @@
 package ESharing.Client.Model.ReservationModel;
 
+import ESharing.Client.Networking.reservation.ReservationClient;
 import ESharing.Shared.TransferedObject.Reservation;
 
 import java.beans.PropertyChangeListener;
@@ -9,6 +10,7 @@ import java.util.List;
 
 public class ReservationModelManager implements ReservationModel{
 
+    private ReservationClient reservationClient;
     private PropertyChangeSupport support;
 
     public ReservationModelManager() {
@@ -17,22 +19,22 @@ public class ReservationModelManager implements ReservationModel{
 
     @Override
     public boolean makeNewReservation(Reservation reservation) {
-        return false;
+        return reservationClient.makeNewReservation(reservation);
     }
 
     @Override
     public boolean removeReservation(int advertisementID, int userID) {
-        return false;
+        return reservationClient.removeReservation(advertisementID, userID);
     }
 
     @Override
     public List<Reservation> getUserReservations(int userID) {
-        return null;
+        return reservationClient.getUserReservations(userID);
     }
 
     @Override
     public List<Reservation> getReservationForAdvertisement(int advertisementID) {
-        return null;
+        return reservationClient.getReservationForAdvertisement(advertisementID);
     }
 
     @Override

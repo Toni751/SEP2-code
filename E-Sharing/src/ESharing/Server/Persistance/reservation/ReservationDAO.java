@@ -5,8 +5,8 @@ import java.util.List;
 
 public interface ReservationDAO {
 
-    boolean makeNewReservation(Reservation reservation);
-    boolean removeReservation(int advertisementID, int userID);
+    int  makeNewReservation(Reservation reservation);
+    int removeReservation(int advertisementID, int userID);
     List<Reservation> getUserReservations(int userID);
     List<Reservation> getReservationForAdvertisement(int advertisementID);
 }

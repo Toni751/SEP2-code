@@ -215,6 +215,12 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
+    public void openReservationView(Pane existingPane)
+    {
+        viewController = ViewControllerFactory.getViewController(Views.RESERVATION_VIEW);
+        showView(viewController, existingPane);
+    }
+
     public void openPicturePreview(Image image)
     {
         Stage previewStage = new Stage();
@@ -261,7 +267,6 @@ public class ViewHandler {
                 existingPane.getChildren().setAll(controller.getRoot());
             }
         });
-
     }
 
     /**

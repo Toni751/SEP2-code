@@ -7,8 +7,11 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public interface ReservationClient extends PropertyChangeSubject {
+
+    void initializeConnection();
     boolean makeNewReservation(Reservation reservation);
     boolean removeReservation(int advertisementID, int userID);
     List<Reservation> getUserReservations(int userID);
     List<Reservation> getReservationForAdvertisement(int advertisementID);
+    void registerForCallback();
 }

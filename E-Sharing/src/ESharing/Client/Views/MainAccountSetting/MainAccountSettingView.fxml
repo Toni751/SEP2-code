@@ -34,6 +34,7 @@
                </styleClass>
             </Label>
             <JFXButton alignment="TOP_LEFT" layoutX="1.0" layoutY="219.0" onAction="#loadAdvertisementsPane" prefHeight="25.0" prefWidth="150.0" style="-fx-cursor: hand;" styleClass="gray-label" text="📝 Advertisements" textFill="#a2b2be" />
+            <JFXButton alignment="TOP_LEFT" layoutX="1.0" layoutY="250.0" onAction="#loadReservationPane" prefHeight="25.0" prefWidth="150.0" style="-fx-cursor: hand;" styleClass="gray-label" text="📄 Reservations" textFill="#a2b2be" />
          </children>
       </Pane>
       <Pane fx:id="userSettingPane" layoutX="150.0" prefHeight="500.0" prefWidth="600.0" styleClass="cream-background" />

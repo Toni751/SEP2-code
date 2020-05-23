@@ -8,20 +8,6 @@ import java.sql.*;
 public class AddressDAOManager extends Database implements AddressDAO
 {
 
-  private static AddressDAOManager instance;
-  // We need to create a unique constraint for the address
-  // ALTER TABLE address ADD CONSTRAINT unique_address UNIQUE (street, number);
-
-//  public static synchronized AddressDAOManager getInstance()
-//  {
-//
-//    if (instance == null)
-//    {
-//      instance = new AddressDAOManager();
-//    }
-//    return instance;
-//  }
-
   public Connection getConnection() throws SQLException {
     return super.getConnection();
   }

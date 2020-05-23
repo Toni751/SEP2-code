@@ -16,18 +16,11 @@ import java.util.List;
 
 public class AdministratorDAOManager extends Database implements AdministratorDAO {
 
-    private static AdministratorDAOManager instance;
-
     public Connection getConnection() throws SQLException
     {
         return super.getConnection();
     }
 
-//    public static synchronized AdministratorDAOManager getInstance() {
-//        if(instance == null)
-//            instance = new AdministratorDAOManager();
-//        return instance;
-//    }
 
     @Override
     public List<User> getAllUsers() {

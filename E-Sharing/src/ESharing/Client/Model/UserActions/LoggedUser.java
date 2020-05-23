@@ -15,6 +15,7 @@ import java.util.List;
 public class LoggedUser {
 
     private User user;
+    private User selectedUser;
     private static LoggedUser loggedUser;
     private List<Message> currentOpenConversation = new ArrayList<>();
     private Advertisement selectedAdvertisement;
@@ -71,5 +72,13 @@ public class LoggedUser {
 
     public List<Message> getCurrentOpenConversation() {
         return currentOpenConversation;
+    }
+
+    public User getSelectedUser() {
+        return selectedUser;
+    }
+
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
     }
 }

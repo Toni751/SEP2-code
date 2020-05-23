@@ -63,7 +63,7 @@ public class MainAppViewController extends ViewController {
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
 
-        if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null)
+        if(LoggedUser.getLoggedUser().getSelectedUser() != null)
             viewHandler.openChatView(contentPane);
 
         mainAppViewModel.resetRectanglesVisibleProperty();

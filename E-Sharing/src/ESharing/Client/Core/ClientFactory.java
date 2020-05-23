@@ -4,6 +4,8 @@ import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Client.Networking.advertisement.ClientAdvertisementManager;
 import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.chat.ClientChatHandler;
+import ESharing.Client.Networking.reservation.ReservationClient;
+import ESharing.Client.Networking.reservation.ReservationClientHandler;
 import ESharing.Client.Networking.user.Client;
 import ESharing.Client.Networking.user.ClientHandler;
 
@@ -16,6 +18,7 @@ public class ClientFactory {
     private Client client;
     private ClientChat chatClient;
     private ClientAdvertisement clientAdvertisement;
+    private ReservationClient reservationClient;
     private static ClientFactory clientFactory;
 
     /**
@@ -54,5 +57,11 @@ public class ClientFactory {
         if(clientAdvertisement == null)
             clientAdvertisement = new ClientAdvertisementManager();
         return clientAdvertisement;
+    }
+
+    public ReservationClient getReservationClient() {
+        if(reservationClient == null)
+            reservationClient = new ReservationClientHandler();
+        return reservationClient;
     }
 }

@@ -3,6 +3,7 @@ package ESharing.Client.Views.UserView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
+import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
@@ -21,6 +22,7 @@ public class UserViewModel {
     private StringProperty streetProperty;
     private ObjectProperty<Paint> avatarFillProperty;
 
+    private User selectedUser;
     private UserActionsModel userActionsModel;
 
     public UserViewModel()
@@ -39,17 +41,19 @@ public class UserViewModel {
 
     public void setDefaultView()
     {
-        avatarFillProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getAvatar()));
-        usernameProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUsername());
-        phoneProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getPhoneNumber());
-        numberProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getAddress().getNumber());
-        streetProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getAddress().getStreet());
+        selectedUser = LoggedUser.getLoggedUser().getSelectedUser();
+
+        avatarFillProperty.setValue(new ImagePattern(selectedUser.getAvatar()));
+        usernameProperty.set(selectedUser.getUsername());
+        phoneProperty.set(selectedUser.getPhoneNumber());
+        numberProperty.set(selectedUser.getAddress().getNumber());
+        streetProperty.set(selectedUser.getAddress().getStreet());
 
         warningVisibleProperty.set(false);
     }
 
     public void reportUser() {
-        if(userActionsModel.addNewUserReport(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id()))
+        if(userActionsModel.addNewUserReport(selectedUser.getUser_id()))
         {
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");

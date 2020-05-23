@@ -77,6 +77,7 @@ public class AdvertisementViewController extends ViewController {
 
         dataPickerEvent();
         initializeDatePicker();
+
     }
 
 
@@ -109,7 +110,7 @@ public class AdvertisementViewController extends ViewController {
                         super.updateItem(item, empty);
                         System.out.println(LoggedUser.getLoggedUser().getSelectedAdvertisement());
                         boolean alreadySelected = advertisementViewModel.getSelectedDates().contains(item);
-                        boolean loadedUnavailability = LoggedUser.getLoggedUser().getSelectedAdvertisement().getUnavailability().contains(item);
+                        boolean loadedUnavailability = advertisementViewModel.getUnavailableDates().contains(item);
                         if(loadedUnavailability) {
                             setStyle("-fx-background-color: #DB5461;");
                             setDisable(true);
@@ -148,8 +149,10 @@ public class AdvertisementViewController extends ViewController {
         LoggedUser.getLoggedUser().selectAdvertisement(null);
         if(LoggedUser.getLoggedUser().getUser().isAdministrator())
             viewHandler.openAdminMainView();
-        else
+        else {
+            LoggedUser.getLoggedUser().setSelectedUser(null);
             viewHandler.openMainAppView();
+        }
     }
 
     public void sendRatings() {

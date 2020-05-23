@@ -2,18 +2,21 @@ package ESharing.Server.Networking;
 
 import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Server.Model.reservation.ServerReservationModel;
+import ESharing.Shared.Networking.reservation.RMIReservationClient;
 import ESharing.Shared.Networking.reservation.RMIReservationServer;
 import ESharing.Shared.TransferedObject.Reservation;
+import ESharing.Shared.Util.Events;
 
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerReservationHandler implements RMIReservationServer {
 
     private ServerReservationModel serverModel;
-    private PropertyChangeListener listenToNewReservation;
     private PropertyChangeListener listenToAddedReservation;
     private PropertyChangeListener listenToDeletedReservation;
 
@@ -31,22 +34,50 @@ public class ServerReservationHandler implements RMIReservationServer {
     }
 
     @Override
-    public boolean makeNewReservation(Reservation reservation) throws RemoteException {
+    public boolean makeNewReservation(Reservation reservation){
         return serverModel.makeNewReservation(reservation);
     }
 
     @Override
-    public boolean removeReservation(int advertisementID, int userID) throws RemoteException {
+    public boolean removeReservation(int advertisementID, int userID){
         return serverModel.removeReservation(advertisementID, userID);
     }
 
     @Override
-    public List<Reservation> getUserReservations(int userID) throws RemoteException {
+    public List<Reservation> getUserReservations(int userID){
         return serverModel.getUserReservations(userID);
     }
 
     @Override
-    public List<Reservation> getReservationForAdvertisement(int advertisementID) throws RemoteException {
+    public List<Reservation> getReservationForAdvertisement(int advertisementID){
         return serverModel.getReservationForAdvertisement(advertisementID);
+    }
+
+    @Override
+    public void registerCallback(RMIReservationClient reservationClient) {
+        listenToAddedReservation = evt -> {
+            try {
+                reservationClient.newReservationCreated((Reservation) evt.getNewValue());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        };
+
+        listenToDeletedReservation = evt -> {
+            try {
+                reservationClient.reservationRemoved((int[])evt.getOldValue(), (List<LocalDate>) evt.getNewValue());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
+        };
+
+        serverModel.addPropertyChangeListener(Events.NEW_RESERVATION_CREATED.toString(), listenToAddedReservation);
+        serverModel.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), listenToDeletedReservation);
+    }
+
+    @Override
+    public void unRegisterCallback() {
+        serverModel.removePropertyChangeListener(Events.NEW_RESERVATION_CREATED.toString(), listenToAddedReservation);
+        serverModel.removePropertyChangeListener(Events.RESERVATION_REMOVED.toString(), listenToDeletedReservation);
     }
 }

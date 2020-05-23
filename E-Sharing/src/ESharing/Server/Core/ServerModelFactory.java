@@ -4,6 +4,8 @@ import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Server.Model.advertisement.ServerAdvertisementModelManager;
 import ESharing.Server.Model.chat.ServerChatModel;
 import ESharing.Server.Model.chat.ServerChatModelManager;
+import ESharing.Server.Model.reservation.ServerReservationModel;
+import ESharing.Server.Model.reservation.ServerReservationModelManager;
 import ESharing.Server.Model.user.ServerModel;
 import ESharing.Server.Model.user.ServerModelManager;
 import ESharing.Server.Persistance.DAOFactory;
@@ -13,6 +15,7 @@ public class ServerModelFactory
     private ServerChatModel chatModel;
     private ServerModel serverModel;
     private ServerAdvertisementModel serverAdvertisementModel;
+    private ServerReservationModel serverReservationModel;
     private DAOFactory daoFactory;
 
     public ServerModelFactory(DAOFactory daoFactory)
@@ -46,5 +49,11 @@ public class ServerModelFactory
         if (serverAdvertisementModel == null)
             serverAdvertisementModel = new ServerAdvertisementModelManager(daoFactory.getAdvertisementDAO());
         return serverAdvertisementModel;
+    }
+
+    public ServerReservationModel getServerReservationModel() {
+        if (serverReservationModel == null)
+            serverReservationModel = new ServerReservationModelManager(daoFactory.getReservationDAO());
+        return serverReservationModel;
     }
 }

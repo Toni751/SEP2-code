@@ -1,8 +1,11 @@
 package ESharing.Client.Model.ReservationModel;
 
+import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.reservation.ReservationClient;
 import ESharing.Shared.TransferedObject.Reservation;
+import ESharing.Shared.Util.Events;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDate;
@@ -14,7 +17,11 @@ public class ReservationModelManager implements ReservationModel{
     private PropertyChangeSupport support;
 
     public ReservationModelManager() {
+        reservationClient = ClientFactory.getClientFactory().getReservationClient();
         support = new PropertyChangeSupport(this);
+
+        reservationClient.addPropertyChangeListener(Events.NEW_RESERVATION_CREATED.toString(), this::newReservationCreated);
+        reservationClient.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), this::reservationRemoved);
     }
 
     @Override
@@ -65,5 +72,13 @@ public class ReservationModelManager implements ReservationModel{
     public void removePropertyChangeListener(PropertyChangeListener listener)
     {
         support.removePropertyChangeListener(listener);
+    }
+
+    private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    private void newReservationCreated(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
 }

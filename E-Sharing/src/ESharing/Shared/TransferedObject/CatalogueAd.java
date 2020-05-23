@@ -14,6 +14,7 @@ public class CatalogueAd implements Serializable
   private String mainImageServerPath;
   private String vehicleType;
   private int advertisementID;
+  private List<Reservation> reservations;
 
   public CatalogueAd(int advertisementID, String title, String mainImageServerPath, double price, String vehicleType)
   {
@@ -52,6 +53,14 @@ public class CatalogueAd implements Serializable
   {
     Image main = new Image(new ByteArrayInputStream(this.mainImage));
     return main;
+  }
+
+  public void setReservations(List<Reservation> reservations) {
+    this.reservations = reservations;
+  }
+
+  public List<Reservation> getReservations() {
+    return reservations;
   }
 
   public String getMainImageServerPath() {

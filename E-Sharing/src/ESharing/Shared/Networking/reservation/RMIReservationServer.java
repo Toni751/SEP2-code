@@ -11,4 +11,7 @@ public interface RMIReservationServer extends Remote {
     boolean removeReservation(int advertisementID, int userID) throws RemoteException;
     List<Reservation> getUserReservations(int userID) throws RemoteException;
     List<Reservation> getReservationForAdvertisement(int advertisementID) throws RemoteException;
+
+    void registerCallback(RMIReservationClient reservationClient) throws RemoteException;
+    void unRegisterCallback() throws RemoteException;
 }

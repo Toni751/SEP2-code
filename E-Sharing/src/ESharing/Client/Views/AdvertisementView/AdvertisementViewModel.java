@@ -5,11 +5,15 @@ import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.ReservationModel.ReservationModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.Reservation;
 import ESharing.Shared.Util.AdImages;
+import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
@@ -17,6 +21,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
+import java.beans.EventSetDescriptor;
+import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +50,7 @@ public class AdvertisementViewModel {
     private ObjectProperty<Image> sub4ImageProperty;
 
     private List<LocalDate> selectedDates;
+    private ObservableList<LocalDate> unavailableDates;
 
     private ReservationModel reservationModel;
     private AdvertisementModel advertisementModel;
@@ -74,10 +81,17 @@ public class AdvertisementViewModel {
         sub4ImageProperty = new SimpleObjectProperty<>();
 
         selectedDates = new ArrayList<>();
+        unavailableDates = FXCollections.observableArrayList();
+
+        reservationModel.addPropertyChangeListener(Events.NEW_RESERVATION_CREATED.toString(), this::newReservationAppear);
+        reservationModel.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), this::reservationRemoved);
     }
 
     public void loadDefaultView()
     {
+        unavailableDates.clear();
+        unavailableDates.setAll(LoggedUser.getLoggedUser().getSelectedAdvertisement().getUnavailability());
+
         titleProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getTitle());
         typeProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getType());
         priceProperty.set(String.valueOf(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPrice()));
@@ -119,9 +133,11 @@ public class AdvertisementViewModel {
 
     public void sendReservationRequest()
     {
+        Advertisement selectedAdvertisement = LoggedUser.getLoggedUser().getSelectedAdvertisement();
+        Reservation newReservation = new Reservation(selectedAdvertisement.getAdvertisementID(), selectedAdvertisement.getTitle(), selectedAdvertisement.getOwner().getUsername(), LoggedUser.getLoggedUser().getUser(), selectedAdvertisement.getPrice(), selectedDates);
         boolean requestResult = false;
         if(!selectedDates.isEmpty())
-            requestResult = reservationModel.sendReservationRequest(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID(), selectedDates);
+            requestResult = reservationModel.makeNewReservation(newReservation);
         if(requestResult){
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
             warningStyleProperty.setValue("-fx-background-color: #4CDBC4; -fx-text-fill: black");
@@ -177,6 +193,10 @@ public class AdvertisementViewModel {
     public void setDefaultRatingsProperty() {
         ratingProperty.setValue(3);
         //Load default ratings average from database
+    }
+
+    public ObservableList<LocalDate> getUnavailableDates() {
+        return unavailableDates;
     }
 
     public List<LocalDate> getSelectedDates() {
@@ -257,5 +277,25 @@ public class AdvertisementViewModel {
 
     public DoubleProperty getRatingProperty() {
         return ratingProperty;
+    }
+
+    private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int[] idArray = (int[]) propertyChangeEvent.getOldValue();
+        List<LocalDate> removedDays = (List<LocalDate>) propertyChangeEvent.getNewValue();
+
+        int advertisementID = idArray[0];
+
+        if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null && advertisementID == LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID()){
+            unavailableDates.removeAll(removedDays);
+        }
+
+        System.out.println("event removed");
+    }
+
+    private void newReservationAppear(PropertyChangeEvent propertyChangeEvent) {
+        Reservation reservation = (Reservation) propertyChangeEvent.getNewValue();
+        if(LoggedUser.getLoggedUser().getSelectedAdvertisement()!= null && reservation.getAdvertisementID() == LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID()){
+            unavailableDates.addAll(reservation.getReservationDays());
+        }
     }
 }

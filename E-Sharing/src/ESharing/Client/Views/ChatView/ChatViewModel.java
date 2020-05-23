@@ -142,7 +142,7 @@ public class ChatViewModel implements PropertyChangeSubject {
                 receiverProperty.setValue(receiver.getUsername());
             else
                 receiverProperty.setValue(sender.getUsername());
-        System.out.println(LoggedUser.getLoggedUser().getCurrentOpenConversation().size());
+        LoggedUser.getLoggedUser().setSelectedUser(null);
     }
 
     public StringProperty getMessageProperty() {

@@ -4,6 +4,7 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Server.Persistance.Database;
 import ESharing.Server.Persistance.address.AddressDAO;
 import ESharing.Server.Persistance.address.AddressDAOManager;
+import ESharing.Server.Persistance.reservation.ReservationDAO;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
 import ESharing.Shared.TransferedObject.*;
@@ -19,20 +20,13 @@ import java.util.Map;
 public class AdvertisementDAOManager extends Database implements AdvertisementDAO
 {
 
-  private static AdvertisementDAOManager instance;
   private UserDAO userDAO;
+  private ReservationDAO reservationDAO;
 
-  public AdvertisementDAOManager(UserDAO userDAO)
+  public AdvertisementDAOManager(UserDAO userDAO, ReservationDAO reservationDAO)
   {
-    try
-    {
-      DriverManager.registerDriver(new org.postgresql.Driver());
       this.userDAO = userDAO;
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
+      this.reservationDAO = reservationDAO;
   }
 
   //  public static synchronized AdvertisementDAOManager getInstance()
@@ -462,12 +456,11 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         Map<String, String> map = getPicturesForAdvertisement(advertisementID);
         String mainImageServerPath = map.get(AdImages.MAIN_IMAGE.toString());
 
-        catalogueAdUser.add(
-            new CatalogueAd(advertisementID, title, mainImageServerPath, price,
-                type));
-      }
+        CatalogueAd catalogueAd = new CatalogueAd(advertisementID, title, mainImageServerPath, price, type);
+        catalogueAd.setReservations(reservationDAO.getReservationForAdvertisement(advertisementID));
 
-      System.out.println(catalogueAdUser);
+        catalogueAdUser.add(catalogueAd);
+      }
       return catalogueAdUser;
     }
 

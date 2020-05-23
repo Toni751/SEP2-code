@@ -7,6 +7,7 @@ import ESharing.Shared.Util.Events;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ServerReservationModelManager implements ServerReservationModel{
@@ -15,18 +16,19 @@ public class ServerReservationModelManager implements ServerReservationModel{
     private ReservationDAO reservationDAO;
 
 
-    public ServerReservationModelManager(){
+    public ServerReservationModelManager(ReservationDAO reservationDAO){
+        this.reservationDAO = reservationDAO;
+
         support = new PropertyChangeSupport(this);
+
     }
 
 
 
     @Override
     public boolean makeNewReservation(Reservation reservation) {
-        int result = reservationDAO.makeNewReservation(reservation);
-        if(result != -1) {
-            reservationDAO.makeNewReservation(reservation);
-            support.firePropertyChange(Events.NEW_RESERVATION_CREATED.toString(), null, reservationDAO);
+        if(reservationDAO.makeNewReservation(reservation)) {
+            support.firePropertyChange(Events.NEW_RESERVATION_CREATED.toString(), null, reservation);
             return true;
         }
         return false;
@@ -34,10 +36,10 @@ public class ServerReservationModelManager implements ServerReservationModel{
 
     @Override
     public boolean removeReservation(int advertisementID, int userID) {
-        int result = reservationDAO.removeReservation(advertisementID, userID);
-        if(result != -1) {
-            reservationDAO.removeReservation(advertisementID, userID);
-            support.firePropertyChange(Events.RESERVATION_REMOVED.toString(), null, reservationDAO);
+        List<LocalDate> removedReservationDays = reservationDAO.getUserReservation(advertisementID, userID);
+        if(removedReservationDays != null & reservationDAO.removeReservation(advertisementID, userID)) {
+            int[] idArray = {advertisementID, userID};
+            support.firePropertyChange(Events.RESERVATION_REMOVED.toString(), idArray, removedReservationDays);
             return true;
         }
         return false;

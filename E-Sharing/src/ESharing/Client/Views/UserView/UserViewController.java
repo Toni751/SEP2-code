@@ -21,7 +21,6 @@ public class UserViewController extends ViewController {
     @FXML private Label phoneLabel;
     @FXML private Label numberLabel;
     @FXML private Label streetLabel;
-    @FXML private AnchorPane mainPane;
 
     private UserViewModel userViewModel;
     private ViewHandler viewHandler;
@@ -40,6 +39,8 @@ public class UserViewController extends ViewController {
         warningLabel.textProperty().bind(userViewModel.getWarningProperty());
         warningPane.visibleProperty().bindBidirectional(userViewModel.getWarningVisibleProperty());
         warningPane.styleProperty().bindBidirectional(userViewModel.getWarningStyleProperty());
+
+
     }
 
     public void onGoToChat() {
@@ -50,7 +51,12 @@ public class UserViewController extends ViewController {
     }
 
     public void onGoBackAction(){
-       viewHandler.openAdvertisementView();
+        if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null)
+            viewHandler.openAdvertisementView();
+        else {
+            LoggedUser.getLoggedUser().setSelectedUser(null);
+            viewHandler.openMainAppView();
+        }
     }
 
     public void reportUser() {

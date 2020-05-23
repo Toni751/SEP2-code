@@ -2,18 +2,34 @@ package ESharing.Client.Views.UserAdvertisementView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.CatalogueAd;
+import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Events;
+import com.sun.webkit.Timer;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Window;
+import javafx.util.Callback;
+import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 
+import java.beans.EventHandler;
 import java.beans.PropertyChangeEvent;
+import java.time.LocalDate;
 import java.util.List;
 
 public class UserAdvertisementViewController extends ViewController {
@@ -63,17 +79,56 @@ public class UserAdvertisementViewController extends ViewController {
                 Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
                 Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
 
-                int finalCurrentAdvertisement = currentAdvertisement;
+
+                DatePicker datePicker = new DatePicker();
+                Button button = new Button("Open profile");
+                Label usernameLabel = new Label("Username");
+                Pane userPane = new Pane();
+                userPane.getChildren().addAll(button, usernameLabel);
+                PopOver popOver = new PopOver(userPane);
+                int finalCurrentAdvertisement1 = currentAdvertisement;
+                Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        for(int i = 0 ; i < userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
+                            if(userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
+                                setStyle("-fx-background-color: #4CDBC4;");
+                                int finalI = i;
+                                addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+
+                                    //popOver.setTitle("User Info");
+                                    User reservationUser = userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
+                                    usernameLabel.textProperty().setValue(reservationUser.getUsername());
+                                    button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
+                                        LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
+                                        viewHandler.openUserView();
+                                        datePicker.hide();
+                                    });
+                                    popOver.show(datePicker);
+                                    //popOver.detach();
+                                });
+                            }
+
+                        }
+                    }
+                };
+                datePicker.setMaxWidth(10);
+                datePicker.setDayCellFactory(dayCellFactory);
+
+                advertisement.getChildren().add(datePicker);
+
+
                 advertisement.getChildren().addAll(mainImage, title, price);
+
+                int finalCurrentAdvertisement = currentAdvertisement;
                 advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     System.out.println("Clicked");
                     if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID()))
                         viewHandler.openAdvertisementView();
                 });
-
                 row.getChildren().add(advertisement);
                 currentAdvertisement++;
-
             }
             mainVBox.getChildren().add(row);
         }
@@ -92,6 +147,46 @@ public class UserAdvertisementViewController extends ViewController {
                 Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
                 Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
 
+
+                DatePicker datePicker = new DatePicker();
+                Button button = new Button("Open profile");
+                Label usernameLabel = new Label("Username");
+                Pane userPane = new Pane();
+                userPane.getChildren().addAll(button, usernameLabel);
+                PopOver popOver = new PopOver(userPane);
+                int finalCurrentAdvertisement1 = currentAdvertisement;
+                Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        for(int i = 0 ; i < userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
+                            if(userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
+                                setStyle("-fx-background-color: #4CDBC4;");
+                                int finalI = i;
+                                addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+
+                                    //popOver.setTitle("User Info");
+                                    User reservationUser = userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
+                                    usernameLabel.textProperty().setValue(reservationUser.getUsername());
+                                    button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
+                                        LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
+                                        viewHandler.openUserView();
+                                        datePicker.hide();
+                                    });
+                                    popOver.show(datePicker);
+                                    //popOver.detach();
+                                });
+                            }
+
+                        }
+                    }
+                };
+                datePicker.setMaxWidth(10);
+                datePicker.setDayCellFactory(dayCellFactory);
+
+                advertisement.getChildren().add(datePicker);
+
+
                 advertisement.getChildren().addAll(mainImage, title, price);
 
                 int finalCurrentAdvertisement = currentAdvertisement;
@@ -105,5 +200,11 @@ public class UserAdvertisementViewController extends ViewController {
             }
             mainVBox.getChildren().add(row);
         }
+    }
+
+    public void onOpenAdvertisement(ActionEvent actionEvent) {
+    }
+
+    public void onRemoveAdvertisement(ActionEvent actionEvent) {
     }
 }

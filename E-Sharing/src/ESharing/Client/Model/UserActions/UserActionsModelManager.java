@@ -4,6 +4,7 @@ import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.Connection;
 import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Client.Networking.chat.ClientChat;
+import ESharing.Client.Networking.reservation.ReservationClient;
 import ESharing.Client.Networking.user.Client;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Events;
@@ -29,6 +30,7 @@ public class UserActionsModelManager implements UserActionsModel {
     private Client client;
     private ClientChat clientChat;
     private ClientAdvertisement clientAdvertisement;
+    private ReservationClient reservationClient;
     private PropertyChangeSupport support;
     private Connection connection;
 
@@ -40,6 +42,7 @@ public class UserActionsModelManager implements UserActionsModel {
         this.client = ClientFactory.getClientFactory().getClient();
         this.clientChat = ClientFactory.getClientFactory().getChatClient();
         this.clientAdvertisement = ClientFactory.getClientFactory().getClientAdvertisement();
+        this.reservationClient = ClientFactory.getClientFactory().getReservationClient();
         support = new PropertyChangeSupport(this);
         connection = new Connection();
 
@@ -83,6 +86,7 @@ public class UserActionsModelManager implements UserActionsModel {
                 LoggedUser.getLoggedUser().loginUser(requestedUser);
                 clientChat.registerForCallBack();
                 clientAdvertisement.registerForCallBack();
+                reservationClient.registerForCallback();
                 return null;
             }
     }
@@ -157,5 +161,6 @@ public class UserActionsModelManager implements UserActionsModel {
         client.initializeConnection();
         clientChat.initializeConnection();
         clientAdvertisement.initializeConnection();
+        reservationClient.initializeConnection();
     }
 }

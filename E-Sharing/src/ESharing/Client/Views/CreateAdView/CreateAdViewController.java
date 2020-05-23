@@ -19,6 +19,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -27,6 +28,8 @@ import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
+import org.controlsfx.control.PopOver;
 
 import java.awt.*;
 import java.io.File;
@@ -47,6 +50,8 @@ public class CreateAdViewController extends ViewController {
     @FXML private JFXTextField priceTextField;
     @FXML private JFXTextArea descriptionTextField;
     @FXML private DatePicker datePicker;
+
+    PopOver popOver = new PopOver();
 
     private EventHandler<MouseEvent> mouseClickedEventHandler;
     private CreateAdViewModel viewModel;
@@ -71,6 +76,7 @@ public class CreateAdViewController extends ViewController {
         subImage2.imageProperty().bind(viewModel.getSubImage2Property());
         subImage3.imageProperty().bind(viewModel.getSubImage3Property());
         subImage4.imageProperty().bind(viewModel.getSubImage4Property());
+
 
         viewModel.setDefaultView();
         initializeDatePicker();
@@ -155,5 +161,15 @@ public class CreateAdViewController extends ViewController {
             }
             clickEvent.consume();
         };
+    }
+
+    public void openPopup() {
+        popOver.show(mainImage);
+
+    }
+
+    public void hidePopup()
+    {
+        popOver.hide(Duration.seconds(1));
     }
 }

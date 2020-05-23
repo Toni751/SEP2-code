@@ -301,10 +301,10 @@ public class ChatViewController extends ViewController {
 
     private void checkIfThereIsSelectedUser()
     {
-        Advertisement advertisement = LoggedUser.getLoggedUser().getSelectedAdvertisement();
-        if(advertisement != null)
+        User selectedUser = LoggedUser.getLoggedUser().getSelectedUser();
+        if(selectedUser != null)
         {
-            viewModel.ifConversationExists(advertisement.getOwner());
+            viewModel.ifConversationExists(selectedUser);
             messagesPane.getChildren().clear();
             for(Message message : LoggedUser.getLoggedUser().getCurrentOpenConversation()){
                 if(message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {

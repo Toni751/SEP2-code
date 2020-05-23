@@ -20,15 +20,7 @@ public class MessageDAOManager extends Database implements MessageDAO {
 
   public MessageDAOManager (AdministratorDAO administratorDAO)
   {
-    try
-    {
-      DriverManager.registerDriver(new org.postgresql.Driver());
       this.administratorDAO = administratorDAO;
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
   }
 
 //  public static MessageDAOManager getInstance() {

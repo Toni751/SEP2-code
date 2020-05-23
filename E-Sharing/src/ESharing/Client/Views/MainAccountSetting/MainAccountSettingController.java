@@ -66,4 +66,8 @@ public class MainAccountSettingController extends ViewController {
     public void loadAdvertisementsPane() {
         viewHandler.openUserAdvertisementView(userSettingPane);
     }
+
+    public void loadReservationPane(){
+        viewHandler.openReservationView(userSettingPane);
+    }
 }

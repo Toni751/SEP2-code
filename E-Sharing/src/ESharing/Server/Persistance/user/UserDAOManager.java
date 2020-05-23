@@ -24,16 +24,8 @@ public class UserDAOManager extends Database implements UserDAO
   //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
   public UserDAOManager(AddressDAO addressDAO, MessageDAO messageDAO)
   {
-    try
-    {
-      DriverManager.registerDriver(new org.postgresql.Driver());
       this.addressDAO = addressDAO;
       this.messageDAO = messageDAO;
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
   }
 
 //  public static synchronized UserDAOManager getInstance()

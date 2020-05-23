@@ -11,6 +11,7 @@ import ESharing.Client.Views.MainAccountSetting.MainSettingViewModel;
 import ESharing.Client.Views.MainAdminView.MainAdminViewModel;
 import ESharing.Client.Views.MainAppView.MainAppViewModel;
 import ESharing.Client.Views.AdminUsersView.ManageUsersViewModel;
+import ESharing.Client.Views.ReservationView.ReservationViewModel;
 import ESharing.Client.Views.SignInView.SignInViewModel;
 import ESharing.Client.Views.SignUpView.SignUpViewModel;
 import ESharing.Client.Views.UserAddressSettingView.UserAddressSettingViewModel;
@@ -44,6 +45,7 @@ public class ViewModelFactory {
     private AdvertisementViewModel advertisementViewModel;
     private UserViewModel userViewModel;
     private UserAdvertisementViewModel userAdvertisementViewModel;
+    private ReservationViewModel reservationViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -69,6 +71,7 @@ public class ViewModelFactory {
         adminAdvertisementsViewModel = new AdminAdvertisementsViewModel();
         userViewModel = new UserViewModel();
         userAdvertisementViewModel = new UserAdvertisementViewModel();
+        reservationViewModel = new ReservationViewModel();
     }
 
     /**
@@ -208,5 +211,9 @@ public class ViewModelFactory {
 
     public UserAdvertisementViewModel getUserAdvertisementViewModel() {
         return userAdvertisementViewModel;
+    }
+
+    public ReservationViewModel getReservationViewModel() {
+        return reservationViewModel;
     }
 }

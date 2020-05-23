@@ -3,6 +3,7 @@ package ESharing.Server.Model.reservation;
 import ESharing.Shared.TransferedObject.Reservation;
 import ESharing.Shared.Util.PropertyChangeSubject;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ServerReservationModel extends PropertyChangeSubject {

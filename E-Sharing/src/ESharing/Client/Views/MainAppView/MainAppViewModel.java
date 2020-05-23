@@ -265,7 +265,9 @@ public class MainAppViewModel implements PropertyChangeSubject {
     }
 
     public void selectAdvertisement(CatalogueAd catalogueAd) {
-        LoggedUser.getLoggedUser().selectAdvertisement(advertisementModel.getAdvertisement(catalogueAd.getAdvertisementID()));
+        Advertisement selectedAdvertisement = advertisementModel.getAdvertisement(catalogueAd.getAdvertisementID());
+        LoggedUser.getLoggedUser().selectAdvertisement(selectedAdvertisement);
+        LoggedUser.getLoggedUser().setSelectedUser(selectedAdvertisement.getOwner());
     }
 
     public BooleanProperty getHomeRectangleVisibleProperty() {

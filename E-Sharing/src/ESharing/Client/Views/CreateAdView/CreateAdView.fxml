@@ -19,7 +19,7 @@
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="108.0" layoutX="204.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="115.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="108.0" layoutX="204.0" layoutY="340.0" stroke="BLACK" strokeType="INSIDE" width="115.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="108.0" layoutX="343.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="115.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="229.0" layoutX="43.0" layoutY="218.0" stroke="BLACK" strokeType="INSIDE" width="139.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="229.0" layoutX="43.0" layoutY="218.0" onMouseEntered="#openPopup" onMouseExited="#hidePopup" stroke="BLACK" strokeType="INSIDE" width="139.0" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#d1d7da" height="108.0" layoutX="343.0" layoutY="340.0" stroke="BLACK" strokeType="INSIDE" width="115.0" />
       <ImageView fx:id="subImage2" fitHeight="88.0" fitWidth="69.0" layoutX="229.0" layoutY="228.0" onMouseClicked="#addImage" pickOnBounds="true" preserveRatio="true">
          <image>

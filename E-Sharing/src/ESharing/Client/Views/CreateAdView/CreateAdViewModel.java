@@ -14,6 +14,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -32,6 +36,12 @@ public class CreateAdViewModel {
     private BooleanProperty warningVisibleProperty;
     private ObservableList<String> typeItemsProperty;
     private StringProperty warningStyleProperty;
+    private ObjectProperty<Paint> mainImageRectangleFill;
+    private ObjectProperty<Paint> subImage1RectangleFill;
+    private ObjectProperty<Paint> subImage2RectangleFill;
+    private ObjectProperty<Paint> subImage3RectangleFill;
+    private ObjectProperty<Paint> subImage4RectangleFill;
+    private BooleanProperty mainPicturePaneVisible;
 
     private ObjectProperty<Image> mainImageProperty;
     private ObjectProperty<Image> subImage1Property;
@@ -59,14 +69,20 @@ public class CreateAdViewModel {
         typeItemsProperty = new SimpleListProperty<>();
         warningStyleProperty = new SimpleStringProperty();
         typeValueProperty = new SimpleStringProperty();
+        mainPicturePaneVisible = new SimpleBooleanProperty();
 
         mainImageProperty = new SimpleObjectProperty<>();
         subImage1Property = new SimpleObjectProperty<>();
         subImage2Property = new SimpleObjectProperty<>();
         subImage3Property = new SimpleObjectProperty<>();
         subImage4Property = new SimpleObjectProperty<>();
-        typeItemsProperty = FXCollections.observableArrayList();
+        mainImageRectangleFill = new SimpleObjectProperty<>();
+        subImage1RectangleFill = new SimpleObjectProperty<>();
+        subImage2RectangleFill = new SimpleObjectProperty<>();
+        subImage3RectangleFill = new SimpleObjectProperty<>();
+        subImage4RectangleFill = new SimpleObjectProperty<>();
 
+        typeItemsProperty = FXCollections.observableArrayList();
         imageFiles = new HashMap<>();
         selectedDates = new ArrayList<>();
 
@@ -102,16 +118,27 @@ public class CreateAdViewModel {
 
     public void setImage(String id, Image image)
     {
-        if(id.equals(AdImages.MAIN_IMAGE.toString()))
-            mainImageProperty.setValue(image);
-        else if(id.equals(AdImages.SUB_IMAGE1.toString()))
-            subImage1Property.setValue(image);
-        else if(id.equals(AdImages.SUB_IMAGE2.toString()))
-            subImage2Property.setValue(image);
-        else if(id.equals(AdImages.SUB_IMAGE3.toString()))
-            subImage3Property.setValue(image);
-        else if(id.equals(AdImages.SUB_IMAGE4.toString()))
-            subImage4Property.setValue(image);
+        if(id.equals(AdImages.MAIN_IMAGE.toString())) {
+            mainImageRectangleFill.setValue(new ImagePattern(image));
+            mainImageProperty.setValue(null);
+            mainPicturePaneVisible.setValue(true);
+        }
+        else if(id.equals(AdImages.SUB_IMAGE1.toString())){
+            subImage1RectangleFill.setValue(new ImagePattern(image));
+            subImage1Property.setValue(null);
+        }
+        else if(id.equals(AdImages.SUB_IMAGE2.toString())) {
+            subImage2RectangleFill.setValue(new ImagePattern(image));
+            subImage2Property.setValue(null);
+        }
+        else if(id.equals(AdImages.SUB_IMAGE3.toString())) {
+            subImage3RectangleFill.setValue(new ImagePattern(image));
+            subImage3Property.setValue(null);
+        }
+        else if(id.equals(AdImages.SUB_IMAGE4.toString())) {
+            subImage4RectangleFill.setValue(new ImagePattern(image));
+            subImage4Property.setValue(null);
+        }
     }
 
     public void addNewSelectedDate()
@@ -130,12 +157,19 @@ public class CreateAdViewModel {
         titleProperty.setValue("");
         typeValueProperty.setValue("");
         priceProperty.setValue("");
+        mainPicturePaneVisible.setValue(false);
 
         mainImageProperty.setValue(defaultImage);
         subImage1Property.setValue(defaultImage);
         subImage2Property.setValue(defaultImage);
         subImage3Property.setValue(defaultImage);
         subImage4Property.setValue(defaultImage);
+
+        mainImageRectangleFill.setValue(Color.valueOf("#f2f4f5"));
+        subImage1RectangleFill.setValue(Color.valueOf("#f2f4f5"));
+        subImage2RectangleFill.setValue(Color.valueOf("#f2f4f5"));
+        subImage3RectangleFill.setValue(Color.valueOf("#f2f4f5"));
+        subImage4RectangleFill.setValue(Color.valueOf("#f2f4f5"));
 
         selectedDates = new ArrayList<>();
         typeItemsProperty.clear();
@@ -205,5 +239,29 @@ public class CreateAdViewModel {
 
     public StringProperty getWarningStyleProperty() {
         return warningStyleProperty;
+    }
+
+    public ObjectProperty<Paint> getMainImageRectangleFill() {
+        return mainImageRectangleFill;
+    }
+
+    public ObjectProperty<Paint> getSubImage1RectangleFill() {
+        return subImage1RectangleFill;
+    }
+
+    public ObjectProperty<Paint> getSubImage2RectangleFill() {
+        return subImage2RectangleFill;
+    }
+
+    public ObjectProperty<Paint> getSubImage3RectangleFill() {
+        return subImage3RectangleFill;
+    }
+
+    public ObjectProperty<Paint> getSubImage4RectangleFill() {
+        return subImage4RectangleFill;
+    }
+
+    public BooleanProperty getMainPicturePaneVisible() {
+        return mainPicturePaneVisible;
     }
 }

@@ -5,10 +5,12 @@ import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.Util.AdImages;
+import ESharing.Shared.Util.Views;
 import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -16,22 +18,29 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
+import org.controlsfx.control.PopOver;
 import org.controlsfx.control.Rating;
 
 import java.time.LocalDate;
 
 public class AdvertisementViewController extends ViewController {
 
+    @FXML private Label ownerPhoneNumberLabel;
+    @FXML private Label ownerAccountCreationDate;
+    @FXML private Button openOwnerProfileButton;
+    @FXML private Rectangle titleImageRectangle;
     @FXML private ImageView adminBackArrow;
+    @FXML private ScrollPane scrollPane;
     @FXML private Rating ratings;
     @FXML private JFXButton removeButton;
     @FXML private JFXButton reserveButton;
-    @FXML private ImageView mainImageView;
-    @FXML private ImageView sub1ImageView;
-    @FXML private ImageView sub2ImageView;
-    @FXML private ImageView sub3ImageView;
-    @FXML private ImageView sub4ImageView;
+    @FXML private Rectangle mainImageRectangle;
+    @FXML private Rectangle subImage1Rectangle;
+    @FXML private Rectangle subImage2Rectangle;
+    @FXML private Rectangle subImage3Rectangle;
+    @FXML private Rectangle subImage4Rectangle;
     @FXML private Label titleLabel;
     @FXML private Label usernameLabel;
     @FXML private Circle avatarCircle;
@@ -43,6 +52,8 @@ public class AdvertisementViewController extends ViewController {
     @FXML private Label priceLabel;
     @FXML private AnchorPane mainPane;
 
+
+    private PopOver imagePopOver;
     private EventHandler<MouseEvent> mouseClickedEventHandler;
     private AdvertisementViewModel advertisementViewModel;
     private ViewHandler viewHandler;
@@ -66,14 +77,19 @@ public class AdvertisementViewController extends ViewController {
         removeButton.visibleProperty().bindBidirectional(advertisementViewModel.getRemoveVisibleProperty());
         reserveButton.visibleProperty().bindBidirectional(advertisementViewModel.getReserveVisibleProperty());
         ratings.ratingProperty().bindBidirectional(advertisementViewModel.getRatingProperty());
+        adminBackArrow.visibleProperty().bindBidirectional(advertisementViewModel.getArrowBackProperty());
 
         datePicker.dayCellFactoryProperty().bindBidirectional(advertisementViewModel.getCellFactoryProperty());
 
-        mainImageView.imageProperty().bindBidirectional(advertisementViewModel.getMainImageProperty());
-        sub1ImageView.imageProperty().bindBidirectional(advertisementViewModel.getSub1ImageProperty());
-        sub2ImageView.imageProperty().bindBidirectional(advertisementViewModel.getSub2ImageProperty());
-        sub3ImageView.imageProperty().bindBidirectional(advertisementViewModel.getSub3ImageProperty());
-        sub4ImageView.imageProperty().bindBidirectional(advertisementViewModel.getSub4ImageProperty());
+        mainImageRectangle.fillProperty().bindBidirectional(advertisementViewModel.getMainImageProperty());
+        subImage1Rectangle.fillProperty().bindBidirectional(advertisementViewModel.getSub1ImageProperty());
+        subImage2Rectangle.fillProperty().bindBidirectional(advertisementViewModel.getSub2ImageProperty());
+        subImage3Rectangle.fillProperty().bindBidirectional(advertisementViewModel.getSub3ImageProperty());
+        subImage4Rectangle.fillProperty().bindBidirectional(advertisementViewModel.getSub4ImageProperty());
+        titleImageRectangle.fillProperty().bindBidirectional(advertisementViewModel.getMainImageProperty());
+
+        scrollPane.setFitToWidth(true);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         dataPickerEvent();
         initializeDatePicker();
@@ -90,8 +106,10 @@ public class AdvertisementViewController extends ViewController {
     }
 
     public void onGoToUserView() {
-        if(LoggedUser.getLoggedUser().getUser().getUser_id() != LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id())
-            viewHandler.openUserView();
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() != LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id()) {
+            LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+            viewHandler.openMainAppView();
+        }
     }
 
     public void onRemovedAction() {
@@ -193,5 +211,29 @@ public class AdvertisementViewController extends ViewController {
 
     public void openMainPicture() {
         viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.MAIN_IMAGE.toString()));
+    }
+
+    public void onGoToDescription() {
+        scrollPane.setVvalue(0.55);
+    }
+
+    public void onGoToGallery() {
+        scrollPane.setVvalue(0.80);
+    }
+
+    public void onGoToOwner() {
+        scrollPane.setVvalue(1);
+    }
+
+    public void showImageDescription() {
+        Label description = new Label("Click the image to open a preview");
+        imagePopOver = new PopOver(description);
+        imagePopOver.show(subImage3Rectangle);
+        ((Parent)imagePopOver.getSkin().getNode()).getStylesheets()
+                .add(getClass().getResource("../../../Addition/Styles/Styles.css").toExternalForm());
+    }
+
+    public void hideImageDescription() {
+        imagePopOver.hide();
     }
 }

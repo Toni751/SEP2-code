@@ -113,7 +113,7 @@ public class MainAppViewModel implements PropertyChangeSubject {
             searchItemsProperty.add(Vehicles.values()[i].toString());
         }
 
-        LoggedUser.getLoggedUser().selectAdvertisement(null);
+//        LoggedUser.getLoggedUser().selectAdvertisement(null);
     }
 
    public List<CatalogueAd> getCatalogueAds()

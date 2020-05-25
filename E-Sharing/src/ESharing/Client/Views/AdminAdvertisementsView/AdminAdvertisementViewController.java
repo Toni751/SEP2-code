@@ -72,7 +72,7 @@ public class AdminAdvertisementViewController extends ViewController {
     }
 
     public void goToSelectedAdvertisement() {
-        viewHandler.openAdvertisementView();
+        viewHandler.openAdvertisementView(null);
     }
 
     public void onRemoveAdAction() {

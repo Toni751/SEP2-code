@@ -3,6 +3,7 @@ package ESharing.Client.Model.UserActions;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.Views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ public class LoggedUser {
     private static LoggedUser loggedUser;
     private List<Message> currentOpenConversation = new ArrayList<>();
     private Advertisement selectedAdvertisement;
+    private Views selectedView;
 
     /**
      * Returns LoggedUser object if it exists, otherwise creates new object
@@ -80,5 +82,13 @@ public class LoggedUser {
 
     public void setSelectedUser(User selectedUser) {
         this.selectedUser = selectedUser;
+    }
+
+    public void setSelectedView(Views selectedView) {
+        this.selectedView = selectedView;
+    }
+
+    public Views getSelectedView() {
+        return selectedView;
     }
 }

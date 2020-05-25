@@ -3,10 +3,12 @@ package ESharing.Client.Views.ReservationView;
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.Reservation;
 import ESharing.Shared.TransferedObject.User;
+import ESharing.Shared.Util.Views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.sun.glass.ui.View;
@@ -57,8 +59,10 @@ public class ReservationViewController extends ViewController {
     }
 
     public void onOpenAdvertisement() {
-        if(reservationViewModel.loadReservation())
-            viewHandler.openAdvertisementView();
+        if(reservationViewModel.loadReservation()) {
+            LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+            viewHandler.openMainAppView();
+        }
 
     }
 

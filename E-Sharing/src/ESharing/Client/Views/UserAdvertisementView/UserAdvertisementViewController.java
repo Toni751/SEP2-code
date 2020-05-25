@@ -7,6 +7,7 @@ import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Events;
+import ESharing.Shared.Util.Views;
 import com.sun.webkit.Timer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -102,7 +103,8 @@ public class UserAdvertisementViewController extends ViewController {
                                     usernameLabel.textProperty().setValue(reservationUser.getUsername());
                                     button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
                                         LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
-                                        viewHandler.openUserView();
+                                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+                                        viewHandler.openMainAppView();
                                         datePicker.hide();
                                     });
                                     popOver.show(datePicker);
@@ -124,8 +126,10 @@ public class UserAdvertisementViewController extends ViewController {
                 int finalCurrentAdvertisement = currentAdvertisement;
                 advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     System.out.println("Clicked");
-                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID()))
-                        viewHandler.openAdvertisementView();
+                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID())) {
+                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+                        viewHandler.openMainAppView();
+                    }
                 });
                 row.getChildren().add(advertisement);
                 currentAdvertisement++;
@@ -170,7 +174,8 @@ public class UserAdvertisementViewController extends ViewController {
                                     usernameLabel.textProperty().setValue(reservationUser.getUsername());
                                     button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
                                         LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
-                                        viewHandler.openUserView();
+                                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+                                        viewHandler.openMainAppView();
                                         datePicker.hide();
                                     });
                                     popOver.show(datePicker);
@@ -192,8 +197,10 @@ public class UserAdvertisementViewController extends ViewController {
                 int finalCurrentAdvertisement = currentAdvertisement;
                 advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     System.out.println("Clicked");
-                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID()))
-                        viewHandler.openAdvertisementView();
+                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID())) {
+                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+                        viewHandler.openMainAppView();
+                    }
                 });
                 row.getChildren().add(advertisement);
                 currentAdvertisement++;

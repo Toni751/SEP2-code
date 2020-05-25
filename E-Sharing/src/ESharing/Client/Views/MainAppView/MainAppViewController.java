@@ -13,27 +13,33 @@ import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.Vehicles;
+import ESharing.Shared.Util.Views;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The controller class used to display the the main system view with all JavaFX components
@@ -53,6 +59,8 @@ public class MainAppViewController extends ViewController {
     private ViewHandler viewHandler;
     private MainAppViewModel mainAppViewModel;
 
+    @FXML private ScrollPane scrollPane1;
+    @FXML private StackPane scrollRoot;
     /**
      * Initializes and opens the main system view with all components,
      * initializes a binding properties of the JavaFX components
@@ -62,9 +70,7 @@ public class MainAppViewController extends ViewController {
 
         this.viewHandler = ViewHandler.getViewHandler();
         this.mainAppViewModel = ViewModelFactory.getViewModelFactory().getMainAppViewModel();
-
-        if(LoggedUser.getLoggedUser().getSelectedUser() != null)
-            viewHandler.openChatView(contentPane);
+        selectSubViewToOpen();
 
         mainAppViewModel.resetRectanglesVisibleProperty();
 
@@ -76,9 +82,9 @@ public class MainAppViewController extends ViewController {
         searchComboBox.valueProperty().bindBidirectional(mainAppViewModel.getSearchValueProperty());
 
         searchComboBox.setItems(mainAppViewModel.getSearchItemsProperty());
-
         mainAppViewModel.loadNotifications();
-        createMainView();
+        //createMainView();
+        crateViewGridPane();
 
         mainAppViewModel.addPropertyChangeListener(Events.USER_LOGOUT.toString(), this::onAdminRemoveAccount);
         mainAppViewModel.addPropertyChangeListener(Events.UPDATE_AD_LIST.toString(), this::onUpdateList);
@@ -114,7 +120,8 @@ public class MainAppViewController extends ViewController {
                     advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                         System.out.println("Clicked");
                         mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                        viewHandler.openAdvertisementView();
+                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+                        viewHandler.openMainAppView();
                     });
 
                     row.getChildren().add(advertisement);
@@ -144,7 +151,8 @@ public class MainAppViewController extends ViewController {
                     advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                         System.out.println("Clicked");
                         mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                        viewHandler.openAdvertisementView();
+                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+                        viewHandler.openMainAppView();
                     });
                     row.getChildren().add(advertisement);
                     currentAdvertisement++;
@@ -182,7 +190,8 @@ public class MainAppViewController extends ViewController {
                 advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     System.out.println("Clicked");
                     mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                    viewHandler.openAdvertisementView();
+                    LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+                    viewHandler.openMainAppView();
                 });
 
                 row.getChildren().add(advertisement);
@@ -212,7 +221,8 @@ public class MainAppViewController extends ViewController {
                 advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                     System.out.println("Clicked");
                     mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                    viewHandler.openAdvertisementView();
+                    LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+                    viewHandler.openMainAppView();
                 });
                 row.getChildren().add(advertisement);
                 currentAdvertisement++;
@@ -220,6 +230,96 @@ public class MainAppViewController extends ViewController {
             mainVBox.getChildren().add(row);
         }
 
+    }
+
+    private void crateViewGridPane(){
+
+        List<CatalogueAd> advertisements = mainAppViewModel.getCatalogueAds();
+
+        GridPane gridPane = new GridPane();
+        gridPane.setPrefWidth(820);
+        gridPane.setMaxWidth(820);
+        gridPane.setHgap(50);
+        gridPane.setVgap(50);
+
+
+
+        int currentRow = 0;
+        int currentColumn = 0;
+        int currentAdvertisement = 0;
+
+        int ads = advertisements.size();
+        for(int i = 0 ;  i < ads/3; i++){
+            for(int j = 0 ; j < 3 ; j++){
+                Node currentNode = createAdComponent(advertisements.get(currentAdvertisement));
+                gridPane.add(currentNode, currentColumn, currentRow);
+                GridPane.setHalignment(currentNode, HPos.CENTER);
+                GridPane.setValignment(currentNode, VPos.CENTER);
+                currentColumn++;
+                currentAdvertisement++;
+            }
+
+            currentColumn = 0;
+            currentRow++;
+        }
+
+        if(ads%3 != 0){
+            for( int i = 0 ; i < ads%3; i++){
+                gridPane.add(createAdComponent(advertisements.get(currentAdvertisement)), currentColumn, currentRow);
+                currentColumn++;
+                currentAdvertisement++;
+            }
+        }
+        scrollPane1.setContent(gridPane);
+    }
+
+
+    private AnchorPane createAdComponent(CatalogueAd catalogueAd){
+        String[] colors = {"#102B3F", "#004346", "#828C51", "#2F3E46", "#52796F", "#EF7B45"};
+        Random randomColor = new Random();
+        int random = randomColor.nextInt(colors.length);
+
+       AnchorPane anchorPane = new AnchorPane();
+       anchorPane.setPrefWidth(200);
+       anchorPane.setPrefHeight(230);
+       anchorPane.setMaxWidth(200);
+       anchorPane.setMaxHeight(230);
+
+       Pane background = new Pane();
+       background.setPrefHeight(230);
+       background.setPrefWidth(200);
+       background.setStyle("-fx-background-color: "+ colors[random] +"; -fx-background-radius: 10");
+       anchorPane.setStyle("-fx-cursor: hand");
+
+       Rectangle image = new Rectangle();
+       image.setFill(new ImagePattern(catalogueAd.getMainImage()));
+       image.setLayoutY(10);
+       image.setWidth(200);
+       image.setHeight(120);
+
+       Label title = new Label(catalogueAd.getTitle());
+       title.setStyle("-fx-text-fill: #f2f7f7; -fx-font-size: 16px");
+       title.setLayoutY(150);
+       title.setLayoutX(10);
+
+       Label price = new Label(catalogueAd.getPrice() + "/day");
+       price.setStyle("-fx-text-fill: #fff; -fx-font-size: 24px");
+       price.setLayoutY(180);
+       price.setLayoutX(10);
+
+       anchorPane.getChildren().add(background);
+       anchorPane.getChildren().add(image);
+       anchorPane.getChildren().add(title);
+       anchorPane.getChildren().add(price);
+
+        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            System.out.println("Clicked");
+            mainAppViewModel.selectAdvertisement(catalogueAd);
+            LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+            viewHandler.openMainAppView();
+        });
+
+       return anchorPane;
     }
 
 
@@ -284,32 +384,6 @@ public class MainAppViewController extends ViewController {
     }
 
 
-    //TEST!!!!!
-//    public void onOpenAdvertisement() {
-//        AdvertisementModel advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
-//        Map<String, File> images = new HashMap<>();
-//        File mainImage = new File("E-Sharing/src/ESharing/Addition/Images/icons/ad-icon.png");
-//        images.put(AdImages.MAIN_IMAGE.toString(), mainImage);
-//
-//
-//        Map<String, byte[]> imagesConverted = advertisementModel.convertedImages(images);
-//
-//        User owner = new User("TestUser", "TestPassword", "TestPhone", new Address("TestStreet", "TestCity"));
-//
-//        ArrayList<LocalDate> dates = new ArrayList<>();
-//        dates.add(LocalDate.now().plusDays(1));
-//        dates.add(LocalDate.now().plusDays(2));
-//        dates.add(LocalDate.now().plusDays(3));
-//
-//
-//
-//        Advertisement advertisement = new Advertisement(LoggedUser.getLoggedUser().getUser(), imagesConverted, Vehicles.Bike.toString(), dates, 30, "Test title", "Test description");
-//        advertisement.setCreationDate(LocalDate.now());
-//        LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
-//
-//        viewHandler.openAdvertisementView();
-//    }
-
     public void onHomeAction() {
         mainAppViewModel.setHomeRectangleSelected();
         viewHandler.resetMainView();
@@ -318,5 +392,17 @@ public class MainAppViewController extends ViewController {
 
     public void onSearchAdvertisements() {
         mainAppViewModel.searchAdvertisements();
+    }
+
+    private void selectSubViewToOpen(){
+        Views requestedView = LoggedUser.getLoggedUser().getSelectedView();
+        if(requestedView == Views.ADVERTISEMENT_VIEW)
+            viewHandler.openAdvertisementView(contentPane);
+        else if(requestedView == Views.USER_VIEW)
+            viewHandler.openUserView(contentPane);
+        else if(requestedView == Views.CHAT_VIEW)
+            viewHandler.openChatView(contentPane);
+
+        LoggedUser.getLoggedUser().setSelectedView(null);
     }
 }

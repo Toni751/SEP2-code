@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.util.Callback;
@@ -41,13 +42,14 @@ public class AdvertisementViewModel {
     private BooleanProperty warningVisibleProperty;
     private BooleanProperty removeVisibleProperty;
     private BooleanProperty reserveVisibleProperty;
+    private BooleanProperty arrowBackProperty;
     private ObjectProperty<LocalDate> dateProperty;
     private ObjectProperty<Callback<DatePicker, DateCell>> dateCellFactoryProperty;
-    private ObjectProperty<Image> mainImageProperty;
-    private ObjectProperty<Image> sub1ImageProperty;
-    private ObjectProperty<Image> sub2ImageProperty;
-    private ObjectProperty<Image> sub3ImageProperty;
-    private ObjectProperty<Image> sub4ImageProperty;
+    private ObjectProperty<Paint> mainImageProperty;
+    private ObjectProperty<Paint> sub1ImageProperty;
+    private ObjectProperty<Paint> sub2ImageProperty;
+    private ObjectProperty<Paint> sub3ImageProperty;
+    private ObjectProperty<Paint> sub4ImageProperty;
 
     private List<LocalDate> selectedDates;
     private ObservableList<LocalDate> unavailableDates;
@@ -67,6 +69,7 @@ public class AdvertisementViewModel {
         typeProperty = new SimpleStringProperty();
         warningProperty = new SimpleStringProperty();
         ratingProperty = new SimpleDoubleProperty();
+        arrowBackProperty = new SimpleBooleanProperty();
         ownerUsernameProperty = new SimpleStringProperty();
         warningStyleProperty = new SimpleStringProperty();
         warningVisibleProperty = new SimpleBooleanProperty();
@@ -99,15 +102,22 @@ public class AdvertisementViewModel {
         ownerUsernameProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUsername());
         avatarCircleProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getAvatar()));
 
-        mainImageProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.MAIN_IMAGE.toString()));
+        sub1ImageProperty.setValue(Color.valueOf("#f2f7f7"));
+        sub2ImageProperty.setValue(Color.valueOf("#f2f7f7"));
+        sub3ImageProperty.setValue(Color.valueOf("#f2f7f7"));
+        sub4ImageProperty.setValue(Color.valueOf("#f2f7f7"));
+
+        arrowBackProperty.setValue(false);
+
+        mainImageProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.MAIN_IMAGE.toString())));
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE1.toString()))
-            sub1ImageProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE1.toString()));
+            sub1ImageProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE1.toString())));
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE2.toString()))
-            sub2ImageProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE2.toString()));
+            sub2ImageProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE2.toString())));
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE3.toString()))
-            sub3ImageProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE3.toString()));
+            sub3ImageProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE3.toString())));
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE4.toString()))
-            sub4ImageProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE4.toString()));
+            sub4ImageProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE4.toString())));
 
         warningVisibleProperty.set(false);
 
@@ -118,6 +128,10 @@ public class AdvertisementViewModel {
         else {
             reserveVisibleProperty.setValue(true);
             removeVisibleProperty.setValue(false);
+        }
+
+        if(LoggedUser.getLoggedUser().getUser().isAdministrator()){
+            arrowBackProperty.setValue(true);
         }
 
         dateProperty.setValue(null);
@@ -223,23 +237,23 @@ public class AdvertisementViewModel {
         return dateProperty;
     }
 
-    public ObjectProperty<Image> getMainImageProperty() {
+    public ObjectProperty<Paint> getMainImageProperty() {
         return mainImageProperty;
     }
 
-    public ObjectProperty<Image> getSub1ImageProperty() {
+    public ObjectProperty<Paint> getSub1ImageProperty() {
         return sub1ImageProperty;
     }
 
-    public ObjectProperty<Image> getSub2ImageProperty() {
+    public ObjectProperty<Paint> getSub2ImageProperty() {
         return sub2ImageProperty;
     }
 
-    public ObjectProperty<Image> getSub3ImageProperty() {
+    public ObjectProperty<Paint> getSub3ImageProperty() {
         return sub3ImageProperty;
     }
 
-    public ObjectProperty<Image> getSub4ImageProperty() {
+    public ObjectProperty<Paint> getSub4ImageProperty() {
         return sub4ImageProperty;
     }
 
@@ -297,5 +311,9 @@ public class AdvertisementViewModel {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement()!= null && reservation.getAdvertisementID() == LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID()){
             unavailableDates.addAll(reservation.getReservationDays());
         }
+    }
+
+    public BooleanProperty getArrowBackProperty() {
+        return arrowBackProperty;
     }
 }

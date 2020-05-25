@@ -4,6 +4,7 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
+import ESharing.Shared.Util.Views;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -46,17 +47,20 @@ public class UserViewController extends ViewController {
     public void onGoToChat() {
         if(LoggedUser.getLoggedUser().getUser().isAdministrator())
             viewHandler.openChatView(null);
-        else
+        else {
+            LoggedUser.getLoggedUser().setSelectedView(Views.CHAT_VIEW);
             viewHandler.openMainAppView();
+        }
     }
 
     public void onGoBackAction(){
-        if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null)
-            viewHandler.openAdvertisementView();
+        if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null) {
+            LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+        }
         else {
             LoggedUser.getLoggedUser().setSelectedUser(null);
-            viewHandler.openMainAppView();
         }
+        viewHandler.openMainAppView();
     }
 
     public void reportUser() {

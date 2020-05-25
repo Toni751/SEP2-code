@@ -191,10 +191,10 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
-    public void openAdvertisementView()
+    public void openAdvertisementView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.ADVERTISEMENT_VIEW);
-        showView(viewController, null);
+        showView(viewController, existingPane);
     }
 
     public void openAdminAdvertisementView(Pane existingPane)
@@ -203,10 +203,10 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
-    public void openUserView()
+    public void openUserView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_VIEW);
-        showView(viewController, null);
+        showView(viewController, existingPane);
     }
 
     public void openUserAdvertisementView(Pane existingPane)

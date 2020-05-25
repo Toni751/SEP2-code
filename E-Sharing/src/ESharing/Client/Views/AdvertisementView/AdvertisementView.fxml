@@ -1,75 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import javafx.geometry.Rectangle2D?>
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane fx:id="mainPane" prefHeight="500.0" prefWidth="800.0" styleClass="white-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdvertisementView.AdvertisementViewController">
+<AnchorPane fx:id="mainPane" prefHeight="600.0" prefWidth="820.0" styleClass="white-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdvertisementView.AdvertisementViewController">
    <children>
-      <ImageView fx:id="mainImageView" fitHeight="200.0" fitWidth="200.0" layoutX="49.0" layoutY="25.0" onMouseClicked="#openMainPicture" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
-         </image>
-         <viewport>
-            <Rectangle2D height="300.0" width="300.0" />
-         </viewport>
-      </ImageView>
-      <ImageView fx:id="sub1ImageView" fitHeight="90.0" fitWidth="90.0" layoutX="49.0" layoutY="250.0" onMouseClicked="#openSub1Picture" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="sub2ImageView" fitHeight="90.0" fitWidth="90.0" layoutX="159.0" layoutY="250.0" onMouseClicked="#openSub2Picture" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="sub3ImageView" fitHeight="90.0" fitWidth="90.0" layoutX="49.0" layoutY="364.0" onMouseClicked="#openSub3Picture" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="sub4ImageView" fitHeight="90.0" fitWidth="90.0" layoutX="159.0" layoutY="364.0" onMouseClicked="#openSub4Picture" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/uploadImage.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="titleLabel" alignment="CENTER" layoutX="283.0" layoutY="14.0" prefHeight="43.0" prefWidth="491.0" text="ADVERTISEMENT TITLE" />
-      <TextArea fx:id="descriptionTextArea" layoutX="283.0" layoutY="109.0" prefHeight="254.0" prefWidth="491.0" text="FDDFDFFDFDFDFDF;;;;;;;;;;;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
-      <Label layoutX="283.0" layoutY="86.0" text="Description" />
-      <DatePicker fx:id="datePicker" layoutX="340.0" layoutY="381.0" prefHeight="26.0" prefWidth="70.0" />
-      <ImageView fitHeight="52.0" fitWidth="57.0" layoutX="349.0" layoutY="368.0" onMouseClicked="#onOpenCalendar" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../Addition/Images/icons/calendar.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="275.0" layoutY="386.0" text="Select date" />
-      <JFXButton fx:id="reserveButton" layoutX="618.0" layoutY="374.0" onAction="#onReserveButton" prefHeight="43.0" prefWidth="143.0" styleClass="button-blue" text="Reserve" />
-      <Label layoutX="529.0" layoutY="387.0" text="Price" />
-      <Label fx:id="priceLabel" layoutX="572.0" layoutY="387.0" text="1000" />
-      <Label fx:id="typeLabel" layoutX="290.0" layoutY="57.0" text="Type" />
-      <Pane fx:id="warningPane" layoutX="1.0" layoutY="459.0" prefHeight="52.0" prefWidth="800.0" styleClass="warning-pane">
-         <children>
-            <Label fx:id="warningLabel" layoutY="16.0" prefHeight="20.0" prefWidth="800.0" styleClass="warning-label" text="Label" />
-         </children>
-      </Pane>
-      <Label fx:id="usernameLabel" layoutX="542.0" layoutY="66.0" onMouseClicked="#onGoToUserView" text="ownerUsername" />
-      <Circle fx:id="avatarCircle" fill="DODGERBLUE" layoutX="503.0" layoutY="75.0" onMouseClicked="#onGoToUserView" radius="26.0" stroke="BLACK" strokeType="INSIDE" />
-      <JFXButton fx:id="removeButton" layoutX="653.0" layoutY="428.0" onAction="#onRemovedAction" text="remove ad" />
-      <ImageView fx:id="adminBackArrow" fitHeight="43.0" fitWidth="45.0" layoutX="1.0" layoutY="460.0" onMouseClicked="#goBack" pickOnBounds="true" preserveRatio="true" rotate="-180.0">
-         <image>
-            <Image url="@../../../Addition/Images/icons/arrow-blue.png" />
-         </image>
-      </ImageView>
-      <JFXButton layoutX="636.0" layoutY="42.0" onAction="#onReportAdvertisement" styleClass="button-blue" text="Report Advertisement" />
-      <Rating fx:id="ratings" layoutX="275.0" layoutY="425.0" onMouseClicked="#sendRatings" onMouseEntered="#clearRatings" onMouseExited="#fillRatings" />
+      <ScrollPane fx:id="scrollPane" prefHeight="600.0" prefWidth="820.0" styleClass="create-ad-scroll-pane">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1386.0" prefWidth="820.0" style="-fx-background-color: #f2f4f5;">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#004346" height="400.0" layoutX="12.0" layoutY="13.0" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="775.0" />
+                  <Label fx:id="titleLabel" layoutX="48.0" layoutY="46.0" prefHeight="34.0" prefWidth="766.0" text="ADVERTISEMENT TITLE">
+                     <styleClass>
+                        <String fx:value="title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Rectangle fx:id="titleImageRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="261.0" layoutX="49.0" layoutY="83.0" stroke="BLACK" strokeType="INSIDE" width="462.0" />
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="541.0" layoutY="121.0" onMouseClicked="#onGoToDescription">
+                     <image>
+                        <Image url="@../../../Addition/Images/icons/description-icon.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="541.0" layoutY="189.0" onMouseClicked="#onGoToGallery">
+                     <image>
+                        <Image url="@../../../Addition/Images/icons/gallery-icon.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="541.0" layoutY="257.0" onMouseClicked="#onGoToOwner">
+                     <image>
+                        <Image url="@../../../Addition/Images/icons/owner-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="603.0" layoutY="136.0" text="Go to the description">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label layoutX="603.0" layoutY="204.0" text="Go to the gallery">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label layoutX="603.0" layoutY="272.0" text="Go to the owner section">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <JFXButton fx:id="reserveButton" layoutX="398.0" layoutY="355.0" onAction="#onReserveButton" prefHeight="31.0" prefWidth="114.0" styleClass="button-light" text="Reserve" textFill="WHITE">
+                     <font>
+                        <Font name="Bernard MT Condensed" size="22.0" />
+                     </font></JFXButton>
+                  <Label layoutX="49.0" layoutY="365.0" text="Select date">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <DatePicker fx:id="datePicker" layoutX="117.0" layoutY="361.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="126.0" layoutY="359.0" onMouseClicked="#onOpenCalendar">
+                     <image>
+                        <Image url="@../../../Addition/Images/icons/calendar-white-icon.png" />
+                     </image>
+                  </ImageView>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#004346" height="347.0" layoutX="12.0" layoutY="435.0" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="775.0" />
+                  <Label layoutX="24.0" layoutY="459.0" prefHeight="32.0" prefWidth="155.0" text="DESCRIPTION">
+                     <styleClass>
+                        <String fx:value="title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <TextArea fx:id="descriptionTextArea" layoutX="20.0" layoutY="529.0" prefHeight="234.0" prefWidth="756.0" style="-fx-background-color: transparent;" styleClass="advertisement-view" text="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
+                  <Label layoutX="22.0" layoutY="501.0" text="Vehicle Type:">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label fx:id="typeLabel" layoutX="117.0" layoutY="501.0" prefHeight="20.0" prefWidth="176.0" text="TYPE">
+                     <styleClass>
+                        <String fx:value="label-green" />
+                        <String fx:value="sub-title" />
+                     </styleClass>
+                  </Label>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#004346" height="271.0" layoutX="12.0" layoutY="807.0" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="775.0" />
+                  <Rectangle fx:id="mainImageRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="207.0" layoutX="20.0" layoutY="849.0" onMouseClicked="#openMainPicture" onMouseEntered="#showImageDescription" onMouseExited="#hideImageDescription" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="332.0" />
+                  <Label layoutX="20.0" layoutY="815.0" prefHeight="32.0" prefWidth="115.0" text="GALLERY">
+                     <styleClass>
+                        <String fx:value="title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Rectangle fx:id="subImage1Rectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="100.0" layoutX="356.0" layoutY="849.0" onMouseClicked="#openSub1Picture" onMouseEntered="#showImageDescription" onMouseExited="#hideImageDescription" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="167.0" />
+                  <Rectangle fx:id="subImage2Rectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="100.0" layoutX="356.0" layoutY="955.0" onMouseClicked="#openSub2Picture" onMouseEntered="#showImageDescription" onMouseExited="#hideImageDescription" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="167.0" />
+                  <Rectangle fx:id="subImage3Rectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="100.0" layoutX="527.0" layoutY="849.0" onMouseClicked="#openSub3Picture" onMouseEntered="#showImageDescription" onMouseExited="#hideImageDescription" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="167.0" />
+                  <Rectangle fx:id="subImage4Rectangle" arcHeight="5.0" arcWidth="5.0" fill="#f2f4f5" height="100.0" layoutX="527.0" layoutY="955.0" onMouseClicked="#openSub4Picture" onMouseEntered="#showImageDescription" onMouseExited="#hideImageDescription" stroke="BLACK" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="167.0" />
+                  <Rating fx:id="ratings" layoutX="607.0" layoutY="22.0" onMouseClicked="#sendRatings" onMouseEntered="#clearRatings" onMouseExited="#fillRatings" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#004346" height="229.0" layoutX="12.0" layoutY="1096.0" stroke="WHITE" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeType="OUTSIDE" width="775.0" />
+                  <Circle fx:id="avatarCircle" fill="#f2f4f5" layoutX="344.0" layoutY="1211.0" radius="61.0" stroke="TRANSPARENT" strokeType="INSIDE" />
+                  <Label fx:id="usernameLabel" layoutX="432.0" layoutY="1160.0" text="ownerUsername">
+                     <styleClass>
+                        <String fx:value="title-label" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label layoutX="20.0" layoutY="1106.0" prefHeight="18.0" prefWidth="82.0" text="OWNER">
+                     <styleClass>
+                        <String fx:value="title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label fx:id="ownerPhoneNumberLabel" layoutX="432.0" layoutY="1195.0" styleClass="white-label" text="Phone Number" />
+                  <JFXButton layoutX="640.0" layoutY="1334.0" onAction="#onReportAdvertisement" styleClass="button-warning" text="Report Advertisement" />
+                  <Label layoutX="20.0" layoutY="1297.0" text="Account created:">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass></Label>
+                  <Label fx:id="ownerAccountCreationDate" layoutX="127.0" layoutY="1297.0" prefHeight="18.0" prefWidth="79.0" text="Date">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="label-green" />
+                     </styleClass>
+                  </Label>
+                  <Button fx:id="openOwnerProfileButton" layoutX="432.0" layoutY="1221.0" mnemonicParsing="false" onAction="#onGoToUserView" prefHeight="39.0" prefWidth="142.0" styleClass="button-light" text="Open Profile" />
+                  <Label layoutX="300.0" layoutY="365.0" text="Price">
+                     <styleClass>
+                        <String fx:value="sub-title" />
+                        <String fx:value="white-label" />
+                     </styleClass>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label fx:id="priceLabel" layoutX="339.0" layoutY="359.0" prefHeight="32.0" prefWidth="65.0" text="1000">
+                     <styleClass>
+                        <String fx:value="title" />
+                        <String fx:value="label-green" />
+                     </styleClass></Label>
+                  <Pane fx:id="warningPane" layoutX="12.0" layoutY="402.0" prefHeight="42.0" prefWidth="775.0" style="-fx-background-radius: 10;" styleClass="warning-pane">
+                     <children>
+                        <Label fx:id="warningLabel" layoutY="9.0" prefHeight="20.0" prefWidth="775.0" styleClass="warning-label" text="Label" />
+                     </children>
+                  </Pane>
+                  <ImageView fx:id="adminBackArrow" fitHeight="32.0" fitWidth="36.0" layoutX="19.0" layoutY="22.0" onMouseClicked="#goBack" pickOnBounds="true" preserveRatio="true" rotate="-180.0">
+                     <image>
+                        <Image url="@../../../Addition/Images/icons/arrow-icon-green.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton fx:id="removeButton" layoutX="524.0" layoutY="23.0" onAction="#onRemovedAction" styleClass="button-warning" text="REMOVE" />
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

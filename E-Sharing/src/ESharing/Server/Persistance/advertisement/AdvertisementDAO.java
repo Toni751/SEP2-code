@@ -19,4 +19,6 @@ public interface AdvertisementDAO {
   int addNewAdvertisementReport(int advertisementID);
   List<AdCatalogueAdmin> getAdminAdCatalogue();
   AdCatalogueAdmin getAdminAdCatalogue(int id);
+  boolean addRating (int ad_id, int user_id, int rating);
+  double retrieveAdRating (int ad_id);
 }

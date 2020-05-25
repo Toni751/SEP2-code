@@ -96,6 +96,8 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       statement2.setInt(1,id);
       statement2.executeUpdate();
 
+      notifyUsersWithReservation(id);
+
       System.out.println("Deleting advertisement at id: " + id);
       PreparedStatement statement3 = connection.prepareStatement("DELETE FROM advertisement WHERE id = ?;");
       statement3.setInt(1, id);
@@ -108,6 +110,11 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       e.printStackTrace();
     }
     return -1;
+  }
+
+  private void notifyUsersWithReservation(int id)
+  {
+
   }
 
   @Override public void addImagesAndDates(Advertisement advertisement)
@@ -519,4 +526,16 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     }
     return null;
   }
+
+  @Override
+  public boolean addRating(int ad_id, int user_id, int rating)
+  {
+    return false;
   }
+
+  @Override
+  public double retrieveAdRating(int ad_id)
+  {
+    return 0;
+  }
+}

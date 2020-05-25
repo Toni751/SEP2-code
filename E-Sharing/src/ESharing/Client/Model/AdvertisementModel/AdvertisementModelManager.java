@@ -111,6 +111,18 @@ public class AdvertisementModelManager implements AdvertisementModel{
         return clientAdvertisement.getAdminAdCatalogue();
     }
 
+    @Override
+    public boolean addRating(int ad_id, int user_id, int rating)
+    {
+        return false;
+    }
+
+    @Override
+    public double retrieveAdRating(int ad_id)
+    {
+        return 0;
+    }
+
     private byte[] convertImageFile(File image)
     {
         try {

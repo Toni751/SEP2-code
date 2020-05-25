@@ -149,4 +149,17 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   {
     return serverModel.getAdminAdCatalogue();
   }
+
+  @Override
+  public boolean addRating(int ad_id, int user_id, int rating)
+      throws RemoteException
+  {
+    return false;
+  }
+
+  @Override
+  public double retrieveAdRating(int ad_id) throws RemoteException
+  {
+    return 0;
+  }
 }

@@ -190,6 +190,18 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
+    public boolean addRating(int ad_id, int user_id, int rating)
+    {
+        return false;
+    }
+
+    @Override
+    public double retrieveAdRating(int ad_id)
+    {
+        return 0;
+    }
+
+    @Override
     public void newAdRequest(AdCatalogueAdmin ad)
     {
         support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, ad);

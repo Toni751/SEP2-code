@@ -216,6 +216,18 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
+    public boolean addRating(int ad_id, int user_id, int rating)
+    {
+        return false;
+    }
+
+    @Override
+    public double retrieveAdRating(int ad_id)
+    {
+        return 0;
+    }
+
+    @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
         if ("".equals(eventName) || eventName == null)

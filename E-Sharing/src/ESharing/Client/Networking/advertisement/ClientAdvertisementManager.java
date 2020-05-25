@@ -190,7 +190,7 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
-    public boolean addRating(int ad_id, int user_id, int rating)
+    public boolean addRating(int ad_id, int user_id, double rating)
     {
         try
         {

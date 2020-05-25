@@ -29,6 +29,6 @@ public interface AdvertisementModel extends PropertyChangeSubject
     List<CatalogueAd> getAllCataloguesForUser(int user_id);
 
     List<AdCatalogueAdmin> getAllAdminCatalogues();
-    boolean addRating (int ad_id, int user_id, int rating);
+    boolean addRating (int ad_id, int user_id, double rating);
     double retrieveAdRating (int ad_id);
 }

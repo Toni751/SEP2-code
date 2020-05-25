@@ -53,6 +53,7 @@ public class AdvertisementViewModel {
 
     private List<LocalDate> selectedDates;
     private ObservableList<LocalDate> unavailableDates;
+    private double rating;
 
     private ReservationModel reservationModel;
     private AdvertisementModel advertisementModel;
@@ -135,7 +136,9 @@ public class AdvertisementViewModel {
         }
 
         dateProperty.setValue(null);
-        ratingProperty.setValue(3); //Load average rating from database
+        rating = advertisementModel.retrieveAdRating(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID());
+        ratingProperty.setValue(rating);
+
         selectedDates.clear();
     }
 
@@ -195,9 +198,7 @@ public class AdvertisementViewModel {
     }
 
     public void sendRatingRequest() {
-        System.out.println(ratingProperty.get());
-        //send a request with the rating to database
-        //if result is true ; disabled rating component
+      advertisementModel.addRating(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID(), LoggedUser.getLoggedUser().getUser().getUser_id(), ratingProperty.get());
     }
 
     public void clearRatingsProperty() {
@@ -205,8 +206,7 @@ public class AdvertisementViewModel {
     }
 
     public void setDefaultRatingsProperty() {
-        ratingProperty.setValue(3);
-        //Load default ratings average from database
+        ratingProperty.setValue(rating);
     }
 
     public ObservableList<LocalDate> getUnavailableDates() {

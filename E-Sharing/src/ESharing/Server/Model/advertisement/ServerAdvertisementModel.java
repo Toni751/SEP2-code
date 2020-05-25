@@ -19,6 +19,6 @@ public interface ServerAdvertisementModel extends PropertyChangeSubject {
     Advertisement getAdvertisementById (int id);
     boolean addNewAdvertisementReport(int advertisementID);
     List<AdCatalogueAdmin> getAdminAdCatalogue();
-    boolean addRating (int ad_id, int user_id, int rating);
+    boolean addRating (int ad_id, int user_id, double rating);
     double retrieveAdRating (int ad_id);
 }

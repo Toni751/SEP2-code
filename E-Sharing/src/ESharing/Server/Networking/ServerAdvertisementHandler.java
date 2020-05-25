@@ -151,7 +151,7 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   }
 
   @Override
-  public boolean addRating(int ad_id, int user_id, int rating)
+  public boolean addRating(int ad_id, int user_id, double rating)
       throws RemoteException
   {
     return serverModel.addRating(ad_id, user_id, rating);

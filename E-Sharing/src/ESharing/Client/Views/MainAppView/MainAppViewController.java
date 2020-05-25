@@ -33,6 +33,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import org.controlsfx.control.Rating;
 
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
@@ -51,16 +52,17 @@ public class MainAppViewController extends ViewController {
     @FXML private JFXComboBox<String> searchComboBox;
     @FXML private Rectangle homeRectangle;
     @FXML private VBox mainVBox;
+    @FXML private ScrollPane scrollPane1;
     @FXML private Label messageNotification;
     @FXML private Rectangle addAdvertisementRectangle;
     @FXML private Rectangle messageRectangle;
     @FXML private Rectangle settingRectangle;
     @FXML private Pane contentPane;
+    private GridPane gridPane;
+    private int currentRow;
+    private int currentColumn;
     private ViewHandler viewHandler;
     private MainAppViewModel mainAppViewModel;
-
-    @FXML private ScrollPane scrollPane1;
-    @FXML private StackPane scrollRoot;
     /**
      * Initializes and opens the main system view with all components,
      * initializes a binding properties of the JavaFX components
@@ -83,84 +85,105 @@ public class MainAppViewController extends ViewController {
 
         searchComboBox.setItems(mainAppViewModel.getSearchItemsProperty());
         mainAppViewModel.loadNotifications();
-        //createMainView();
         crateViewGridPane();
 
         mainAppViewModel.addPropertyChangeListener(Events.USER_LOGOUT.toString(), this::onAdminRemoveAccount);
-        mainAppViewModel.addPropertyChangeListener(Events.UPDATE_AD_LIST.toString(), this::onUpdateList);
+        mainAppViewModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::onAdRemoved);
+        mainAppViewModel.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::onNewAd);
     }
 
-    private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("EVENT");
-        Platform.runLater(() -> {
-            mainVBox.getChildren().clear();
-            List<CatalogueAd> advertisements = (ArrayList) propertyChangeEvent.getNewValue();
+    private void onNewAd(PropertyChangeEvent propertyChangeEvent) {
+        CatalogueAd catalogueAd = (CatalogueAd) propertyChangeEvent.getNewValue();
+        AnchorPane anchorPane = viewHandler.createAdvertisementComponent(catalogueAd, String.valueOf(catalogueAd.getAdvertisementID()));
+        Platform.runLater(() -> gridPane.add(anchorPane,currentColumn,currentRow));
 
-            System.out.println(advertisements);
-            int rows = advertisements.size() / 3;
-            int rest = advertisements.size() % 3;
-            int currentAdvertisement = 0;
-
-            for (int i = 0; i < rows; i++) {
-                HBox row = new HBox(37.5);
-                for (int j = 0; j < 3; j++) {
-                    VBox advertisement = new VBox(5);
-                    advertisement.setPrefWidth(200);
-                    advertisement.setPrefHeight(180);
-
-                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                    mainImage.setFitWidth(200);
-                    mainImage.setFitHeight(106);
-                    mainImage.preserveRatioProperty();
-                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
-
-                    int finalCurrentAdvertisement = currentAdvertisement;
-                    advertisement.getChildren().addAll(mainImage, title, price);
-                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                        System.out.println("Clicked");
-                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
-                        viewHandler.openMainAppView();
-                    });
-
-                    row.getChildren().add(advertisement);
-                    currentAdvertisement++;
-
-                }
-                mainVBox.getChildren().add(row);
-            }
-
-            if (rest != 0) {
-                HBox row = new HBox(37.5);
-                for (int i = 0; i < rest; i++) {
-                    VBox advertisement = new VBox(5);
-                    advertisement.setPrefWidth(200);
-                    advertisement.setPrefHeight(180);
-
-                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                    mainImage.setFitWidth(200);
-                    mainImage.setFitHeight(106);
-                    mainImage.preserveRatioProperty();
-                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
-
-                    advertisement.getChildren().addAll(mainImage, title, price);
-
-                    int finalCurrentAdvertisement = currentAdvertisement;
-                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                        System.out.println("Clicked");
-                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
-                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
-                        viewHandler.openMainAppView();
-                    });
-                    row.getChildren().add(advertisement);
-                    currentAdvertisement++;
-                }
-                mainVBox.getChildren().add(row);
-            }
-        });
     }
+
+    private void onAdRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int advertisementID = (int) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < gridPane.getChildren().size() ; i++){
+            if(gridPane.getChildren().get(i).getId().equals(String.valueOf(advertisementID))) {
+                int finalI = i;
+                Platform.runLater(() ->gridPane.getChildren().remove(gridPane.getChildren().get(finalI)));
+            }
+        }
+    }
+
+//    private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
+//        createMainView();
+//    }
+
+//    private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
+//        System.out.println("EVENT");
+//        Platform.runLater(() -> {
+//            mainVBox.getChildren().clear();
+//            List<CatalogueAd> advertisements = (ArrayList) propertyChangeEvent.getNewValue();
+//
+//            System.out.println(advertisements);
+//            int rows = advertisements.size() / 3;
+//            int rest = advertisements.size() % 3;
+//            int currentAdvertisement = 0;
+//
+//            for (int i = 0; i < rows; i++) {
+//                HBox row = new HBox(37.5);
+//                for (int j = 0; j < 3; j++) {
+//                    VBox advertisement = new VBox(5);
+//                    advertisement.setPrefWidth(200);
+//                    advertisement.setPrefHeight(180);
+//
+//                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
+//                    mainImage.setFitWidth(200);
+//                    mainImage.setFitHeight(106);
+//                    mainImage.preserveRatioProperty();
+//                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
+//                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
+//
+//                    int finalCurrentAdvertisement = currentAdvertisement;
+//                    advertisement.getChildren().addAll(mainImage, title, price);
+//                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+//                        System.out.println("Clicked");
+//                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
+//                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+//                        viewHandler.openMainAppView();
+//                    });
+//
+//                    row.getChildren().add(advertisement);
+//                    currentAdvertisement++;
+//
+//                }
+//                mainVBox.getChildren().add(row);
+//            }
+//
+//            if (rest != 0) {
+//                HBox row = new HBox(37.5);
+//                for (int i = 0; i < rest; i++) {
+//                    VBox advertisement = new VBox(5);
+//                    advertisement.setPrefWidth(200);
+//                    advertisement.setPrefHeight(180);
+//
+//                    ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
+//                    mainImage.setFitWidth(200);
+//                    mainImage.setFitHeight(106);
+//                    mainImage.preserveRatioProperty();
+//                    Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
+//                    Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
+//
+//                    advertisement.getChildren().addAll(mainImage, title, price);
+//
+//                    int finalCurrentAdvertisement = currentAdvertisement;
+//                    advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+//                        System.out.println("Clicked");
+//                        mainAppViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement));
+//                        LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+//                        viewHandler.openMainAppView();
+//                    });
+//                    row.getChildren().add(advertisement);
+//                    currentAdvertisement++;
+//                }
+//                mainVBox.getChildren().add(row);
+//            }
+//        });
+//    }
 
     public void createMainView() {
         mainVBox.getChildren().clear();
@@ -232,29 +255,26 @@ public class MainAppViewController extends ViewController {
 
     }
 
+
+
+
     private void crateViewGridPane(){
 
         List<CatalogueAd> advertisements = mainAppViewModel.getCatalogueAds();
-
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         gridPane.setPrefWidth(820);
         gridPane.setMaxWidth(820);
         gridPane.setHgap(50);
         gridPane.setVgap(50);
 
-
-
-        int currentRow = 0;
-        int currentColumn = 0;
+        currentRow = 0;
+        currentColumn = 0;
         int currentAdvertisement = 0;
 
         int ads = advertisements.size();
         for(int i = 0 ;  i < ads/3; i++){
             for(int j = 0 ; j < 3 ; j++){
-                Node currentNode = createAdComponent(advertisements.get(currentAdvertisement));
-                gridPane.add(currentNode, currentColumn, currentRow);
-                GridPane.setHalignment(currentNode, HPos.CENTER);
-                GridPane.setValignment(currentNode, VPos.CENTER);
+                gridPane.add(viewHandler.createAdvertisementComponent(mainAppViewModel.getCatalogueAds().get(currentAdvertisement), String.valueOf(mainAppViewModel.getCatalogueAds().get(currentAdvertisement).getAdvertisementID())), currentColumn, currentRow);
                 currentColumn++;
                 currentAdvertisement++;
             }
@@ -265,63 +285,13 @@ public class MainAppViewController extends ViewController {
 
         if(ads%3 != 0){
             for( int i = 0 ; i < ads%3; i++){
-                gridPane.add(createAdComponent(advertisements.get(currentAdvertisement)), currentColumn, currentRow);
+                gridPane.add(viewHandler.createAdvertisementComponent(mainAppViewModel.getCatalogueAds().get(currentAdvertisement), String.valueOf(mainAppViewModel.getCatalogueAds().get(currentAdvertisement).getAdvertisementID())), currentColumn, currentRow);
                 currentColumn++;
                 currentAdvertisement++;
             }
         }
         scrollPane1.setContent(gridPane);
     }
-
-
-    private AnchorPane createAdComponent(CatalogueAd catalogueAd){
-        String[] colors = {"#102B3F", "#004346", "#828C51", "#2F3E46", "#52796F", "#EF7B45"};
-        Random randomColor = new Random();
-        int random = randomColor.nextInt(colors.length);
-
-       AnchorPane anchorPane = new AnchorPane();
-       anchorPane.setPrefWidth(200);
-       anchorPane.setPrefHeight(230);
-       anchorPane.setMaxWidth(200);
-       anchorPane.setMaxHeight(230);
-
-       Pane background = new Pane();
-       background.setPrefHeight(230);
-       background.setPrefWidth(200);
-       background.setStyle("-fx-background-color: "+ colors[random] +"; -fx-background-radius: 10");
-       anchorPane.setStyle("-fx-cursor: hand");
-
-       Rectangle image = new Rectangle();
-       image.setFill(new ImagePattern(catalogueAd.getMainImage()));
-       image.setLayoutY(10);
-       image.setWidth(200);
-       image.setHeight(120);
-
-       Label title = new Label(catalogueAd.getTitle());
-       title.setStyle("-fx-text-fill: #f2f7f7; -fx-font-size: 16px");
-       title.setLayoutY(150);
-       title.setLayoutX(10);
-
-       Label price = new Label(catalogueAd.getPrice() + "/day");
-       price.setStyle("-fx-text-fill: #fff; -fx-font-size: 24px");
-       price.setLayoutY(180);
-       price.setLayoutX(10);
-
-       anchorPane.getChildren().add(background);
-       anchorPane.getChildren().add(image);
-       anchorPane.getChildren().add(title);
-       anchorPane.getChildren().add(price);
-
-        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            System.out.println("Clicked");
-            mainAppViewModel.selectAdvertisement(catalogueAd);
-            LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
-            viewHandler.openMainAppView();
-        });
-
-       return anchorPane;
-    }
-
 
     /**
      * Sends a request to the view model layer to setting visible property of the setting rectangle object

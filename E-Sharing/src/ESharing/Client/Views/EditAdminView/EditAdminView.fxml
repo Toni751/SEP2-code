@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 
-<AnchorPane prefHeight="500.0" prefWidth="600.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.EditAdminView.EditAdminViewController">
+<AnchorPane prefHeight="600.0" prefWidth="700.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.EditAdminView.EditAdminViewController">
    <children>
       <Label layoutX="35.0" layoutY="32.0" prefHeight="38.0" prefWidth="212.0" text="Edit Administrator">
          <styleClass>
@@ -17,61 +17,61 @@
             <String fx:value="blue-big-title" />
          </styleClass>
       </Label>
-      <Line endX="-100.0" endY="-109.4000015258789" layoutX="399.0" layoutY="201.0" startX="-100.0" startY="206.60000610351562" stroke="#343333" />
-      <Label layoutX="35.0" layoutY="91.0" prefHeight="35.0" prefWidth="161.0" text="General">
+      <Line endX="-100.0" endY="-109.4000015258789" layoutX="464.0" layoutY="234.0" startX="-100.0" startY="206.60000610351562" stroke="#343333" />
+      <Label layoutX="100.0" layoutY="124.0" prefHeight="35.0" prefWidth="161.0" text="General">
          <styleClass>
             <String fx:value="blue-label" />
             <String fx:value="big-label" />
          </styleClass>
       </Label>
-      <Label layoutX="328.0" layoutY="91.0" prefHeight="35.0" prefWidth="161.0" text="Password">
+      <Label layoutX="393.0" layoutY="124.0" prefHeight="35.0" prefWidth="161.0" text="Password">
          <styleClass>
             <String fx:value="blue-label" />
             <String fx:value="big-label" />
          </styleClass>
       </Label>
-      <JFXTextField fx:id="usernameTextfield" focusColor="#c0c000" layoutX="51.0" layoutY="203.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
-      <Label layoutX="51.0" layoutY="187.0" text="Username">
+      <JFXTextField fx:id="usernameTextfield" focusColor="#c0c000" layoutX="116.0" layoutY="236.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+      <Label layoutX="116.0" layoutY="220.0" text="Username">
          <styleClass>
             <String fx:value="text-field-label" />
             <String fx:value="blue-label" />
          </styleClass>
       </Label>
-      <JFXTextField fx:id="phoneNumberTextfield" focusColor="#c0c000" layoutX="51.0" layoutY="272.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
-      <Label layoutX="51.0" layoutY="256.0" text="Phone Number">
+      <JFXTextField fx:id="phoneNumberTextfield" focusColor="#c0c000" layoutX="116.0" layoutY="305.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+      <Label layoutX="116.0" layoutY="289.0" text="Phone Number">
          <styleClass>
             <String fx:value="text-field-label" />
             <String fx:value="blue-label" />
          </styleClass>
       </Label>
-      <Label layoutX="341.0" layoutY="166.0" text="Old Password">
+      <Label layoutX="406.0" layoutY="199.0" text="Old Password">
          <styleClass>
             <String fx:value="text-field-label" />
             <String fx:value="blue-label" />
          </styleClass>
       </Label>
-      <Label layoutX="341.0" layoutY="229.0" text="New Password">
+      <Label layoutX="406.0" layoutY="262.0" text="New Password">
          <styleClass>
             <String fx:value="text-field-label" />
             <String fx:value="blue-label" />
          </styleClass>
       </Label>
-      <Label layoutX="341.0" layoutY="292.0" text="Confirm Password">
+      <Label layoutX="406.0" layoutY="325.0" text="Confirm Password">
          <styleClass>
             <String fx:value="text-field-label" />
             <String fx:value="blue-label" />
          </styleClass>
       </Label>
-      <Pane fx:id="warningPane" layoutY="443.0" prefHeight="68.0" prefWidth="600.0" styleClass="warning-pane">
+      <Pane fx:id="warningPane" layoutX="-1.0" layoutY="532.0" prefHeight="68.0" prefWidth="700.0" styleClass="warning-pane">
          <children>
-            <Label fx:id="warningLabel" layoutY="24.0" prefHeight="20.0" prefWidth="600.0" styleClass="warning-label" text="Label" />
+            <Label fx:id="warningLabel" layoutY="24.0" prefHeight="20.0" prefWidth="700.0" styleClass="warning-label" text="Label" />
          </children>
       </Pane>
-      <JFXButton layoutX="187.0" layoutY="316.0" onAction="#onSaveAction" prefHeight="35.0" prefWidth="58.0" styleClass="button-blue" text="Save" />
-      <JFXButton layoutX="117.0" layoutY="316.0" onAction="#onDefaultAction" prefHeight="35.0" prefWidth="63.0" styleClass="button-blue" text="Default" />
-      <JFXButton layoutX="464.0" layoutY="351.0" onAction="#onChangePassword" prefHeight="35.0" prefWidth="71.0" styleClass="button-blue" text="Save" />
-      <JFXPasswordField fx:id="oldPasswordTextField" focusColor="#c0c000" layoutX="339.0" layoutY="182.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
-      <JFXPasswordField fx:id="newPasswordTextField" focusColor="#c0c000" layoutX="339.0" layoutY="243.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
-      <JFXPasswordField fx:id="confirmPasswordTextField" focusColor="#c0c000" layoutX="339.0" layoutY="308.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+      <JFXButton layoutX="252.0" layoutY="349.0" onAction="#onSaveAction" prefHeight="35.0" prefWidth="58.0" styleClass="button-blue" text="Save" />
+      <JFXButton layoutX="182.0" layoutY="349.0" onAction="#onDefaultAction" prefHeight="35.0" prefWidth="63.0" styleClass="button-blue" text="Default" />
+      <JFXButton layoutX="529.0" layoutY="384.0" onAction="#onChangePassword" prefHeight="35.0" prefWidth="71.0" styleClass="button-blue" text="Save" />
+      <JFXPasswordField fx:id="oldPasswordTextField" focusColor="#c0c000" layoutX="404.0" layoutY="215.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+      <JFXPasswordField fx:id="newPasswordTextField" focusColor="#c0c000" layoutX="404.0" layoutY="276.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
+      <JFXPasswordField fx:id="confirmPasswordTextField" focusColor="#c0c000" layoutX="404.0" layoutY="341.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="195.0" styleClass="gray-textfield" />
    </children>
 </AnchorPane>

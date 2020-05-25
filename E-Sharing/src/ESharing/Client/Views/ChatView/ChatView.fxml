@@ -12,49 +12,49 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="746.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.ChatView.ChatViewController">
+<AnchorPane prefHeight="600.0" prefWidth="820.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.ChatView.ChatViewController">
    <children>
-      <Pane layoutX="166.0" layoutY="450.0" prefHeight="50.0" prefWidth="427.0" style="-fx-background-color: white;">
+      <Pane layoutX="166.0" layoutY="549.0" prefHeight="50.0" prefWidth="458.0" style="-fx-background-color: white;">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="42.0" layoutX="379.0" layoutY="3.0" onMouseClicked="#sendMessageByButton" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+            <ImageView fitHeight="50.0" fitWidth="42.0" layoutX="409.0" layoutY="4.0" onMouseClicked="#sendMessageByButton" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../../Addition/Images/icons/sendArrow.png" />
                </image>
             </ImageView>
-            <TextField fx:id="messageTextField" layoutY="1.0" onKeyPressed="#sendMessageByEnter" prefHeight="47.0" prefWidth="386.0" promptText="Type something to send..." styleClass="messageTextField" />
+            <TextField fx:id="messageTextField" layoutY="2.0" onKeyPressed="#sendMessageByEnter" prefHeight="47.0" prefWidth="400.0" promptText="Type something to send..." styleClass="messageTextField" />
          </children>
       </Pane>
-      <Pane prefHeight="500.0" prefWidth="166.0" styleClass="message-navigate-pane">
+      <Pane prefHeight="600.0" prefWidth="166.0" styleClass="message-navigate-pane">
          <children>
             <TextField fx:id="searchConversationBox" layoutX="16.0" layoutY="14.0" onKeyPressed="#searchConversation" prefHeight="25.0" prefWidth="134.0" promptText="🔎 Search Conversation" styleClass="search-conversation" />
-            <ScrollPane layoutX="11.0" layoutY="55.0" prefHeight="396.0" prefWidth="160.0" styleClass="transparent-background">
+            <ScrollPane layoutX="-1.0" layoutY="55.0" prefHeight="494.0" prefWidth="166.0" styleClass="transparent-background">
                <content>
-                  <VBox fx:id="conversationsPane" prefHeight="392.0" prefWidth="156.0" />
+                  <VBox fx:id="conversationsPane" prefHeight="392.0" prefWidth="148.0" />
                </content>
             </ScrollPane>
-            <ImageView fx:id="administratorBackImage" fitHeight="35.0" fitWidth="35.0" layoutX="14.0" layoutY="457.0" onMouseClicked="#onAdministratorBack" pickOnBounds="true" preserveRatio="true" rotate="-180.0" style="-fx-cursor: hand;">
+            <ImageView fx:id="administratorBackImage" fitHeight="35.0" fitWidth="35.0" layoutX="16.0" layoutY="551.0" onMouseClicked="#onAdministratorBack" pickOnBounds="true" preserveRatio="true" rotate="-180.0" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../../Addition/Images/icons/arrow-blue.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Pane layoutX="585.0" prefHeight="500.0" prefWidth="174.0" styleClass="white-pane">
+      <Pane layoutX="627.0" prefHeight="600.0" prefWidth="192.0" styleClass="white-pane">
          <children>
             <Label layoutX="36.0" layoutY="14.0" styleClass="big-label" text="Online Users" />
-            <ScrollPane layoutX="12.0" layoutY="50.0" prefHeight="450.0" prefWidth="160.0" styleClass="transparent-background">
+            <ScrollPane layoutX="1.0" layoutY="50.0" prefHeight="550.0" prefWidth="226.0" styleClass="transparent-background">
                <content>
-                  <VBox fx:id="onlineUsersPane" prefHeight="448.0" prefWidth="154.0" />
+                  <VBox fx:id="onlineUsersPane" prefHeight="545.0" prefWidth="223.0" />
                </content>
             </ScrollPane>
          </children>
       </Pane>
-      <ScrollPane fx:id="scrollPane" layoutX="166.0" layoutY="47.0" prefHeight="403.0" prefWidth="427.0" styleClass="transparent-background">
+      <ScrollPane fx:id="scrollPane" layoutX="166.0" layoutY="47.0" prefHeight="500.0" prefWidth="458.0" styleClass="transparent-background">
          <content>
-            <VBox fx:id="messagesPane" prefHeight="384.0" prefWidth="430.0" styleClass="cream-background" />
+            <VBox fx:id="messagesPane" prefHeight="480.0" prefWidth="457.0" styleClass="cream-background" />
          </content>
       </ScrollPane>
-      <Pane layoutX="166.0" prefHeight="47.0" prefWidth="427.0" styleClass="cream-background">
+      <Pane layoutX="166.0" prefHeight="47.0" prefWidth="458.0" styleClass="cream-background">
          <children>
             <Label fx:id="receiverUsernameLabel" layoutX="36.0" layoutY="10.0" prefHeight="27.0" prefWidth="386.0" styleClass="big-label" text="SuperBob1201">
                <font>

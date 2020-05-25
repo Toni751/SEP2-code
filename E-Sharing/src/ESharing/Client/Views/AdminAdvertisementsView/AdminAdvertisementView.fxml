@@ -9,18 +9,18 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane fx:id="mainPane" prefHeight="500.0" prefWidth="600.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminAdvertisementsView.AdminAdvertisementViewController">
+<AnchorPane fx:id="mainPane" prefHeight="600.0" prefWidth="700.0" styleClass="dark-pane" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.AdminAdvertisementsView.AdminAdvertisementViewController">
    <children>
       <Pane layoutY="-1.0">
          <children>
             <JFXButton fx:id="removeAdvertisementButton" layoutX="227.0" layoutY="152.0" onAction="#onRemoveAdAction" prefHeight="30.0" prefWidth="108.0" styleClass="button-warning" text="Remove Ad" />
             <JFXButton fx:id="approveAdvertisementButton" layoutX="14.0" layoutY="152.0" onAction="#approveSelectedAdvertisement" prefHeight="30.0" prefWidth="98.0" styleClass="button-blue" text="Approve" />
-            <TableView fx:id="advertisementTable" layoutY="196.0" prefHeight="306.0" prefWidth="600.0">
+            <TableView fx:id="advertisementTable" layoutY="196.0" prefHeight="401.0" prefWidth="700.0">
                <columns>
                   <TableColumn fx:id="adIdColumn" prefWidth="68.800048828125" text="ID" />
-                  <TableColumn fx:id="adTitleColumn" prefWidth="196.8000030517578" text="TITLE" />
-                  <TableColumn fx:id="adTypeColumn" prefWidth="201.5999755859375" text="TYPE" />
-                  <TableColumn fx:id="adReportsColumn" prefWidth="139.199951171875" styleClass="reports-column" text="REPORTS" />
+                  <TableColumn fx:id="adTitleColumn" prefWidth="404.00000762939453" text="TITLE" />
+                  <TableColumn fx:id="adTypeColumn" prefWidth="107.19998168945312" text="TYPE" />
+                  <TableColumn fx:id="adReportsColumn" prefWidth="120.7999267578125" styleClass="reports-column" text="REPORTS" />
                </columns>
             </TableView>
             <Label layoutX="23.0" layoutY="40.0" prefHeight="18.0" prefWidth="194.0" text="Manage Advertisements">
@@ -29,27 +29,27 @@
                   <String fx:value="blue-label" />
                </styleClass>
             </Label>
-            <Label fx:id="totalAdvertisement" alignment="CENTER" contentDisplay="CENTER" layoutX="194.0" layoutY="61.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
+            <Label fx:id="totalAdvertisement" alignment="CENTER" contentDisplay="CENTER" layoutX="246.0" layoutY="67.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
                <styleClass>
                   <String fx:value="big-number" />
                   <String fx:value="yellow-number" />
                </styleClass>
             </Label>
-            <Label fx:id="notApprovedAdvertisements" alignment="CENTER" contentDisplay="CENTER" layoutX="350.0" layoutY="61.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
+            <Label fx:id="notApprovedAdvertisements" alignment="CENTER" contentDisplay="CENTER" layoutX="402.0" layoutY="67.0" minWidth="-Infinity" prefHeight="46.0" prefWidth="66.0" text="1000">
                <styleClass>
                   <String fx:value="big-number" />
                   <String fx:value="red-number" />
                </styleClass>
             </Label>
-            <Label layoutX="175.0" layoutY="107.0" styleClass="blue-label" text="Total advertisements" />
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="310.0" layoutY="106.0" prefHeight="18.0" prefWidth="146.0" styleClass="blue-label" text="Not approed advertisements" />
-            <Pane fx:id="warningPane" prefHeight="30.0" prefWidth="600.0" styleClass="warning-pane">
+            <Label layoutX="227.0" layoutY="113.0" styleClass="blue-label" text="Total advertisements" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutX="362.0" layoutY="112.0" prefHeight="18.0" prefWidth="146.0" styleClass="blue-label" text="Not approed advertisements" />
+            <Pane fx:id="warningPane" prefHeight="30.0" prefWidth="700.0" styleClass="warning-pane">
                <children>
-                  <Label fx:id="warningLabel" layoutX="286.0" layoutY="6.0" styleClass="warning-label" text="Label" />
+                  <Label fx:id="warningLabel" layoutY="6.0" prefHeight="20.0" prefWidth="700.0" styleClass="warning-label" text="Label" />
                </children>
             </Pane>
             <JFXButton fx:id="goToSelectedAdvertisementButton" layoutX="120.0" layoutY="152.0" onAction="#goToSelectedAdvertisement" prefHeight="30.0" prefWidth="98.0" styleClass="button-blue" text="Open" />
-            <JFXComboBox fx:id="searchComboBox" focusColor="#c0c000" layoutX="425.0" layoutY="152.0" onAction="#onSearchAdvertisements" prefHeight="25.0" prefWidth="152.0" promptText="🔎 Search" />
+            <JFXComboBox fx:id="searchComboBox" focusColor="#c0c000" layoutX="534.0" layoutY="155.0" onAction="#onSearchAdvertisements" prefHeight="25.0" prefWidth="152.0" promptText="🔎 Search" />
          </children>
       </Pane>
    </children>

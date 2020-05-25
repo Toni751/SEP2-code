@@ -218,7 +218,7 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public boolean addRating(int ad_id, int user_id, int rating)
+    public boolean addRating(int ad_id, int user_id, double rating)
     {
         return advertisementDAO.addRating(ad_id, user_id, rating);
     }

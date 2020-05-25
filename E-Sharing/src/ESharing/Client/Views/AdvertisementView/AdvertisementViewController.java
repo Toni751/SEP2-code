@@ -35,6 +35,7 @@ public class AdvertisementViewController extends ViewController {
     @FXML private ScrollPane scrollPane;
     @FXML private JFXButton removeButton;
     @FXML private JFXButton reserveButton;
+    @FXML private Rating ratings;
     @FXML private Rectangle mainImageRectangle;
     @FXML private Rectangle subImage1Rectangle;
     @FXML private Rectangle subImage2Rectangle;
@@ -75,7 +76,7 @@ public class AdvertisementViewController extends ViewController {
         avatarCircle.fillProperty().bindBidirectional(advertisementViewModel.getAvatarCircleProperty());
         removeButton.visibleProperty().bindBidirectional(advertisementViewModel.getRemoveVisibleProperty());
         reserveButton.visibleProperty().bindBidirectional(advertisementViewModel.getReserveVisibleProperty());
-        //ratings.ratingProperty().bindBidirectional(advertisementViewModel.getRatingProperty());
+        ratings.ratingProperty().bindBidirectional(advertisementViewModel.getRatingProperty());
         adminBackArrow.visibleProperty().bindBidirectional(advertisementViewModel.getArrowBackProperty());
 
         datePicker.dayCellFactoryProperty().bindBidirectional(advertisementViewModel.getCellFactoryProperty());

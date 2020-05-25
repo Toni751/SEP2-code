@@ -1,20 +1,29 @@
 package ESharing.Client.Core;
 
+import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
+import ESharing.Shared.TransferedObject.Advertisement;
+import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Views;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.Random;
 
 /**
  * The class responsible for managing views
@@ -243,6 +252,68 @@ public class ViewHandler {
         previewStage.show();
     }
 
+    public AnchorPane createAdvertisementComponent(CatalogueAd catalogueAd, String id){
+        String[] colors = {"#102B3F", "#004346" , "#828C51", "#2F3E46", "#52796F", "#EF7B45"};
+        Random randomColor = new Random();
+        int random = randomColor.nextInt(colors.length);
+
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setPrefWidth(200);
+        anchorPane.setPrefHeight(230);
+        anchorPane.setMaxWidth(200);
+        anchorPane.setMaxHeight(230);
+
+        Pane background = new Pane();
+        background.setPrefHeight(230);
+        background.setPrefWidth(200);
+        background.setStyle("-fx-background-color: "+ colors[random] +"; -fx-background-radius: 10");
+        anchorPane.setStyle("-fx-cursor: hand");
+
+        Rectangle image = new Rectangle();
+        image.setFill(new ImagePattern(catalogueAd.getMainImage()));
+        image.setLayoutY(10);
+        image.setWidth(200);
+        image.setHeight(120);
+
+        Label title = new Label(catalogueAd.getTitle());
+        title.setStyle("-fx-text-fill: #f2f7f7; -fx-font-size: 16px");
+        title.setLayoutY(150);
+        title.setLayoutX(10);
+
+        Label price = new Label(catalogueAd.getPrice() + "/day");
+        price.setStyle("-fx-text-fill: #fff; -fx-font-size: 24px");
+        price.setLayoutY(180);
+        price.setLayoutX(10);
+
+        anchorPane.getChildren().add(background);
+        anchorPane.getChildren().add(image);
+        anchorPane.getChildren().add(title);
+        anchorPane.getChildren().add(price);
+
+        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            System.out.println("Clicked");
+            ViewModelFactory.getViewModelFactory().getMainAppViewModel().selectAdvertisement(catalogueAd);
+            LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
+            viewHandler.openMainAppView();
+        });
+        anchorPane.setId(id);
+        return anchorPane;
+
+    }
+
+
+    /**
+     * Minimizes the javaFx stage
+     */
+    public void minimizeWindow()
+    {
+        currentStage.setIconified(true);
+    }
+
+    public void resetMainView() {
+        ViewControllerFactory.clearViews();
+    }
+
     /**
      * Shows views in a current scene or already loaded pane, using the ViewController class
      * @param controller the ViewController class which inheritances all view controllers
@@ -289,17 +360,5 @@ public class ViewHandler {
                 currentStage.setY(event.getScreenY() - yOffset);
             }
         });
-    }
-
-    /**
-     * Minimizes the javaFx stage
-     */
-    public void minimizeWindow()
-    {
-        currentStage.setIconified(true);
-    }
-
-    public void resetMainView() {
-        ViewControllerFactory.clearViews();
     }
 }

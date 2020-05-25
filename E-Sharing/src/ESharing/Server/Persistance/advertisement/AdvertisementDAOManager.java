@@ -123,7 +123,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     try (Connection connection = getConnection())
     {
       ArrayList<Integer> ids = new ArrayList<>();
-      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailability_date >= NOW()::DATE;");
+      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailable_date >= NOW()::DATE;");
       statement.setInt(1,id);
       ResultSet resultSet = statement.executeQuery();
       while(resultSet.next())
@@ -577,7 +577,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public boolean addRating(int ad_id, int user_id, int rating)
+  @Override public boolean addRating(int ad_id, int user_id, double rating)
   {
     try (Connection connection = getConnection())
     {
@@ -586,7 +586,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
               + "ON CONFLICT ON CONSTRAINT unique_rating DO NOTHING;");
       statement.setInt(1, ad_id);
       statement.setInt(2, user_id);
-      statement.setInt(3, rating);
+      statement.setDouble(3, rating);
 
       int affectedRows = statement.executeUpdate();
       if (affectedRows == 1)
@@ -606,6 +606,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     {
       PreparedStatement statement = connection.prepareStatement(
           "SELECT AVG(score) AS average FROM ratings WHERE advertisement_id = ?;");
+      statement.setInt(1, ad_id);
       ResultSet resultSet = statement.executeQuery();
       double score =0;
       if(resultSet.next())

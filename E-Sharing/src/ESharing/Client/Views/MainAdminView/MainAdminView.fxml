@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" style="-fx-background-color: black;" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAdminView.MainAdminViewController">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: black;" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.MainAdminView.MainAdminViewController">
    <children>
-      <Pane prefHeight="500.0" prefWidth="200.0" styleClass="dark-pane">
+      <Pane prefHeight="600.0" prefWidth="200.0" styleClass="dark-pane">
          <children>
             <Rectangle fx:id="advertisementsRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="300.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
             <Rectangle fx:id="usersRectangle" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="100.0" layoutX="186.0" layoutY="200.0" stroke="BLACK" strokeType="INSIDE" styleClass="navigate-rectangle" width="14.0" />
@@ -41,19 +41,19 @@
             <JFXButton layoutX="1.0" layoutY="400.0" onAction="#onGoToChat" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Messages&#10;" />
             <JFXButton layoutY="100.0" onAction="#onDashboardAction" prefHeight="100.0" prefWidth="200.0" styleClass="button-transparent" text="&#10;Dashboard" />
             <Label prefHeight="63.0" prefWidth="200.0" styleClass="logo-label" text="E-SHARING" />
-            <ImageView fitHeight="23.0" fitWidth="30.0" layoutX="3.0" layoutY="32.0" onMouseClicked="#onEditAdminAccount" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+            <ImageView fitHeight="23.0" fitWidth="30.0" layoutX="26.0" layoutY="574.0" onMouseClicked="#onEditAdminAccount" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../../Addition/Images/icons/settingIcon.png" />
                </image>
             </ImageView>
             <Label fx:id="messageNotification" layoutX="105.0" layoutY="402.0" prefHeight="23.0" prefWidth="23.0" styleClass="message-notification" text="12" />
-            <ImageView fitHeight="23.0" fitWidth="23.0" layoutX="3.0" layoutY="3.0" onMouseClicked="#onLogoutAction" pickOnBounds="true" preserveRatio="true" rotate="-180.0" style="-fx-cursor: hand;">
+            <ImageView fitHeight="23.0" fitWidth="23.0" layoutX="3.0" layoutY="574.0" onMouseClicked="#onLogoutAction" pickOnBounds="true" preserveRatio="true" rotate="-180.0" style="-fx-cursor: hand;">
                <image>
                   <Image url="@../../../Addition/Images/icons/logout.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="contentPane" layoutX="200.0" prefHeight="500.0" prefWidth="600.0" />
+      <Pane fx:id="contentPane" layoutX="200.0" prefHeight="600.0" prefWidth="700.0" />
    </children>
 </AnchorPane>

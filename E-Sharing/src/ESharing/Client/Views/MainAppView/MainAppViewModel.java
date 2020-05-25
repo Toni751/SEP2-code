@@ -42,7 +42,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
     private PropertyChangeSupport support;
 
     private List<CatalogueAd> catalogueAds;
-
     private AdministratorActionsModel administratorActionsModel;
     private ChatModel chatModel;
     private UserActionsModel userActionsModel;
@@ -83,7 +82,7 @@ public class MainAppViewModel implements PropertyChangeSubject {
         for(int i = 0 ; i < catalogueAds.size() ; i++){
             if(catalogueAds.get(i).getAdvertisementID() == advertisementID) {
                 catalogueAds.remove(catalogueAds.get(i));
-                support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, catalogueAds);
+                support.firePropertyChange(Events.AD_REMOVED.toString(), null, advertisementID);
             }
         }
 
@@ -93,7 +92,7 @@ public class MainAppViewModel implements PropertyChangeSubject {
         CatalogueAd newCatalogue = (CatalogueAd) propertyChangeEvent.getNewValue();
         catalogueAds.add(newCatalogue);
 
-        support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, catalogueAds);
+        support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, newCatalogue);
     }
 
     /**
@@ -122,13 +121,6 @@ public class MainAppViewModel implements PropertyChangeSubject {
        catalogueAds.addAll(advertisementModel.getAllCatalogues());
        return catalogueAds;
    }
-
-
-
-
-
-
-
 
     /**
      * Sets visible property of the setting rectangle object as true
@@ -296,4 +288,5 @@ public class MainAppViewModel implements PropertyChangeSubject {
 
         support.firePropertyChange(Events.UPDATE_AD_LIST.toString(), null, filteredAds);
     }
+
 }

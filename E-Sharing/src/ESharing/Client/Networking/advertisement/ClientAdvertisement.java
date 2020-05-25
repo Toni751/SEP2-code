@@ -25,6 +25,6 @@ public interface ClientAdvertisement extends PropertyChangeSubject
     void registerForCallBack();
 
     List<CatalogueAd> getAllUserCatalogues(int user_id);
-  boolean addRating (int ad_id, int user_id, int rating);
+  boolean addRating (int ad_id, int user_id, double rating);
   double retrieveAdRating (int ad_id);
 }

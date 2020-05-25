@@ -192,12 +192,28 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     @Override
     public boolean addRating(int ad_id, int user_id, int rating)
     {
+        try
+        {
+            return server.addRating(ad_id, user_id, rating);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
         return false;
     }
 
     @Override
     public double retrieveAdRating(int ad_id)
     {
+        try
+        {
+            return server.retrieveAdRating(ad_id);
+        }
+        catch (RemoteException e)
+        {
+            e.printStackTrace();
+        }
         return 0;
     }
 

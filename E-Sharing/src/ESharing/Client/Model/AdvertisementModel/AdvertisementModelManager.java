@@ -114,13 +114,13 @@ public class AdvertisementModelManager implements AdvertisementModel{
     @Override
     public boolean addRating(int ad_id, int user_id, int rating)
     {
-        return false;
+        return clientAdvertisement.addRating(ad_id, user_id, rating);
     }
 
     @Override
     public double retrieveAdRating(int ad_id)
     {
-        return 0;
+        return clientAdvertisement.retrieveAdRating(ad_id);
     }
 
     private byte[] convertImageFile(File image)

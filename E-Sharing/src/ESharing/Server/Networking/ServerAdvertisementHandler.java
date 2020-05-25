@@ -154,12 +154,12 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   public boolean addRating(int ad_id, int user_id, int rating)
       throws RemoteException
   {
-    return false;
+    return serverModel.addRating(ad_id, user_id, rating);
   }
 
   @Override
   public double retrieveAdRating(int ad_id) throws RemoteException
   {
-    return 0;
+    return serverModel.retrieveAdRating(ad_id);
   }
 }

@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -218,13 +220,13 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     @Override
     public boolean addRating(int ad_id, int user_id, int rating)
     {
-        return false;
+        return advertisementDAO.addRating(ad_id, user_id, rating);
     }
 
     @Override
     public double retrieveAdRating(int ad_id)
     {
-        return 0;
+        return advertisementDAO.retrieveAdRating(ad_id);
     }
 
     @Override

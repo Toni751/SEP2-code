@@ -11,7 +11,6 @@ import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Views;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
-import com.sun.glass.ui.View;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;

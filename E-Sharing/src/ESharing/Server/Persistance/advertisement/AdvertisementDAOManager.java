@@ -4,6 +4,7 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Server.Persistance.Database;
 import ESharing.Server.Persistance.address.AddressDAO;
 import ESharing.Server.Persistance.address.AddressDAOManager;
+import ESharing.Server.Persistance.message.MessageDAO;
 import ESharing.Server.Persistance.reservation.ReservationDAO;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
@@ -22,11 +23,13 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
 
   private UserDAO userDAO;
   private ReservationDAO reservationDAO;
+  private MessageDAO messageDAO;
 
-  public AdvertisementDAOManager(UserDAO userDAO, ReservationDAO reservationDAO)
+  public AdvertisementDAOManager(UserDAO userDAO, ReservationDAO reservationDAO,MessageDAO messageDAO)
   {
-      this.userDAO = userDAO;
-      this.reservationDAO = reservationDAO;
+    this.userDAO = userDAO;
+    this.reservationDAO = reservationDAO;
+    this.messageDAO = messageDAO;
   }
 
   //  public static synchronized AdvertisementDAOManager getInstance()
@@ -84,16 +87,19 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       PreparedStatement statement = connection.prepareStatement("SELECT * FROM advertisement WHERE id = ?;");
       statement.setInt(1, id);
       ResultSet resultSet = statement.executeQuery();
-      while (resultSet.next()) {
+      while (resultSet.next())
+      {
         ownerId = resultSet.getInt("owner_id");
       }
 
-      PreparedStatement statement1 = connection.prepareStatement("DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
-      statement1.setInt(1,id);
+      PreparedStatement statement1 = connection.prepareStatement(
+          "DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
+      statement1.setInt(1, id);
       statement1.executeUpdate();
 
-      PreparedStatement statement2 = connection.prepareStatement("DELETE FROM ad_picture WHERE advertisement_id = ?;");
-      statement2.setInt(1,id);
+      PreparedStatement statement2 = connection.prepareStatement(
+          "DELETE FROM ad_picture WHERE advertisement_id = ?;");
+      statement2.setInt(1, id);
       statement2.executeUpdate();
 
       notifyUsersWithReservation(id);
@@ -112,9 +118,37 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return -1;
   }
 
-  private void notifyUsersWithReservation(int id)
+  private void notifyUsersWithReservation(int id) throws SQLException
   {
+    try (Connection connection = getConnection())
+    {
+      ArrayList<Integer> ids = new ArrayList<>();
+      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailability_date >= NOW()::DATE;");
+      statement.setInt(1,id);
+      ResultSet resultSet = statement.executeQuery();
+      while(resultSet.next())
+      {
+        ids.add(resultSet.getInt("user_id"));
+      }
+      PreparedStatement statement1 = connection.prepareStatement("SELECT owner_id FROM advertisement WHERE id=?;");
+      statement1.setInt(1,id);
+      ResultSet resultSet1 = statement1.executeQuery();
+      int owner_id=0;
+      if (resultSet1.next())
+      {
+        owner_id = resultSet1.getInt("owner_id");
+      }
+      User sender = userDAO.readById(owner_id);
+      User receiver = null;
+      for (int i = 0; i <ids.size() ; i++)
+      {
+        receiver=userDAO.readById(ids.get(i));
+        Message message = new Message(sender,receiver,"your reservation was canceled",false);
+        messageDAO.addMessage(message);
 
+      }
+
+    }
   }
 
   @Override public void addImagesAndDates(Advertisement advertisement)
@@ -183,35 +217,44 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override public CatalogueAd approveAdvertisement(int id) {
-    try (Connection connection = getConnection()) {
+  @Override public CatalogueAd approveAdvertisement(int id)
+  {
+    try (Connection connection = getConnection())
+    {
 
       PreparedStatement selectStatement = connection.prepareStatement("SELECT * FROM advertisement WHERE id = ?;");
       selectStatement.setInt(1, id);
       ResultSet resultSet = selectStatement.executeQuery();
-      while (resultSet.next()) {
+      while (resultSet.next())
+      {
         int advertisementID = resultSet.getInt("id");
         String title = resultSet.getString("title");
         int price = resultSet.getInt("price");
         String vehicle_type = resultSet.getString("vehicle_type");
         String mainImageServerPath = null;
 
-        PreparedStatement mainImageStatement = connection.prepareStatement("SELECT * FROM ad_picture WHERE advertisement_id = ? AND picture_name = ?;");
+        PreparedStatement mainImageStatement = connection.prepareStatement(
+            "SELECT * FROM ad_picture WHERE advertisement_id = ? AND picture_name = ?;");
         mainImageStatement.setInt(1, advertisementID);
         mainImageStatement.setString(2, AdImages.MAIN_IMAGE.toString());
         ResultSet mainImageResult = mainImageStatement.executeQuery();
-        while (mainImageResult.next()) {
+        while (mainImageResult.next())
+        {
           mainImageServerPath = mainImageResult.getString("path");
         }
 
-        PreparedStatement statement = connection.prepareStatement("UPDATE advertisement  SET approved=? WHERE id=?");
+        PreparedStatement statement = connection.prepareStatement(
+            "UPDATE advertisement  SET approved=? WHERE id=?");
         statement.setBoolean(1, true);
         statement.setInt(2, id);
         statement.executeUpdate();
 
-        return new CatalogueAd(id, title, mainImageServerPath, price, vehicle_type);
+        return new CatalogueAd(id, title, mainImageServerPath, price,
+            vehicle_type);
       }
-    } catch (SQLException e) {
+    }
+    catch (SQLException e)
+    {
       e.printStackTrace();
     }
     return null;
@@ -280,7 +323,8 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         int owner_id = 0;
 
         Map<String, String> pictures = getPicturesForAdvertisement(id);
-        ArrayList<LocalDate> unavailableDates = getUnavailabilityForAdvertisement(id);
+        ArrayList<LocalDate> unavailableDates = getUnavailabilityForAdvertisement(
+            id);
 
         PreparedStatement ownerStatement = connection.prepareStatement("SELECT * FROM user_account WHERE id=?;");
         ownerStatement.setInt(1, ownerID);
@@ -463,7 +507,8 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         Map<String, String> map = getPicturesForAdvertisement(advertisementID);
         String mainImageServerPath = map.get(AdImages.MAIN_IMAGE.toString());
 
-        CatalogueAd catalogueAd = new CatalogueAd(advertisementID, title, mainImageServerPath, price, type);
+        CatalogueAd catalogueAd = new CatalogueAd(advertisementID, title,
+            mainImageServerPath, price, type);
         catalogueAd.setReservations(reservationDAO.getReservationForAdvertisement(advertisementID));
 
         catalogueAdUser.add(catalogueAd);
@@ -494,7 +539,8 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         int reports = resultSet.getInt("reports");
         boolean approved = resultSet.getBoolean("approved");
 
-        catalogueAdAdmin.add(new AdCatalogueAdmin(advertisementID, title, type, reports, approved));
+        catalogueAdAdmin.add(
+            new AdCatalogueAdmin(advertisementID, title, type, reports, approved));
       }
       System.out.println(catalogueAdAdmin);
       return catalogueAdAdmin;
@@ -506,13 +552,15 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return null;
   }
 
-  @Override
-  public AdCatalogueAdmin getAdminAdCatalogue(int id) {
-    try (Connection connection = getConnection()) {
+  @Override public AdCatalogueAdmin getAdminAdCatalogue(int id)
+  {
+    try (Connection connection = getConnection())
+    {
       PreparedStatement statement = connection.prepareStatement(
-              "SELECT id,title,vehicle_type,reports,approved FROM advertisement;");
+          "SELECT id,title,vehicle_type,reports,approved FROM advertisement;");
       ResultSet resultSet = statement.executeQuery();
-      while (resultSet.next()) {
+      while (resultSet.next())
+      {
         int advertisementID = resultSet.getInt("id");
         String title = resultSet.getString("title");
         String type = resultSet.getString("vehicle_type");
@@ -521,21 +569,53 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
 
         return new AdCatalogueAdmin(id, title, type, reports, approved);
       }
-    } catch (SQLException e) {
+    }
+    catch (SQLException e)
+    {
       e.printStackTrace();
     }
     return null;
   }
 
-  @Override
-  public boolean addRating(int ad_id, int user_id, int rating)
+  @Override public boolean addRating(int ad_id, int user_id, int rating)
   {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "INSERT INTO ratings (advertisement_id,user_id,score) VALUES (?, ?, ?) "
+              + "ON CONFLICT ON CONSTRAINT unique_rating DO NOTHING;");
+      statement.setInt(1, ad_id);
+      statement.setInt(2, user_id);
+      statement.setInt(3, rating);
+
+      int affectedRows = statement.executeUpdate();
+      if (affectedRows == 1)
+        return true;
+    }
+
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
     return false;
   }
 
-  @Override
-  public double retrieveAdRating(int ad_id)
+  @Override public double retrieveAdRating(int ad_id)
   {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "SELECT AVG(score) AS average FROM ratings WHERE advertisement_id = ?;");
+      ResultSet resultSet = statement.executeQuery();
+      double score =0;
+      if(resultSet.next())
+        score = resultSet.getDouble("average");
+      return score;
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
     return 0;
   }
 }

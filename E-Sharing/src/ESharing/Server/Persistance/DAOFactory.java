@@ -29,7 +29,7 @@ public class DAOFactory
     messageDAO = new MessageDAOManager(administratorDAO);
     userDAO = new UserDAOManager(addressDAO, messageDAO);
     reservationDAO = new ReservationDAOManager(userDAO);
-    advertisementDAO = new AdvertisementDAOManager(userDAO, reservationDAO);
+    advertisementDAO = new AdvertisementDAOManager(userDAO, reservationDAO,messageDAO);
   }
 
   public AddressDAO getAddressDAO()

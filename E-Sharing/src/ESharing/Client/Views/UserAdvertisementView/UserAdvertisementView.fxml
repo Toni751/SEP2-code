@@ -4,12 +4,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.UserAdvertisementView.UserAdvertisementViewController">
+<AnchorPane prefHeight="600.0" prefWidth="820.0" stylesheets="@../../../Addition/Styles/Styles.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ESharing.Client.Views.UserAdvertisementView.UserAdvertisementViewController">
    <children>
-      <ScrollPane prefHeight="400.0" prefWidth="600.0">
+      <ScrollPane fx:id="scrollPane" prefHeight="600.0" prefWidth="820.0" styleClass="create-ad-scroll-pane">
          <content>
-            <VBox fx:id="mainVBox" prefHeight="395.0" prefWidth="595.0" />
-         </content>
-      </ScrollPane>
+            <VBox fx:id="mainVBox" prefHeight="596.0" prefWidth="815.0" />
+         </content></ScrollPane>
    </children>
 </AnchorPane>

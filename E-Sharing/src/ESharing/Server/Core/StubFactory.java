@@ -32,7 +32,7 @@ public class StubFactory implements StubInterface {
         if(chatServerRMI == null)
         {
             System.out.println("Server chat was null in stub");
-            chatServerRMI = new ServerChatHandler(serverFactory.getChatModel(), serverFactory.getServerModel());
+            chatServerRMI = new ServerChatHandler(serverFactory.getChatModel(), serverFactory.getServerModel(), serverFactory.getServerAdvertisementModel());
         }
         return chatServerRMI;
     }

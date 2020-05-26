@@ -92,10 +92,10 @@ public class AdvertisementViewController extends ViewController {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         dataPickerEvent();
+        scrollPane.setVvalue(0);
         initializeDatePicker();
 
     }
-
 
     public void onOpenCalendar() {
         datePicker.show();

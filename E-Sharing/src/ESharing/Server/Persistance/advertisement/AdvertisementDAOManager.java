@@ -79,7 +79,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return -1;
   }
 
-  @Override public int removeAdvertisement(int id)
+  @Override public List<Message> removeAdvertisement(int id)
   {
     int ownerId = -1;
     try (Connection connection = getConnection())
@@ -91,6 +91,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       {
         ownerId = resultSet.getInt("owner_id");
       }
+      List<Message> messages = notifyUsersWithReservation(id);
 
       PreparedStatement statement1 = connection.prepareStatement(
           "DELETE FROM ad_unavailability WHERE advertisement_id = ?;");
@@ -102,53 +103,72 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       statement2.setInt(1, id);
       statement2.executeUpdate();
 
-      notifyUsersWithReservation(id);
+      PreparedStatement ratingStatement = connection.prepareStatement(
+              "DELETE FROM ratings WHERE advertisement_id = ?;");
+      ratingStatement.setInt(1, id);
+      ratingStatement.executeUpdate();
+
+
 
       System.out.println("Deleting advertisement at id: " + id);
       PreparedStatement statement3 = connection.prepareStatement("DELETE FROM advertisement WHERE id = ?;");
       statement3.setInt(1, id);
       int affectedRows = statement3.executeUpdate();
       if (affectedRows == 1)
-        return ownerId;
+        return messages;
     }
     catch (SQLException e)
     {
       e.printStackTrace();
     }
-    return -1;
+    return null;
   }
 
-  private void notifyUsersWithReservation(int id) throws SQLException
+  private List<Message> notifyUsersWithReservation(int id)
   {
+    ArrayList<Message> messages = new ArrayList<>();
     try (Connection connection = getConnection())
     {
       ArrayList<Integer> ids = new ArrayList<>();
-      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailable_date >= NOW()::DATE;");
+      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailable_date >= NOW()::DATE AND user_id IS NOT NULL ORDER BY user_id;");
       statement.setInt(1,id);
       ResultSet resultSet = statement.executeQuery();
-      while(resultSet.next())
+      System.out.println("IDIDIDIDIDI : " + id);
+      while (resultSet.next())
       {
+        System.out.println("XXXXXXXXXXXXXXXXXXX"+ resultSet.getInt("user_id"));
         ids.add(resultSet.getInt("user_id"));
       }
+      System.out.println("IDS " + ids);
       PreparedStatement statement1 = connection.prepareStatement("SELECT owner_id FROM advertisement WHERE id=?;");
       statement1.setInt(1,id);
+
       ResultSet resultSet1 = statement1.executeQuery();
       int owner_id=0;
       if (resultSet1.next())
       {
         owner_id = resultSet1.getInt("owner_id");
+        System.out.println("OWNER" + owner_id);
       }
       User sender = userDAO.readById(owner_id);
+      System.out.println("SENDER" + sender);
       User receiver = null;
-      for (int i = 0; i <ids.size() ; i++)
-      {
-        receiver=userDAO.readById(ids.get(i));
-        Message message = new Message(sender,receiver,"your reservation was canceled",false);
-        messageDAO.addMessage(message);
-
+      System.out.println("IDSSSSSSSS" + ids.size());
+        for (int i = 0; i < ids.size(); i++) {
+          System.out.println("Reservation removed ");
+          receiver = userDAO.readById(ids.get(i));
+          Message message = new Message(sender, receiver, "your reservation was canceled", false);
+          messageDAO.addMessage(message);
+          messages.add(message);
       }
-
+      if(messages.isEmpty()){
+        messages.add(new Message(sender, sender, "", false));
+      }
+      return messages;
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
     }
+   return null;
   }
 
   @Override public void addImagesAndDates(Advertisement advertisement)

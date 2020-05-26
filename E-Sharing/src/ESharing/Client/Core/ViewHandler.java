@@ -5,11 +5,16 @@ import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
+import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Views;
 import javafx.application.Platform;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,7 +27,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
+import org.controlsfx.control.PopOver;
 
+import java.time.LocalDate;
 import java.util.Random;
 
 /**
@@ -230,6 +238,11 @@ public class ViewHandler {
         showView(viewController, existingPane);
     }
 
+    public void openAdsOverviewView(Pane existingPane){
+        viewController = ViewControllerFactory.getViewController(Views.ADS_OVERVIEW_VIEW);
+        showView(viewController, existingPane);
+    }
+
     public void openPicturePreview(Image image)
     {
         Stage previewStage = new Stage();
@@ -252,9 +265,11 @@ public class ViewHandler {
         previewStage.show();
     }
 
-    public AnchorPane createAdvertisementComponent(CatalogueAd catalogueAd, String id){
+    public AnchorPane createAdvertisementComponent(CatalogueAd catalogueAd, String id, int currentAd){
         String[] colors = {"#102B3F", "#004346" , "#828C51", "#2F3E46", "#52796F", "#EF7B45"};
         Random randomColor = new Random();
+        DatePicker datePicker = null;
+        ImageView calendarImage = new ImageView();
         int random = randomColor.nextInt(colors.length);
 
         AnchorPane anchorPane = new AnchorPane();
@@ -285,14 +300,74 @@ public class ViewHandler {
         price.setLayoutY(180);
         price.setLayoutX(10);
 
+        if(currentAd != -1){
+
+            datePicker = new DatePicker();
+            Button button = new Button("Open profile");
+            Label usernameLabel = new Label("Username");
+            Pane userPane = new Pane();
+            userPane.getChildren().addAll(button, usernameLabel);
+            PopOver popOver = new PopOver(userPane);
+            int finalCurrentAdvertisement1 = currentAd;
+            DatePicker finalDatePicker = datePicker;
+            Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    for(int i = 0 ; i < ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
+
+                        if(ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
+                            setStyle("-fx-background-color: #4CDBC4;");
+                            int finalI = i;
+                            System.out.println(finalCurrentAdvertisement1);
+                            addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+
+                                //popOver.setTitle("User Info");
+                                User reservationUser = ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
+                                usernameLabel.textProperty().setValue(reservationUser.getUsername());
+                                button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
+                                    LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
+                                    LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+                                    viewHandler.openMainAppView();
+                                    finalDatePicker.hide();
+                                });
+                                popOver.show(finalDatePicker);
+                                //popOver.detach();
+                            });
+                        }
+
+                    }
+                }
+            };
+
+            datePicker.setDayCellFactory(dayCellFactory);
+            datePicker.setLayoutY(180);
+            datePicker.setLayoutX(30);
+            datePicker.setVisible(false);
+            calendarImage.setImage(new Image("ESharing/Addition/Images/icons/calendar-white-icon.png"));
+            calendarImage.setLayoutY(180);
+            calendarImage.setLayoutX(130);
+            calendarImage.setFitHeight(50);
+            calendarImage.setFitWidth(50);
+            DatePicker finalDatePicker1 = datePicker;
+            calendarImage.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+               finalDatePicker1.show();
+            });
+        }
+
         anchorPane.getChildren().add(background);
         anchorPane.getChildren().add(image);
         anchorPane.getChildren().add(title);
         anchorPane.getChildren().add(price);
+        if(currentAd != -1) {
+            anchorPane.getChildren().add(datePicker);
+            anchorPane.getChildren().add(calendarImage);
+        }
+            
 
-        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+        image.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             System.out.println("Clicked");
-            ViewModelFactory.getViewModelFactory().getMainAppViewModel().selectAdvertisement(catalogueAd);
+            ViewModelFactory.getViewModelFactory().getAdsOverviewViewModel().selectAdvertisement(catalogueAd);
             LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
             viewHandler.openMainAppView();
         });

@@ -14,12 +14,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.DateCell;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -36,8 +34,12 @@ import java.util.List;
 public class UserAdvertisementViewController extends ViewController {
 
     @FXML private VBox mainVBox;
+    @FXML private ScrollPane scrollPane;
     private ViewHandler viewHandler;
     private UserAdvertisementViewModel userAdvertisementViewModel;
+    private GridPane gridPane;
+    private int currentRow;
+    private int currentColumn;
 
     public void init()
     {
@@ -45,14 +47,14 @@ public class UserAdvertisementViewController extends ViewController {
         userAdvertisementViewModel = ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel();
         userAdvertisementViewModel.defaultView();
 
-        createMainView();
+        //createMainView();
+        createGridPane();
 
         userAdvertisementViewModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::updateAdView);
     }
 
     private void updateAdView(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(this::createMainView);
-
+        //Platform.runLater(this::createMainView);
     }
 
     public void createMainView() {
@@ -207,6 +209,40 @@ public class UserAdvertisementViewController extends ViewController {
             }
             mainVBox.getChildren().add(row);
         }
+    }
+
+    public void createGridPane(){
+        List<CatalogueAd> advertisements = userAdvertisementViewModel.getOwnCatalogues();
+        gridPane = new GridPane();
+        gridPane.setPrefWidth(820);
+        gridPane.setMaxWidth(820);
+        gridPane.setHgap(50);
+        gridPane.setVgap(50);
+
+        currentRow = 0;
+        currentColumn = 0;
+        int currentAdvertisement = 0;
+
+        int ads = advertisements.size();
+        for(int i = 0 ;  i < ads/3; i++){
+            for(int j = 0 ; j < 3 ; j++){
+                gridPane.add(viewHandler.createAdvertisementComponent(userAdvertisementViewModel.getOwnCatalogues().get(currentAdvertisement), String.valueOf(userAdvertisementViewModel.getOwnCatalogues().get(currentAdvertisement).getAdvertisementID()),currentAdvertisement), currentColumn, currentRow);
+                currentColumn++;
+                currentAdvertisement++;
+            }
+
+            currentColumn = 0;
+            currentRow++;
+        }
+
+        if(ads%3 != 0){
+            for( int i = 0 ; i < ads%3; i++){
+                gridPane.add(viewHandler.createAdvertisementComponent(userAdvertisementViewModel.getOwnCatalogues().get(currentAdvertisement), String.valueOf(userAdvertisementViewModel.getOwnCatalogues().get(currentAdvertisement).getAdvertisementID()), currentAdvertisement), currentColumn, currentRow);
+                currentColumn++;
+                currentAdvertisement++;
+            }
+        }
+        scrollPane.setContent(gridPane);
     }
 
     public void onOpenAdvertisement(ActionEvent actionEvent) {

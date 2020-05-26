@@ -51,6 +51,15 @@ public class ReservationViewModel {
 
         reservationModel.addPropertyChangeListener(Events.NEW_RESERVATION_CREATED.toString(), this::newReservationCreated);
         reservationModel.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), this::reservationRemoved);
+        advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
+    }
+
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int id = (int) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < reservations.size(); i++){
+            if(reservations.get(i).getAdvertisementID() == id)
+                reservations.remove(reservations.get(i));
+        }
     }
 
     public void defaultView(){

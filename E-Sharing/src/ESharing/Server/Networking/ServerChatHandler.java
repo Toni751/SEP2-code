@@ -1,7 +1,6 @@
 package ESharing.Server.Networking;
 
-import ESharing.Client.Model.UserActions.LoggedUser;
-import ESharing.Server.Core.ServerModelFactory;
+import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Server.Model.chat.ServerChatModel;
 import ESharing.Server.Model.user.ServerModel;
 import ESharing.Shared.Networking.chat.RMIChatClient;
@@ -9,6 +8,7 @@ import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
+import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
@@ -23,12 +23,14 @@ public class ServerChatHandler implements RMIChatServer
   private PropertyChangeListener listenForOfflineUser;
   private PropertyChangeListener listenForMessageRead;
   private ServerModel serverModel;
+  private ServerAdvertisementModel  advertisementModel;
 
-  public ServerChatHandler(ServerChatModel chatModel, ServerModel serverModel) throws RemoteException
+  public ServerChatHandler(ServerChatModel chatModel, ServerModel serverModel,ServerAdvertisementModel advertisementModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
     this.chatModel = chatModel;
     this.serverModel = serverModel;
+    this.advertisementModel =advertisementModel;
   }
 
   @Override
@@ -75,6 +77,7 @@ public class ServerChatHandler implements RMIChatServer
     {
       System.out.println("Registering in SCH user: " + chatClient.getLoggedUser().getUsername());
       chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + chatClient.getLoggedUser().getUser_id(), listenForNewMessage);
+      advertisementModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + chatClient.getLoggedUser().getUser_id(), listenForNewMessage);
     }
     catch (RemoteException e)
     {
@@ -153,6 +156,7 @@ public class ServerChatHandler implements RMIChatServer
     {
       chatModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + client.getLoggedUser().getUser_id(), listenForNewMessage);
       chatModel.removePropertyChangeListener(Events.MAKE_MESSAGE_READ.toString()  + client.getLoggedUser().getUser_id(), listenForMessageRead);
+      advertisementModel.removePropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString() + client.getLoggedUser().getUser_id(), listenForNewMessage);
     }
     catch (RemoteException e)
     {

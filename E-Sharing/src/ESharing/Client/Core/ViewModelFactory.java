@@ -4,6 +4,7 @@ import ESharing.Client.Views.AdminAdvertisementsView.AdminAdvertisementsViewMode
 import ESharing.Client.Views.AdminDashboardView.AdminDashboardViewModel;
 import ESharing.Client.Views.AdminEditUserView.AdminEditUserViewModel;
 import ESharing.Client.Views.AdvertisementView.AdvertisementViewModel;
+import ESharing.Client.Views.AdvertisementsOverview.AdsOverviewViewModel;
 import ESharing.Client.Views.ChatView.ChatViewModel;
 import ESharing.Client.Views.CreateAdView.CreateAdViewModel;
 import ESharing.Client.Views.EditAdminView.EditAdminViewModel;
@@ -46,6 +47,7 @@ public class ViewModelFactory {
     private UserViewModel userViewModel;
     private UserAdvertisementViewModel userAdvertisementViewModel;
     private ReservationViewModel reservationViewModel;
+    private AdsOverviewViewModel adsOverviewViewModel;
     private static ViewModelFactory viewModelFactory;
 
     /**
@@ -72,6 +74,7 @@ public class ViewModelFactory {
         userViewModel = new UserViewModel();
         userAdvertisementViewModel = new UserAdvertisementViewModel();
         reservationViewModel = new ReservationViewModel();
+        adsOverviewViewModel = new AdsOverviewViewModel();
     }
 
     /**
@@ -215,5 +218,9 @@ public class ViewModelFactory {
 
     public ReservationViewModel getReservationViewModel() {
         return reservationViewModel;
+    }
+
+    public AdsOverviewViewModel getAdsOverviewViewModel() {
+        return adsOverviewViewModel;
     }
 }

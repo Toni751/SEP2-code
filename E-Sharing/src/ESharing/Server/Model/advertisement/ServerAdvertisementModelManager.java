@@ -5,8 +5,10 @@ import ESharing.Server.Persistance.advertisement.AdvertisementDAOManager;
 import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
 import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
+import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
+import jdk.jfr.Event;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
@@ -132,11 +134,17 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
     @Override
     public boolean removeAdvertisement(int id) {
-        int ownerID = advertisementDAO.removeAdvertisement(id);
-        if(ownerID != -1) {
+       List<Message> messages = advertisementDAO.removeAdvertisement(id);
+        if(messages != null) {
             // add removing part for pictures
-            deleteDirectory(new File("E-Sharing/Resources/User" + ownerID + "/Advertisement" + id));
+            deleteDirectory(new File("E-Sharing/Resources/User" + messages.get(0).getSender().getUser_id() + "/Advertisement" + id));
             support.firePropertyChange(Events.AD_REMOVED.toString(), null, id);
+            if(messages.size() == 1 && messages.get(0).getContent().equals(""))
+                return true;
+            for(Message message : messages) {
+                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
+                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getSender().getUser_id(), null, message);
+            }
             return true;
         }
         return false;

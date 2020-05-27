@@ -200,26 +200,50 @@ public class ViewModelFactory {
         return adViewModel;
     }
 
+    /**
+     * Returns initialized view model of the admin advertisement view
+     * @return the initialized AdminAdvertisementViewModel
+     */
     public AdminAdvertisementsViewModel getAdminAdvertisementsViewModel() {
         return adminAdvertisementsViewModel;
     }
 
+    /**
+     * Returns initialized view model of the advertisement view
+     * @return the initialized AdvertisementViewModel
+     */
     public AdvertisementViewModel getAdvertisementViewModel() {
         return advertisementViewModel;
     }
 
+    /**
+     * Returns initialized view model of the user view
+     * @return the initialized UserViewModel
+     */
     public UserViewModel getUserViewModel() {
         return userViewModel;
     }
 
+    /**
+     * Returns initialized view model of the user advertisement view
+     * @return the initialized UserAdvertisementViewModel
+     */
     public UserAdvertisementViewModel getUserAdvertisementViewModel() {
         return userAdvertisementViewModel;
     }
 
+    /**
+     * Returns initialized view model of the reservationView
+     * @return the initialized ReservationViewModel
+     */
     public ReservationViewModel getReservationViewModel() {
         return reservationViewModel;
     }
 
+    /**
+     * Returns initialized view model of the advertisements overview view
+     * @return the initialized AdsOverviewViewModel
+     */
     public AdsOverviewViewModel getAdsOverviewViewModel() {
         return adsOverviewViewModel;
     }

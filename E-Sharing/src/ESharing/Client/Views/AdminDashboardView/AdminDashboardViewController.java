@@ -19,6 +19,7 @@ public class AdminDashboardViewController extends ViewController {
     @FXML private AreaChart areaChart;
     @FXML private Label userNumberLabel;
     @FXML private PieChart pieChart;
+    @FXML private Label advertisementsLabel;
 
     private AdminDashboardViewModel viewModel;
 
@@ -35,6 +36,7 @@ public class AdminDashboardViewController extends ViewController {
         pieChart.legendVisibleProperty().bindBidirectional(viewModel.getPieChartLegendVisibleProperty());
         areaChart.getXAxis().autoRangingProperty().bindBidirectional(viewModel.getXAxisRanging());
         areaChart.getYAxis().autoRangingProperty().bindBidirectional(viewModel.getYAxisRanging());
+        advertisementsLabel.textProperty().bind(viewModel.getAdvertisementsNumberProperty());
         pieChart.dataProperty().bind(viewModel.getPieChartDate());
         userNumberLabel.textProperty().bind(viewModel.getUserNumberProperty());
         ObservableList<XYChart.Series> userAccounts = FXCollections.observableArrayList(viewModel.getUsersSeries());

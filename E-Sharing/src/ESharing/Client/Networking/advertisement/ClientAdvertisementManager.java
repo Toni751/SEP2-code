@@ -171,6 +171,16 @@ public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdver
     }
 
     @Override
+    public int getAdvertisementNumber() {
+        try {
+            return server.getAdvertisementNumber();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
     public void registerForCallBack() {
         try {
             server.registerClientCallback(this);

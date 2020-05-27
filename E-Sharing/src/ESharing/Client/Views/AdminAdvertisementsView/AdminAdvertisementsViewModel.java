@@ -1,6 +1,7 @@
 package ESharing.Client.Views.AdminAdvertisementsView;
 
 import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
@@ -16,6 +17,8 @@ import javafx.collections.ObservableList;
 import jdk.jfr.Event;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminAdvertisementsViewModel {
 
@@ -77,19 +80,21 @@ public class AdminAdvertisementsViewModel {
                 notApproved++;
         }
         notApprovedProperty.set(String.valueOf(notApproved));
-
-        comboItems.clear();
-        comboValueProperty.set("All");
-        comboItems.add("Not Approved");
-        comboItems.add("Approved");
-        for(int i = 0; i < Vehicles.values().length ; i++) {
-            comboItems.add(Vehicles.values()[i].toString());
+        if(comboItems.isEmpty()) {
+            for (int i = 0; i < Vehicles.values().length; i++) {
+                comboItems.add(Vehicles.values()[i].toString());
+            }
+            comboItems.add("Not Approved");
+            comboItems.add("Approved");
         }
+        comboValueProperty.setValue(Vehicles.All.toString());
     }
 
     public void enableUserManagingProperty() {
-        if(LoggedUser.getLoggedUser().getSelectedAdvertisement().ifAdApproved())
+        if(LoggedUser.getLoggedUser().getSelectedAdvertisement().ifAdApproved()) {
             approveAdDisableProperty.set(true);
+
+        }
         else
             approveAdDisableProperty.set(false);
         openAdDisableProperty.setValue(false);
@@ -104,29 +109,34 @@ public class AdminAdvertisementsViewModel {
     }
 
     public void searchAdvertisements() {
-        advertisementList.clear();
+        System.out.println("Admin search");
+        advertisementList.setAll(advertisementModel.getAllAdminCatalogues());
         LoggedUser.getLoggedUser().selectAdvertisement(null);
         disableUserManagingProperty();
+        List<AdCatalogueAdmin> filteredList = new ArrayList<>();
 
-        if(comboValueProperty.get().equals("Not Approved")){
+        if(comboValueProperty.get().equals(Vehicles.All.toString())){
+            filteredList.addAll(getAllAdvertisement());
+        }
+        else if(comboValueProperty.get().equals("Not Approved")){
             for(AdCatalogueAdmin advertisement : advertisementList) {
                 if(!advertisement.isApproved())
-                    advertisementList.add(advertisement);
+                    filteredList.add(advertisement);
             }
         }
         else if(comboValueProperty.get().equals("Approved"))
             for(AdCatalogueAdmin advertisement : advertisementList) {
                 if(advertisement.isApproved())
-                    advertisementList.add(advertisement);
+                    filteredList.add(advertisement);
                 System.out.println(advertisement.isApproved());
             }
         else{
             for(AdCatalogueAdmin advertisement : advertisementList) {
-                    if (comboValueProperty.get().equals(advertisement.getType()))
-                        advertisementList.add(advertisement);
+                    if (advertisement.getType().equals(comboValueProperty.getValue()))
+                        filteredList.add(advertisement);
             }
         }
-
+        advertisementList.setAll(filteredList);
     }
 
     public void approveAdvertisement() {
@@ -157,6 +167,7 @@ public class AdminAdvertisementsViewModel {
 
     public void selectAdvertisement(AdCatalogueAdmin adCatalogueAdmin) {
         Advertisement advertisement = advertisementModel.getAdvertisement(adCatalogueAdmin.getAdvertisementID());
+        System.out.println(advertisement.ifAdApproved());
         if(advertisement != null){
             LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
             enableUserManagingProperty();

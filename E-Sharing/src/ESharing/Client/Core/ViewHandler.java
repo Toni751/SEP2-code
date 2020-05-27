@@ -3,12 +3,10 @@ package ESharing.Client.Core;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Client.Views.ViewControllerFactory;
-import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Views;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,6 +20,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
@@ -197,52 +196,88 @@ public class ViewHandler {
         showView(viewController, null);
     }
 
+    /**
+     * Opens the chat view
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openChatView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.CHAT_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the view with creation advertisement process
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openAddAdvertisementView(Pane existingPane) {
         viewController = ViewControllerFactory.getViewController(Views.ADD_ADVERTISEMENT_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the preview of the selected advertisement
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openAdvertisementView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.ADVERTISEMENT_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens a view with all advertisements for administrator account
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openAdminAdvertisementView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.MANAGE_ADVERTISEMENT_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens a preview of the selected user
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openUserView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the view with all advertisements which are a part of the user account
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openUserAdvertisementView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.USER_ADVERTISEMENT_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the reservation view
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openReservationView(Pane existingPane)
     {
         viewController = ViewControllerFactory.getViewController(Views.RESERVATION_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens the views which presents all available advertisements
+     * @param existingPane the already loaded pane where the view will be displayed
+     */
     public void openAdsOverviewView(Pane existingPane){
         viewController = ViewControllerFactory.getViewController(Views.ADS_OVERVIEW_VIEW);
         showView(viewController, existingPane);
     }
 
+    /**
+     * Opens another stage with a preview of the selected picture
+     * @param image the selected picture
+     */
     public void openPicturePreview(Image image)
     {
         Stage previewStage = new Stage();
@@ -265,6 +300,13 @@ public class ViewHandler {
         previewStage.show();
     }
 
+    /**
+     * Creates the advertisement component which is presented to the user
+     * @param catalogueAd the Catalogue object which keeps all important information about an advertisement
+     * @param id the ID which will be assigned for the component
+     * @param currentAd the numer of advertisement for which the component is actually created
+     * @return the advertisement component as a JavaFX anchor pane object
+     */
     public AnchorPane createAdvertisementComponent(CatalogueAd catalogueAd, String id, int currentAd){
         String[] colors = {"#102B3F", "#004346" , "#828C51", "#2F3E46", "#52796F", "#EF7B45"};
         Random randomColor = new Random();
@@ -282,13 +324,13 @@ public class ViewHandler {
         background.setPrefHeight(230);
         background.setPrefWidth(200);
         background.setStyle("-fx-background-color: "+ colors[random] +"; -fx-background-radius: 10");
-        anchorPane.setStyle("-fx-cursor: hand");
 
         Rectangle image = new Rectangle();
         image.setFill(new ImagePattern(catalogueAd.getMainImage()));
         image.setLayoutY(10);
         image.setWidth(200);
         image.setHeight(120);
+        image.setStyle("-fx-cursor: hand");
 
         Label title = new Label(catalogueAd.getTitle());
         title.setStyle("-fx-text-fill: #f2f7f7; -fx-font-size: 16px");
@@ -304,26 +346,25 @@ public class ViewHandler {
 
             datePicker = new DatePicker();
             Button button = new Button("Open profile");
+            button.setStyle("-fx-background-color: #f2f7f7; -fx-text-fill: #4cdbc4;-fx-font-size: 14px");
             Label usernameLabel = new Label("Username");
-            Pane userPane = new Pane();
-            userPane.getChildren().addAll(button, usernameLabel);
+            usernameLabel.setStyle("-fx-font-size: 16; ");
+            VBox userPane = new VBox();
+            userPane.getChildren().addAll(usernameLabel, button);
             PopOver popOver = new PopOver(userPane);
-            int finalCurrentAdvertisement1 = currentAd;
             DatePicker finalDatePicker = datePicker;
             Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
                 @Override
                 public void updateItem(LocalDate item, boolean empty) {
                     super.updateItem(item, empty);
-                    for(int i = 0 ; i < ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
+                    for(int i = 0; i < ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(currentAd).getReservations().size() ; i++){
 
-                        if(ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
+                        if(ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(currentAd).getReservations().get(i).getReservationDays().contains(item)){
                             setStyle("-fx-background-color: #4CDBC4;");
                             int finalI = i;
-                            System.out.println(finalCurrentAdvertisement1);
+                            System.out.println(currentAd);
                             addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-
-                                //popOver.setTitle("User Info");
-                                User reservationUser = ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
+                                User reservationUser = ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel().getOwnCatalogues().get(currentAd).getReservations().get(finalI).getRequestedUser();
                                 usernameLabel.textProperty().setValue(reservationUser.getUsername());
                                 button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
                                     LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
@@ -332,7 +373,6 @@ public class ViewHandler {
                                     finalDatePicker.hide();
                                 });
                                 popOver.show(finalDatePicker);
-                                //popOver.detach();
                             });
                         }
 
@@ -366,7 +406,6 @@ public class ViewHandler {
             
 
         image.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            System.out.println("Clicked");
             ViewModelFactory.getViewModelFactory().getAdsOverviewViewModel().selectAdvertisement(catalogueAd);
             LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
             viewHandler.openMainAppView();
@@ -376,7 +415,6 @@ public class ViewHandler {
 
     }
 
-
     /**
      * Minimizes the javaFx stage
      */
@@ -385,6 +423,9 @@ public class ViewHandler {
         currentStage.setIconified(true);
     }
 
+    /**
+     * Resets views which are stored in the memory
+     */
     public void resetMainView() {
         ViewControllerFactory.clearViews();
     }

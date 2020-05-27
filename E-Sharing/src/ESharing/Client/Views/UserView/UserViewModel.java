@@ -43,12 +43,11 @@ public class UserViewModel {
     {
         selectedUser = LoggedUser.getLoggedUser().getSelectedUser();
 
-        avatarFillProperty.setValue(new ImagePattern(selectedUser.getAvatar()));
         usernameProperty.set(selectedUser.getUsername());
         phoneProperty.set(selectedUser.getPhoneNumber());
         numberProperty.set(selectedUser.getAddress().getNumber());
         streetProperty.set(selectedUser.getAddress().getStreet());
-
+        avatarFillProperty.setValue(new ImagePattern(selectedUser.getAvatar()));
         warningVisibleProperty.set(false);
     }
 

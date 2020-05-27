@@ -335,10 +335,12 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         LocalDate dateCreation = resultSet.getDate("date_creation").toLocalDate();
         int reports = resultSet.getInt("reports");
         int ownerID = resultSet.getInt("owner_id");
+        boolean approved = resultSet.getBoolean("approved");
 
         String username = null;
         String phoneNumber = null;
         String avatarpath = null;
+        String creation_date = null;
         int address_id = 0;
         int owner_id = 0;
 
@@ -355,6 +357,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
           phoneNumber = ownerResult.getString("phoneno");
           avatarpath = ownerResult.getString("avatarpath");
           address_id = ownerResult.getInt("address_id");
+          creation_date = ownerResult.getString("creation_date");
         }
 
         String street = null;
@@ -373,14 +376,15 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
         User owner = new User(username, null, phoneNumber, ownerAddress);
         owner.setAvatarServerPath(avatarpath);
         owner.setUser_id(ownerID);
+        owner.setCreation_date(creation_date);
         Advertisement advertisement = new Advertisement(owner, null, type,
             unavailableDates, price, title, description);
         advertisement.setServerPath(pictures);
         advertisement.setAdvertisementID(id);
         advertisement.setReports(reports);
         advertisement.setCreationDate(dateCreation);
-
-        System.out.println("ADvertismen" + id);
+        if(approved)
+          advertisement.setAdApproved();
 
         return advertisement;
       }
@@ -638,5 +642,21 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       e.printStackTrace();
     }
     return 0;
+  }
+
+  @Override
+  public int getAdvertisementsNumber() {
+    try(Connection connection = getConnection()) {
+      int count = 0;
+      PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS count FROM advertisement");
+      ResultSet resultSet = statement.executeQuery();
+      while (resultSet.next()){
+        count = resultSet.getInt("count");
+      }
+      return count;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return -1;
   }
 }

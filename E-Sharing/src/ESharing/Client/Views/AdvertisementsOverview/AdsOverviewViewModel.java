@@ -18,6 +18,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class AdsOverviewViewModel implements PropertyChangeSubject {
 
@@ -41,11 +42,13 @@ public class AdsOverviewViewModel implements PropertyChangeSubject {
 
     public void setDefaultView()
     {
-        catalogueAds.addAll(advertisementModel.getAllCatalogues());
-        searchItemsProperty.clear();
-        for(int i = 0; i < Vehicles.values().length ; i++) {
-            searchItemsProperty.add(Vehicles.values()[i].toString());
+        if(searchItemsProperty.isEmpty()) {
+            for (int i = 0; i < Vehicles.values().length; i++) {
+                searchItemsProperty.add(Vehicles.values()[i].toString());
+            }
         }
+        searchValueProperty.setValue(Vehicles.All.toString());
+        catalogueAds.addAll(advertisementModel.getAllCatalogues());
     }
 
         public void selectAdvertisement(CatalogueAd catalogueAd) {
@@ -73,11 +76,15 @@ public class AdsOverviewViewModel implements PropertyChangeSubject {
         System.out.println("search");
         List<CatalogueAd> filteredAds = new ArrayList<>();
 
-        for(CatalogueAd catalogueAd : catalogueAds)
+        for(int i = 0 ; i <catalogueAds.size() ; i++)
         {
-            System.out.println(catalogueAd.getVehicleType());
-            if(catalogueAd.getVehicleType().equals(searchValueProperty.getValue())) {
-                filteredAds.add(catalogueAd);
+            System.out.println(searchValueProperty.get());
+            if((searchValueProperty).getValue().equals(Vehicles.All.toString())){
+                filteredAds = catalogueAds;
+            }
+            else if(catalogueAds.get(i).getVehicleType().equals(searchValueProperty.getValue())) {
+                filteredAds.add(catalogueAds.get(i));
+                System.out.println(catalogueAds.get(i).getTitle());
             }
         }
 

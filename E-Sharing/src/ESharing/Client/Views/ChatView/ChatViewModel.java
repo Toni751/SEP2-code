@@ -22,7 +22,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 public class ChatViewModel implements PropertyChangeSubject {
-    private StringProperty searchProperty;
     private StringProperty messageProperty;
     private StringProperty receiverProperty;
     private ObservableList<Message> conversations;
@@ -41,8 +40,6 @@ public class ChatViewModel implements PropertyChangeSubject {
 
         conversations = FXCollections.observableArrayList();
         users = FXCollections.observableArrayList();
-
-        searchProperty = new SimpleStringProperty();
         messageProperty = new SimpleStringProperty();
         receiverProperty = new SimpleStringProperty();
 
@@ -105,10 +102,6 @@ public class ChatViewModel implements PropertyChangeSubject {
             chatModel.sendPrivateMessage(message);
             currentReceiver = null;
         }
-    }
-
-    public StringProperty getSearchProperty() {
-        return searchProperty;
     }
 
     public void searchConversation()

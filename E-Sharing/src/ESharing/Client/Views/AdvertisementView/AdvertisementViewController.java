@@ -78,6 +78,9 @@ public class AdvertisementViewController extends ViewController {
         reserveButton.visibleProperty().bindBidirectional(advertisementViewModel.getReserveVisibleProperty());
         ratings.ratingProperty().bindBidirectional(advertisementViewModel.getRatingProperty());
         adminBackArrow.visibleProperty().bindBidirectional(advertisementViewModel.getArrowBackProperty());
+        ownerPhoneNumberLabel.textProperty().bind(advertisementViewModel.getOwnerPhoneProperty());
+        ownerAccountCreationDate.textProperty().bind(advertisementViewModel.getOwnerDate());
+        openOwnerProfileButton.disableProperty().bindBidirectional(advertisementViewModel.getOwnerButtonDisable());
 
         datePicker.dayCellFactoryProperty().bindBidirectional(advertisementViewModel.getCellFactoryProperty());
 
@@ -92,7 +95,6 @@ public class AdvertisementViewController extends ViewController {
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         dataPickerEvent();
-        scrollPane.setVvalue(0);
         initializeDatePicker();
 
     }

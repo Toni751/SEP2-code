@@ -3,15 +3,19 @@ package ESharing.Client.Views.AdminDashboardView;
 import ESharing.Client.Core.ModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
+import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 import javafx.application.Platform;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import jdk.jfr.Event;
+
 import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -35,7 +39,9 @@ public class AdminDashboardViewModel {
     private SimpleBooleanProperty pieChartLegendVisibleProperty;
     private SimpleBooleanProperty xAxisRangingProperty;
     private SimpleBooleanProperty yAxisRangingProperty;
+    private SimpleStringProperty advertisementsNumberProperty;
     private AdministratorActionsModel model;
+    private AdvertisementModel advertisementModel;
     private int todayUsers;
     private String todayString;
     private double zeroReports;
@@ -46,6 +52,7 @@ public class AdminDashboardViewModel {
     public AdminDashboardViewModel()
     {
         model = ModelFactory.getModelFactory().getAdministratorActionsModel();
+        advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
 
         pieData1 = new PieChart.Data("0 Reports", 0);
         pieData2 = new PieChart.Data(">10 Reports", 0);
@@ -54,6 +61,7 @@ public class AdminDashboardViewModel {
         userNumberProperty = new SimpleStringProperty();
         pieChartLegendProperty = new SimpleObjectProperty<>();
         pieChartLegendVisibleProperty = new SimpleBooleanProperty();
+        advertisementsNumberProperty = new SimpleStringProperty();
         xAxisRangingProperty = new SimpleBooleanProperty();
         yAxisRangingProperty = new SimpleBooleanProperty();
         pieChartDataProperty = new SimpleObjectProperty<>(FXCollections.observableArrayList(pieData1, pieData2, pieData3));
@@ -61,6 +69,13 @@ public class AdminDashboardViewModel {
 
         model.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), this::reloadDashboard);
         model.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::reloadDashboard);
+        advertisementModel.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::updateNumber);
+        advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::updateNumber);
+    }
+
+    private void updateNumber(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(()-> advertisementsNumberProperty.setValue(String.valueOf(advertisementModel.getAdvertisementNumber())));
+
     }
 
     /**
@@ -149,6 +164,7 @@ public class AdminDashboardViewModel {
         xAxisRangingProperty.set(true);
         yAxisRangingProperty.set(true);
         userNumberProperty.set(AdministratorLists.getInstance().getUserList().size() + "");
+        advertisementsNumberProperty.setValue(String.valueOf(advertisementModel.getAdvertisementNumber()));
 
         loadLastWeekCreatedUsers();
         loadPieChartValues();
@@ -216,5 +232,9 @@ public class AdminDashboardViewModel {
      */
     private void reloadDashboard(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(this::defaultView);
+    }
+
+    public StringProperty getAdvertisementsNumberProperty() {
+        return advertisementsNumberProperty;
     }
 }

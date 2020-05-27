@@ -2,13 +2,10 @@ package ESharing.Client.Views.AdminAdvertisementsView;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
-import ESharing.Shared.TransferedObject.Advertisement;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;

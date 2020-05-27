@@ -21,6 +21,7 @@ public interface ClientAdvertisement extends PropertyChangeSubject
     List<CatalogueAd> getAllCatalogues();
   List<AdCatalogueAdmin> getAdminAdCatalogue();
   Advertisement getAdvertisement(int advertisementID);
+  int getAdvertisementNumber();
 
     void registerForCallBack();
 

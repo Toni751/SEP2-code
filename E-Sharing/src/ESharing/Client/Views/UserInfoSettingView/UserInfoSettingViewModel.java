@@ -1,12 +1,17 @@
 package ESharing.Client.Views.UserInfoSettingView;
 
 import ESharing.Client.Core.ModelFactory;
+import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
+import ESharing.Client.Model.ReservationModel.ReservationModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Model.UserActions.UserActionsModel;
 import ESharing.Client.Model.VerificationModel.VerificationModel;
+import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
+import com.sun.webkit.Timer;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
@@ -33,6 +38,8 @@ public class UserInfoSettingViewModel{
 
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
+    private AdvertisementModel advertisementModel;
+    private ReservationModel reservationModel;
     private LoggedUser loggedUser;
 
     /**
@@ -41,6 +48,8 @@ public class UserInfoSettingViewModel{
     public UserInfoSettingViewModel() {
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         verificationModel = ModelFactory.getModelFactory().getVerificationModel();
+        advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
+        reservationModel = ModelFactory.getModelFactory().getReservationModel();
         loggedUser = LoggedUser.getLoggedUser();
 
         usernameProperty = new SimpleStringProperty();

@@ -32,7 +32,6 @@ import java.util.ArrayList;
 public class ChatViewController extends ViewController {
     @FXML private ImageView administratorBackImage;
     @FXML private ScrollPane scrollPane;
-    @FXML private TextField searchConversationBox;
     @FXML private TextField messageTextField;
     @FXML private VBox conversationsPane;
     @FXML private VBox onlineUsersPane;
@@ -47,7 +46,6 @@ public class ChatViewController extends ViewController {
 
         viewModel = ViewModelFactory.getViewModelFactory().getChatViewModel();
         viewHandler = ViewHandler.getViewHandler();
-        searchConversationBox.textProperty().bindBidirectional(viewModel.getSearchProperty());
         messageTextField.textProperty().bindBidirectional(viewModel.getMessageProperty());
         receiverUsernameLabel.textProperty().bind(viewModel.getReceiverProperty());
 

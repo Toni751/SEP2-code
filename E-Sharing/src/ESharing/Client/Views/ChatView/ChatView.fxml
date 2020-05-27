@@ -26,7 +26,6 @@
       </Pane>
       <Pane prefHeight="600.0" prefWidth="166.0" styleClass="message-navigate-pane">
          <children>
-            <TextField fx:id="searchConversationBox" layoutX="16.0" layoutY="14.0" onKeyPressed="#searchConversation" prefHeight="25.0" prefWidth="134.0" promptText="🔎 Search Conversation" styleClass="search-conversation" />
             <ScrollPane layoutX="-1.0" layoutY="55.0" prefHeight="494.0" prefWidth="166.0" styleClass="transparent-background">
                <content>
                   <VBox fx:id="conversationsPane" prefHeight="392.0" prefWidth="148.0" />
@@ -42,9 +41,9 @@
       <Pane layoutX="627.0" prefHeight="600.0" prefWidth="192.0" styleClass="white-pane">
          <children>
             <Label layoutX="36.0" layoutY="14.0" styleClass="big-label" text="Online Users" />
-            <ScrollPane layoutX="1.0" layoutY="50.0" prefHeight="550.0" prefWidth="226.0" styleClass="transparent-background">
+            <ScrollPane layoutX="1.0" layoutY="50.0" prefHeight="550.0" prefWidth="192.0" styleClass="transparent-background">
                <content>
-                  <VBox fx:id="onlineUsersPane" prefHeight="545.0" prefWidth="223.0" />
+                  <VBox fx:id="onlineUsersPane" prefHeight="546.0" prefWidth="187.0" />
                </content>
             </ScrollPane>
          </children>

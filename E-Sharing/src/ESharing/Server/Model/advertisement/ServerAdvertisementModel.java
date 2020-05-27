@@ -21,4 +21,5 @@ public interface ServerAdvertisementModel extends PropertyChangeSubject {
     List<AdCatalogueAdmin> getAdminAdCatalogue();
     boolean addRating (int ad_id, int user_id, double rating);
     double retrieveAdRating (int ad_id);
+    int getAdvertisementNumber();
 }

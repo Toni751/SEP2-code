@@ -24,4 +24,5 @@ public interface RMIAdvertisementServer extends Remote
   List<AdCatalogueAdmin> getAdminAdCatalogue() throws RemoteException;
   boolean addRating (int ad_id, int user_id, double rating) throws RemoteException;
   double retrieveAdRating (int ad_id) throws RemoteException;
+  int getAdvertisementNumber() throws RemoteException;
 }

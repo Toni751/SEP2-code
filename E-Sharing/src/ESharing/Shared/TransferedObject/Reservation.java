@@ -3,6 +3,9 @@ package ESharing.Shared.TransferedObject;
 import com.jfoenix.controls.JFXDatePicker;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.layout.Background;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.util.Callback;
 
 import java.io.Serializable;
@@ -55,7 +58,7 @@ public class Reservation implements Serializable {
     }
 
     public DatePicker getReservationsComponent(){
-        JFXDatePicker datePicker = new JFXDatePicker();
+        DatePicker datePicker = new DatePicker();
         Callback<DatePicker, DateCell> dayCellFactory = (DatePicker) -> new DateCell(){
             @Override
             public void updateItem(LocalDate item, boolean empty) {

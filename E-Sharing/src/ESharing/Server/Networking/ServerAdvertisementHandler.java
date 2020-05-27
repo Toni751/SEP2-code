@@ -162,4 +162,9 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   {
     return serverModel.retrieveAdRating(ad_id);
   }
+
+  @Override
+  public int getAdvertisementNumber() {
+    return serverModel.getAdvertisementNumber();
+  }
 }

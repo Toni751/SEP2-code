@@ -24,7 +24,6 @@ public class MainAdminViewController extends ViewController {
     @FXML private Rectangle dashboardRectangle;
     @FXML private Rectangle usersRectangle;
     @FXML private Rectangle advertisementsRectangle;
-    @FXML private Rectangle systemLogsRectangle;
     @FXML private Pane contentPane;
     @FXML private Label messageNotification;
     private ViewHandler viewHandler;
@@ -39,11 +38,14 @@ public class MainAdminViewController extends ViewController {
         mainAdminViewModel = ViewModelFactory.getViewModelFactory().getMainAdminViewModel();
 
         messageNotification.textProperty().bind(mainAdminViewModel.getNotificationProperty());
+        advertisementsRectangle.visibleProperty().bindBidirectional(mainAdminViewModel.getAdRectangleProperty());
+        dashboardRectangle.visibleProperty().bindBidirectional(mainAdminViewModel.getDashboardProperty());
+        usersRectangle.visibleProperty().bindBidirectional(mainAdminViewModel.getUsersProperty());
+
 
         if(AdministratorLists.getInstance().getUserList().isEmpty())
             mainAdminViewModel.loadUsersListRequest();
-        mainAdminViewModel.loadNotifications();
-        hideRectanglesStyle();
+        mainAdminViewModel.setDefaultView();
         onDashboardAction();
     }
 
@@ -52,9 +54,7 @@ public class MainAdminViewController extends ViewController {
      * Opens view for managing users which are registered in the system
      */
     public void onManageUsersAction() {
-        hideRectanglesStyle();
-        usersRectangle.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", usersRectangle, 500);
+        mainAdminViewModel.setUsersRequest();
         viewHandler.openManagesUsersView(contentPane);
     }
 
@@ -63,19 +63,8 @@ public class MainAdminViewController extends ViewController {
      * Opens admin dashboard in the content pane
      */
     public void onDashboardAction() {
-        hideRectanglesStyle();
-        dashboardRectangle.setVisible(true);
-        GeneralFunctions.fadeNode("FadeIn", dashboardRectangle, 600);
+        mainAdminViewModel.onDashboardRequest();
         viewHandler.openAdminDashboardView(contentPane);
-    }
-
-
-    private void hideRectanglesStyle()
-    {
-        dashboardRectangle.setVisible(false);
-        usersRectangle.setVisible(false);
-        advertisementsRectangle.setVisible(false);
-        systemLogsRectangle.setVisible(false);
     }
 
     public void onEditAdminAccount() {
@@ -93,6 +82,7 @@ public class MainAdminViewController extends ViewController {
     }
 
     public void onGoToAdvertisements() {
+        mainAdminViewModel.setAdvertisementsRequest();
         viewHandler.openAdminAdvertisementView(contentPane);
     }
 }

@@ -123,6 +123,11 @@ public class AdvertisementModelManager implements AdvertisementModel{
         return clientAdvertisement.retrieveAdRating(ad_id);
     }
 
+    @Override
+    public int getAdvertisementNumber() {
+        return clientAdvertisement.getAdvertisementNumber();
+    }
+
     private byte[] convertImageFile(File image)
     {
         try {

@@ -3,7 +3,6 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -35,26 +34,12 @@
       <JFXTextField fx:id="phoneTextField" focusColor="#54d38a" layoutX="481.0" layoutY="132.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="156.0" />
       <JFXPasswordField fx:id="oldPasswordField" focusColor="#54d38a" layoutX="310.0" layoutY="262.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="179.0" />
       <JFXPasswordField fx:id="newPasswordField" focusColor="#54d38a" layoutX="310.0" layoutY="326.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="179.0" />
-      <Label layoutX="78.0" layoutY="339.0" prefHeight="27.0" prefWidth="122.0" styleClass="big-label" text="Advertisements " />
-      <Label layoutX="78.0" layoutY="299.0" prefHeight="27.0" prefWidth="106.0" styleClass="big-label" text="Reservations" />
       <Line endX="-86.60000610351562" endY="-118.20000457763672" fill="#4cdbc4" layoutX="370.0" layoutY="178.0" startX="-86.60000610351562" startY="270.6000061035156" strokeWidth="0.5" />
-      <Label alignment="CENTER" layoutX="199.0" layoutY="299.0" prefHeight="27.0" prefWidth="67.0" text="0">
-         <styleClass>
-            <String fx:value="big-label" />
-            <String fx:value="green-label" />
-         </styleClass>
-      </Label>
-      <Label alignment="CENTER" layoutX="199.0" layoutY="339.0" prefHeight="27.0" prefWidth="67.0" text="0">
-         <styleClass>
-            <String fx:value="big-label" />
-            <String fx:value="label-green" />
-         </styleClass>
-      </Label>
       <JFXButton layoutX="417.0" layoutY="435.0" onAction="#onChangePassword" prefHeight="27.0" prefWidth="71.0" styleClass="gray-button" text="Save" />
       <JFXPasswordField fx:id="confirmPassword" focusColor="#54d38a" layoutX="310.0" layoutY="389.0" onKeyPressed="#hideWarningPane" prefHeight="26.0" prefWidth="179.0" />
-      <JFXButton layoutX="122.0" layoutY="231.0" onAction="#onSetAvatar" prefHeight="26.0" prefWidth="100.0" styleClass="gray-button" text="Save Avatar" />
-      <Circle fx:id="avatarCircle" fill="DODGERBLUE" layoutX="172.0" layoutY="159.0" onMouseClicked="#onAvatarClicked" onMouseEntered="#onMouseOnAvatar" onMouseExited="#onMouseOutAvatar" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
-      <ImageView fx:id="uploadImageView" fitHeight="30.0" fitWidth="32.0" layoutX="157.0" layoutY="144.0" onMouseClicked="#onAvatarClicked" onMouseEntered="#onMouseOnAvatar" pickOnBounds="true" preserveRatio="true">
+      <JFXButton layoutX="122.0" layoutY="315.0" onAction="#onSetAvatar" prefHeight="26.0" prefWidth="100.0" styleClass="gray-button" text="Save Avatar" />
+      <Circle fx:id="avatarCircle" fill="DODGERBLUE" layoutX="172.0" layoutY="243.0" onMouseClicked="#onAvatarClicked" onMouseEntered="#onMouseOnAvatar" onMouseExited="#onMouseOutAvatar" radius="60.0" stroke="BLACK" strokeType="INSIDE" />
+      <ImageView fx:id="uploadImageView" fitHeight="30.0" fitWidth="32.0" layoutX="157.0" layoutY="228.0" onMouseClicked="#onAvatarClicked" onMouseEntered="#onMouseOnAvatar" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../Addition/Images/icons/upload.png" />
          </image>

@@ -37,11 +37,14 @@ public class AdvertisementViewModel {
     private StringProperty warningProperty;
     private StringProperty warningStyleProperty;
     private StringProperty ownerUsernameProperty;
+    private StringProperty ownerPhoneProperty;
+    private StringProperty ownerDateProperty;
     private DoubleProperty ratingProperty;
     private ObjectProperty<Paint> avatarCircleProperty;
     private BooleanProperty warningVisibleProperty;
     private BooleanProperty removeVisibleProperty;
     private BooleanProperty reserveVisibleProperty;
+    private BooleanProperty ownerButtonDisableProperty;
     private BooleanProperty arrowBackProperty;
     private ObjectProperty<LocalDate> dateProperty;
     private ObjectProperty<Callback<DatePicker, DateCell>> dateCellFactoryProperty;
@@ -68,8 +71,11 @@ public class AdvertisementViewModel {
         priceProperty = new SimpleStringProperty();
         dateProperty = new SimpleObjectProperty<>();
         typeProperty = new SimpleStringProperty();
+        ownerPhoneProperty = new SimpleStringProperty();
+        ownerDateProperty = new SimpleStringProperty();
         warningProperty = new SimpleStringProperty();
         ratingProperty = new SimpleDoubleProperty();
+        ownerButtonDisableProperty = new SimpleBooleanProperty();
         arrowBackProperty = new SimpleBooleanProperty();
         ownerUsernameProperty = new SimpleStringProperty();
         warningStyleProperty = new SimpleStringProperty();
@@ -102,6 +108,8 @@ public class AdvertisementViewModel {
         descriptionProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getDescription());
         ownerUsernameProperty.set(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUsername());
         avatarCircleProperty.setValue(new ImagePattern(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getAvatar()));
+        ownerPhoneProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getPhoneNumber());
+        ownerDateProperty.setValue(LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getCreation_date());
 
         sub1ImageProperty.setValue(Color.valueOf("#f2f7f7"));
         sub2ImageProperty.setValue(Color.valueOf("#f2f7f7"));
@@ -125,10 +133,12 @@ public class AdvertisementViewModel {
         if(LoggedUser.getLoggedUser().getUser().isAdministrator() || LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()){
             reserveVisibleProperty.setValue(false);
             removeVisibleProperty.setValue(true);
+            ownerButtonDisableProperty.setValue(true);
         }
         else {
             reserveVisibleProperty.setValue(true);
             removeVisibleProperty.setValue(false);
+            ownerButtonDisableProperty.setValue(false);
         }
 
         if(LoggedUser.getLoggedUser().getUser().isAdministrator()){
@@ -315,5 +325,17 @@ public class AdvertisementViewModel {
 
     public BooleanProperty getArrowBackProperty() {
         return arrowBackProperty;
+    }
+
+    public StringProperty getOwnerPhoneProperty() {
+        return ownerPhoneProperty;
+    }
+
+    public StringProperty getOwnerDate() {
+        return ownerDateProperty;
+    }
+
+    public BooleanProperty getOwnerButtonDisable() {
+        return ownerButtonDisableProperty;
     }
 }

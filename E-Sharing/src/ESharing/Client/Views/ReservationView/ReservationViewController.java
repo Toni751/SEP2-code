@@ -59,7 +59,7 @@ public class ReservationViewController extends ViewController {
 
     public void onOpenAdvertisement() {
         if(reservationViewModel.loadReservation()) {
-            LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
+            LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
             viewHandler.openMainAppView();
         }
 

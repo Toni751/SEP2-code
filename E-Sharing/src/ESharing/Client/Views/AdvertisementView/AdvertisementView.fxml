@@ -80,7 +80,7 @@
                         <String fx:value="title" />
                         <String fx:value="white-label" />
                      </styleClass></Label>
-                  <TextArea fx:id="descriptionTextArea" layoutX="20.0" layoutY="529.0" prefHeight="234.0" prefWidth="756.0" style="-fx-background-color: transparent;" styleClass="advertisement-view" text="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
+                  <TextArea fx:id="descriptionTextArea" disable="true" layoutX="20.0" layoutY="529.0" prefHeight="234.0" prefWidth="756.0" style="-fx-background-color: transparent;" styleClass="advertisement-view" text="&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;&#10;" />
                   <Label layoutX="22.0" layoutY="501.0" text="Vehicle Type:">
                      <styleClass>
                         <String fx:value="sub-title" />

@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdsOverviewViewController extends ViewController {
@@ -35,7 +36,7 @@ public class AdsOverviewViewController extends ViewController {
         adsOverviewViewModel.setDefaultView();
 
         crateViewGridPane(null);
-        searchComboBox.valueProperty().bind(adsOverviewViewModel.getSearchValueProperty());
+        searchComboBox.valueProperty().bindBidirectional(adsOverviewViewModel.getSearchValueProperty());
         searchComboBox.setItems(adsOverviewViewModel.getSearchItemsProperty());
 
         adsOverviewViewModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::onAdRemoved);
@@ -46,6 +47,7 @@ public class AdsOverviewViewController extends ViewController {
     private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
         List<CatalogueAd> updatedList = (List<CatalogueAd>) propertyChangeEvent.getNewValue();
         crateViewGridPane(updatedList);
+        System.out.println(updatedList.get(0).getTitle());
     }
 
     private void onNewAd(PropertyChangeEvent propertyChangeEvent) {
@@ -67,11 +69,15 @@ public class AdsOverviewViewController extends ViewController {
 
     private void crateViewGridPane(List<CatalogueAd> updatedList){
 
-        List<CatalogueAd> advertisements;
-        if(updatedList == null)
+        List<CatalogueAd> advertisements = null;
+        if(updatedList == null) {
+            System.out.println("not update");
             advertisements = adsOverviewViewModel.getCatalogueAds();
-        else
+        }
+        else {
+            System.out.println("UPDATE LISt");
             advertisements = updatedList;
+        }
         gridPane = new GridPane();
         gridPane.setPrefWidth(820);
         gridPane.setMaxWidth(820);
@@ -85,7 +91,8 @@ public class AdsOverviewViewController extends ViewController {
         int ads = advertisements.size();
         for(int i = 0 ;  i < ads/3; i++){
             for(int j = 0 ; j < 3 ; j++){
-                gridPane.add(viewHandler.createAdvertisementComponent(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement), String.valueOf(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement).getAdvertisementID()), -1), currentColumn, currentRow);
+                //gridPane.add(viewHandler.createAdvertisementComponent(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement), String.valueOf(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement).getAdvertisementID()), -1), currentColumn, currentRow);
+                gridPane.add(viewHandler.createAdvertisementComponent(advertisements.get(currentAdvertisement), String.valueOf(advertisements.get(currentAdvertisement).getAdvertisementID()), -1), currentColumn, currentRow);
                 currentColumn++;
                 currentAdvertisement++;
             }
@@ -96,7 +103,7 @@ public class AdsOverviewViewController extends ViewController {
 
         if(ads%3 != 0){
             for( int i = 0 ; i < ads%3; i++){
-                gridPane.add(viewHandler.createAdvertisementComponent(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement), String.valueOf(adsOverviewViewModel.getCatalogueAds().get(currentAdvertisement).getAdvertisementID()),-1), currentColumn, currentRow);
+                gridPane.add(viewHandler.createAdvertisementComponent(advertisements.get(currentAdvertisement), String.valueOf(advertisements.get(currentAdvertisement).getAdvertisementID()),-1), currentColumn, currentRow);
                 currentColumn++;
                 currentAdvertisement++;
             }
@@ -105,6 +112,7 @@ public class AdsOverviewViewController extends ViewController {
     }
 
     public void onSearchAdvertisements() {
+        System.out.println("comboclicked");
         adsOverviewViewModel.searchAdvertisements();
     }
 

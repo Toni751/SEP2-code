@@ -238,6 +238,11 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
+    public int getAdvertisementNumber() {
+        return advertisementDAO.getAdvertisementsNumber();
+    }
+
+    @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
         if ("".equals(eventName) || eventName == null)

@@ -37,6 +37,6 @@
             <JFXButton alignment="TOP_LEFT" layoutX="1.0" layoutY="303.0" onAction="#loadReservationPane" prefHeight="25.0" prefWidth="150.0" style="-fx-cursor: hand;" styleClass="gray-label" text="📄 Reservations" textFill="#a2b2be" />
          </children>
       </Pane>
-      <Pane fx:id="userSettingPane" layoutX="150.0" prefHeight="600.0" prefWidth="820.0" styleClass="cream-background" />
+      <Pane fx:id="userSettingPane" layoutX="150.0" prefHeight="600.0" prefWidth="670.0" styleClass="cream-background" />
    </children>
 </AnchorPane>

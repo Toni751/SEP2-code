@@ -22,4 +22,5 @@ public interface AdvertisementDAO {
   AdCatalogueAdmin getAdminAdCatalogue(int id);
   boolean addRating (int ad_id, int user_id, double rating);
   double retrieveAdRating (int ad_id);
+  int getAdvertisementsNumber();
 }

@@ -53,12 +53,20 @@ public class ClientFactory {
         return chatClient;
     }
 
+    /**
+     * Returns a advertisement client object
+     * @return the reservation client object
+     */
     public ClientAdvertisement getClientAdvertisement() {
         if(clientAdvertisement == null)
             clientAdvertisement = new ClientAdvertisementManager();
         return clientAdvertisement;
     }
 
+    /**
+     * Returns a reservation client object
+     * @return the reservation client object
+     */
     public ReservationClient getReservationClient() {
         if(reservationClient == null)
             reservationClient = new ReservationClientHandler();

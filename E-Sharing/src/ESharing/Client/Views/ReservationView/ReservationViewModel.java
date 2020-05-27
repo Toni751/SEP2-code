@@ -123,6 +123,7 @@ public class ReservationViewModel {
     }
 
     public void setSelectedReservation(Reservation selectedReservation) {
+        LoggedUser.getLoggedUser().selectAdvertisement(advertisementModel.getAdvertisement(selectedReservation.getAdvertisementID()));
         this.selectedReservation = selectedReservation;
     }
 

@@ -23,15 +23,6 @@ public class MessageDAOManager extends Database implements MessageDAO {
       this.administratorDAO = administratorDAO;
   }
 
-//  public static MessageDAOManager getInstance() {
-//    if (instance == null)
-//      synchronized (lock) {
-//        if (instance == null)
-//          instance = new MessageDAOManager();
-//      }
-//    return instance;
-//  }
-
   public Connection getConnection() throws SQLException {
     return super.getConnection();
   }
@@ -49,14 +40,7 @@ public class MessageDAOManager extends Database implements MessageDAO {
       statement.setInt(4, sender.getUser_id());
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next()) {
-        Message message = null;
-
-        if (sender.getUser_id() == resultSet.getInt("sender_id")) {
-          message = new Message(sender, receiver, resultSet.getString("content"), resultSet.getBoolean("read"));
-        } else {
-          message = new Message(receiver, sender, resultSet.getString("content"), resultSet.getBoolean("read"));
-        }
-        conversation.add(message);
+        searchForMessage(sender, conversation, receiver, resultSet);
       }
       return conversation;
 
@@ -96,13 +80,7 @@ public class MessageDAOManager extends Database implements MessageDAO {
           messageStatement.setInt(1, resultSet.getInt("message_id"));
           ResultSet messageResultSet = messageStatement.executeQuery();
           if (messageResultSet.next()) {
-            Message message = null;
-            if (user.getUser_id() == messageResultSet.getInt("sender_id")) {
-              message = new Message(user, allUser, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
-            } else {
-              message = new Message(allUser, user, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
-            }
-            lastMessages.add(message);
+            searchForMessage(user, lastMessages, allUser, messageResultSet);
           }
         }
       }
@@ -113,6 +91,16 @@ public class MessageDAOManager extends Database implements MessageDAO {
       e.printStackTrace();
     }
     return null;
+  }
+
+  private void searchForMessage(User user, List<Message> lastMessages, User allUser, ResultSet messageResultSet) throws SQLException {
+    Message message = null;
+    if (user.getUser_id() == messageResultSet.getInt("sender_id")) {
+      message = new Message(user, allUser, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
+    } else {
+      message = new Message(allUser, user, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
+    }
+    lastMessages.add(message);
   }
 
   @Override

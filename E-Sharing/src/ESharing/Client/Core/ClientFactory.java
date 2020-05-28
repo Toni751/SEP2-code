@@ -6,8 +6,8 @@ import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.chat.ClientChatHandler;
 import ESharing.Client.Networking.reservation.ReservationClient;
 import ESharing.Client.Networking.reservation.ReservationClientHandler;
-import ESharing.Client.Networking.user.Client;
-import ESharing.Client.Networking.user.ClientHandler;
+import ESharing.Client.Networking.user.UserClient;
+import ESharing.Client.Networking.user.UserClientHandler;
 
 /**
  * The class responsible for managing clients
@@ -15,7 +15,7 @@ import ESharing.Client.Networking.user.ClientHandler;
  * @author Group1
  */
 public class ClientFactory {
-    private Client client;
+    private UserClient client;
     private ClientChat chatClient;
     private ClientAdvertisement clientAdvertisement;
     private ReservationClient reservationClient;
@@ -37,9 +37,9 @@ public class ClientFactory {
      * Returns a client object
      * @return the client object
      */
-    public Client getClient() {
+    public UserClient getClient() {
         if(client == null)
-            client = new ClientHandler();
+            client = new UserClientHandler();
         return client;
     }
 

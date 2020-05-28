@@ -2,20 +2,19 @@ package ESharing.Server.Core;
 
 import ESharing.Server.Networking.ServerAdvertisementHandler;
 import ESharing.Server.Networking.ServerChatHandler;
-import ESharing.Server.Networking.ServerHandler;
+import ESharing.Server.Networking.ServerUserHandler;
 import ESharing.Server.Networking.ServerReservationHandler;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Networking.reservation.RMIReservationServer;
-import ESharing.Shared.Networking.user.RMIServer;
+import ESharing.Shared.Networking.user.RMIUserServer;
 
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class StubFactory implements StubInterface {
     private RMIChatServer chatServerRMI;
-    private RMIServer serverRMI;
+    private RMIUserServer serverRMI;
     private RMIAdvertisementServer advertisementServerRMI;
     private RMIReservationServer reservationServer;
     private ServerModelFactory serverFactory;
@@ -37,12 +36,12 @@ public class StubFactory implements StubInterface {
         return chatServerRMI;
     }
 
-    public RMIServer getServerRMI() throws RemoteException {
+    public RMIUserServer getServerRMI() throws RemoteException {
         System.out.println("Get server called in stub");
         if(serverRMI == null)
         {
             System.out.println("Server was null in stub");
-            serverRMI = new ServerHandler(serverFactory.getServerModel());
+            serverRMI = new ServerUserHandler(serverFactory.getServerModel());
         }
         return serverRMI;
     }

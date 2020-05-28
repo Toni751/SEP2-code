@@ -5,13 +5,11 @@ import ESharing.Client.Networking.Connection;
 import ESharing.Client.Networking.advertisement.ClientAdvertisement;
 import ESharing.Client.Networking.chat.ClientChat;
 import ESharing.Client.Networking.reservation.ReservationClient;
-import ESharing.Client.Networking.user.Client;
+import ESharing.Client.Networking.user.UserClient;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
-import javafx.scene.image.Image;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,7 +25,7 @@ import java.nio.file.Files;
  */
 public class UserActionsModelManager implements UserActionsModel {
 
-    private Client client;
+    private UserClient client;
     private ClientChat clientChat;
     private ClientAdvertisement clientAdvertisement;
     private ReservationClient reservationClient;

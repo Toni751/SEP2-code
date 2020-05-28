@@ -2,20 +2,19 @@ package ESharing.Client.Model.AdministratorModel;
 
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
-import ESharing.Client.Networking.user.Client;
+import ESharing.Client.Networking.user.UserClient;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.net.URI;
 import java.util.List;
 import java.util.Random;
 
 public class AdministratorActionModelManager implements AdministratorActionsModel {
 
-    private Client client;
+    private UserClient client;
     private PropertyChangeSupport support;
 
     public AdministratorActionModelManager() {

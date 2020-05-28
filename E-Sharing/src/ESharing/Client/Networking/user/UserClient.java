@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  * @author Group1
  */
-public interface Client extends PropertyChangeSubject
+public interface UserClient extends PropertyChangeSubject
 {
 
   void initializeConnection();

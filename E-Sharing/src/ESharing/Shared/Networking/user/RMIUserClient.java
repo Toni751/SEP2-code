@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
  * @version 1.0
  * @author Group1
  */
-public interface RMIClient extends Remote
+public interface RMIUserClient extends Remote
 {
     void newUserReceived(User newUser) throws RemoteException;
 

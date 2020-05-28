@@ -1,16 +1,12 @@
 package ESharing.Server.Networking;
 
-import ESharing.Server.Core.ServerModelFactory;
 import ESharing.Server.Model.user.ServerModel;
-import ESharing.Shared.Networking.user.RMIClient;
-import ESharing.Shared.Networking.user.RMIServer;
+import ESharing.Shared.Networking.user.RMIUserClient;
+import ESharing.Shared.Networking.user.RMIUserServer;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
-import javafx.scene.image.Image;
 
 import java.beans.PropertyChangeListener;
-import java.io.*;
-import java.nio.file.Files;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
@@ -20,7 +16,7 @@ import java.util.List;
  * @version 1.0
  * @author Group 1
  */
-public class ServerHandler implements RMIServer
+public class ServerUserHandler implements RMIUserServer
 {
   private ServerModel serverModel;
   private PropertyChangeListener listenForNewUser;
@@ -33,7 +29,7 @@ public class ServerHandler implements RMIServer
    * A constructor initializes fields and starts the internet connection
    * @throws RemoteException if the method invocation fails
    */
-  public ServerHandler(ServerModel serverModel) throws RemoteException
+  public ServerUserHandler(ServerModel serverModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
     this.serverModel = serverModel;
@@ -64,7 +60,7 @@ public class ServerHandler implements RMIServer
   }
 
   @Override
-  public void registerAdministratorCallback(RMIClient client) {
+  public void registerAdministratorCallback(RMIUserClient client) {
     listenForNewUser = evt -> {
       try {
         client.newUserReceived((User) evt.getNewValue());
@@ -77,7 +73,7 @@ public class ServerHandler implements RMIServer
   }
 
   @Override
-  public void registerGeneralCallback(RMIClient client){
+  public void registerGeneralCallback(RMIUserClient client){
     listenForUserRemoved = evt -> {
       try {
         client.userRemoved((User) evt.getNewValue());

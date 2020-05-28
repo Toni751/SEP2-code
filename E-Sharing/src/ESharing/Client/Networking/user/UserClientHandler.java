@@ -4,8 +4,8 @@ import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.Connection;
 import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.Networking.chat.RMIChatServer;
-import ESharing.Shared.Networking.user.RMIClient;
-import ESharing.Shared.Networking.user.RMIServer;
+import ESharing.Shared.Networking.user.RMIUserClient;
+import ESharing.Shared.Networking.user.RMIUserServer;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 
@@ -21,9 +21,9 @@ import java.util.List;
  * @version 1.0
  * @author Group 1
  */
-public class ClientHandler implements Client, RMIClient
+public class UserClientHandler implements UserClient, RMIUserClient
 {
-  private RMIServer server;
+  private RMIUserServer server;
   private RMIChatServer chatServer;
   private RMIAdvertisementServer rmiAdvertisementServer;
   private PropertyChangeSupport support;
@@ -31,7 +31,7 @@ public class ClientHandler implements Client, RMIClient
   /**
    * A constructor which initializes fields and tries to establish connection with the server
    */
-  public ClientHandler()
+  public UserClientHandler()
   {
     support = new PropertyChangeSupport(this);
     try

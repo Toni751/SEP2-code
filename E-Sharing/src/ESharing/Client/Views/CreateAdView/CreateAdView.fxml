@@ -28,7 +28,7 @@
                         <Font name="Century Gothic Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Text layoutX="93.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sub-title" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi urna, hendrerit vitae porta sit amet, rutrum eget orci. Suspendisse tempus et felis quis iaculis. Curabitur non dictum tellus, quis malesuada ante." wrappingWidth="280.0" />
+                  <Text layoutX="89.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sub-title" text="All the vehicles to be rented are supposed to be electric. That's the intention!Once you face a fraud, remember to report a fake user!Need to get anywhere fast ? Don't have any vehicle ? Use e-sharing!Be ecological, don't waste the petrol, use e-sharing!" wrappingWidth="280.0" />
                   <Label layoutX="40.0" layoutY="366.0" styleClass="text-field-label" text="VEHICLE TYPE" />
                   <Label layoutX="40.0" layoutY="282.0" prefHeight="16.0" prefWidth="139.0" styleClass="text-field-label" text="ADVERTISEMENT TITLE">
                      <font>

@@ -143,26 +143,6 @@ public class UserDAOManager extends Database implements UserDAO
           user.setAsAdministrator();
         return user;
       }
-      // Search in admin table
-//      else if(!resultSet.next())
-//      {
-//        statement = connection.prepareStatement("SELECT * FROM admin_account WHERE username = ? AND password = ?");
-//        statement.setString(1, usernameRequest);
-//        statement.setString(2, passwordRequest);
-//        resultSet = statement.executeQuery();
-//        if(resultSet.next())
-//        {
-//          int admin_id = resultSet.getInt("id");
-//          String admin_name = resultSet.getString("username");
-//          String password = resultSet.getString("password");
-//          String phoneNo = resultSet.getString("phoneno");
-//
-//          User admin = new User(admin_name, password, phoneNo, null);
-//          admin.setAsAdministrator();
-//          admin.setUser_id(admin_id);
-//          return admin;
-//        }
-//      }
     }
     catch (SQLException | IOException e)
     {

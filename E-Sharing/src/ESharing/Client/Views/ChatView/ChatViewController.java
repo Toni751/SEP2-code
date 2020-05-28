@@ -29,6 +29,11 @@ import javafx.scene.shape.Circle;
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 
+/**
+ * The controller class used to display the edit chat view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class ChatViewController extends ViewController {
     @FXML private ImageView administratorBackImage;
     @FXML private ScrollPane scrollPane;
@@ -41,6 +46,10 @@ public class ChatViewController extends ViewController {
     private ViewHandler viewHandler;
     private ChatViewModel viewModel;
 
+    /**
+     * Initializes and opens the chat view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
 
@@ -64,50 +73,20 @@ public class ChatViewController extends ViewController {
         checkIfThereIsSelectedUser();
     }
 
-    private void updateConversationList(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(() ->{
-            conversationsPane.getChildren().clear();
-            for(Message conversation: viewModel.getConversations())
-                conversationsPane.getChildren().add(createConversationComponent(conversation));
-        });
+    /**
+     * Opens administrator previous view
+     */
+    public void onAdministratorBack() {
+        if(LoggedUser.getLoggedUser().getUser().isAdministrator()){
+
+            viewHandler.openAdminMainView();
+        }
     }
 
-    private void userOffline(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("OFFLINE USER CHAT CONTROLLER");
-        Platform.runLater(() ->{
-            onlineUsersPane.getChildren().clear();
-            for(User user : viewModel.getUsers())
-                if(user.getUser_id() != LoggedUser.getLoggedUser().getUser().getUser_id())
-                    onlineUsersPane.getChildren().add(creatOnlineUserComponent(user));
-        });
-
-    }
-
-    private void newOnlineUser(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(() ->{
-            User newOnlineUser = (User) propertyChangeEvent.getNewValue();
-            onlineUsersPane.getChildren().add(creatOnlineUserComponent(newOnlineUser));
-        });
-    }
-
-    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(() ->{
-            System.out.println(LoggedUser.getLoggedUser().getUser());
-            Message newMessage = (Message) propertyChangeEvent.getNewValue();
-            if(newMessage.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
-                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
-            }
-            else {
-                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_LEFT, "#fff", newMessage.getSender().getAvatar()));
-            }
-            scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
-        });
-    }
-
-    public void searchConversation() {
-        viewModel.searchConversation();
-    }
-
+    /**
+     * Sends new message request
+     * @param event the enter pressed
+     */
     public void sendMessageByEnter(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
             viewModel.sendMessage();
@@ -115,11 +94,17 @@ public class ChatViewController extends ViewController {
         }
     }
 
+    /**
+     * Sends new message request
+     */
     public void sendMessageByButton() {
         viewModel.sendMessage();
         messageTextField.clear();
     }
 
+    /**
+     * Loads all components
+     */
     private void loadAllComponents()
     {
         conversationsPane.getChildren().clear();
@@ -136,6 +121,11 @@ public class ChatViewController extends ViewController {
         });
     }
 
+    /**
+     * Create user component
+     * @param user the given user
+     * @return the user component
+     */
     private HBox creatOnlineUserComponent(User user)
     {
         HBox onlineUser = new HBox(10);
@@ -166,6 +156,11 @@ public class ChatViewController extends ViewController {
         return  onlineUser;
     }
 
+    /**
+     * Create user conversation component
+     * @param conversation the given conversation
+     * @return the conversation component
+     */
     private HBox createConversationComponent(Message conversation)
     {
         HBox conversationHBox = new HBox();
@@ -219,6 +214,14 @@ public class ChatViewController extends ViewController {
         return conversationHBox;
     }
 
+    /**
+     * Create message component
+     * @param message the message
+     * @param pos the position of the message
+     * @param color the color of the message
+     * @param avatar the avatar
+     * @return the message component
+     */
     private HBox createMessageComponent(Message message, Pos pos, String color, Image avatar)
     {
         HBox messageComponent = new HBox(10);
@@ -252,6 +255,9 @@ public class ChatViewController extends ViewController {
         return messageComponent;
     }
 
+    /**
+     * Sets styling for components
+     */
     private void setComponentsStyling()
     {
         onlineUsersPane.setSpacing(5);
@@ -265,19 +271,18 @@ public class ChatViewController extends ViewController {
         scrollPane.setFitToHeight(true);
     }
 
+    /**
+     * Sets styling when user is administrator
+     */
     private void adminStyling()
     {
         administratorBackImage.setVisible(true);
         administratorBackImage.setDisable(false);
     }
 
-    public void onAdministratorBack() {
-        if(LoggedUser.getLoggedUser().getUser().isAdministrator()){
-
-            viewHandler.openAdminMainView();
-        }
-    }
-
+    /**
+     * Checks if user is administrator
+     */
     private void checkIfUserIsAdmin(){
         if(LoggedUser.getLoggedUser().getUser().isAdministrator()) {
             if(AdministratorLists.getInstance().getSelectedUser() != null) {
@@ -297,6 +302,9 @@ public class ChatViewController extends ViewController {
         }
     }
 
+    /**
+     * Checks if user has selected user
+     */
     private void checkIfThereIsSelectedUser()
     {
         User selectedUser = LoggedUser.getLoggedUser().getSelectedUser();
@@ -315,5 +323,61 @@ public class ChatViewController extends ViewController {
             scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
             System.out.println("finished");
         }
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void updateConversationList(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(() ->{
+            conversationsPane.getChildren().clear();
+            for(Message conversation: viewModel.getConversations())
+                conversationsPane.getChildren().add(createConversationComponent(conversation));
+        });
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void userOffline(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("OFFLINE USER CHAT CONTROLLER");
+        Platform.runLater(() ->{
+            onlineUsersPane.getChildren().clear();
+            for(User user : viewModel.getUsers())
+                if(user.getUser_id() != LoggedUser.getLoggedUser().getUser().getUser_id())
+                    onlineUsersPane.getChildren().add(creatOnlineUserComponent(user));
+        });
+
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newOnlineUser(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(() ->{
+            User newOnlineUser = (User) propertyChangeEvent.getNewValue();
+            onlineUsersPane.getChildren().add(creatOnlineUserComponent(newOnlineUser));
+        });
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(() ->{
+            System.out.println(LoggedUser.getLoggedUser().getUser());
+            Message newMessage = (Message) propertyChangeEvent.getNewValue();
+            if(newMessage.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id()) {
+                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_RIGHT, "#54d38a", LoggedUser.getLoggedUser().getUser().getAvatar()));
+            }
+            else {
+                messagesPane.getChildren().add(createMessageComponent(newMessage, Pos.CENTER_LEFT, "#fff", newMessage.getSender().getAvatar()));
+            }
+            scrollPane.vvalueProperty().bind(messagesPane.heightProperty());
+        });
     }
 }

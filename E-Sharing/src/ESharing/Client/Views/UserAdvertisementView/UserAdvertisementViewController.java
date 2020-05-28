@@ -31,6 +31,11 @@ import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The controller class used to display the edit user info view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class UserAdvertisementViewController extends ViewController {
 
     @FXML private VBox mainVBox;
@@ -41,176 +46,24 @@ public class UserAdvertisementViewController extends ViewController {
     private int currentRow;
     private int currentColumn;
 
+    /**
+     * Initializes and opens the edit user info view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewHandler = ViewHandler.getViewHandler();
         userAdvertisementViewModel = ViewModelFactory.getViewModelFactory().getUserAdvertisementViewModel();
         userAdvertisementViewModel.defaultView();
 
-        //createMainView();
         createGridPane();
 
         userAdvertisementViewModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::updateAdView);
     }
 
-    private void updateAdView(PropertyChangeEvent propertyChangeEvent) {
-        //Platform.runLater(this::createMainView);
-    }
-
-    public void createMainView() {
-        mainVBox.getChildren().clear();
-        List<CatalogueAd> advertisements = userAdvertisementViewModel.getOwnCatalogues();
-
-        System.out.println(advertisements);
-
-        System.out.println(advertisements);
-        int rows = advertisements.size() / 3;
-        int rest = advertisements.size() % 3;
-        int currentAdvertisement = 0;
-
-        for (int i = 0; i < rows; i++) {
-            HBox row = new HBox(37.5);
-            for (int j = 0; j < 3; j++) {
-                VBox advertisement = new VBox(5);
-                advertisement.setPrefWidth(200);
-                advertisement.setPrefHeight(180);
-
-                ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                mainImage.setFitWidth(200);
-                mainImage.setFitHeight(106);
-                mainImage.preserveRatioProperty();
-                Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
-
-
-                DatePicker datePicker = new DatePicker();
-                Button button = new Button("Open profile");
-                Label usernameLabel = new Label("Username");
-                Pane userPane = new Pane();
-                userPane.getChildren().addAll(button, usernameLabel);
-                PopOver popOver = new PopOver(userPane);
-                int finalCurrentAdvertisement1 = currentAdvertisement;
-                Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        for(int i = 0 ; i < userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
-                            if(userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
-                                setStyle("-fx-background-color: #4CDBC4;");
-                                int finalI = i;
-                                addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-
-                                    //popOver.setTitle("User Info");
-                                    User reservationUser = userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
-                                    usernameLabel.textProperty().setValue(reservationUser.getUsername());
-                                    button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
-                                        LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
-                                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
-                                        viewHandler.openMainAppView();
-                                        datePicker.hide();
-                                    });
-                                    popOver.show(datePicker);
-                                    //popOver.detach();
-                                });
-                            }
-
-                        }
-                    }
-                };
-                datePicker.setMaxWidth(10);
-                datePicker.setDayCellFactory(dayCellFactory);
-
-                advertisement.getChildren().add(datePicker);
-
-
-                advertisement.getChildren().addAll(mainImage, title, price);
-
-                int finalCurrentAdvertisement = currentAdvertisement;
-                advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    System.out.println("Clicked");
-                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID())) {
-                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
-                        viewHandler.openMainAppView();
-                    }
-                });
-                row.getChildren().add(advertisement);
-                currentAdvertisement++;
-            }
-            mainVBox.getChildren().add(row);
-        }
-
-        if (rest != 0) {
-            HBox row = new HBox(37.5);
-            for (int i = 0; i < rest; i++) {
-                VBox advertisement = new VBox(5);
-                advertisement.setPrefWidth(200);
-                advertisement.setPrefHeight(180);
-
-                ImageView mainImage = new ImageView(advertisements.get(currentAdvertisement).getMainImage());
-                mainImage.setFitWidth(200);
-                mainImage.setFitHeight(106);
-                mainImage.preserveRatioProperty();
-                Label title = new Label(advertisements.get(currentAdvertisement).getTitle());
-                Label price = new Label(String.valueOf(advertisements.get(currentAdvertisement).getPrice()));
-
-
-                DatePicker datePicker = new DatePicker();
-                Button button = new Button("Open profile");
-                Label usernameLabel = new Label("Username");
-                Pane userPane = new Pane();
-                userPane.getChildren().addAll(button, usernameLabel);
-                PopOver popOver = new PopOver(userPane);
-                int finalCurrentAdvertisement1 = currentAdvertisement;
-                Callback<DatePicker, DateCell> dayCellFactory = (DatePicker datePicker1) -> new DateCell(){
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        for(int i = 0 ; i < userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().size() ; i++){
-                            if(userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(i).getReservationDays().contains(item)){
-                                setStyle("-fx-background-color: #4CDBC4;");
-                                int finalI = i;
-                                addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-
-                                    //popOver.setTitle("User Info");
-                                    User reservationUser = userAdvertisementViewModel.getOwnCatalogues().get(finalCurrentAdvertisement1).getReservations().get(finalI).getRequestedUser();
-                                    usernameLabel.textProperty().setValue(reservationUser.getUsername());
-                                    button.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent1 -> {
-                                        LoggedUser.getLoggedUser().setSelectedUser(reservationUser);
-                                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
-                                        viewHandler.openMainAppView();
-                                        datePicker.hide();
-                                    });
-                                    popOver.show(datePicker);
-                                    //popOver.detach();
-                                });
-                            }
-
-                        }
-                    }
-                };
-                datePicker.setMaxWidth(10);
-                datePicker.setDayCellFactory(dayCellFactory);
-
-                advertisement.getChildren().add(datePicker);
-
-
-                advertisement.getChildren().addAll(mainImage, title, price);
-
-                int finalCurrentAdvertisement = currentAdvertisement;
-                advertisement.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    System.out.println("Clicked");
-                    if (userAdvertisementViewModel.selectAdvertisement(advertisements.get(finalCurrentAdvertisement).getAdvertisementID())) {
-                        LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
-                        viewHandler.openMainAppView();
-                    }
-                });
-                row.getChildren().add(advertisement);
-                currentAdvertisement++;
-            }
-            mainVBox.getChildren().add(row);
-        }
-    }
-
+    /**
+     * Sends a request for creation an advertisement preview
+     */
     public void createGridPane(){
         List<CatalogueAd> advertisements = userAdvertisementViewModel.getOwnCatalogues();
         gridPane = new GridPane();
@@ -245,9 +98,11 @@ public class UserAdvertisementViewController extends ViewController {
         scrollPane.setContent(gridPane);
     }
 
-    public void onOpenAdvertisement(ActionEvent actionEvent) {
-    }
-
-    public void onRemoveAdvertisement(ActionEvent actionEvent) {
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void updateAdView(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(this::createGridPane);
     }
 }

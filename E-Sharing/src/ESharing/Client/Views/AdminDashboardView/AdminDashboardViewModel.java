@@ -8,14 +8,11 @@ import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 import javafx.application.Platform;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import jdk.jfr.Event;
-
 import java.beans.PropertyChangeEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -71,11 +68,6 @@ public class AdminDashboardViewModel {
         model.addPropertyChangeListener(Events.USER_REMOVED.toString(), this::reloadDashboard);
         advertisementModel.addPropertyChangeListener(Events.NEW_AD_REQUEST.toString(), this::updateNumber);
         advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::updateNumber);
-    }
-
-    private void updateNumber(PropertyChangeEvent propertyChangeEvent) {
-        Platform.runLater(()-> advertisementsNumberProperty.setValue(String.valueOf(advertisementModel.getAdvertisementNumber())));
-
     }
 
     /**
@@ -227,14 +219,27 @@ public class AdminDashboardViewModel {
     }
 
     /**
-     * When you event appears, the function reloads the view with new values
+     * Returns value used in the bind process between a controller and view model
+     * @return the ad number property
+     */
+    public StringProperty getAdvertisementsNumberProperty() {
+        return advertisementsNumberProperty;
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void updateNumber(PropertyChangeEvent propertyChangeEvent) {
+        Platform.runLater(()-> advertisementsNumberProperty.setValue(String.valueOf(advertisementModel.getAdvertisementNumber())));
+
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
      * @param propertyChangeEvent the given event
      */
     private void reloadDashboard(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(this::defaultView);
-    }
-
-    public StringProperty getAdvertisementsNumberProperty() {
-        return advertisementsNumberProperty;
     }
 }

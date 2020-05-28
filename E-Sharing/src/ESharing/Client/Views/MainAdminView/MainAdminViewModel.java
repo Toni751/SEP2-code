@@ -17,6 +17,11 @@ import javafx.event.Event;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * The class in a view model layer contains all functions which are used in the main admin setting view.
+ * @version 1.0
+ * @author Group1
+ */
 public class MainAdminViewModel {
 
     private AdministratorActionsModel administratorActionsModel;
@@ -29,6 +34,9 @@ public class MainAdminViewModel {
 
     private StringProperty notificationProperty;
 
+    /**
+     * A constructor initializes model layer for a user setting features
+     */
     public MainAdminViewModel() {
         this.administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
         this.advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
@@ -43,10 +51,16 @@ public class MainAdminViewModel {
         chatModel.addPropertyChangeListener(Events.NEW_MESSAGE_RECEIVED.toString(), this::increaseNotification);
     }
 
+    /**
+     * Loads users
+     */
     public void loadUsersListRequest() {
         AdministratorLists.getInstance().setUserList(administratorActionsModel.getAllUsers());
     }
 
+    /**
+     * Sets default view
+     */
     public void setDefaultView(){
         hideRectangle();
         dashboardProperty.setValue(true);
@@ -54,53 +68,87 @@ public class MainAdminViewModel {
 
     }
 
+    /**
+     * Change rectangles visible property
+     */
     public void hideRectangle(){
         dashboardProperty.setValue(false);
         usersProperty.setValue(false);
         rectangleProperty.setValue(false);
     }
 
+    /**
+     * Sends a request to logout
+     */
     public void onLogoutRequest() {
         userActionsModel.logoutUser();
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a notification
+     */
     public StringProperty getNotificationProperty() {
         return notificationProperty;
     }
 
+    /**
+     * Increases the message notification
+     * @param propertyChangeEvent
+     */
     private void increaseNotification(PropertyChangeEvent propertyChangeEvent) {
         Platform.runLater(() ->{
             notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
         });
     }
 
+    /**
+     * Loads message notification
+     */
     public void loadNotifications()
     {
         notificationProperty.setValue(String.valueOf(chatModel.getAllUnreadMessages()));
     }
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a ad rectangle
+     */
     public BooleanProperty getAdRectangleProperty() {
         return rectangleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of dashboard rectangle
+     */
     public BooleanProperty getDashboardProperty() {
         return dashboardProperty;
     }
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a user rectangle
+     */
     public BooleanProperty getUsersProperty() {
         return usersProperty;
     }
 
+    /**
+     * Change rectangle visible property
+     */
     public void setUsersRequest() {
         hideRectangle();
         usersProperty.setValue(true);
     }
-
+    /**
+     * Change rectangle visible property
+     */
     public void onDashboardRequest() {
         hideRectangle();
         dashboardProperty.setValue(true);
     }
-
+    /**
+     * Change rectangle visible property
+     */
     public void setAdvertisementsRequest() {
         hideRectangle();
         rectangleProperty.setValue(true);

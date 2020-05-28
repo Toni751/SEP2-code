@@ -10,15 +10,16 @@ import ESharing.Shared.Util.Events;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
+/**
+ * The class in a view model layer contains all functions which are used in the reservation view.
+ * @version 1.0
+ * @author Group1
+ */
 public class ReservationViewModel {
 
     private BooleanProperty removeProperty;
@@ -34,7 +35,9 @@ public class ReservationViewModel {
     private Reservation selectedReservation;
     private PropertyChangeSupport support;
 
-
+    /**
+     * A constructor initializes model layer for a reservation features and all fields
+     */
     public ReservationViewModel() {
         this.reservationModel = ModelFactory.getModelFactory().getReservationModel();
         this.advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
@@ -54,14 +57,9 @@ public class ReservationViewModel {
         advertisementModel.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
     }
 
-    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
-        int id = (int) propertyChangeEvent.getNewValue();
-        for(int i = 0 ; i < reservations.size(); i++){
-            if(reservations.get(i).getAdvertisementID() == id)
-                reservations.remove(reservations.get(i));
-        }
-    }
-
+    /**
+     * Sets defaultview
+     */
     public void defaultView(){
 
         reservations.clear();
@@ -72,20 +70,32 @@ public class ReservationViewModel {
         warningVisibleProperty.setValue(false);
     }
 
+    /**
+     * enables button property
+     */
     public void enableManagingActions(){
         removeProperty.setValue(false);
         openProperty.setValue(false);
     }
 
+    /**
+     * disables button property
+     */
     public void disableManagingActions(){
         removeProperty.setValue(true);
         openProperty.setValue(true);
     }
 
+    /**
+     * Loads all reservations
+     */
     public void loadAllReservations() {
         reservations.setAll(reservationModel.getUserReservations(LoggedUser.getLoggedUser().getUser().getUser_id()));
     }
 
+    /**
+     * Sends a request for removing reservation and sets the warning pane property
+     */
     public void removeReservation(){
         if(reservationModel.removeReservation(selectedReservation.getAdvertisementID(), LoggedUser.getLoggedUser().getUser().getUser_id()))
         {
@@ -99,6 +109,10 @@ public class ReservationViewModel {
         warningVisibleProperty.setValue(true);
     }
 
+    /**
+     * Loads reservations
+     * @return the result of loading
+     */
     public boolean loadReservation(){
         Advertisement advertisement = advertisementModel.getAdvertisement(selectedReservation.getAdvertisementID());
         if(advertisement != null)
@@ -109,36 +123,67 @@ public class ReservationViewModel {
         return false;
     }
 
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list of all reservations
+     */
     public ObservableList<Reservation> getAllReservations() {
         return reservations;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a open button
+     */
     public BooleanProperty getOpenProperty() {
         return openProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a remove button
+     */
     public BooleanProperty getRemoveProperty() {
         return removeProperty;
     }
 
+    /**
+     * Sets selected reservation
+     * @param selectedReservation the given reservation
+     */
     public void setSelectedReservation(Reservation selectedReservation) {
         LoggedUser.getLoggedUser().selectAdvertisement(advertisementModel.getAdvertisement(selectedReservation.getAdvertisementID()));
         this.selectedReservation = selectedReservation;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public BooleanProperty getWarningVisibleProperty() {
         return warningVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public StringProperty getWarningStyleProperty() {
         return warningStyleProperty;
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
         int[] idArray = (int[]) propertyChangeEvent.getOldValue();
         int advertisementID = idArray[0];
@@ -154,9 +199,25 @@ public class ReservationViewModel {
         disableManagingActions();
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void newReservationCreated(PropertyChangeEvent propertyChangeEvent) {
         Reservation reservation = (Reservation) propertyChangeEvent.getNewValue();
         if(reservation.getRequestedUser().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id())
             defaultView();
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int id = (int) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < reservations.size(); i++){
+            if(reservations.get(i).getAdvertisementID() == id)
+                reservations.remove(reservations.get(i));
+        }
     }
 }

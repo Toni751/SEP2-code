@@ -28,6 +28,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class in a view model layer contains all functions which are used in the advertisement view.
+ *
+ * @author Group1
+ * @version 1.0
+ */
 public class AdvertisementViewModel {
 
     private StringProperty titleProperty;
@@ -61,6 +67,9 @@ public class AdvertisementViewModel {
     private ReservationModel reservationModel;
     private AdvertisementModel advertisementModel;
 
+    /**
+     * A constructor initializes model layer for a administrator features and all fields
+     */
     public AdvertisementViewModel()
     {
         reservationModel = ModelFactory.getModelFactory().getReservationModel();
@@ -97,6 +106,9 @@ public class AdvertisementViewModel {
         reservationModel.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), this::reservationRemoved);
     }
 
+    /**
+     * Sets a default view and values
+     */
     public void loadDefaultView()
     {
         unavailableDates.clear();
@@ -152,12 +164,18 @@ public class AdvertisementViewModel {
         selectedDates.clear();
     }
 
+    /**
+     * Recalculates price
+     */
     public void recalculatePrice()
     {
         double newPrice = LoggedUser.getLoggedUser().getSelectedAdvertisement().getPrice() * selectedDates.size();
         priceProperty.set(String.valueOf(newPrice));
     }
 
+    /**
+     * Sends a request for creating reservation
+     */
     public void sendReservationRequest()
     {
         Advertisement selectedAdvertisement = LoggedUser.getLoggedUser().getSelectedAdvertisement();
@@ -176,6 +194,9 @@ public class AdvertisementViewModel {
         warningVisibleProperty.setValue(true);
     }
 
+    /**
+     * Sends a request for removing reservation
+     */
     public String sendAdvertisementRemoveRequest()
     {
         boolean requestResult = advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID());
@@ -190,6 +211,9 @@ public class AdvertisementViewModel {
            return  "USER";
     }
 
+    /**
+     * Adds selected dates to the list
+     */
     public void addSelectedDate()
     {
         LocalDate selectedDate = dateProperty.getValue();
@@ -199,6 +223,9 @@ public class AdvertisementViewModel {
             selectedDates.add(dateProperty.getValue());
     }
 
+    /**
+     * Sends a request for reporting
+     */
     public void reportAdvertisement() {
         if (advertisementModel.reportAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID())) {
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
@@ -207,102 +234,231 @@ public class AdvertisementViewModel {
         }
     }
 
+    /**
+     * Sends a request for rating
+     */
     public void sendRatingRequest() {
       advertisementModel.addRating(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID(), LoggedUser.getLoggedUser().getUser().getUser_id(), ratingProperty.get());
     }
 
+    /**
+     * Clears rating
+     */
     public void clearRatingsProperty() {
         ratingProperty.setValue(0);
     }
 
+    /**
+     * Sets default ratings
+     */
     public void setDefaultRatingsProperty() {
         ratingProperty.setValue(rating);
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list with unavailable dates
+     */
     public ObservableList<LocalDate> getUnavailableDates() {
         return unavailableDates;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list with selected dates
+     */
     public List<LocalDate> getSelectedDates() {
         return selectedDates;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a title value
+     */
     public StringProperty getTitleProperty() {
         return titleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a description value
+     */
     public StringProperty getDescriptionProperty() {
         return descriptionProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a price value
+     */
     public StringProperty getPriceProperty() {
         return priceProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the string property of a type value
+     */
     public StringProperty getTypeProperty() {
         return typeProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a date value
+     */
     public ObjectProperty<LocalDate> getDateProperty() {
         return dateProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a main picture
+     */
     public ObjectProperty<Paint> getMainImageProperty() {
         return mainImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub picture 1
+     */
     public ObjectProperty<Paint> getSub1ImageProperty() {
         return sub1ImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub picture 2
+     */
     public ObjectProperty<Paint> getSub2ImageProperty() {
         return sub2ImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub picture 3
+     */
     public ObjectProperty<Paint> getSub3ImageProperty() {
         return sub3ImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub picture 4
+     */
     public ObjectProperty<Paint> getSub4ImageProperty() {
         return sub4ImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning pane
+     */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning pane
+     */
     public StringProperty getWarningStyleProperty() {
         return warningStyleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning pane
+     */
     public BooleanProperty getWarningVisibleProperty() {
         return warningVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a date picker item
+     */
     public ObjectProperty<Callback<DatePicker, DateCell>> getCellFactoryProperty(){
         return dateCellFactoryProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a username value
+     */
     public StringProperty getOwnerUsernameProperty() {
         return ownerUsernameProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a avatar value
+     */
     public ObjectProperty<Paint> getAvatarCircleProperty() {
         return avatarCircleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a remove button
+     */
     public BooleanProperty getRemoveVisibleProperty() {
         return removeVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a reserve button
+     */
     public BooleanProperty getReserveVisibleProperty() {
         return reserveVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rating
+     */
     public DoubleProperty getRatingProperty() {
         return ratingProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a arrow back
+     */
+    public BooleanProperty getArrowBackProperty() {
+        return arrowBackProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a phone
+     */
+    public StringProperty getOwnerPhoneProperty() {
+        return ownerPhoneProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a owner
+     */
+    public StringProperty getOwnerDate() {
+        return ownerDateProperty;
+    }
+
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a owner button
+     */
+    public BooleanProperty getOwnerButtonDisable() {
+        return ownerButtonDisableProperty;
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
         int[] idArray = (int[]) propertyChangeEvent.getOldValue();
         List<LocalDate> removedDays = (List<LocalDate>) propertyChangeEvent.getNewValue();
@@ -316,26 +472,14 @@ public class AdvertisementViewModel {
         System.out.println("event removed");
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void newReservationAppear(PropertyChangeEvent propertyChangeEvent) {
         Reservation reservation = (Reservation) propertyChangeEvent.getNewValue();
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement()!= null && reservation.getAdvertisementID() == LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID()){
             unavailableDates.addAll(reservation.getReservationDays());
         }
-    }
-
-    public BooleanProperty getArrowBackProperty() {
-        return arrowBackProperty;
-    }
-
-    public StringProperty getOwnerPhoneProperty() {
-        return ownerPhoneProperty;
-    }
-
-    public StringProperty getOwnerDate() {
-        return ownerDateProperty;
-    }
-
-    public BooleanProperty getOwnerButtonDisable() {
-        return ownerButtonDisableProperty;
     }
 }

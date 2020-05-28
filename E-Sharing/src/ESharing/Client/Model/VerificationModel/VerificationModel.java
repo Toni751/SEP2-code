@@ -2,6 +2,11 @@ package ESharing.Client.Model.VerificationModel;
 
 import ESharing.Shared.TransferedObject.Address;
 
+/**
+ * The interface used to connect a view model layer with a model layer for all verification features.
+ * @version 1.0
+ * @author Group1
+ */
 public interface VerificationModel {
     /**
      * Verifies user information and returns a result as a string object

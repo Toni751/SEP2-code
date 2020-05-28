@@ -92,7 +92,7 @@ public class ServerUserHandler implements RMIUserServer
 
     listenForAvatarUpdated = evt -> {
       try {
-        client.avatarUpdated((byte[]) evt.getNewValue());
+        client.avatarUpdated((int)evt.getOldValue(), (byte[]) evt.getNewValue());
       } catch (RemoteException e) {
         e.printStackTrace();
       }

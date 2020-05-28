@@ -21,6 +21,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+/**
+ * The controller class used to display the reservation view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class ReservationViewController extends ViewController {
 
     @FXML private TableView<Reservation> reservationTable;
@@ -36,6 +41,10 @@ public class ReservationViewController extends ViewController {
     private ReservationViewModel reservationViewModel;
     private ViewHandler viewHandler;
 
+    /**
+     * Initializes and opens the reservation view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewHandler = ViewHandler.getViewHandler();
@@ -57,6 +66,9 @@ public class ReservationViewController extends ViewController {
         reservationTable.setOnMouseClicked(this::onReservationSelected);
     }
 
+    /**
+     * Opens advertisements view
+     */
     public void onOpenAdvertisement() {
         if(reservationViewModel.loadReservation()) {
             LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
@@ -65,10 +77,17 @@ public class ReservationViewController extends ViewController {
 
     }
 
+    /**
+     * Sends a request for removing
+     */
     public void onRemoveAction() {
         reservationViewModel.removeReservation();
     }
 
+    /**
+     * Sends a request for selecting advertisement
+     * @param mouseEvent mouse clicked event
+     */
     private void onReservationSelected(MouseEvent mouseEvent) {
         int index = reservationTable.getSelectionModel().getSelectedIndex();
         Reservation selectedReservation = reservationTable.getItems().get(index);

@@ -103,20 +103,17 @@ public class MainAppViewController extends ViewController {
     }
 
     /**
-     * Sends a request to the view handler to open a welcome view when an administrator removes the account of a current logged user
-     * @param propertyChangeEvent the administrator removing account event
+     * Sends a request to rest view
      */
-    private void onAdminRemoveAccount(PropertyChangeEvent propertyChangeEvent) {
-        viewHandler.openWelcomeView();
-    }
-
-
     public void onHomeAction() {
         mainAppViewModel.setHomeRectangleSelected();
         viewHandler.resetMainView();
         viewHandler.openMainAppView();
     }
 
+    /**
+     * Opens selected view
+     */
     private void selectSubViewToOpen(){
         Views requestedView = LoggedUser.getLoggedUser().getSelectedView();
         if(requestedView == Views.ADVERTISEMENT_VIEW)
@@ -129,5 +126,13 @@ public class MainAppViewController extends ViewController {
             viewHandler.openAdsOverviewView(contentPane);
 
         LoggedUser.getLoggedUser().setSelectedView(null);
+    }
+
+    /**
+     * Sends a request to the view handler to open a welcome view when an administrator removes the account of a current logged user
+     * @param propertyChangeEvent the administrator removing account event
+     */
+    private void onAdminRemoveAccount(PropertyChangeEvent propertyChangeEvent) {
+        viewHandler.openWelcomeView();
     }
 }

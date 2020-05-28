@@ -63,10 +63,16 @@ public class MainAccountSettingController extends ViewController {
         viewHandler.openUserAddressSettingView(userSettingPane);
     }
 
+    /**
+     * Sends a request to the view handler to open the user advertisement setting view into the userSettingPane
+     */
     public void loadAdvertisementsPane() {
         viewHandler.openUserAdvertisementView(userSettingPane);
     }
 
+    /**
+     * Sends a request to the view handler to open the user reservation setting view into the userSettingPane
+     */
     public void loadReservationPane(){
         viewHandler.openReservationView(userSettingPane);
     }

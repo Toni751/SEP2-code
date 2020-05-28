@@ -67,20 +67,32 @@ public class MainAdminViewController extends ViewController {
         viewHandler.openAdminDashboardView(contentPane);
     }
 
+    /**
+     * Sends a request to edit
+     */
     public void onEditAdminAccount() {
         viewHandler.openEditAdminView(contentPane);
     }
 
+    /**
+     * Sends a request to logout
+     */
     public void onLogoutAction() {
         mainAdminViewModel.onLogoutRequest();
         viewHandler.openWelcomeView();
     }
 
+    /**
+     * Opens chat view
+     */
     public void onGoToChat() {
         AdministratorLists.getInstance().setSelectedUser(null);
         viewHandler.openChatView(null);
     }
 
+    /**
+     *  Opens advertisements view
+     */
     public void onGoToAdvertisements() {
         mainAdminViewModel.setAdvertisementsRequest();
         viewHandler.openAdminAdvertisementView(contentPane);

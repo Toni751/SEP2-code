@@ -64,45 +64,6 @@ public class ManageUsersViewModel{
         userActionsModel.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), this::newUserReported);
     }
 
-    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("USER reported");
-        int userID = (int) propertyChangeEvent.getOldValue();
-        int reports = (int) propertyChangeEvent.getNewValue();
-        System.out.println(userID);
-        System.out.println(reports);
-
-
-        for(int i = 0 ; i < users.size() ; i++)
-        {
-            if(users.get(i).getUser_id() == userID) {
-                User updated = users.get(i);
-                updated.setReportsNumber(reports);
-                users.set(i, updated);
-            }
-        }
-    }
-
-    private void updatedUser(PropertyChangeEvent propertyChangeEvent) {
-        User updatedUser = (User) propertyChangeEvent.getNewValue();
-        for(int i = 0 ; i < users.size() ; i++){
-            if(users.get(i).getUser_id() == updatedUser.getUser_id()){
-                users.set(i, updatedUser);
-            }
-        }
-    }
-
-    private void userRemoved(PropertyChangeEvent propertyChangeEvent) {
-        User removedUser = (User) propertyChangeEvent.getNewValue();
-        users.remove(removedUser);
-        disableUserManagingProperty();
-    }
-
-    private void newUserCreated(PropertyChangeEvent propertyChangeEvent) {
-        User newUser = (User) propertyChangeEvent.getNewValue();
-        users.add(newUser);
-        disableUserManagingProperty();
-    }
-
     /**
      * Loads all users which are a part of the system to the users table
      * @return the collection of the all users which are part of the system
@@ -255,4 +216,58 @@ public class ManageUsersViewModel{
         return warningVisibleProperty;
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("USER reported");
+        int userID = (int) propertyChangeEvent.getOldValue();
+        int reports = (int) propertyChangeEvent.getNewValue();
+        System.out.println(userID);
+        System.out.println(reports);
+
+
+        for(int i = 0 ; i < users.size() ; i++)
+        {
+            if(users.get(i).getUser_id() == userID) {
+                User updated = users.get(i);
+                updated.setReportsNumber(reports);
+                users.set(i, updated);
+            }
+        }
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void updatedUser(PropertyChangeEvent propertyChangeEvent) {
+        User updatedUser = (User) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < users.size() ; i++){
+            if(users.get(i).getUser_id() == updatedUser.getUser_id()){
+                users.set(i, updatedUser);
+            }
+        }
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void userRemoved(PropertyChangeEvent propertyChangeEvent) {
+        User removedUser = (User) propertyChangeEvent.getNewValue();
+        users.remove(removedUser);
+        disableUserManagingProperty();
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newUserCreated(PropertyChangeEvent propertyChangeEvent) {
+        User newUser = (User) propertyChangeEvent.getNewValue();
+        users.add(newUser);
+        disableUserManagingProperty();
+    }
 }

@@ -1,10 +1,7 @@
 package ESharing.Client.Model.UserActions;
 
-import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.PropertyChangeSubject;
-import javafx.scene.image.Image;
-
 import java.io.File;
 
 /**
@@ -41,9 +38,21 @@ public interface UserActionsModel extends PropertyChangeSubject
      */
     void removeAccount();
 
+    /**
+     * Logouts user from the system
+     */
     void logoutUser();
 
+    /**
+     * Sends a request to the networking layer for changing the account avatar
+     * @param avatarImage the new avatar as a file object
+     */
     void changeAvatar(File avatarImage);
 
+    /**
+     * Sends a request to the networking layer for reporting the given user
+     * @param user_id the id of the given user
+     * @return the result of the reporting part
+     */
     boolean addNewUserReport(int user_id);
 }

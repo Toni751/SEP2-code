@@ -4,7 +4,6 @@ import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.Views;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,36 +57,68 @@ public class LoggedUser {
         return user;
     }
 
+    /**
+     * Sets a current selected conversation
+     * @param currentOpenConversation the current selected conversation
+     */
     public void setCurrentOpenConversation(List<Message> currentOpenConversation) {
         this.currentOpenConversation = currentOpenConversation;
     }
 
+    /**
+     * Returns a current selected advertisement
+     * @return a current selected advertisement
+     */
     public Advertisement getSelectedAdvertisement()
     {
         return selectedAdvertisement;
     }
 
+    /**
+     * Sets a current selected advertisement
+     * @param selectedAdvertisement a current selected advertisement
+     */
     public void selectAdvertisement(Advertisement selectedAdvertisement)
     {
         this.selectedAdvertisement = selectedAdvertisement;
     }
 
+    /**
+     * Returns a current selected conversation
+     * @return the current selected conversation
+     */
     public List<Message> getCurrentOpenConversation() {
         return currentOpenConversation;
     }
 
+    /**
+     * Returns a current selected user
+     * @return the current selected user
+     */
     public User getSelectedUser() {
         return selectedUser;
     }
 
+    /**
+     * Sets a current selected user
+     * @param selectedUser the current selected user
+     */
     public void setSelectedUser(User selectedUser) {
         this.selectedUser = selectedUser;
     }
 
+    /**
+     * Sets a current selected view to open
+     * @param selectedView the current selected view
+     */
     public void setSelectedView(Views selectedView) {
         this.selectedView = selectedView;
     }
 
+    /**
+     * Returns a current selected view to open
+     * @return the current selected view
+     */
     public Views getSelectedView() {
         return selectedView;
     }

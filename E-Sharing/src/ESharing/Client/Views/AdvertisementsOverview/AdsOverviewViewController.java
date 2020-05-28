@@ -2,23 +2,24 @@ package ESharing.Client.Views.AdvertisementsOverview;
 
 import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
-import ESharing.Client.Views.MainAppView.MainAppViewModel;
 import ESharing.Client.Views.ViewController;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.Events;
 import com.jfoenix.controls.JFXComboBox;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import java.beans.PropertyChangeEvent;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The controller class used to display the ads overview view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class AdsOverviewViewController extends ViewController {
 
     @FXML private JFXComboBox<String> searchComboBox;
@@ -30,6 +31,10 @@ public class AdsOverviewViewController extends ViewController {
     private ViewHandler viewHandler;
     private AdsOverviewViewModel adsOverviewViewModel;
 
+    /**
+     * Initializes and opens the administrator users list view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init(){
         this.viewHandler = ViewHandler.getViewHandler();
         this.adsOverviewViewModel = ViewModelFactory.getViewModelFactory().getAdsOverviewViewModel();
@@ -44,12 +49,27 @@ public class AdsOverviewViewController extends ViewController {
         adsOverviewViewModel.addPropertyChangeListener(Events.UPDATE_AD_LIST.toString(), this::onUpdateList);
     }
 
+    /**
+     * Sends a request to the view model layer for searching advertisement
+     */
+    public void onSearchAdvertisements() {
+        adsOverviewViewModel.searchAdvertisements();
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void onUpdateList(PropertyChangeEvent propertyChangeEvent) {
         List<CatalogueAd> updatedList = (List<CatalogueAd>) propertyChangeEvent.getNewValue();
         crateViewGridPane(updatedList);
         System.out.println(updatedList.get(0).getTitle());
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void onNewAd(PropertyChangeEvent propertyChangeEvent) {
         CatalogueAd catalogueAd = (CatalogueAd) propertyChangeEvent.getNewValue();
         AnchorPane anchorPane = viewHandler.createAdvertisementComponent(catalogueAd, String.valueOf(catalogueAd.getAdvertisementID()), -1);
@@ -57,6 +77,10 @@ public class AdsOverviewViewController extends ViewController {
 
     }
 
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
     private void onAdRemoved(PropertyChangeEvent propertyChangeEvent) {
         int advertisementID = (int) propertyChangeEvent.getNewValue();
         for(int i = 0 ; i < gridPane.getChildren().size() ; i++){
@@ -67,6 +91,10 @@ public class AdsOverviewViewController extends ViewController {
         }
     }
 
+    /**
+     * Creates a preview with all advertisements
+     * @param updatedList the list of advertisement
+     */
     private void crateViewGridPane(List<CatalogueAd> updatedList){
 
         List<CatalogueAd> advertisements = null;
@@ -109,11 +137,6 @@ public class AdsOverviewViewController extends ViewController {
             }
         }
         scrollPane1.setContent(gridPane);
-    }
-
-    public void onSearchAdvertisements() {
-        System.out.println("comboclicked");
-        adsOverviewViewModel.searchAdvertisements();
     }
 
 }

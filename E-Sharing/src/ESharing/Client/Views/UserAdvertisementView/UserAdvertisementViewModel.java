@@ -21,7 +21,11 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.time.LocalDate;
 import java.util.List;
-
+/**
+ * The class in a view model layer contains all functions which are used in the user advertisement view.
+ * @version 1.0
+ * @author Group1
+ */
 public class UserAdvertisementViewModel implements PropertyChangeSubject {
 
 
@@ -33,6 +37,9 @@ public class UserAdvertisementViewModel implements PropertyChangeSubject {
     private UserActionsModel userActionsModel;
     private ReservationModel reservationModel;
 
+    /**
+     * A constructor initializes model layer for a edit user features and all fields
+     */
     public UserAdvertisementViewModel(){
         advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
@@ -47,53 +54,9 @@ public class UserAdvertisementViewModel implements PropertyChangeSubject {
         reservationModel.addPropertyChangeListener(Events.RESERVATION_REMOVED.toString(), this::reservationRemoved);
     }
 
-    private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
-        int[] idArray = (int[]) propertyChangeEvent.getOldValue();
-        List<LocalDate> daysToRemove = (List<LocalDate>) propertyChangeEvent.getNewValue();
-
-        int advertisementID = idArray[0];
-        int requestedID = idArray[1];
-
-        for(int i = 0 ; i < ownCatalogues.size() ; i++) {
-            if (ownCatalogues.get(i).getAdvertisementID() == advertisementID) {
-                CatalogueAd catalogueAdReplace = ownCatalogues.get(i);
-                for(int j = 0 ; j < ownCatalogues.get(i).getReservations().size() ; j++)
-                {
-                    if(ownCatalogues.get(i).getReservations().get(j).getRequestedUser().getUser_id() == requestedID){
-                        CatalogueAd updated = ownCatalogues.get(i);
-                        updated.getReservations().get(j).getReservationDays().removeAll(daysToRemove);
-                        ownCatalogues.set(i, updated);
-                    }
-                }
-                ownCatalogues.set(i, catalogueAdReplace);
-                System.out.println("New reservations event");
-            }
-        }
-    }
-
-    private void newReservationCreated(PropertyChangeEvent propertyChangeEvent) {
-        Reservation reservation = (Reservation) propertyChangeEvent.getNewValue();
-        for(int i = 0 ; i < ownCatalogues.size() ; i++){
-            if(ownCatalogues.get(i).getAdvertisementID() == reservation.getAdvertisementID()){
-                CatalogueAd catalogueAdReplace = ownCatalogues.get(i);
-                catalogueAdReplace.getReservations().add(reservation);
-                ownCatalogues.set(i, catalogueAdReplace);
-            }
-        }
-    }
-
-    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
-        int removedId = (int) propertyChangeEvent.getNewValue();
-
-        for(int i = 0 ; i < ownCatalogues.size() ; i++)
-        {
-            if(ownCatalogues.get(i).getAdvertisementID() == removedId) {
-                ownCatalogues.remove(ownCatalogues.get(i));
-                support.firePropertyChange(Events.AD_REMOVED.toString(), null, ownCatalogues);
-            }
-        }
-    }
-
+    /**
+     * Sets a default view and values
+     */
     public void defaultView()
     {
         ownCatalogues.clear();
@@ -101,18 +64,12 @@ public class UserAdvertisementViewModel implements PropertyChangeSubject {
 
     }
 
+    /**
+     * Returns all advertisement catalogues
+     * @return all advertisement catalogues
+     */
     public ObservableList<CatalogueAd> getOwnCatalogues() {
         return ownCatalogues;
-    }
-
-    public boolean selectAdvertisement(int id)
-    {
-        Advertisement advertisement = advertisementModel.getAdvertisement(id);
-        if(advertisement  != null){
-            LoggedUser.getLoggedUser().selectAdvertisement(advertisement);
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -139,5 +96,64 @@ public class UserAdvertisementViewModel implements PropertyChangeSubject {
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int[] idArray = (int[]) propertyChangeEvent.getOldValue();
+        List<LocalDate> daysToRemove = (List<LocalDate>) propertyChangeEvent.getNewValue();
+
+        int advertisementID = idArray[0];
+        int requestedID = idArray[1];
+
+        for(int i = 0 ; i < ownCatalogues.size() ; i++) {
+            if (ownCatalogues.get(i).getAdvertisementID() == advertisementID) {
+                CatalogueAd catalogueAdReplace = ownCatalogues.get(i);
+                for(int j = 0 ; j < ownCatalogues.get(i).getReservations().size() ; j++)
+                {
+                    if(ownCatalogues.get(i).getReservations().get(j).getRequestedUser().getUser_id() == requestedID){
+                        CatalogueAd updated = ownCatalogues.get(i);
+                        updated.getReservations().get(j).getReservationDays().removeAll(daysToRemove);
+                        ownCatalogues.set(i, updated);
+                    }
+                }
+                ownCatalogues.set(i, catalogueAdReplace);
+                System.out.println("New reservations event");
+            }
+        }
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newReservationCreated(PropertyChangeEvent propertyChangeEvent) {
+        Reservation reservation = (Reservation) propertyChangeEvent.getNewValue();
+        for(int i = 0 ; i < ownCatalogues.size() ; i++){
+            if(ownCatalogues.get(i).getAdvertisementID() == reservation.getAdvertisementID()){
+                CatalogueAd catalogueAdReplace = ownCatalogues.get(i);
+                catalogueAdReplace.getReservations().add(reservation);
+                ownCatalogues.set(i, catalogueAdReplace);
+            }
+        }
+    }
+
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
+        int removedId = (int) propertyChangeEvent.getNewValue();
+
+        for(int i = 0 ; i < ownCatalogues.size() ; i++)
+        {
+            if(ownCatalogues.get(i).getAdvertisementID() == removedId) {
+                ownCatalogues.remove(ownCatalogues.get(i));
+                support.firePropertyChange(Events.AD_REMOVED.toString(), null, ownCatalogues);
+            }
+        }
     }
 }

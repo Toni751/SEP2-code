@@ -25,6 +25,11 @@ import org.controlsfx.control.Rating;
 
 import java.time.LocalDate;
 
+/**
+ * The controller class used to display the advertisement view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class AdvertisementViewController extends ViewController {
 
     @FXML private Label ownerPhoneNumberLabel;
@@ -52,12 +57,15 @@ public class AdvertisementViewController extends ViewController {
     @FXML private Label priceLabel;
     @FXML private AnchorPane mainPane;
 
-
     private PopOver imagePopOver;
     private EventHandler<MouseEvent> mouseClickedEventHandler;
     private AdvertisementViewModel advertisementViewModel;
     private ViewHandler viewHandler;
 
+    /**
+     * Initializes and opens the administrator users list view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewHandler = ViewHandler.getViewHandler();
@@ -99,14 +107,23 @@ public class AdvertisementViewController extends ViewController {
 
     }
 
+    /**
+     * Opens calendar component
+     */
     public void onOpenCalendar() {
         datePicker.show();
     }
 
+    /**
+     * Sends a request for create reservation
+     */
     public void onReserveButton() {
         advertisementViewModel.sendReservationRequest();
     }
 
+    /**
+     * Opens user view
+     */
     public void onGoToUserView() {
         if(LoggedUser.getLoggedUser().getUser().getUser_id() != LoggedUser.getLoggedUser().getSelectedAdvertisement().getOwner().getUser_id()) {
             LoggedUser.getLoggedUser().setSelectedView(Views.USER_VIEW);
@@ -114,6 +131,9 @@ public class AdvertisementViewController extends ViewController {
         }
     }
 
+    /**
+     * Sends a request for remove advertisement
+     */
     public void onRemovedAction() {
         String requestResult = advertisementViewModel.sendAdvertisementRemoveRequest();
         if(requestResult != null && requestResult.equals("ADMIN"))
@@ -122,6 +142,9 @@ public class AdvertisementViewController extends ViewController {
             viewHandler.openMainSettingView(mainPane);
     }
 
+    /**
+     * Initializes datePicker component
+     */
     private void initializeDatePicker() {
         Callback<DatePicker, DateCell> dayCellFactory =
                 (final DatePicker datePicker) -> new DateCell() {
@@ -150,6 +173,9 @@ public class AdvertisementViewController extends ViewController {
         datePicker.setDayCellFactory(dayCellFactory);
     }
 
+    /**
+     * Adds events for dataPicker component
+     */
     private void dataPickerEvent()
     {
         datePicker.setOnAction(actionEvent -> {
@@ -165,6 +191,9 @@ public class AdvertisementViewController extends ViewController {
         };
     }
 
+    /**
+     * Opens previous view
+     */
     public void goBack() {
         LoggedUser.getLoggedUser().selectAdvertisement(null);
         if(LoggedUser.getLoggedUser().getUser().isAdministrator())
@@ -175,58 +204,97 @@ public class AdvertisementViewController extends ViewController {
         }
     }
 
+    /**
+     * Sends a request for adding rating
+     */
     public void sendRatings() {
         advertisementViewModel.sendRatingRequest();
     }
 
+    /**
+     * Sends a request to clear rating
+     */
     public void clearRatings() {
         advertisementViewModel.clearRatingsProperty();
     }
 
+    /**
+     * Sends a request to fill rating
+     */
     public void fillRatings() {
         advertisementViewModel.setDefaultRatingsProperty();
     }
 
+    /**
+     * Sends a request for reporting the advertisement
+     */
     public void onReportAdvertisement() {
         advertisementViewModel.reportAdvertisement();
     }
 
+    /**
+     * Sends a request to view handler for open picture in new stage
+     */
     public void openSub4Picture() {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE4.toString()))
             viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE4.toString()));
     }
 
+    /**
+     * Sends a request to view handler for open picture in new stage
+     */
     public void openSub3Picture() {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE3.toString()))
             viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE3.toString()));
     }
 
+    /**
+     * Sends a request to view handler for open picture in new stage
+     */
     public void openSub2Picture() {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE2.toString()))
             viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE2.toString()));
     }
 
+    /**
+     * Sends a request to view handler for open picture in new stage
+     */
     public void openSub1Picture() {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhotos().containsKey(AdImages.SUB_IMAGE1.toString()))
             viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.SUB_IMAGE1.toString()));
     }
 
+    /**
+     * Sends a request to view handler for open picture in new stage
+     */
     public void openMainPicture() {
         viewHandler.openPicturePreview(LoggedUser.getLoggedUser().getSelectedAdvertisement().getPhoto(AdImages.MAIN_IMAGE.toString()));
     }
 
+    /**
+     * Goes to description part
+     */
     public void onGoToDescription() {
         scrollPane.setVvalue(0.55);
     }
 
+    /**
+     * Goes to gallery part
+     */
     public void onGoToGallery() {
         scrollPane.setVvalue(0.80);
     }
 
+    /**
+     * Goes to owner part
+     */
     public void onGoToOwner() {
         scrollPane.setVvalue(1);
     }
 
+    /**
+     * Shows popup with image information
+     */
     public void showImageDescription() {
         Label description = new Label("Click the image to open a preview");
         imagePopOver = new PopOver(description);
@@ -235,6 +303,9 @@ public class AdvertisementViewController extends ViewController {
                 .add(getClass().getResource("../../../Addition/Styles/Styles.css").toExternalForm());
     }
 
+    /**
+     * Hides popup with image information
+     */
     public void hideImageDescription() {
         imagePopOver.hide();
     }

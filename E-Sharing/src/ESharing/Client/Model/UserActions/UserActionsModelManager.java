@@ -33,7 +33,7 @@ public class UserActionsModelManager implements UserActionsModel {
     private Connection connection;
 
     /**
-     * A constructor initializes all fields
+     * A constructor sets fields and assigns events
      */
     public UserActionsModelManager()
     {
@@ -47,18 +47,6 @@ public class UserActionsModelManager implements UserActionsModel {
         client.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), this::avatarUpdated);
         connection.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
         client.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), this::newUserReported);
-    }
-
-    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void avatarUpdated(PropertyChangeEvent propertyChangeEvent) {
-        LoggedUser.getLoggedUser().getUser().setAvatar((byte[]) propertyChangeEvent.getNewValue());
     }
 
 
@@ -75,7 +63,6 @@ public class UserActionsModelManager implements UserActionsModel {
 
     @Override
     public String onLoginRequest(String username, String password) {
-       // connection.closeConnection();
         initializeConnections();
             User requestedUser = client.loginUserRequest(username,password);
             if(requestedUser == null)
@@ -107,7 +94,6 @@ public class UserActionsModelManager implements UserActionsModel {
         client.logout();
         clientChat.userLoggedOut();
         connection.closeConnection();
-        //LoggedUser.getLoggedUser().logoutUser();
     }
 
     @Override
@@ -154,11 +140,40 @@ public class UserActionsModelManager implements UserActionsModel {
         support.removePropertyChangeListener(listener);
     }
 
+    /**
+     * Initializes a server
+     */
     private void initializeConnections()
     {
         client.initializeConnection();
         clientChat.initializeConnection();
         clientAdvertisement.initializeConnection();
         reservationClient.initializeConnection();
+    }
+
+    /**
+     * Starts when new reportedUSer event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void newUserReported(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Starts when new connectionFailed event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void connectionFailed(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Starts when new avatarUpdated event appears. Check the logged user and sets the new avatar
+     * @param propertyChangeEvent the received event
+     */
+    private void avatarUpdated(PropertyChangeEvent propertyChangeEvent) {
+        int userId = (int) propertyChangeEvent.getOldValue();
+        if(LoggedUser.getLoggedUser().getUser().getUser_id() == userId)
+            LoggedUser.getLoggedUser().getUser().setAvatar((byte[]) propertyChangeEvent.getNewValue());
     }
 }

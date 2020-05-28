@@ -4,11 +4,9 @@ import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Core.ViewModelFactory;
 import ESharing.Client.Model.AdministratorModel.AdministratorLists;
 import ESharing.Client.Views.ViewController;
-import ESharing.Shared.Util.GeneralFunctions;
 import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 /**

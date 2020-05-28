@@ -13,11 +13,19 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+/**
+ * The class from the model layer which contains all chat features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class ChatModelManager implements ChatModel{
 
     private ClientChat client;
     private PropertyChangeSupport support;
 
+    /**
+     * A constructor sets fields and assigns events
+     */
     public ChatModelManager()
     {
         client = ClientFactory.getClientFactory().getChatClient();
@@ -27,36 +35,6 @@ public class ChatModelManager implements ChatModel{
         client.addPropertyChangeListener(Events.USER_ONLINE.toString(), this::newOnlineUser);
         client.addPropertyChangeListener(Events.USER_OFFLINE.toString(),this::newOfflineUser);
         client.addPropertyChangeListener(Events.MAKE_MESSAGE_READ.toString(), this::readMessageReceived);
-    }
-
-    private void readMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        Message newMessage = (Message) propertyChangeEvent.getNewValue();
-        if(loggedUserPartOfTheMessage(newMessage)) {
-            support.firePropertyChange(propertyChangeEvent);
-            if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty())
-                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
-            else if(!GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getSender())
-                    && !GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getReceiver()))
-                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
-        }
-    }
-
-    private void newOfflineUser(PropertyChangeEvent event)
-    {
-        support.firePropertyChange(event);
-    }
-
-    private void newOnlineUser(PropertyChangeEvent event)
-    {
-        support.firePropertyChange(event);
-    }
-
-    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("ESSAGE RECEIVED IN CHAT MODEL");
-        Message newMessage = (Message) propertyChangeEvent.getNewValue();
-        if(loggedUserPartOfTheMessage(newMessage)) {
-            support.firePropertyChange(propertyChangeEvent);
-        }
     }
 
     @Override
@@ -93,7 +71,6 @@ public class ChatModelManager implements ChatModel{
         return client.getNoUnreadMessages(LoggedUser.getLoggedUser().getUser());
     }
 
-
     @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
@@ -123,7 +100,56 @@ public class ChatModelManager implements ChatModel{
         support.removePropertyChangeListener(listener);
     }
 
+    /**
+     * Starts when new readMessageReceived event appears. Check is the logged user is a part of the message and sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void readMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        Message newMessage = (Message) propertyChangeEvent.getNewValue();
+        if(loggedUserPartOfTheMessage(newMessage)) {
+            support.firePropertyChange(propertyChangeEvent);
+            if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty())
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
+            else if(!GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getSender())
+                    && !GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), newMessage.getReceiver()))
+                support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString(), null, null);
+        }
+    }
 
+    /**
+     * Starts when new offlineUser event appears. Sends another event to the view model layer.
+     * @param event the received event
+     */
+    private void newOfflineUser(PropertyChangeEvent event)
+    {
+        support.firePropertyChange(event);
+    }
+
+    /**
+     * Starts when new onlineUser event appears. Sends another event to the view model layer.
+     * @param event the received event
+     */
+    private void newOnlineUser(PropertyChangeEvent event)
+    {
+        support.firePropertyChange(event);
+    }
+
+    /**
+     * Starts when new messageReceived event appears. Check is the logged user is a part of the message and sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        Message newMessage = (Message) propertyChangeEvent.getNewValue();
+        if(loggedUserPartOfTheMessage(newMessage)) {
+            support.firePropertyChange(propertyChangeEvent);
+        }
+    }
+
+    /**
+     * Checks if the logged user is a part of the message
+     * @param newMessage the given message
+     * @return the result of the checking
+     */
     private boolean loggedUserPartOfTheMessage(Message newMessage)
     {
         System.out.println(LoggedUser.getLoggedUser().getUser().getUsername());

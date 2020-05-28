@@ -14,11 +14,20 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+/**
+ * The class which handles the requests from the model and communicates
+ * with the server through remote method invocation
+ * @version 1.0
+ * @author Group 1
+ */
 public class ClientAdvertisementManager implements ClientAdvertisement, RMIAdvertisementClient {
 
     private PropertyChangeSupport support;
     private RMIAdvertisementServer server;
 
+    /**
+     * A constructor which initializes fields and tries to establish connection with the server
+     */
     public ClientAdvertisementManager() {
         support = new PropertyChangeSupport(this);
         try

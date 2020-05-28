@@ -7,7 +7,6 @@ import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -18,11 +17,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The class from the model layer which contains all advertisement features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class AdvertisementModelManager implements AdvertisementModel{
 
     private ClientAdvertisement clientAdvertisement;
     private PropertyChangeSupport support;
 
+    /**
+     * A constructor sets fields and assigns events
+     */
     public AdvertisementModelManager() {
         this.clientAdvertisement = ClientFactory.getClientFactory().getClientAdvertisement();
         support = new PropertyChangeSupport(this);
@@ -30,25 +37,6 @@ public class AdvertisementModelManager implements AdvertisementModel{
         clientAdvertisement.addPropertyChangeListener(Events.NEW_APPROVED_AD.toString(), this::newApprovedAd);
         clientAdvertisement.addPropertyChangeListener(Events.AD_REMOVED.toString(), this::adRemoved);
         clientAdvertisement.addPropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), this::newReportReceived);
-    }
-
-    private void newReportReceived(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void adRemoved(PropertyChangeEvent propertyChangeEvent)
-    {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void newApprovedAd(PropertyChangeEvent propertyChangeEvent)
-    {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void newAdRequest(PropertyChangeEvent propertyChangeEvent)
-    {
-        support.firePropertyChange(propertyChangeEvent);
     }
 
     @Override
@@ -128,16 +116,6 @@ public class AdvertisementModelManager implements AdvertisementModel{
         return clientAdvertisement.getAdvertisementNumber();
     }
 
-    private byte[] convertImageFile(File image)
-    {
-        try {
-            return Files.readAllBytes(image.toPath().toAbsolutePath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
     {
@@ -165,5 +143,55 @@ public class AdvertisementModelManager implements AdvertisementModel{
     @Override
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Starts when new reportedAd event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void newReportReceived(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Starts when new removedAd event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void adRemoved(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Starts when new newApprovedAd event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void newApprovedAd(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Starts when new adRequest event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
+    private void newAdRequest(PropertyChangeEvent propertyChangeEvent)
+    {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+
+    /**
+     * Converts given file into byte array and returns that
+     * @param image the given file
+     * @return the converted file as a byte array
+     */
+    private byte[] convertImageFile(File image)
+    {
+        try {
+            return Files.readAllBytes(image.toPath().toAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

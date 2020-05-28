@@ -1,7 +1,6 @@
 package ESharing.Client.Networking.reservation;
 
 import ESharing.Client.Networking.Connection;
-import ESharing.Shared.Networking.advertisement.RMIAdvertisementServer;
 import ESharing.Shared.Networking.reservation.RMIReservationClient;
 import ESharing.Shared.Networking.reservation.RMIReservationServer;
 import ESharing.Shared.TransferedObject.Reservation;
@@ -14,6 +13,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The class which handles the requests from the model and communicates
+ * with the server through remote method invocation
+ * @version 1.0
+ * @author Group 1
+ */
 public class ReservationClientHandler implements ReservationClient, RMIReservationClient {
 
     private PropertyChangeSupport support;
@@ -33,15 +38,15 @@ public class ReservationClientHandler implements ReservationClient, RMIReservati
     }
 
 
-
+    /**
+     * A constructor which initializes fields and tries to establish connection with the server
+     */
     public void initializeConnection()
     {
         try {
             server = Connection.getStubInterface().getServerReservation();
             System.out.println("Connected from Client Chat Handler");
-//        server.unRegisterUserAsAListener();
         } catch (RemoteException e) {
-            //support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
         }
     }
 

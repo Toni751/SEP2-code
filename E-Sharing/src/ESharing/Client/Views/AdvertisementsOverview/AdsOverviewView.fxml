@@ -29,7 +29,7 @@
                   <Font name="Century Gothic Bold" size="30.0" />
                </font>
             </Label>
-            <Text layoutX="34.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus aliquet risus, et tincidunt quam feugiat quis. Vestibulum vel erat est. Curabitur ac massa tincidunt, tincidunt ex nec, consectetur lacus." wrappingWidth="393.6066436767578">
+            <Text layoutX="34.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-sharing app aims to make your travel easier. With E-sharing you might either post your own vehicle or rent it. E-sharing lets to get to the destination quickly.Such app as e-sharing is made to be easy in use. Morever, thanks to e-sharing you can also protect the environment. " wrappingWidth="393.6066436767578">
                <font>
                   <Font name="Century Gothic" size="13.0" />
                </font>

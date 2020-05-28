@@ -21,6 +21,11 @@ import org.controlsfx.control.PopOver;
 import java.io.File;
 import java.time.LocalDate;
 
+/**
+ * The controller class used to display the edit creating ad view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class CreateAdViewController extends ViewController {
 
     @FXML private Label warningLabel;
@@ -47,6 +52,10 @@ public class CreateAdViewController extends ViewController {
     private EventHandler<MouseEvent> mouseClickedEventHandler;
     private CreateAdViewModel viewModel;
 
+    /**
+     * Initializes and opens the edit administrator view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewModel = ViewModelFactory.getViewModelFactory().getAdViewModel();
@@ -87,6 +96,10 @@ public class CreateAdViewController extends ViewController {
         addFocusEvent(mainImage);
     }
 
+    /**
+     * Adds images
+     * @param mouseEvent the mouse clicked event
+     */
     public void addImage(MouseEvent mouseEvent) {
         ImageView selectedImage = (ImageView) mouseEvent.getSource();
         if(selectedImage.getId().equals(mainImage.getId())) {
@@ -106,28 +119,47 @@ public class CreateAdViewController extends ViewController {
         }
     }
 
+    /**
+     * Sends a request to add advertisement
+     */
     public void onAddAdvertisementAction() {
         viewModel.addAdvertisementRequest();
     }
 
+    /**
+     * Opens calendar
+     */
     public void openCalendar() {
         datePicker.show();
     }
 
+    /**
+     * sends a request to clear form
+     */
     public void clearForm(){
         viewModel.setDefaultView();
     }
 
+    /**
+     * Shows image popup
+     */
     public void showImagePopup() {
         Label imageDescription = new Label("Images should be in .png or .jpg format");
         popOver = new PopOver(imageDescription);
         popOver.show(subImage3Rectangle);
     }
 
+    /**
+     * Hides image popup
+     */
     public void hideImagePopup() {
         popOver.hide();
     }
 
+    /**
+     * Adds focus event
+     * @param node node for focus event
+     */
     private void addFocusEvent(Node node){
         Label description = null;
         if(node == titleTextField)
@@ -153,6 +185,9 @@ public class CreateAdViewController extends ViewController {
         });
     }
 
+    /**
+     * Initializes datePicker
+     */
     private void initializeDatePicker() {
         Callback<DatePicker, DateCell> dayCellFactory =
                 (final DatePicker datePicker) -> new DateCell() {
@@ -178,6 +213,9 @@ public class CreateAdViewController extends ViewController {
         datePicker.setDayCellFactory(dayCellFactory);
     }
 
+    /**
+     * Adds events to datePicker
+     */
     private void dataPickerEvent()
     {
         datePicker.setOnAction(actionEvent -> {
@@ -192,6 +230,10 @@ public class CreateAdViewController extends ViewController {
         };
     }
 
+    /**
+     * Opens file chooser and sets the selected image
+     * @param imageId the image id
+     */
     private void selectAndLoadImage(String imageId)
     {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png");

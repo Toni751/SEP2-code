@@ -10,16 +10,29 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
+/**
+ * The class responsible for managing client connection
+ * @version 1.0
+ * @author Group1
+ */
 public class Connection implements PropertyChangeSubject {
 
     private static StubInterface stubInterface;
     private static PropertyChangeSupport support;
 
+    /**
+     * A constructor initializes fileds
+     */
     public Connection()
     {
         support = new PropertyChangeSupport(this);
     }
 
+
+    /**
+     * Returns the initialized stub interface if is possible, otherwise fires the event with failed connection
+     * @return the initialized stub interface
+     */
     public static StubInterface getStubInterface()
     {
             if (stubInterface == null) {
@@ -33,6 +46,9 @@ public class Connection implements PropertyChangeSubject {
             return stubInterface;
     }
 
+    /**
+     * Closes connection with the server
+     */
     public void closeConnection()
     {
         stubInterface = null;

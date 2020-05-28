@@ -115,7 +115,7 @@ public class ServerModelManager implements ServerModel
       out.close();
 
       if(userDAO.changeAvatar(avatar.toPath().toString(), userId));
-        support.firePropertyChange(Events.UPDATE_AVATAR.toString(), null, avatarByte);
+        support.firePropertyChange(Events.UPDATE_AVATAR.toString(), userId, avatarByte);
     } catch (IOException e) {
       e.printStackTrace();
     }

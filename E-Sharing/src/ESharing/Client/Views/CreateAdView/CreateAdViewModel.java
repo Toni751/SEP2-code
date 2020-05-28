@@ -26,6 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The class in a view model layer contains all functions which are used in the edit create ad view.
+ * @version 1.0
+ * @author Group1
+ */
 public class CreateAdViewModel {
 
     private StringProperty titleProperty;
@@ -58,6 +63,10 @@ public class CreateAdViewModel {
     private Map<String, File> imageFiles;
 
     private final Image defaultImage = new Image("ESharing/Addition/Images/icons/image.png");
+
+    /**
+     * A constructor initializes model layer for a create ad features and all fields
+     */
     public CreateAdViewModel()
     {
         titleProperty = new SimpleStringProperty();
@@ -90,6 +99,9 @@ public class CreateAdViewModel {
         verificationModel = ModelFactory.getModelFactory().getVerificationModel();
     }
 
+    /**
+     * Sends a request for adding ad
+     */
     public void addAdvertisementRequest()
     {
         String verification = verificationModel.verifyAdvertisement(titleProperty.get(), typeValueProperty.get(), descriptionProperty.get(),priceProperty.get(), imageFiles.size());
@@ -108,6 +120,11 @@ public class CreateAdViewModel {
         warningVisibleProperty.setValue(true);
     }
 
+    /**
+     * Adds new image
+     * @param imageId
+     * @param imageFile
+     */
     public void addImageFile(String imageId, File imageFile)
     {
         if(imageFiles.get(imageId) == null)
@@ -116,6 +133,11 @@ public class CreateAdViewModel {
             imageFiles.replace(imageId, imageFile);
     }
 
+    /**
+     * Sets image
+     * @param id image id
+     * @param image image
+     */
     public void setImage(String id, Image image)
     {
         if(id.equals(AdImages.MAIN_IMAGE.toString())) {
@@ -141,6 +163,9 @@ public class CreateAdViewModel {
         }
     }
 
+    /**
+     * Adds selected date to the list
+     */
     public void addNewSelectedDate()
     {
         LocalDate selectedDate = dateProperty.getValue();
@@ -150,6 +175,9 @@ public class CreateAdViewModel {
             selectedDates.add(dateProperty.getValue());
     }
 
+    /**
+     * Sets default view
+     */
     public void setDefaultView()
     {
         warningVisibleProperty.setValue(false);
@@ -180,87 +208,169 @@ public class CreateAdViewModel {
         LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list with selected dates
+     */
     public List<LocalDate> getSelectedDates()
     {
         return selectedDates;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a title
+     */
     public StringProperty getTitleProperty() {
         return titleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of aprice
+     */
     public StringProperty getPriceProperty() {
         return priceProperty;
     }
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a description
+     */
     public StringProperty getDescriptionProperty() {
         return descriptionProperty;
     }
-
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a main image
+     */
     public ObjectProperty<Image> getMainImageProperty() {
         return mainImageProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub image 1
+     */
     public ObjectProperty<Image> getSubImage1Property() {
         return subImage1Property;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub image 2
+     */
     public ObjectProperty<Image> getSubImage2Property() {
         return subImage2Property;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub image 3
+     */
     public ObjectProperty<Image> getSubImage3Property() {
         return subImage3Property;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a sub image 4
+     */
     public ObjectProperty<Image> getSubImage4Property() {
         return subImage4Property;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a date
+     */
     public ObjectProperty<LocalDate> getDateProperty() {
         return dateProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public BooleanProperty warningVisibleProperty() {
         return warningVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list with searching items
+     */
     public ObservableList<String> getTypeItemsProperty() {
         return typeItemsProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a type
+     */
     public StringProperty getTypeValueProperty() {
         return typeValueProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a warning
+     */
     public StringProperty getWarningStyleProperty() {
         return warningStyleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rectangle
+     */
     public ObjectProperty<Paint> getMainImageRectangleFill() {
         return mainImageRectangleFill;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rectangle
+     */
     public ObjectProperty<Paint> getSubImage1RectangleFill() {
         return subImage1RectangleFill;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rectangle
+     */
     public ObjectProperty<Paint> getSubImage2RectangleFill() {
         return subImage2RectangleFill;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rectangle
+     */
     public ObjectProperty<Paint> getSubImage3RectangleFill() {
         return subImage3RectangleFill;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a rectangle
+     */
     public ObjectProperty<Paint> getSubImage4RectangleFill() {
         return subImage4RectangleFill;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a picture pane
+     */
     public BooleanProperty getMainPicturePaneVisible() {
         return mainPicturePaneVisible;
     }

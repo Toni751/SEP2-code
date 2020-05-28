@@ -2,8 +2,6 @@ package ESharing.Client.Core;
 
 import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.AdvertisementModel.AdvertisementModelManager;
-import ESharing.Client.Model.AppModel.AppOverviewModel;
-import ESharing.Client.Model.AppModel.AppOverviewModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionModelManager;
 import ESharing.Client.Model.AdministratorModel.AdministratorActionsModel;
 import ESharing.Client.Model.ChatModel.ChatModel;
@@ -22,7 +20,6 @@ import ESharing.Client.Model.VerificationModel.VerificationModelManager;
  */
 public class ModelFactory {
     private UserActionsModel userActionsModel;
-    private AppOverviewModel appOverviewModel;
     private AdministratorActionsModel administratorActionsModel;
     private VerificationModel verificationModel;
     private ChatModel chatModel;
@@ -37,7 +34,6 @@ public class ModelFactory {
     private ModelFactory()
     {
         userActionsModel = new UserActionsModelManager();
-        appOverviewModel = new AppOverviewModelManager();
         administratorActionsModel = new AdministratorActionModelManager();
         verificationModel = new VerificationModelManager();
         chatModel = new ChatModelManager();
@@ -61,14 +57,6 @@ public class ModelFactory {
      */
     public UserActionsModel getUserActionsModel() {
         return userActionsModel;
-    }
-
-    /**
-     * Returns initialized model for all features belongs to system overview
-     * @return initialized model for all features belongs to system overview
-     */
-    public AppOverviewModel getAppOverviewModel() {
-        return appOverviewModel;
     }
 
     /**

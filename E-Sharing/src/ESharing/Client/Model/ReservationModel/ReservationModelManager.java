@@ -4,18 +4,24 @@ import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Networking.reservation.ReservationClient;
 import ESharing.Shared.TransferedObject.Reservation;
 import ESharing.Shared.Util.Events;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The class from the model layer which contains all reservation features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class ReservationModelManager implements ReservationModel{
 
     private ReservationClient reservationClient;
     private PropertyChangeSupport support;
 
+    /**
+     * A constructor sets fields and assigns events
+     */
     public ReservationModelManager() {
         reservationClient = ClientFactory.getClientFactory().getReservationClient();
         support = new PropertyChangeSupport(this);
@@ -74,10 +80,18 @@ public class ReservationModelManager implements ReservationModel{
         support.removePropertyChangeListener(listener);
     }
 
+    /**
+     * Starts when new reservationRemoved event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
     private void reservationRemoved(PropertyChangeEvent propertyChangeEvent) {
         support.firePropertyChange(propertyChangeEvent);
     }
 
+    /**
+     * Starts when new reservationCreated event appears. Sends another event to the view model layer.
+     * @param propertyChangeEvent the received event
+     */
     private void newReservationCreated(PropertyChangeEvent propertyChangeEvent) {
         support.firePropertyChange(propertyChangeEvent);
     }

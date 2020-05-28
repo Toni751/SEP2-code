@@ -9,18 +9,21 @@ import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
 import ESharing.Shared.Util.GeneralFunctions;
 import ESharing.Shared.Util.PropertyChangeSubject;
-import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
+/**
+ * The class in a view model layer contains all functions which are used in the chhat view.
+ *
+ * @author Group1
+ * @version 1.0
+ */
 public class ChatViewModel implements PropertyChangeSubject {
     private StringProperty messageProperty;
     private StringProperty receiverProperty;
@@ -32,6 +35,9 @@ public class ChatViewModel implements PropertyChangeSubject {
     private ChatModel chatModel;
     private VerificationModel verificationModel;
 
+    /**
+     * A constructor initializes model layer for a chat features and all fields
+     */
     public ChatViewModel()
     {
         chatModel = ModelFactory.getModelFactory().getChatModel();
@@ -50,39 +56,9 @@ public class ChatViewModel implements PropertyChangeSubject {
         chatModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), this::userOffline);
     }
 
-    private void userOffline(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void newOnlineUser(PropertyChangeEvent propertyChangeEvent) {
-        support.firePropertyChange(propertyChangeEvent);
-    }
-
-    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
-        System.out.println("MESSAGE CHAT VIEW MODEL!!!!!!!!!!!!!!");
-        Message message = (Message) propertyChangeEvent.getNewValue();
-            if (!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
-                if(GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getSender())
-                || GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getReceiver())
-                || currentReceiver != null)
-                {
-                    LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
-                    support.firePropertyChange(propertyChangeEvent);
-                    makeConversationRead();
-                }
-            }
-            else if(currentReceiver == null) {}
-            else if(message.getSender().getUser_id() == currentReceiver.getUser_id()) {
-                    LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
-                    support.firePropertyChange(propertyChangeEvent);
-                    makeConversationRead();
-                    loadConversation(currentReceiver, LoggedUser.getLoggedUser().getUser());
-                    currentReceiver = null;
-            }
-        getConversations();
-        support.firePropertyChange(Events.UPDATE_CONVERSATION_LIST.toString(), null, null);
-    }
-
+    /**
+     * Sends a request for sending new message
+     */
     public void sendMessage() {
         System.out.println(LoggedUser.getLoggedUser().getCurrentOpenConversation().size());
         if(LoggedUser.getLoggedUser().getCurrentOpenConversation() != null && !LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
@@ -104,30 +80,47 @@ public class ChatViewModel implements PropertyChangeSubject {
         }
     }
 
-    public void searchConversation()
-    {
-        Platform.runLater(() -> {
-            conversations.clear();
-            for(Message conversation : conversations)
-            {
-                if (conversation.getReceiver().getUsername().contains(conversation.getReceiver().getUsername()))
-                    conversations.add(conversation);
-            }
-        });
-    }
-
+    /**
+     * Returns all online users
+     * @return all online users
+     */
     public ObservableList<User> getUsers() {
         System.out.println(chatModel.getOnlineUsers());
         users.setAll(chatModel.getOnlineUsers());
         return users;
     }
 
+    /**
+     * Clears lists
+     */
+    public void clearList() {
+        users.clear();
+        conversations.clear();
+    }
+
+    /**
+     * Resets view
+     */
+    public void resetView()
+    {
+        receiverProperty.setValue("");
+    }
+
+    /**
+     * Returns conversation shortcuts
+     * @return the conversation shortcuts
+     */
     public ObservableList<Message> getConversations() {
         conversations.clear();
         conversations.addAll(chatModel.loadConversationShortcuts());
         return conversations;
     }
 
+    /**
+     * Loads conversation
+     * @param sender the sender
+     * @param receiver the receiver
+     */
     public void loadConversation(User sender, User receiver) {
             currentReceiver = null;
             LoggedUser.getLoggedUser().setCurrentOpenConversation(chatModel.loadConversation(sender, receiver));
@@ -138,16 +131,60 @@ public class ChatViewModel implements PropertyChangeSubject {
         LoggedUser.getLoggedUser().setSelectedUser(null);
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a message
+     */
     public StringProperty getMessageProperty() {
         return messageProperty;
     }
 
+    /**
+     * Sends a request to make conversation read
+     */
     public void makeConversationRead() {
         chatModel.makeMessageRead();
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of a receiver
+     */
     public StringProperty getReceiverProperty() {
         return receiverProperty;
+    }
+
+    /**
+     * Check if view model has listeners
+     * @return result of checking
+     */
+    public boolean ifViewModelHasListeners()
+    {
+        return support.getPropertyChangeListeners().length != 0;
+    }
+
+    /**
+     * If conversation exists loads that otherwise set a temporary receiver who will be receiver for next message
+     * @param anotherUser the another user
+     */
+    public void ifConversationExists(User anotherUser) {
+        currentReceiver = null;
+        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
+        for(Message message : chatModel.loadConversationShortcuts())
+        {
+            if((message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id() && message.getReceiver().getUser_id() == anotherUser.getUser_id())) {
+                loadConversation(LoggedUser.getLoggedUser().getUser(), anotherUser);
+                makeConversationRead();
+            }
+            if((message.getReceiver().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id() && message.getSender().getUser_id() == anotherUser.getUser_id())) {
+                loadConversation(anotherUser, LoggedUser.getLoggedUser().getUser());
+                makeConversationRead();
+            }
+        }
+        if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
+            currentReceiver = anotherUser;
+            receiverProperty.setValue(anotherUser.getUsername());
+        }
     }
 
     @Override
@@ -179,40 +216,47 @@ public class ChatViewModel implements PropertyChangeSubject {
         support.removePropertyChangeListener(listener);
     }
 
-    public boolean ifViewModelHasListeners()
-    {
-        return support.getPropertyChangeListeners().length != 0;
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void userOffline(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
     }
-
-    public void ifConversationExists(User anotherUser) {
-        currentReceiver = null;
-        LoggedUser.getLoggedUser().setCurrentOpenConversation(new ArrayList<>());
-        for(Message message : chatModel.loadConversationShortcuts())
-        {
-            if((message.getSender().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id() && message.getReceiver().getUser_id() == anotherUser.getUser_id())) {
-                loadConversation(LoggedUser.getLoggedUser().getUser(), anotherUser);
-                makeConversationRead();
-            }
-            if((message.getReceiver().getUser_id() == LoggedUser.getLoggedUser().getUser().getUser_id() && message.getSender().getUser_id() == anotherUser.getUser_id())) {
-                loadConversation(anotherUser, LoggedUser.getLoggedUser().getUser());
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newOnlineUser(PropertyChangeEvent propertyChangeEvent) {
+        support.firePropertyChange(propertyChangeEvent);
+    }
+    /**
+     * When new event appears, the function reloads the view with new values
+     * @param propertyChangeEvent the given event
+     */
+    private void newMessageReceived(PropertyChangeEvent propertyChangeEvent) {
+        System.out.println("MESSAGE CHAT VIEW MODEL!!!!!!!!!!!!!!");
+        Message message = (Message) propertyChangeEvent.getNewValue();
+        if (!LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
+            if(GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getSender())
+                    || GeneralFunctions.usersInCurrentConversation(LoggedUser.getLoggedUser().getUser(), message.getReceiver())
+                    || currentReceiver != null)
+            {
+                LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
+                support.firePropertyChange(propertyChangeEvent);
                 makeConversationRead();
             }
         }
-        if(LoggedUser.getLoggedUser().getCurrentOpenConversation().isEmpty()) {
-            currentReceiver = anotherUser;
-            receiverProperty.setValue(anotherUser.getUsername());
+        else if(currentReceiver == null) {}
+        else if(message.getSender().getUser_id() == currentReceiver.getUser_id()) {
+            LoggedUser.getLoggedUser().getCurrentOpenConversation().add(message);
+            support.firePropertyChange(propertyChangeEvent);
+            makeConversationRead();
+            loadConversation(currentReceiver, LoggedUser.getLoggedUser().getUser());
+            currentReceiver = null;
         }
+        getConversations();
+        support.firePropertyChange(Events.UPDATE_CONVERSATION_LIST.toString(), null, null);
     }
-
-    public void clearList() {
-        users.clear();
-        conversations.clear();
-    }
-
-    public void resetView()
-    {
-        receiverProperty.setValue("");
-    }
-
 
 }

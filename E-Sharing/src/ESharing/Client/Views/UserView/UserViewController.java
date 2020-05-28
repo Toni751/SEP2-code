@@ -13,6 +13,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
+/**
+ * The controller class used to display the welcome view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class UserViewController extends ViewController {
 
     @FXML private Pane warningPane;
@@ -26,6 +31,10 @@ public class UserViewController extends ViewController {
     private UserViewModel userViewModel;
     private ViewHandler viewHandler;
 
+    /**
+     * Initializes and opens welcome view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewHandler = ViewHandler.getViewHandler();
@@ -40,10 +49,11 @@ public class UserViewController extends ViewController {
         warningLabel.textProperty().bind(userViewModel.getWarningProperty());
         warningPane.visibleProperty().bindBidirectional(userViewModel.getWarningVisibleProperty());
         warningPane.styleProperty().bindBidirectional(userViewModel.getWarningStyleProperty());
-
-
     }
 
+    /**
+     * Opens chat view
+     */
     public void onGoToChat() {
         if(LoggedUser.getLoggedUser().getUser().isAdministrator())
             viewHandler.openChatView(null);
@@ -53,6 +63,9 @@ public class UserViewController extends ViewController {
         }
     }
 
+    /**
+     * Opens previous view
+     */
     public void onGoBackAction(){
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement() != null) {
             LoggedUser.getLoggedUser().setSelectedView(Views.ADVERTISEMENT_VIEW);
@@ -63,6 +76,9 @@ public class UserViewController extends ViewController {
         viewHandler.openMainAppView();
     }
 
+    /**
+     * Sends a request for reporting user
+     */
     public void reportUser() {
         userViewModel.reportUser();
     }

@@ -5,6 +5,11 @@ import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.Util.VerificationList;
 import ESharing.Shared.Util.Verifications;
 
+/**
+ * The class from the model layer which contains all verification features and connects them with a networking part
+ * @version 1.0
+ * @author Group1
+ */
 public class VerificationModelManager implements VerificationModel{
 
     @Override
@@ -14,10 +19,6 @@ public class VerificationModelManager implements VerificationModel{
             return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_STREET);
         else if(address.getNumber() == null || address.getNumber().equals(""))
             return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_NUMBER);
-//        else if(address.getCity() == null || address.getCity().equals(""))
-//            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_CITY);
-//        else if(address.getPostcode() == null || address.getPostcode().equals(""))
-//            return VerificationList.getVerificationList().getVerifications().get(Verifications.INVALID_POSTAL_CODE);
         else
             return null;
     }

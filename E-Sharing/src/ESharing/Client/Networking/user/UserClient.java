@@ -6,7 +6,7 @@ import ESharing.Shared.Util.PropertyChangeSubject;
 import java.util.List;
 
 /**
- * The interface the model will user for calling methods on the client
+ * The interface from networking layer which is responsible for sending and receiving requests related to user account to and form the server
  * and for sending/ receiving data to the server
  * @version 1.0
  * @author Group1
@@ -50,9 +50,21 @@ public interface UserClient extends PropertyChangeSubject
    */
   List<User> getAllUsersRequest();
 
+  /**
+   * Logouts user from the system
+   */
   void logout();
 
+  /**
+   * Sends a request for changing the avatar for a given user
+   * @param avatarImage the new avatar
+   */
    void changeAvatar(byte[] avatarImage);
 
+  /**
+   * Sends a request to add new user report
+   * @param user_id the id of the reported user
+   * @return the result of the reporting
+   */
     boolean addNewUserReport(int user_id);
 }

@@ -15,6 +15,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
+/**
+ * The controller class used to display the administrator advertisement view with all JavaFX components
+ * @version 1.0
+ * @author Group1
+ */
 public class AdminAdvertisementViewController extends ViewController {
 
     @FXML private JFXButton goToSelectedAdvertisementButton;
@@ -30,12 +35,15 @@ public class AdminAdvertisementViewController extends ViewController {
     @FXML private TableColumn<AdCatalogueAdmin, String> adTitleColumn;
     @FXML private TableColumn<AdCatalogueAdmin, String> adTypeColumn;
     @FXML private TableColumn<AdCatalogueAdmin, Integer> adReportsColumn;
-
     @FXML private TableView<AdCatalogueAdmin> advertisementTable;
 
     private ViewHandler viewHandler;
     private AdminAdvertisementsViewModel adminAdvertisementsViewModel;
 
+    /**
+     * Initializes and opens administrator advertisement view with all components,
+     * initializes a binding properties of the JavaFX components
+     */
     public void init()
     {
         viewHandler = ViewHandler.getViewHandler();
@@ -64,22 +72,37 @@ public class AdminAdvertisementViewController extends ViewController {
         advertisementTable.setOnMouseClicked(this :: selectAdvertisement);
     }
 
+    /**
+     * Sends a request to the view model layer for approving advertisement
+     */
     public void approveSelectedAdvertisement() {
         adminAdvertisementsViewModel.approveAdvertisement();
     }
 
+    /**
+     * Opens view of the selected advertisement
+     */
     public void goToSelectedAdvertisement() {
         viewHandler.openAdvertisementView(null);
     }
 
+    /**
+     * Sends a request to the view model layer for removing advertisement
+     */
     public void onRemoveAdAction() {
         adminAdvertisementsViewModel.removeSelectedAdvertisement();
     }
 
+    /**
+     * Sends a request to the view model layer for searching advertisement
+     */
     public void onSearchAdvertisements() {
         adminAdvertisementsViewModel.searchAdvertisements();
     }
 
+    /**
+     * Sends a request to the view model layer for selecting advertisement
+     */
     private void selectAdvertisement(MouseEvent mouseEvent) {
         int index = advertisementTable.getSelectionModel().getSelectedIndex();
         adminAdvertisementsViewModel.selectAdvertisement(advertisementTable.getItems().get(index));

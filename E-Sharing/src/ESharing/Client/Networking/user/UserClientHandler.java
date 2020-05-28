@@ -42,13 +42,9 @@ public class UserClientHandler implements UserClient, RMIUserClient
     {
       e.printStackTrace();
     }
-//    try {
-//      server = Connection.getStubInterface().getServerRMI();
-//    } catch (RemoteException e) {
-//      e.printStackTrace();
-//    }
   }
 
+  @Override
   public void initializeConnection()
   {
     try {
@@ -108,7 +104,6 @@ public class UserClientHandler implements UserClient, RMIUserClient
   {
     try
     {
-      //server = Connection.getStubInterface().getServerRMI();
       User loggedUser = server.loginUser(username, password);
       if(loggedUser != null && loggedUser.isAdministrator()) {
         server.registerAdministratorCallback(this);
@@ -177,8 +172,8 @@ public class UserClientHandler implements UserClient, RMIUserClient
   }
 
   @Override
-  public void avatarUpdated(byte[] avatar){
-    support.firePropertyChange(Events.UPDATE_AVATAR.toString(), null, avatar);
+  public void avatarUpdated(int userID, byte[] avatar){
+    support.firePropertyChange(Events.UPDATE_AVATAR.toString(), userID, avatar);
   }
 
   @Override

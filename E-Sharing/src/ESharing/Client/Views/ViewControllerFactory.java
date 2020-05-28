@@ -53,6 +53,9 @@ public class ViewControllerFactory {
         return viewController;
     }
 
+    /**
+     * clears views
+     */
     public static void clearViews() {
        viewControllers.clear();
     }

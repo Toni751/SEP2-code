@@ -1,7 +1,6 @@
 package ESharing.Client.Views.AdminAdvertisementsView;
 
 import ESharing.Client.Core.ModelFactory;
-import ESharing.Client.Core.ViewHandler;
 import ESharing.Client.Model.AdvertisementModel.AdvertisementModel;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Shared.TransferedObject.AdCatalogueAdmin;
@@ -14,12 +13,15 @@ import ESharing.Shared.Util.Verifications;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import jdk.jfr.Event;
-
 import java.beans.PropertyChangeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The class in a view model layer contains all functions which are used in the administrator advertisement view.
+ * @version 1.0
+ * @author Group1
+ */
 public class AdminAdvertisementsViewModel {
 
     private StringProperty warningStyleProperty;
@@ -38,6 +40,9 @@ public class AdminAdvertisementsViewModel {
     private AdvertisementModel advertisementModel;
 
 
+    /**
+     * A constructor initializes the model layer for a administrator advertisement features and all fields
+     */
     public AdminAdvertisementsViewModel()
     {
         advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
@@ -61,6 +66,9 @@ public class AdminAdvertisementsViewModel {
         advertisementModel.addPropertyChangeListener(Events.NEW_ADVERTISEMENT_REPORT.toString(), this::newReportReceived);
     }
 
+    /**
+     * Sets default version of the view
+     */
     public void loadDefaultView() {
         LoggedUser.getLoggedUser().selectAdvertisement(null);
         advertisementList.clear();
@@ -90,6 +98,9 @@ public class AdminAdvertisementsViewModel {
         comboValueProperty.setValue(Vehicles.All.toString());
     }
 
+    /**
+     * Enables managing properties
+     */
     public void enableUserManagingProperty() {
         if(LoggedUser.getLoggedUser().getSelectedAdvertisement().ifAdApproved()) {
             approveAdDisableProperty.set(true);
@@ -102,12 +113,18 @@ public class AdminAdvertisementsViewModel {
         removeAdDisableProperty.setValue(false);
     }
 
+    /**
+     * Disables managing properties
+     */
     public void disableUserManagingProperty() {
         removeAdDisableProperty.setValue(true);
         openAdDisableProperty.setValue(true);
         approveAdDisableProperty.set(true);
     }
 
+    /**
+     * Searches for advertisements regarding the search value property
+     */
     public void searchAdvertisements() {
         System.out.println("Admin search");
         advertisementList.setAll(advertisementModel.getAllAdminCatalogues());
@@ -139,6 +156,9 @@ public class AdminAdvertisementsViewModel {
         advertisementList.setAll(filteredList);
     }
 
+    /**
+     * Sends a request to approve advertisement
+     */
     public void approveAdvertisement() {
         if(advertisementModel.approveAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID())){
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
@@ -153,6 +173,10 @@ public class AdminAdvertisementsViewModel {
 
     }
 
+
+    /**
+     * Sends a request to remove advertisement
+     */
     public void removeSelectedAdvertisement() {
         if(advertisementModel.removeAdvertisement(LoggedUser.getLoggedUser().getSelectedAdvertisement().getAdvertisementID())){
             warningProperty.set(VerificationList.getVerificationList().getVerifications().get(Verifications.ACTION_SUCCESS));
@@ -165,6 +189,10 @@ public class AdminAdvertisementsViewModel {
         warningVisibleProperty.set(true);
     }
 
+    /**
+     * Selects advertisement
+     * @param adCatalogueAdmin the advertisement in the form for admin
+     */
     public void selectAdvertisement(AdCatalogueAdmin adCatalogueAdmin) {
         Advertisement advertisement = advertisementModel.getAdvertisement(adCatalogueAdmin.getAdvertisementID());
         System.out.println(advertisement.ifAdApproved());
@@ -174,50 +202,98 @@ public class AdminAdvertisementsViewModel {
         }
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable of the open button
+     */
     public BooleanProperty getOpenAdDisableProperty() {
         return openAdDisableProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable of the remove button
+     */
     public BooleanProperty getRemoveDisableProperty() {
         return removeAdDisableProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the disable of the approve button
+     */
     public BooleanProperty getApproveDisableProperty() {
         return approveAdDisableProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list of all search values
+     */
     public ObservableList<String> getComboItems() {
         return comboItems;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of the not approved label
+     */
     public StringProperty getNotApprovedProperty() {
         return notApprovedProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of the total label
+     */
     public StringProperty getTotalProperty() {
         return totalProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of the warning label
+     */
     public StringProperty getWarningProperty() {
         return warningProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the visible property of the warning pane
+     */
     public BooleanProperty getWarningVisibleProperty() {
         return warningVisibleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of the not approved label
+     */
     public StringProperty getWarningStyleProperty() {
         return warningStyleProperty;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the list with all advertisements in admin form
+     */
     public ObservableList<AdCatalogueAdmin> getAllAdvertisement() {
         return advertisementList;
     }
 
+    /**
+     * Returns value used in the bind process between a controller and view model
+     * @return the property of the search box
+     */
     public StringProperty getComboValueProperty() {
         return comboValueProperty;
     }
 
+    /**
+     * Starts when reportReceived event appears. Change properties regarding the event
+     * @param propertyChangeEvent the given event
+     */
     private void newReportReceived(PropertyChangeEvent propertyChangeEvent) {
 
         int advertisementID = (int) propertyChangeEvent.getOldValue();
@@ -233,6 +309,10 @@ public class AdminAdvertisementsViewModel {
         }
     }
 
+    /**
+     * Starts when adApproved event appears. Change properties regarding the event
+     * @param propertyChangeEvent the given event
+     */
     private void newApprovedAd(PropertyChangeEvent propertyChangeEvent) {
         CatalogueAd newAd = (CatalogueAd) propertyChangeEvent.getNewValue();
         for(AdCatalogueAdmin catalogueAdmin : advertisementList)
@@ -243,12 +323,20 @@ public class AdminAdvertisementsViewModel {
         disableUserManagingProperty();
     }
 
+    /**
+     * Starts when adRequested event appears. Change properties regarding the event
+     * @param propertyChangeEvent the given event
+     */
     private void newAdRequest(PropertyChangeEvent propertyChangeEvent) {
         AdCatalogueAdmin newAdvertisement = (AdCatalogueAdmin) propertyChangeEvent.getNewValue();
         advertisementList.add(newAdvertisement);
         disableUserManagingProperty();
     }
 
+    /**
+     * Starts when adRemoved event appears. Change properties regarding the event
+     * @param propertyChangeEvent the given event
+     */
     private void adRemoved(PropertyChangeEvent propertyChangeEvent) {
         int removedID = (int) propertyChangeEvent.getNewValue();
         for(int i = 0 ; i < advertisementList.size() ; i++)

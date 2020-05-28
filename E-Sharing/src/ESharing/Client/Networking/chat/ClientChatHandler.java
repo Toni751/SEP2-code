@@ -14,6 +14,12 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+/**
+ * The class which handles the requests from the model and communicates
+ * with the server through remote method invocation
+ * @version 1.0
+ * @author Group 1
+ */
 public class ClientChatHandler implements ClientChat, RMIChatClient
 {
   private RMIChatServer server;
@@ -33,22 +39,14 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     {
       e.printStackTrace();
     }
-//    try {
-//      server = Connection.getStubInterface().getServerChatHandler();
-//      server.registerChatCallback(this);
-//    } catch (RemoteException e) {
-//      e.printStackTrace();
-//    }
   }
-
+  @Override
   public void initializeConnection()
   {
     try {
         server = Connection.getStubInterface().getServerChatHandler();
       System.out.println("Connected from Client Chat Handler");
-//        server.unRegisterUserAsAListener();
     } catch (RemoteException e) {
-      //support.firePropertyChange(Events.CONNECTION_FAILED.toString(), null, null);
     }
   }
 
@@ -130,19 +128,6 @@ public class ClientChatHandler implements ClientChat, RMIChatClient
     try
     {
       server.addMessage(message);
-    }
-    catch (RemoteException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  @Override
-  public void deleteMessagesForUser(User user)
-  {
-    try
-    {
-      server.deleteMessagesForUser(user);
     }
     catch (RemoteException e)
     {

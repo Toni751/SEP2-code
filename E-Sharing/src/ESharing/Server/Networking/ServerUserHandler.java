@@ -1,6 +1,6 @@
 package ESharing.Server.Networking;
 
-import ESharing.Server.Model.user.ServerModel;
+import ESharing.Server.Model.user.ServerUserModel;
 import ESharing.Shared.Networking.user.RMIUserClient;
 import ESharing.Shared.Networking.user.RMIUserServer;
 import ESharing.Shared.Util.Events;
@@ -12,13 +12,13 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 /**
- * The class handles all requests which are received from clients
+ * The class handles all requests which are received from clients for handling user actions
  * @version 1.0
  * @author Group 1
  */
 public class ServerUserHandler implements RMIUserServer
 {
-  private ServerModel serverModel;
+  private ServerUserModel serverUserModel;
   private PropertyChangeListener listenForNewUser;
   private PropertyChangeListener listenForUserRemoved;
   private PropertyChangeListener listenForUserUpdated;
@@ -26,37 +26,37 @@ public class ServerUserHandler implements RMIUserServer
   private PropertyChangeListener listenForNewUserReported;
 
   /**
-   * A constructor initializes fields and starts the internet connection
-   * @throws RemoteException if the method invocation fails
+   * A constructor initializes the server user model, and exports the objects
+   * @param serverUserModel the value to be set for the server model
    */
-  public ServerUserHandler(ServerModel serverModel) throws RemoteException
+  public ServerUserHandler(ServerUserModel serverUserModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
-    this.serverModel = serverModel;
+    this.serverUserModel = serverUserModel;
   }
 
   @Override
   public boolean addUser(User user)
   {
-    return serverModel.addNewUser(user);
+    return serverUserModel.addNewUser(user);
   }
 
   @Override
   public boolean removeUser(User user)
   {
-    return serverModel.removeUser(user);
+    return serverUserModel.removeUser(user);
   }
 
   @Override
   public boolean editUser(User user)
   {
-    return serverModel.editUser(user);
+    return serverUserModel.editUser(user);
   }
 
   @Override
   public User loginUser(String username, String password)
   {
-    return serverModel.loginUser(username, password);
+    return serverUserModel.loginUser(username, password);
   }
 
   @Override
@@ -69,7 +69,7 @@ public class ServerUserHandler implements RMIUserServer
       }
 
     };
-    serverModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
+    serverUserModel.addPropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
   }
 
   @Override
@@ -106,36 +106,36 @@ public class ServerUserHandler implements RMIUserServer
       }
     };
 
-    serverModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
-    serverModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
-    serverModel.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
-    serverModel.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
+    serverUserModel.addPropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
+    serverUserModel.addPropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
+    serverUserModel.addPropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
+    serverUserModel.addPropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
   }
 
   @Override
   public List<User> getAllUsers(){
-    return serverModel.getAllUsers();
+    return serverUserModel.getAllUsers();
   }
 
   @Override
   public void unRegisterUserAsAListener() {
 
-    serverModel.removePropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
-    serverModel.removePropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
-    serverModel.removePropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
-    serverModel.removePropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
-    serverModel.removePropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
+    serverUserModel.removePropertyChangeListener(Events.USER_REMOVED.toString(), listenForUserRemoved);
+    serverUserModel.removePropertyChangeListener(Events.USER_UPDATED.toString(), listenForUserUpdated);
+    serverUserModel.removePropertyChangeListener(Events.NEW_USER_CREATED.toString(), listenForNewUser);
+    serverUserModel.removePropertyChangeListener(Events.UPDATE_AVATAR.toString(), listenForAvatarUpdated);
+    serverUserModel.removePropertyChangeListener(Events.NEW_USER_REPORT.toString(), listenForNewUserReported);
 
-    serverModel.listeners();
+    serverUserModel.listeners();
   }
 
   @Override
   public void changeUserAvatar(byte[] avatarImage, int userId){
-    serverModel.changeUserAvatar(avatarImage, userId);
+    serverUserModel.changeUserAvatar(avatarImage, userId);
   }
 
   @Override
   public boolean addNewUserReport(int user_id){
-    return serverModel.addNewUserReport(user_id);
+    return serverUserModel.addNewUserReport(user_id);
   }
 }

@@ -13,11 +13,20 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * The DAO manager class for handling requests regarding the message table
+ * @version 1.0
+ * @author Group1
+ */
 public class MessageDAOManager extends Database implements MessageDAO {
   private static MessageDAOManager instance;
   private static Lock lock = new ReentrantLock();
   private AdministratorDAO administratorDAO;
 
+  /**
+   * One-argument constructor initializing the administrator DAO with the given value
+   * @param administratorDAO the value to be set for the administrator DAO
+   */
   public MessageDAOManager (AdministratorDAO administratorDAO)
   {
       this.administratorDAO = administratorDAO;
@@ -93,16 +102,6 @@ public class MessageDAOManager extends Database implements MessageDAO {
     return null;
   }
 
-  private void searchForMessage(User user, List<Message> lastMessages, User allUser, ResultSet messageResultSet) throws SQLException {
-    Message message = null;
-    if (user.getUser_id() == messageResultSet.getInt("sender_id")) {
-      message = new Message(user, allUser, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
-    } else {
-      message = new Message(allUser, user, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
-    }
-    lastMessages.add(message);
-  }
-
   @Override
   public void addMessage(Message message) {
     try (Connection connection = getConnection()) {
@@ -146,5 +145,23 @@ public class MessageDAOManager extends Database implements MessageDAO {
       e.printStackTrace();
     }
     return false;
+  }
+
+  /**
+   * Appends a message between 2 users to the last messages list
+   * @param user the first user involved in the message
+   * @param lastMessages the list with last messages
+   * @param allUser the second user involved in the message
+   * @param messageResultSet the database result set containing the content of the message
+   * @throws SQLException if there is a database connection error
+   */
+  private void searchForMessage(User user, List<Message> lastMessages, User allUser, ResultSet messageResultSet) throws SQLException {
+    Message message = null;
+    if (user.getUser_id() == messageResultSet.getInt("sender_id")) {
+      message = new Message(user, allUser, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
+    } else {
+      message = new Message(allUser, user, messageResultSet.getString("content"), messageResultSet.getBoolean("read"));
+    }
+    lastMessages.add(message);
   }
 }

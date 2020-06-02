@@ -2,6 +2,11 @@ package ESharing.Shared.TransferedObject;
 
 import java.io.Serializable;
 
+/**
+ * A class for representing a message object
+ * @version 1.0
+ * @author Group1
+ */
 public class Message implements Serializable {
 
     private User sender;

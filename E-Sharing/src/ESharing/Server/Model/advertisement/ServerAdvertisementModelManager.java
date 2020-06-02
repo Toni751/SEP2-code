@@ -24,11 +24,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The server model class for managing advertisements
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerAdvertisementModelManager implements ServerAdvertisementModel{
 
     private AdvertisementDAO advertisementDAO;
     private PropertyChangeSupport support;
 
+    /**
+     * One-argument constructor which initializes the advertisement DAO and the property change support instance
+     * @param advertisementDAO the value to be set for the advertisement DAO
+     */
     public ServerAdvertisementModelManager(AdvertisementDAO advertisementDAO)
     {
         this.advertisementDAO = advertisementDAO;
@@ -37,7 +46,7 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
 
     @Override
-    public boolean addAdvertisement(Advertisement advertisement) {
+    public synchronized boolean addAdvertisement(Advertisement advertisement) {
 
         int result = advertisementDAO.create(advertisement);
         if(result != -1) {
@@ -49,6 +58,159 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         return false;
     }
 
+    @Override
+    public synchronized boolean approveAdvertisement(int id)
+    {
+        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(id);
+        if(catalogueAd != null) {
+            try
+            {
+                catalogueAd.setMainImage(Files.readAllBytes(new File(catalogueAd.getMainImageServerPath()).toPath()));
+            } catch (IOException e) {e.printStackTrace();}
+            System.out.println("Approved event fired");
+            support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized boolean removeAdvertisement(int id) {
+       List<Message> messages = advertisementDAO.removeAdvertisement(id);
+        if(messages != null) {
+            // add removing part for pictures
+            deleteDirectory(new File("E-Sharing/Resources/User" + messages.get(0).getSender().getUser_id() + "/Advertisement" + id));
+            support.firePropertyChange(Events.AD_REMOVED.toString(), null, id);
+            if(messages.size() == 1 && messages.get(0).getContent().equals(""))
+                return true;
+            for(Message message : messages) {
+                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
+                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getSender().getUser_id(), null, message);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized List<Advertisement> selectAllAdvertisements() {
+       List<Advertisement> advertisements = advertisementDAO.getAllAdvertisements();
+       for(Advertisement advertisement : advertisements) {
+             advertisement.setPhotos(convertAdvertisementPictures(advertisement));
+       }
+           return advertisements;
+    }
+
+    @Override
+    public synchronized List<CatalogueAd> getAdvertisementsCatalogue()
+    {
+        List<CatalogueAd> catalogueAds = advertisementDAO.getAdvertisementsCatalogue();
+        if(catalogueAds != null) {
+            for (CatalogueAd catalogueAd : catalogueAds) {
+                String mainImageServerPath = catalogueAd.getMainImageServerPath();
+                try {
+                    catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return catalogueAds;
+    }
+
+    @Override
+    public synchronized List<CatalogueAd> getAdvertisementsCatalogueForUser(int id) {
+        List<CatalogueAd> catalogues = advertisementDAO.getAdvertisementsByUser(id);
+        for(CatalogueAd catalogueAd : catalogues)
+        {
+            String mainImageServerPath = catalogueAd.getMainImageServerPath();
+            try
+            {
+                catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+        return catalogues;
+    }
+
+    @Override
+    public synchronized Advertisement getAdvertisementById(int id)
+    {
+        Advertisement advertisement = advertisementDAO.getAdvertisementById(id);
+        advertisement.getOwner().setAvatar(convertUserAvatar(advertisement.getOwner().getAvatarServerPath()));
+        advertisement.setPhotos(convertAdvertisementPictures(advertisement));
+        return advertisement;
+    }
+
+    @Override
+    public synchronized boolean addNewAdvertisementReport(int advertisementID) {
+        System.out.println("REPORT ADDED");
+        int reports = advertisementDAO.addNewAdvertisementReport(advertisementID);
+        if(reports != -1) {
+            support.firePropertyChange(Events.NEW_ADVERTISEMENT_REPORT.toString(), advertisementID, reports);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public synchronized List<AdCatalogueAdmin> getAdminAdCatalogue()
+    {
+        return advertisementDAO.getAdminAdCatalogue();
+    }
+
+    @Override
+    public synchronized boolean addRating(int ad_id, int user_id, double rating)
+    {
+        return advertisementDAO.addRating(ad_id, user_id, rating);
+    }
+
+    @Override
+    public synchronized double retrieveAdRating(int ad_id)
+    {
+        return advertisementDAO.retrieveAdRating(ad_id);
+    }
+
+    @Override
+    public synchronized int getAdvertisementNumber() {
+        return advertisementDAO.getAdvertisementsNumber();
+    }
+
+    @Override
+    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            addPropertyChangeListener(listener);
+        else
+            support.addPropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
+    {
+        if ("".equals(eventName) || eventName == null)
+            removePropertyChangeListener(listener);
+        else
+            support.removePropertyChangeListener(eventName, listener);
+    }
+
+    @Override
+    public void removePropertyChangeListener(PropertyChangeListener listener)
+    {
+        support.removePropertyChangeListener(listener);
+    }
+
+    /**
+     * Method for uploading the advertisement's photos on the server
+     * @param advertisement the advertisement for which to upload photos
+     * @param result the value of the advertisement's id
+     * @return the updated advertisement, with the server paths set
+     */
     private Advertisement uploadPhotos (Advertisement advertisement, int result)
     {
         Map<String, String> serverPaths = new HashMap<>();
@@ -116,162 +278,11 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         return null;
     }
 
-    @Override
-    public boolean approveAdvertisement(int id)
-    {
-        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(id);
-        if(catalogueAd != null) {
-            try
-            {
-                catalogueAd.setMainImage(Files.readAllBytes(new File(catalogueAd.getMainImageServerPath()).toPath()));
-            } catch (IOException e) {e.printStackTrace();}
-            System.out.println("Appropved event fired");
-            support.firePropertyChange(Events.NEW_APPROVED_AD.toString(), null, catalogueAd);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean removeAdvertisement(int id) {
-       List<Message> messages = advertisementDAO.removeAdvertisement(id);
-        if(messages != null) {
-            // add removing part for pictures
-            deleteDirectory(new File("E-Sharing/Resources/User" + messages.get(0).getSender().getUser_id() + "/Advertisement" + id));
-            support.firePropertyChange(Events.AD_REMOVED.toString(), null, id);
-            if(messages.size() == 1 && messages.get(0).getContent().equals(""))
-                return true;
-            for(Message message : messages) {
-                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
-                support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getSender().getUser_id(), null, message);
-            }
-            return true;
-        }
-        return false;
-    }
-
-//    @Override
-//    public boolean editAdvertisement(Advertisement ad)
-//    {
-//        boolean result = advertisementDAO.updateAdvertisement(ad);
-//        if(result)
-//            support.firePropertyChange(Events.AD_UPDATED.toString(), null, ad);
-//        return result;
-//    }
-
-    @Override
-    public List<Advertisement> selectAllAdvertisements() {
-       List<Advertisement> advertisements = advertisementDAO.getAllAdvertisements();
-       for(Advertisement advertisement : advertisements) {
-             advertisement.setPhotos(convertAdvertisementPictures(advertisement));
-       }
-           return advertisements;
-    }
-
-    @Override
-    public List<CatalogueAd> getAdvertisementsCatalogue()
-    {
-        List<CatalogueAd> catalogueAds = advertisementDAO.getAdvertisementsCatalogue();
-        if(catalogueAds != null) {
-            for (CatalogueAd catalogueAd : catalogueAds) {
-                String mainImageServerPath = catalogueAd.getMainImageServerPath();
-                try {
-                    catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return catalogueAds;
-    }
-
-    @Override
-    public List<CatalogueAd> getAdvertisementsCatalogueForUser(int id) {
-        List<CatalogueAd> catalogues = advertisementDAO.getAdvertisementsByUser(id);
-        for(CatalogueAd catalogueAd : catalogues)
-        {
-            String mainImageServerPath = catalogueAd.getMainImageServerPath();
-            try
-            {
-                catalogueAd.setMainImage(Files.readAllBytes(new File(mainImageServerPath).toPath()));
-            } catch (IOException e) { e.printStackTrace(); }
-        }
-        return catalogues;
-    }
-
-    @Override
-    public Advertisement getAdvertisementById(int id)
-    {
-        Advertisement advertisement = advertisementDAO.getAdvertisementById(id);
-        advertisement.getOwner().setAvatar(convertUserAvatar(advertisement.getOwner().getAvatarServerPath()));
-        advertisement.setPhotos(convertAdvertisementPictures(advertisement));
-        return advertisement;
-    }
-
-    @Override
-    public boolean addNewAdvertisementReport(int advertisementID) {
-        System.out.println("REPORT ADDED");
-        int reports = advertisementDAO.addNewAdvertisementReport(advertisementID);
-        if(reports != -1) {
-            support.firePropertyChange(Events.NEW_ADVERTISEMENT_REPORT.toString(), advertisementID, reports);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public List<AdCatalogueAdmin> getAdminAdCatalogue()
-    {
-        return advertisementDAO.getAdminAdCatalogue();
-    }
-
-    @Override
-    public boolean addRating(int ad_id, int user_id, double rating)
-    {
-        return advertisementDAO.addRating(ad_id, user_id, rating);
-    }
-
-    @Override
-    public double retrieveAdRating(int ad_id)
-    {
-        return advertisementDAO.retrieveAdRating(ad_id);
-    }
-
-    @Override
-    public int getAdvertisementNumber() {
-        return advertisementDAO.getAdvertisementsNumber();
-    }
-
-    @Override
-    public void addPropertyChangeListener(String eventName, PropertyChangeListener listener)
-    {
-        if ("".equals(eventName) || eventName == null)
-            addPropertyChangeListener(listener);
-        else
-            support.addPropertyChangeListener(eventName, listener);
-    }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener)
-    {
-        support.addPropertyChangeListener(listener);
-    }
-
-    @Override
-    public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
-    {
-        if ("".equals(eventName) || eventName == null)
-            removePropertyChangeListener(listener);
-        else
-            support.removePropertyChangeListener(eventName, listener);
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener listener)
-    {
-        support.removePropertyChangeListener(listener);
-    }
-
+    /**
+     * Converts an advertisement's server paths to the concrete images
+     * @param advertisement the advertisement for which to retrieve the images
+     * @return the advertisement's images
+     */
     private Map<String, byte[]> convertAdvertisementPictures(Advertisement advertisement)
     {
         Map<String, byte[]> convertedImages = new HashMap<>();
@@ -294,6 +305,11 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         return convertedImages;
     }
 
+    /**
+     * Retrieves from the server the user's avatar by the path
+     * @param serverPath the server path of the avatar
+     * @return the image contain the user's avatar
+     */
     private byte[] convertUserAvatar(String serverPath)
     {
         try {
@@ -304,6 +320,11 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
         return null;
     }
 
+    /**
+     * Deletes all the files/images inside a directory
+     * @param directory the given directory
+     * @return true if the files were deleted, false otherwise
+     */
     private boolean deleteDirectory(File directory) {
         File[] allContents = directory.listFiles();
         if (allContents != null) {

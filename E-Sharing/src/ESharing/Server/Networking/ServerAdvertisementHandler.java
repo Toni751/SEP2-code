@@ -14,6 +14,11 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+/**
+ * The server networking handler for advertisements, used for RMI
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerAdvertisementHandler implements RMIAdvertisementServer
 {
   private ServerAdvertisementModel serverModel;
@@ -22,6 +27,10 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   private PropertyChangeListener listenToDeletedAd;
   private PropertyChangeListener listenToNewReport;
 
+  /**
+   * One-argument constructor initializing the server advertisements model and exports the object
+   * @param serverModel the value to be set to the server model
+   */
   public ServerAdvertisementHandler(ServerAdvertisementModel serverModel)
   {
     try
@@ -52,12 +61,6 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   {
     return serverModel.removeAdvertisement(id);
   }
-
-//  @Override
-//  public boolean editAdvertisement(Advertisement ad)
-//  {
-//    return serverModel.editAdvertisement(ad);
-//  }
 
   @Override
   public void registerClientCallback(RMIAdvertisementClient client)

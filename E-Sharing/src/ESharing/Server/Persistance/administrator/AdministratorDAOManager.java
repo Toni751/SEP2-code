@@ -14,6 +14,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The DAO manager class for handling database requests made by the administrator
+ * @version 1.0
+ * @author Group1
+ */
 public class AdministratorDAOManager extends Database implements AdministratorDAO {
 
     public Connection getConnection() throws SQLException

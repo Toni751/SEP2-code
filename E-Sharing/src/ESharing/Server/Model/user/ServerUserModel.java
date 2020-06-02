@@ -12,7 +12,7 @@ import java.util.List;
  * @version 1.0
  * @author Group 1
  */
-public interface ServerModel extends PropertyChangeSubject
+public interface ServerUserModel extends PropertyChangeSubject
 {
   /**
    * Sends a request to the data base for adding a new user and waits for a response
@@ -48,12 +48,35 @@ public interface ServerModel extends PropertyChangeSubject
    * @return the collection of all users existing in the system database
    */
   List<User> getAllUsers();
+
+  /**
+   * Removes a user from the online users list and fires an event
+   * @param user the user to be removed from the list
+   */
   void userLoggedOut(User user);
+
+  /**
+   * Returns the list with all online users
+   * @return the list with all online users
+   */
   List<User> getAllOnlineUsers();
 
-    void changeUserAvatar(byte[] avatarImage, int userId);
+  /**
+   * Changes a user's avatar with the given image and sends the request to the database
+   * @param avatarImage the new avatar for the user
+   * @param userId the id of the user
+   */
+   void changeUserAvatar(byte[] avatarImage, int userId);
 
-    void listeners();
+  /**
+   * Prints to the console the number of listeners the property change support instance has
+   */
+  void listeners();
 
-    boolean addNewUserReport(int user_id);
+  /**
+   * Sends a new request to the DAO for incrementing a user's number of reports, and fires an event afterwards
+   * @param user_id the id of the reported user
+   * @return true if the reports were updated successfully, false otherwise
+   */
+   boolean addNewUserReport(int user_id);
 }

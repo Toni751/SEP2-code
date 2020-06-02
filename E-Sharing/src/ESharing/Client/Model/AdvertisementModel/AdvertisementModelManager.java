@@ -7,12 +7,15 @@ import ESharing.Shared.TransferedObject.Advertisement;
 import ESharing.Shared.TransferedObject.CatalogueAd;
 import ESharing.Shared.Util.AdImages;
 import ESharing.Shared.Util.Events;
+import ESharing.Shared.Util.Vehicles;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +85,17 @@ public class AdvertisementModelManager implements AdvertisementModel{
     @Override
     public List<CatalogueAd> getAllCatalogues() {
         return clientAdvertisement.getAllCatalogues();
+//        List<CatalogueAd> dummyAds = new ArrayList<>();
+//        dummyAds.add(new CatalogueAd(1, "Title1", "Path1", 100, Vehicles.Car.toString()));
+//        dummyAds.add(new CatalogueAd(2, "Title2", "Path2", 100, Vehicles.Scooter.toString()));
+//        dummyAds.add(new CatalogueAd(3, "Title3", "Path3", 100, Vehicles.Bike.toString()));
+//        dummyAds.add(new CatalogueAd(4, "Title4", "Path4", 100, Vehicles.Car.toString()));
+//        dummyAds.add(new CatalogueAd(5, "Title5", "Path5", 100, Vehicles.Scooter.toString()));
+//        dummyAds.add(new CatalogueAd(6, "Title6", "Path6", 100, Vehicles.Bike.toString()));
+//        dummyAds.add(new CatalogueAd(7, "Title7", "Path7", 100, Vehicles.Car.toString()));
+//        dummyAds.add(new CatalogueAd(8, "Title8", "Path8", 100, Vehicles.Scooter.toString()));
+//        dummyAds.add(new CatalogueAd(9, "Title9", "Path9", 100, Vehicles.Bike.toString()));
+//        return dummyAds;
     }
 
     @Override

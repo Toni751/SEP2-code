@@ -18,6 +18,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The DAO class for managing database requests regarding advertisements
+ * @version 1.0
+ * @author Group1
+ */
 public class AdvertisementDAOManager extends Database implements AdvertisementDAO
 {
 
@@ -25,22 +30,18 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
   private ReservationDAO reservationDAO;
   private MessageDAO messageDAO;
 
+  /**
+   * A constructor which initializes the other DAO classes necessary for handling requests
+   * @param userDAO the value to be set for the user DAO
+   * @param reservationDAO the value to be set for the reservation DAO
+   * @param messageDAO the value to be set for the message DAO
+   */
   public AdvertisementDAOManager(UserDAO userDAO, ReservationDAO reservationDAO,MessageDAO messageDAO)
   {
     this.userDAO = userDAO;
     this.reservationDAO = reservationDAO;
     this.messageDAO = messageDAO;
   }
-
-  //  public static synchronized AdvertisementDAOManager getInstance()
-  //  {
-  //    if (instance == null)
-  //    {
-  //      instance = new AdvertisementDAOManager();
-  //    }
-  //    return instance;
-  //
-  //  }
 
   public Connection getConnection() throws SQLException
   {
@@ -122,53 +123,6 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       e.printStackTrace();
     }
     return null;
-  }
-
-  private List<Message> notifyUsersWithReservation(int id)
-  {
-    ArrayList<Message> messages = new ArrayList<>();
-    try (Connection connection = getConnection())
-    {
-      ArrayList<Integer> ids = new ArrayList<>();
-      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailable_date >= NOW()::DATE AND user_id IS NOT NULL ORDER BY user_id;");
-      statement.setInt(1,id);
-      ResultSet resultSet = statement.executeQuery();
-      System.out.println("IDIDIDIDIDI : " + id);
-      while (resultSet.next())
-      {
-        System.out.println("XXXXXXXXXXXXXXXXXXX"+ resultSet.getInt("user_id"));
-        ids.add(resultSet.getInt("user_id"));
-      }
-      System.out.println("IDS " + ids);
-      PreparedStatement statement1 = connection.prepareStatement("SELECT owner_id FROM advertisement WHERE id=?;");
-      statement1.setInt(1,id);
-
-      ResultSet resultSet1 = statement1.executeQuery();
-      int owner_id=0;
-      if (resultSet1.next())
-      {
-        owner_id = resultSet1.getInt("owner_id");
-        System.out.println("OWNER" + owner_id);
-      }
-      User sender = userDAO.readById(owner_id);
-      System.out.println("SENDER" + sender);
-      User receiver = null;
-      System.out.println("IDSSSSSSSS" + ids.size());
-        for (int i = 0; i < ids.size(); i++) {
-          System.out.println("Reservation removed ");
-          receiver = userDAO.readById(ids.get(i));
-          Message message = new Message(sender, receiver, "your reservation was canceled", false);
-          messageDAO.addMessage(message);
-          messages.add(message);
-      }
-      if(messages.isEmpty()){
-        messages.add(new Message(sender, sender, "", false));
-      }
-      return messages;
-    } catch (SQLException throwables) {
-      throwables.printStackTrace();
-    }
-   return null;
   }
 
   @Override public void addImagesAndDates(Advertisement advertisement)
@@ -426,92 +380,6 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
     return -1;
   }
 
-  private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)
-  {
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO ad_picture (advertisement_id, path, picture_name) VALUES (?,?,?);");
-      statement.setInt(1, advertisementID);
-      statement.setString(2, serverPath);
-      statement.setString(3, photoName);
-
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  private void addAdvertisementUnavailableDates(int advertisementID, LocalDate date)
-  {
-    try (Connection connection = getConnection())
-    {
-      System.out.println("date");
-      PreparedStatement statement = connection.prepareStatement(
-          "INSERT INTO ad_unavailability (advertisement_id, unavailable_date) VALUES (?,?);");
-      statement.setInt(1, advertisementID);
-      statement.setDate(2, Date.valueOf(date));
-
-      statement.executeUpdate();
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  private ArrayList<LocalDate> getUnavailabilityForAdvertisement(int advertisement_id)
-  {
-    ArrayList<LocalDate> unavailableDates = new ArrayList<>();
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement statement = connection.prepareStatement(
-          "SELECT * FROM ad_unavailability  WHERE advertisement_id=?;");
-      statement.setInt(1, advertisement_id);
-      ResultSet resultSet = statement.executeQuery();
-
-      while (resultSet.next())
-      {
-        unavailableDates.add(resultSet.getDate("unavailable_date").toLocalDate());
-      }
-      return unavailableDates;
-
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  private Map<String, String> getPicturesForAdvertisement(int advertisement_id)
-  {
-    Map<String, String> map = new HashMap<>();
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement statement = connection.prepareStatement("SELECT* FROM ad_picture WHERE advertisement_id=?");
-      statement.setInt(1, advertisement_id);
-      ResultSet resultSet = statement.executeQuery();
-
-      while (resultSet.next())
-      {
-        String name = resultSet.getString("picture_name");
-        String serverPath = resultSet.getString("path");
-        map.put(name, serverPath);
-      }
-      return map;
-
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-    return null;
-
-  }
-
   @Override public List<CatalogueAd> getAdvertisementsByUser(int user_id)
   {
     List<CatalogueAd> catalogueAdUser = new ArrayList<>();
@@ -648,7 +516,7 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
   public int getAdvertisementsNumber() {
     try(Connection connection = getConnection()) {
       int count = 0;
-      PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS count FROM advertisement");
+      PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) AS count FROM advertisement;");
       ResultSet resultSet = statement.executeQuery();
       while (resultSet.next()){
         count = resultSet.getInt("count");
@@ -658,5 +526,164 @@ public class AdvertisementDAOManager extends Database implements AdvertisementDA
       e.printStackTrace();
     }
     return -1;
+  }
+
+  /**
+   * Method for adding messages to all users with reservations of an advertisement about to get deleted
+   * @param id the id of the advertisement
+   * @return the list with all the messages sent
+   */
+  private List<Message> notifyUsersWithReservation(int id)
+  {
+    ArrayList<Message> messages = new ArrayList<>();
+    try (Connection connection = getConnection())
+    {
+      ArrayList<Integer> ids = new ArrayList<>();
+      PreparedStatement statement = connection.prepareStatement("SELECT DISTINCT user_id FROM ad_unavailability WHERE advertisement_id=? AND unavailable_date >= NOW()::DATE AND user_id IS NOT NULL ORDER BY user_id;");
+      statement.setInt(1,id);
+      ResultSet resultSet = statement.executeQuery();
+      System.out.println("IDIDIDIDIDI : " + id);
+      while (resultSet.next())
+      {
+        System.out.println("XXXXXXXXXXXXXXXXXXX"+ resultSet.getInt("user_id"));
+        ids.add(resultSet.getInt("user_id"));
+      }
+      System.out.println("IDS " + ids);
+      PreparedStatement statement1 = connection.prepareStatement("SELECT owner_id FROM advertisement WHERE id=?;");
+      statement1.setInt(1,id);
+
+      ResultSet resultSet1 = statement1.executeQuery();
+      int owner_id=0;
+      if (resultSet1.next())
+      {
+        owner_id = resultSet1.getInt("owner_id");
+        System.out.println("OWNER" + owner_id);
+      }
+      User sender = userDAO.readById(owner_id);
+      System.out.println("SENDER" + sender);
+      User receiver = null;
+      System.out.println("IDSSSSSSSS" + ids.size());
+      for (int i = 0; i < ids.size(); i++) {
+        System.out.println("Reservation removed ");
+        receiver = userDAO.readById(ids.get(i));
+        Message message = new Message(sender, receiver, "your reservation was canceled", false);
+        messageDAO.addMessage(message);
+        messages.add(message);
+      }
+      if(messages.isEmpty()){
+        messages.add(new Message(sender, sender, "", false));
+      }
+      return messages;
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * Adds an advertisement's picture path to the ad_picture database table
+   * @param serverPath the path to the image
+   * @param photoName the name of the image
+   * @param advertisementID the id of the advertisement
+   */
+  private void addAdvertisementPictures(String serverPath, String photoName, int advertisementID)
+  {
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "INSERT INTO ad_picture (advertisement_id, path, picture_name) VALUES (?,?,?);");
+      statement.setInt(1, advertisementID);
+      statement.setString(2, serverPath);
+      statement.setString(3, photoName);
+
+      statement.executeUpdate();
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Adds an unavailability date for an advertisement in the ad_unavailability database table
+   * @param advertisementID the id of the advertisement
+   * @param date the unavailability date to be added
+   */
+  private void addAdvertisementUnavailableDates(int advertisementID, LocalDate date)
+  {
+    try (Connection connection = getConnection())
+    {
+      System.out.println("date");
+      PreparedStatement statement = connection.prepareStatement(
+          "INSERT INTO ad_unavailability (advertisement_id, unavailable_date) VALUES (?,?);");
+      statement.setInt(1, advertisementID);
+      statement.setDate(2, Date.valueOf(date));
+
+      statement.executeUpdate();
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Gets all the unavailable dates for an advertisement
+   * @param advertisement_id the id of the advertisement
+   * @return the list with all the dates when the advertisement is unavailable for booking
+   */
+  private ArrayList<LocalDate> getUnavailabilityForAdvertisement(int advertisement_id)
+  {
+    ArrayList<LocalDate> unavailableDates = new ArrayList<>();
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement(
+          "SELECT * FROM ad_unavailability  WHERE advertisement_id=?;");
+      statement.setInt(1, advertisement_id);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next())
+      {
+        unavailableDates.add(resultSet.getDate("unavailable_date").toLocalDate());
+      }
+      return unavailableDates;
+
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  /**
+   * Retrieves from the database all the pictures an advertisement has
+   * @param advertisement_id the id of the advertisement
+   * @return the list with all the picture belonging to the given advertisement
+   */
+  private Map<String, String> getPicturesForAdvertisement(int advertisement_id)
+  {
+    Map<String, String> map = new HashMap<>();
+    try (Connection connection = getConnection())
+    {
+      PreparedStatement statement = connection.prepareStatement("SELECT* FROM ad_picture WHERE advertisement_id=?");
+      statement.setInt(1, advertisement_id);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next())
+      {
+        String name = resultSet.getString("picture_name");
+        String serverPath = resultSet.getString("path");
+        map.put(name, serverPath);
+      }
+      return map;
+
+    }
+    catch (SQLException e)
+    {
+      e.printStackTrace();
+    }
+    return null;
+
   }
 }

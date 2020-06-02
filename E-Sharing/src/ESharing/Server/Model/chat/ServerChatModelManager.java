@@ -12,12 +12,22 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+/**
+ * The server model class for managing chat actions
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerChatModelManager implements ServerChatModel
 {
   private MessageDAO messageDAO;
   private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
 
+  /**
+   * 2-arguments constructor initializing the messageDAO and administratorDAO field variables
+   * @param messageDAO the new instance value to be set for the message DAO
+   * @param administratorDAO the new instance value to be set for the administrator DAO
+   */
   public ServerChatModelManager(MessageDAO messageDAO, AdministratorDAO administratorDAO)
   {
     this.messageDAO = messageDAO;
@@ -26,25 +36,25 @@ public class ServerChatModelManager implements ServerChatModel
   }
 
   @Override
-  public List<Message> loadConversation(User sender, User receiver)
+  public synchronized List<Message> loadConversation(User sender, User receiver)
   {
     return messageDAO.loadConversation(sender, receiver);
   }
 
   @Override
-  public int getNoUnreadMessages(User user)
+  public synchronized int getNoUnreadMessages(User user)
   {
     return messageDAO.getNoUnreadMessages(user);
   }
 
   @Override
-  public List<Message> getLastMessageWithEveryone(User user)
+  public synchronized List<Message> getLastMessageWithEveryone(User user)
   {
     return messageDAO.getLastMessageWithEveryone(user);
   }
 
   @Override
-  public void addMessage(Message message)
+  public synchronized void addMessage(Message message)
   {
     messageDAO.addMessage(message);
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
@@ -52,13 +62,13 @@ public class ServerChatModelManager implements ServerChatModel
   }
 
   @Override
-  public void deleteMessagesForUser(User user)
+  public synchronized void deleteMessagesForUser(User user)
   {
     messageDAO.deleteMessagesForUser(user);
   }
 
   @Override
-  public void makeMessageRead(Message message) {
+  public synchronized void makeMessageRead(Message message) {
     System.out.println("Attempting to make message read");
     if(messageDAO.makeMessageRead(message)) {
       support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString() + message.getReceiver().getUser_id(), null, message);
@@ -105,6 +115,7 @@ public class ServerChatModelManager implements ServerChatModel
     support.removePropertyChangeListener(listener);
   }
 
+  @Override
   public void listeners()
   {
     System.out.println("LISTENERS CHAT:" + support.getPropertyChangeListeners().length);

@@ -267,6 +267,28 @@
     -fx-text-fill: white;
     -fx-control-inner-background: #222828;
 }
+
+.reservation-table{
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-table-cell-border-color: transparent;
+    -fx-text-fill: white;
+    -fx-control-inner-background: #222828;
+}
+.reservation-row-cell {
+    -fx-background-color: #f2f7f7;
+    -fx-cell-size: 40px;
+    -fx-text-fill: black;
+    -fx-alignment: center;
+    -fx-border-width: 0;
+}
+
+.reservation-table-view .column-header-background{
+    -fx-background-color: #222828;
+    -fx-padding: 18px;
+}
+
 .table-view .column-header-background{
     -fx-background-color: #222828;
     -fx-padding: 18px;

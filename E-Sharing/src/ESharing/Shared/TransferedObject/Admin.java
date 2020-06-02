@@ -2,7 +2,13 @@ package ESharing.Shared.TransferedObject;
 
 import java.io.Serializable;
 
-public class Admin implements Serializable {
+/**
+ * A class for representing an administrator object
+ * @version 1.0
+ * @author Group1
+ */
+public class Admin implements Serializable
+{
     private String admin_id;
     private String name;
     private String password;

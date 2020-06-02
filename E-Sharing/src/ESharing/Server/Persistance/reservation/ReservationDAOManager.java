@@ -15,21 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The DAO manager class for handling database requests regarding reservations
+ * @version 1.0
+ * @author Group1
+ */
 public class ReservationDAOManager extends Database implements ReservationDAO{
 
     private UserDAO userDAO;
 
+    /**
+     * One argument constructor which initializes the user DAO
+     * @param userDAO the value to be set for the user DAO
+     */
     public ReservationDAOManager(UserDAO userDAO){
         this.userDAO = userDAO;
     }
-
-
 
     public Connection getConnection() throws SQLException
     {
         return super.getConnection();
     }
-
 
     @Override
     public boolean makeNewReservation(Reservation reservation)

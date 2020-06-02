@@ -2,19 +2,23 @@ package ESharing.Server.Networking;
 
 import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Server.Model.chat.ServerChatModel;
-import ESharing.Server.Model.user.ServerModel;
+import ESharing.Server.Model.user.ServerUserModel;
 import ESharing.Shared.Networking.chat.RMIChatClient;
 import ESharing.Shared.Networking.chat.RMIChatServer;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.Message;
 import ESharing.Shared.TransferedObject.User;
-import jdk.jfr.Event;
 
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+/**
+ * The server networking handler for the chat, used for RMI
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerChatHandler implements RMIChatServer
 {
   private ServerChatModel chatModel;
@@ -22,14 +26,21 @@ public class ServerChatHandler implements RMIChatServer
   private PropertyChangeListener listenForOnlineUser;
   private PropertyChangeListener listenForOfflineUser;
   private PropertyChangeListener listenForMessageRead;
-  private ServerModel serverModel;
+  private ServerUserModel serverUserModel;
   private ServerAdvertisementModel  advertisementModel;
 
-  public ServerChatHandler(ServerChatModel chatModel, ServerModel serverModel,ServerAdvertisementModel advertisementModel) throws RemoteException
+  /**
+   * A constructor which initializes the server models with the given values, and exports the object
+   * @param chatModel the value to be set for the chat model
+   * @param serverUserModel the value to be set for the user model
+   * @param advertisementModel the value to be set for the advertisement model
+   * @throws RemoteException
+   */
+  public ServerChatHandler(ServerChatModel chatModel, ServerUserModel serverUserModel,ServerAdvertisementModel advertisementModel) throws RemoteException
   {
     UnicastRemoteObject.exportObject(this, 0);
     this.chatModel = chatModel;
-    this.serverModel = serverModel;
+    this.serverUserModel = serverUserModel;
     this.advertisementModel =advertisementModel;
   }
 
@@ -95,7 +106,7 @@ public class ServerChatHandler implements RMIChatServer
       }
     };
 
-    serverModel.addPropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
+    serverUserModel.addPropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
 
 
     listenForOfflineUser = evt ->{
@@ -108,7 +119,7 @@ public class ServerChatHandler implements RMIChatServer
         e.printStackTrace();
       }
     };
-    serverModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
+    serverUserModel.addPropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
 
     listenForMessageRead = evt -> {
       try {
@@ -137,19 +148,19 @@ public class ServerChatHandler implements RMIChatServer
 
   @Override public void userLoggedOut(User user)
   {
-    serverModel.userLoggedOut(user);
+    serverUserModel.userLoggedOut(user);
   }
 
   @Override public List<User> getOnlineUsers()
   {
-    return serverModel.getAllOnlineUsers();
+    return serverUserModel.getAllOnlineUsers();
   }
 
   @Override
   public void unRegisterUserAsAListener(RMIChatClient client){
     System.out.println("A USER IS REMOVED AS A SERVER LISTENER");
-    serverModel.removePropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
-    serverModel.removePropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
+    serverUserModel.removePropertyChangeListener(Events.USER_OFFLINE.toString(), listenForOfflineUser);
+    serverUserModel.removePropertyChangeListener(Events.USER_ONLINE.toString(), listenForOnlineUser);
     System.out.print("Before: ");
     chatModel.listeners();
     try

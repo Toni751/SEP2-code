@@ -9,6 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A class for representing an advertisement object
+ * @version 1.0
+ * @author Group1
+ */
 public class Advertisement implements Serializable {
     private int advertisementID;
     private User owner;
@@ -32,9 +37,7 @@ public class Advertisement implements Serializable {
         this.title = title;
         this.description = description;
         this.approved = false;
-
         serverPaths = new HashMap<>();
-
     }
 
     public int getAdvertisementID() {

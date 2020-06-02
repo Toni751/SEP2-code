@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 /**
- * A class representing the user used in the system
+ * A class representing the user object
  * @version 1.0
  * @author Group1
  */
@@ -226,6 +226,4 @@ public class User implements Serializable
             Objects.equals(phoneNumber, user.phoneNumber) &&
             address.equals(user.address);
   }
-
-
 }

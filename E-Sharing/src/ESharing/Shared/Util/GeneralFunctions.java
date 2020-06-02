@@ -82,6 +82,13 @@ public class GeneralFunctions {
         return confirmationAlert;
     }
 
+    /**
+     * Sends a edit user request with a verification status
+     * @param updatedUser the updated user
+     * @param verification the result of the verification
+     * @param warningLabel the warning label to be modified accordingly
+     * @return true if the verification is null, false otherwise
+     */
     public static boolean sendEditRequest(User updatedUser, String verification, StringProperty warningLabel) {
         if(verification == null)
         {
@@ -96,6 +103,31 @@ public class GeneralFunctions {
             return false;
         }
         return false;
+    }
+
+    /**
+     * Checks if 2 users are in the a user's current conversation
+     * @param user1 the first user of the conversation
+     * @param user2 the second user of the conversation
+     * @return true if the 2 users are in the current conversation, false otherwise
+     */
+    public static boolean usersInCurrentConversation(User user1, User user2)
+    {
+        boolean user1InConversation = false;
+        boolean user2InConversation = false;
+        if(user1.getUser_id() != user2.getUser_id()) {
+            int senderID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getSender().getUser_id();
+            int receiverID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getReceiver().getUser_id();
+            if (user1.getUser_id() == senderID || user1.getUser_id() == receiverID)
+                user1InConversation = true;
+            if (user2.getUser_id() == senderID || user2.getUser_id() == receiverID)
+                user2InConversation = true;
+        }
+        if (user1InConversation && user2InConversation)
+            return true;
+        else
+            return false;
+
     }
 
     /**
@@ -124,26 +156,4 @@ public class GeneralFunctions {
             }
         }
     }
-
-    public static boolean usersInCurrentConversation(User user1, User user2)
-    {
-        boolean user1InConversation = false;
-        boolean user2InConversation = false;
-        if(user1.getUser_id() != user2.getUser_id()) {
-            int senderID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getSender().getUser_id();
-            int receiverID = LoggedUser.getLoggedUser().getCurrentOpenConversation().get(LoggedUser.getLoggedUser().getCurrentOpenConversation().size() - 1).getReceiver().getUser_id();
-            if (user1.getUser_id() == senderID || user1.getUser_id() == receiverID)
-                user1InConversation = true;
-            if (user2.getUser_id() == senderID || user2.getUser_id() == receiverID)
-                user2InConversation = true;
-        }
-        if (user1InConversation && user2InConversation)
-            return true;
-        else
-            return false;
-
-    }
-
-
-
 }

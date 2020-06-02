@@ -1,9 +1,7 @@
 package ESharing.Server.Model.user;
 
 import ESharing.Server.Persistance.administrator.AdministratorDAO;
-import ESharing.Server.Persistance.administrator.AdministratorDAOManager;
 import ESharing.Server.Persistance.user.UserDAO;
-import ESharing.Server.Persistance.user.UserDAOManager;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 
@@ -22,7 +20,7 @@ import java.util.List;
  * @version 1.0
  * @author Group 1
  */
-public class ServerModelManager implements ServerModel
+public class ServerUserModelManager implements ServerUserModel
 {
   private UserDAO userDAO;
   private AdministratorDAO administratorDAO;
@@ -30,9 +28,11 @@ public class ServerModelManager implements ServerModel
   private List<User> onlineUsers;
 
   /**
-   * A constructor initializes all fields
+   * A constructor which initializes the userDAO and administratorDAO with the given objects
+   * @param userDAO the value to be set for the userDAO
+   * @param administratorDAO the value to be set for the administratorDAO
    */
-  public ServerModelManager(UserDAO userDAO, AdministratorDAO administratorDAO)
+  public ServerUserModelManager(UserDAO userDAO, AdministratorDAO administratorDAO)
   {
     this.userDAO = userDAO;
     this.administratorDAO = administratorDAO;
@@ -41,7 +41,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public boolean addNewUser(User user)
+  public synchronized boolean addNewUser(User user)
   {
     String currentDate = new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     user.setCreation_date(currentDate);
@@ -53,7 +53,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public boolean removeUser(User user)
+  public synchronized boolean removeUser(User user)
   {
     boolean result = userDAO.delete(user);
     if(result)
@@ -62,7 +62,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public boolean editUser(User user)
+  public synchronized boolean editUser(User user)
   {
     boolean result = userDAO.update(user);
     if(result)
@@ -73,7 +73,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public User loginUser(String username, String password)
+  public synchronized User loginUser(String username, String password)
   {
    User user = userDAO.readByUserNameAndPassword(username, password);
    if(user != null)
@@ -85,7 +85,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public List<User> getAllUsers() {
+  public synchronized List<User> getAllUsers() {
     List<User> users = administratorDAO.getAllUsers();
     for(int i = 0 ; i<users.size() ; i++)
     {
@@ -95,19 +95,20 @@ public class ServerModelManager implements ServerModel
     return users;
   }
 
-  @Override public void userLoggedOut(User user)
+  @Override
+  public synchronized void userLoggedOut(User user)
   {
     onlineUsers.remove(user);
     support.firePropertyChange(Events.USER_OFFLINE.toString(),null,user);
   }
 
-  @Override public List<User> getAllOnlineUsers()
+  @Override public synchronized List<User> getAllOnlineUsers()
   {
     return onlineUsers;
   }
 
   @Override
-  public void changeUserAvatar(byte[] avatarByte, int userId) {
+  public synchronized void changeUserAvatar(byte[] avatarByte, int userId) {
     try {
       File avatar = new File("E-Sharing/Resources/User"+ userId + "/avatar.jpg");
       FileOutputStream out = new FileOutputStream(avatar);
@@ -156,7 +157,7 @@ public class ServerModelManager implements ServerModel
   }
 
   @Override
-  public boolean addNewUserReport(int user_id) {
+  public synchronized boolean addNewUserReport(int user_id) {
     int reports = userDAO.addNewUserReport(user_id);
     if(reports != -1){
       support.firePropertyChange(Events.NEW_USER_REPORT.toString(), user_id, reports);

@@ -60,6 +60,11 @@ public interface RMIUserServer extends Remote
    */
   void registerAdministratorCallback(RMIUserClient client) throws RemoteException;
 
+  /**
+   * Initializes all callbacks which are related to the user account
+   * @param client the client to be registered
+   * @throws RemoteException if the method invocation fails
+   */
   void registerGeneralCallback(RMIUserClient client) throws RemoteException;
 
   /**
@@ -69,10 +74,26 @@ public interface RMIUserServer extends Remote
    */
   List<User> getAllUsers() throws RemoteException;
 
+  /**
+   * Sends a request to the server to unregister a client for callback methods
+   * @throws RemoteException if the method invocation fails
+   */
   void unRegisterUserAsAListener() throws RemoteException;
 
+  /**
+   * Sends a request to the server to update a user's avatar
+   * @param avatarImage the new avatar image
+   * @param userID the id of the user
+   * @throws RemoteException if the method invocation fails
+   */
   void changeUserAvatar(byte[] avatarImage, int userID) throws RemoteException;
 
+  /**
+   * Sends a request to the server to add a new report to a user
+   * @param user_id the id of the reported user
+   * @return true if the report was added successfully, false otherwise
+   * @throws RemoteException if the method invocation fails
+   */
   boolean addNewUserReport(int user_id) throws RemoteException;
 }
 

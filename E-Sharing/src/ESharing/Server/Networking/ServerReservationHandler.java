@@ -2,6 +2,7 @@ package ESharing.Server.Networking;
 
 import ESharing.Server.Model.advertisement.ServerAdvertisementModel;
 import ESharing.Server.Model.reservation.ServerReservationModel;
+import ESharing.Shared.Networking.advertisement.RMIAdvertisementClient;
 import ESharing.Shared.Networking.reservation.RMIReservationClient;
 import ESharing.Shared.Networking.reservation.RMIReservationServer;
 import ESharing.Shared.TransferedObject.Reservation;
@@ -14,12 +15,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The server networking handler class for reservations, used for RMI
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerReservationHandler implements RMIReservationServer {
 
     private ServerReservationModel serverModel;
     private PropertyChangeListener listenToAddedReservation;
     private PropertyChangeListener listenToDeletedReservation;
 
+    /**
+     * One argument constructor which initializes the server reservation model, and exports the object
+     * @param serverModel the value to be set for the server reservation model
+     */
     public ServerReservationHandler(ServerReservationModel serverModel)
     {
         try
@@ -51,6 +61,13 @@ public class ServerReservationHandler implements RMIReservationServer {
     @Override
     public List<Reservation> getReservationForAdvertisement(int advertisementID){
         return serverModel.getReservationForAdvertisement(advertisementID);
+    }
+
+    @Override
+    public void registerClientCallback(RMIAdvertisementClient client)
+        throws RemoteException
+    {
+
     }
 
     @Override

@@ -5,6 +5,11 @@ import ESharing.Shared.TransferedObject.Address;
 
 import java.sql.*;
 
+/**
+ * The manager DAO class for the address database table
+ * @version 1.0
+ * @author Group1
+ */
 public class AddressDAOManager extends Database implements AddressDAO
 {
 
@@ -45,28 +50,28 @@ public class AddressDAOManager extends Database implements AddressDAO
     return 0;
   }
 
-  @Override public Address readById(int address_id)
-  {
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement statement = connection.prepareStatement("SELECT * FROM address WHERE address_id = ?;");
-      statement.setInt(1, address_id);
-      ResultSet resultSet = statement.executeQuery();
-      if (resultSet.next())
-      {
-        String street = resultSet.getString("street");
-        String number = resultSet.getString("number");
-        Address address = new Address(street, number);
-        address.setAddress_id(address_id);
-        return address;
-      }
-    }
-    catch (SQLException e)
-    {
-      e.printStackTrace();
-    }
-    return null;
-  }
+//  @Override public Address readById(int address_id)
+//  {
+//    try (Connection connection = getConnection())
+//    {
+//      PreparedStatement statement = connection.prepareStatement("SELECT * FROM address WHERE address_id = ?;");
+//      statement.setInt(1, address_id);
+//      ResultSet resultSet = statement.executeQuery();
+//      if (resultSet.next())
+//      {
+//        String street = resultSet.getString("street");
+//        String number = resultSet.getString("number");
+//        Address address = new Address(street, number);
+//        address.setAddress_id(address_id);
+//        return address;
+//      }
+//    }
+//    catch (SQLException e)
+//    {
+//      e.printStackTrace();
+//    }
+//    return null;
+//  }
 
   @Override
   public Address readByAddress(String street, String number)

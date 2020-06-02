@@ -12,6 +12,11 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * A class for representing a reservation object
+ * @version 1.0
+ * @author Group1
+ */
 public class Reservation implements Serializable {
     private int advertisementID;
     private String advertisementTitle;

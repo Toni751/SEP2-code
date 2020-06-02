@@ -4,6 +4,11 @@ import ESharing.Shared.TransferedObject.User;
 
 import java.util.List;
 
+/**
+ * The DAO interface for managing the database requests made by the administrator
+ * @version 1.0
+ * @author Group1
+ */
 public interface AdministratorDAO{
 
     /**

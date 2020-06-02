@@ -14,6 +14,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 
+/**
+ * The DAO manager class for handling database requests regarding the user_account table
+ * @version 1.0
+ * @author Group1
+ */
 public class UserDAOManager extends Database implements UserDAO
 {
 
@@ -21,21 +26,17 @@ public class UserDAOManager extends Database implements UserDAO
   private AddressDAO addressDAO;
   private MessageDAO messageDAO;
 
-  //ALTER TABLE user ADD CONSTRAINT unique_username UNIQUE (username);
+  /**
+   * A constructor which initializes the address DAO and message DAO
+   * @param addressDAO the new value to be set for the address DAO
+   * @param messageDAO the new value to be set for the message DAO
+   */
   public UserDAOManager(AddressDAO addressDAO, MessageDAO messageDAO)
   {
       this.addressDAO = addressDAO;
       this.messageDAO = messageDAO;
   }
 
-//  public static synchronized UserDAOManager getInstance()
-//  {
-//    if (instance == null)
-//    {
-//      instance = new UserDAOManager();
-//    }
-//    return instance;
-//  }
 
   public Connection getConnection() throws SQLException {
     return super.getConnection();
@@ -280,6 +281,11 @@ public class UserDAOManager extends Database implements UserDAO
     return -1;
   }
 
+  /**
+   * Retrieves the number of users living at a given address
+   * @param address_id the id of the address
+   * @return the number of users living at a given address
+   */
   private int getNoUsersLivingAtAddress (int address_id)
   {
     try (Connection connection = getConnection())

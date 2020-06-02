@@ -13,6 +13,11 @@ import ESharing.Server.Persistance.reservation.ReservationDAOManager;
 import ESharing.Server.Persistance.user.UserDAO;
 import ESharing.Server.Persistance.user.UserDAOManager;
 
+/**
+ * The DAO factory class, which creates and retrieves all DAO classes
+ * @version 1.0
+ * @author Group1
+ */
 public class DAOFactory
 {
   private AddressDAO addressDAO;
@@ -22,6 +27,9 @@ public class DAOFactory
   private UserDAO userDAO;
   private ReservationDAO reservationDAO;
 
+  /**
+   * No-argument constructor which initializes all the DAO manager instances
+   */
   public DAOFactory ()
   {
     addressDAO = new AddressDAOManager();
@@ -32,31 +40,55 @@ public class DAOFactory
     advertisementDAO = new AdvertisementDAOManager(userDAO, reservationDAO,messageDAO);
   }
 
+  /**
+   * Returns the address dao
+   * @return the address dao
+   */
   public AddressDAO getAddressDAO()
   {
     return addressDAO;
   }
 
+  /**
+   * Returns the administrator dao
+   * @return the administrator dao
+   */
   public AdministratorDAO getAdministratorDAO()
   {
     return administratorDAO;
   }
 
+  /**
+   * Returns the advertisement dao
+   * @return the advertisement dao
+   */
   public AdvertisementDAO getAdvertisementDAO()
   {
     return advertisementDAO;
   }
 
+  /**
+   * Returns the message dao
+   * @return the message dao
+   */
   public MessageDAO getMessageDAO()
   {
     return messageDAO;
   }
 
+  /**
+   * Returns the user dao
+   * @return the user dao
+   */
   public UserDAO getUserDAO()
   {
     return userDAO;
   }
 
+  /**
+   * Returns the reservation dao
+   * @return the reservation dao
+   */
   public ReservationDAO getReservationDAO() {
     return reservationDAO;
   }

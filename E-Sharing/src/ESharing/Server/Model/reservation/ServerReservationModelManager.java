@@ -10,24 +10,28 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * The server model class for managing reservations
+ * @version 1.0
+ * @author Group1
+ */
 public class ServerReservationModelManager implements ServerReservationModel{
 
     private PropertyChangeSupport support;
     private ReservationDAO reservationDAO;
 
-
+    /**
+     * One-argument constructor which initializes the reservationDAO with the given object
+     * @param reservationDAO the new value to be set for the reservationDAO
+     */
     public ServerReservationModelManager(ReservationDAO reservationDAO){
         this.reservationDAO = reservationDAO;
 
         support = new PropertyChangeSupport(this);
-
-
     }
 
-
-
     @Override
-    public boolean makeNewReservation(Reservation reservation) {
+    public synchronized boolean makeNewReservation(Reservation reservation) {
         if(reservationDAO.makeNewReservation(reservation)) {
             support.firePropertyChange(Events.NEW_RESERVATION_CREATED.toString(), null, reservation);
             return true;
@@ -36,7 +40,7 @@ public class ServerReservationModelManager implements ServerReservationModel{
     }
 
     @Override
-    public boolean removeReservation(int advertisementID, int userID) {
+    public synchronized boolean removeReservation(int advertisementID, int userID) {
         List<LocalDate> removedReservationDays = reservationDAO.getUserReservation(advertisementID, userID);
         if(removedReservationDays != null & reservationDAO.removeReservation(advertisementID, userID)) {
             int[] idArray = {advertisementID, userID};
@@ -47,12 +51,12 @@ public class ServerReservationModelManager implements ServerReservationModel{
     }
 
     @Override
-    public List<Reservation> getUserReservations(int userID) {
+    public synchronized List<Reservation> getUserReservations(int userID) {
         return reservationDAO.getUserReservations(userID);
     }
 
     @Override
-    public List<Reservation> getReservationForAdvertisement(int advertisementID) {
+    public synchronized List<Reservation> getReservationForAdvertisement(int advertisementID) {
         return reservationDAO.getReservationForAdvertisement(advertisementID);
     }
 

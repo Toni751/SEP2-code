@@ -2,6 +2,11 @@ package ESharing.Shared.TransferedObject;
 
 import java.io.Serializable;
 
+/**
+ * A class for advertisement objects stored as catalogue items for the admin
+ * @version 1.0
+ * @author Group1
+ */
 public class AdCatalogueAdmin implements Serializable
 {
   private int id;

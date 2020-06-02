@@ -48,7 +48,7 @@ public class UserClientHandler implements UserClient, RMIUserClient
   public void initializeConnection()
   {
     try {
-    server = Connection.getStubInterface().getServerRMI();
+    server = Connection.getStubInterface().getUserServerRMI();
     chatServer = Connection.getStubInterface().getServerChatHandler();
     rmiAdvertisementServer = Connection.getStubInterface().getServerAdHandler();
       System.out.println(chatServer);

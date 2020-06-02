@@ -3,11 +3,13 @@ package ESharing.Client.Model.AdministratorModel;
 import ESharing.Client.Core.ClientFactory;
 import ESharing.Client.Model.UserActions.LoggedUser;
 import ESharing.Client.Networking.user.UserClient;
+import ESharing.Shared.TransferedObject.Address;
 import ESharing.Shared.Util.Events;
 import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +37,19 @@ public class AdministratorActionModelManager implements AdministratorActionsMode
     @Override
     public List<User> getAllUsers() {
         return client.getAllUsersRequest();
+//        List<User> dummyUsers = new ArrayList<>();
+//        Address address = new Address("Yes", "1");
+//        dummyUsers.add(new User("asrgjar", "password", "123", address));
+//        dummyUsers.add(new User("ertyb", "password", "123", address));
+//        dummyUsers.add(new User("aafgfb", "password", "123", address));
+//        dummyUsers.add(new User("rtcvwe", "password", "123", address));
+//        dummyUsers.add(new User("xcfgrv", "password", "123", address));
+//        dummyUsers.add(new User("afgb", "password", "123", address));
+//        dummyUsers.add(new User("sdrgdf", "password", "123", address));
+//        dummyUsers.add(new User("adgber", "password", "123", address));
+//        dummyUsers.add(new User("rtvxfc", "password", "123", address));
+//        dummyUsers.add(new User("asftbrtv", "password", "123", address));
+//        return dummyUsers;
     }
 
     @Override

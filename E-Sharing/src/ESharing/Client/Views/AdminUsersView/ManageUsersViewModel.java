@@ -216,6 +216,11 @@ public class ManageUsersViewModel{
         return warningVisibleProperty;
     }
 
+    public ObservableList<User> getUsers()
+    {
+        return users;
+    }
+
     /**
      * When new event appears, the function reloads the view with new values
      * @param propertyChangeEvent the given event

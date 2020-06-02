@@ -6,6 +6,11 @@ import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * A class for advertisement objects stored as catalogue items for the user
+ * @version 1.0
+ * @author Group1
+ */
 public class CatalogueAd implements Serializable
 {
   private String title;

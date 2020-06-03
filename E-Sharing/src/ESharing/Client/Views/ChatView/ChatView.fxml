@@ -24,7 +24,7 @@
             <TextField fx:id="messageTextField" layoutY="2.0" onKeyPressed="#sendMessageByEnter" prefHeight="47.0" prefWidth="400.0" promptText="Type something to send..." styleClass="messageTextField" />
          </children>
       </Pane>
-      <Pane prefHeight="600.0" prefWidth="166.0" styleClass="message-navigate-pane">
+      <Pane prefHeight="600.0" prefWidth="166.0" styleClass="navigate-pane">
          <children>
             <ScrollPane layoutX="-1.0" layoutY="55.0" prefHeight="494.0" prefWidth="166.0" styleClass="transparent-background">
                <content>

@@ -8,7 +8,6 @@ import ESharing.Server.Model.reservation.ServerReservationModel;
 import ESharing.Server.Model.reservation.ServerReservationModelManager;
 import ESharing.Server.Model.user.ServerUserModel;
 import ESharing.Server.Model.user.ServerUserModelManager;
-import ESharing.Server.Persistance.DAOFactory;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;

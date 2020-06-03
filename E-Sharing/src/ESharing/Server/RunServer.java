@@ -2,7 +2,7 @@ package ESharing.Server;
 
 import ESharing.Server.Core.ServerModelFactory;
 import ESharing.Server.Core.StubFactory;
-import ESharing.Server.Persistance.DAOFactory;
+import ESharing.Server.Core.DAOFactory;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;

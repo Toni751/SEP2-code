@@ -65,16 +65,6 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
   @Override
   public void registerClientCallback(RMIAdvertisementClient client)
   {
-    listenToNewAdReq = evt -> {
-      try
-      {
-        client.newAdRequest((AdCatalogueAdmin) evt.getNewValue());
-      }
-      catch (RemoteException e)
-      {
-        e.printStackTrace();
-      }
-    };
     listenToAdApproved = evt -> {
       try
       {
@@ -101,6 +91,16 @@ public class ServerAdvertisementHandler implements RMIAdvertisementServer
       try {
         client.newReportReceived((int)evt.getOldValue() ,(int) evt.getNewValue());
       } catch (RemoteException e) {
+        e.printStackTrace();
+      }
+    };
+    listenToNewAdReq = evt -> {
+      try
+      {
+        client.newAdRequest((AdCatalogueAdmin) evt.getNewValue());
+      }
+      catch (RemoteException e)
+      {
         e.printStackTrace();
       }
     };

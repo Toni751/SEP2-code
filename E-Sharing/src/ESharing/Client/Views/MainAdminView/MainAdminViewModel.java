@@ -30,7 +30,6 @@ public class MainAdminViewModel {
     private BooleanProperty rectangleProperty;
     private BooleanProperty usersProperty;
     private BooleanProperty dashboardProperty;
-    private AdvertisementModel advertisementModel;
 
     private StringProperty notificationProperty;
 
@@ -39,7 +38,6 @@ public class MainAdminViewModel {
      */
     public MainAdminViewModel() {
         this.administratorActionsModel = ModelFactory.getModelFactory().getAdministratorActionsModel();
-        this.advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
         this.userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         this.chatModel = ModelFactory.getModelFactory().getChatModel();
 

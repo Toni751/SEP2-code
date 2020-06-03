@@ -19,7 +19,6 @@ import ESharing.Client.Views.UserAddressSettingView.UserAddressSettingViewModel;
 import ESharing.Client.Views.UserAdvertisementView.UserAdvertisementViewModel;
 import ESharing.Client.Views.UserInfoSettingView.UserInfoSettingViewModel;
 import ESharing.Client.Views.UserView.UserViewModel;
-import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
 
 /**
  * The class responsible for managing all view models
@@ -28,7 +27,6 @@ import ESharing.Client.Views.WelcomeView.WelcomeViewModel;
  */
 public class ViewModelFactory {
 
-    private WelcomeViewModel welcomeViewModel;
     private SignInViewModel signInViewModel;
     private SignUpViewModel signUpViewModel;
     private MainAppViewModel mainAppViewModel;
@@ -55,7 +53,6 @@ public class ViewModelFactory {
      */
     private ViewModelFactory()
     {
-        welcomeViewModel = new WelcomeViewModel();
         signInViewModel = new SignInViewModel();
         signUpViewModel = new SignUpViewModel();
         mainAppViewModel = new MainAppViewModel();
@@ -86,14 +83,6 @@ public class ViewModelFactory {
         if(viewModelFactory == null)
             viewModelFactory = new ViewModelFactory();
         return viewModelFactory;
-    }
-
-    /**
-     * Returns initialized view model of the welcome view
-     * @return the initialized welcomeViewModel
-     */
-    public WelcomeViewModel getWelcomeViewModel() {
-        return welcomeViewModel;
     }
 
     /**

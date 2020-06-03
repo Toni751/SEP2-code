@@ -69,6 +69,7 @@ public class CreateAdViewController extends ViewController {
         warningPane.visibleProperty().bindBidirectional(viewModel.warningVisibleProperty());
         warningPane.styleProperty().bindBidirectional(viewModel.getWarningStyleProperty());
         mainPicturePane.visibleProperty().bindBidirectional(viewModel.getMainPicturePaneVisible());
+
         mainImageRectangle.fillProperty().bind(viewModel.getMainImageRectangleFill());
         subImage1Rectangle.fillProperty().bind(viewModel.getSubImage1RectangleFill());
         subImage2Rectangle.fillProperty().bind(viewModel.getSubImage2RectangleFill());

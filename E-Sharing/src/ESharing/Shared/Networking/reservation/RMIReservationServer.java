@@ -48,13 +48,6 @@ public interface RMIReservationServer extends Remote
     List<Reservation> getReservationForAdvertisement(int advertisementID) throws RemoteException;
 
     /**
-     * Sends a request to the server to register the client for callback regarding advertisements
-     * @param client the client to be registered for callback methods
-     * @throws RemoteException if the remote method invocation fails
-     */
-    void registerClientCallback (RMIAdvertisementClient client) throws RemoteException;
-
-    /**
      * Sends a request to the server to register the client for callback regarding reservations
      * @param reservationClient the client to be registered for callback methods
      * @throws RemoteException if the remote method invocation fails

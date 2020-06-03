@@ -64,13 +64,6 @@ public class ServerReservationHandler implements RMIReservationServer {
     }
 
     @Override
-    public void registerClientCallback(RMIAdvertisementClient client)
-        throws RemoteException
-    {
-
-    }
-
-    @Override
     public void registerCallback(RMIReservationClient reservationClient) {
         listenToAddedReservation = evt -> {
             try {

@@ -50,15 +50,20 @@ public class AdvertisementModelManager implements AdvertisementModel{
     @Override
     public Map<String, byte[]> convertedImages(Map<String, File> images) {
         Map<String, byte[]> convertedImages = new HashMap<>();
-        convertedImages.put(AdImages.MAIN_IMAGE.toString(), convertImageFile(images.get(AdImages.MAIN_IMAGE.toString())));
+        convertedImages.put(AdImages.MAIN_IMAGE.toString(),
+                    convertImageFile(images.get(AdImages.MAIN_IMAGE.toString())));
         if(images.containsKey(AdImages.SUB_IMAGE1.toString()))
-            convertedImages.put(AdImages.SUB_IMAGE1.toString(), convertImageFile(images.get(AdImages.SUB_IMAGE1.toString())));
+            convertedImages.put(AdImages.SUB_IMAGE1.toString(),
+                    convertImageFile(images.get(AdImages.SUB_IMAGE1.toString())));
         if(images.containsKey(AdImages.SUB_IMAGE2.toString()))
-            convertedImages.put(AdImages.SUB_IMAGE2.toString(), convertImageFile(images.get(AdImages.SUB_IMAGE2.toString())));
+            convertedImages.put(AdImages.SUB_IMAGE2.toString(),
+                    convertImageFile(images.get(AdImages.SUB_IMAGE2.toString())));
         if(images.containsKey(AdImages.SUB_IMAGE3.toString()))
-            convertedImages.put(AdImages.SUB_IMAGE3.toString(), convertImageFile(images.get(AdImages.SUB_IMAGE3.toString())));
+            convertedImages.put(AdImages.SUB_IMAGE3.toString(),
+                    convertImageFile(images.get(AdImages.SUB_IMAGE3.toString())));
         if(images.containsKey(AdImages.SUB_IMAGE4.toString()))
-            convertedImages.put(AdImages.SUB_IMAGE4.toString(), convertImageFile(images.get(AdImages.SUB_IMAGE4.toString())));
+            convertedImages.put(AdImages.SUB_IMAGE4.toString(),
+                    convertImageFile(images.get(AdImages.SUB_IMAGE4.toString())));
         return convertedImages;
     }
 

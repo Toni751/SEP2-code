@@ -38,8 +38,6 @@ public class UserInfoSettingViewModel{
 
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
-    private AdvertisementModel advertisementModel;
-    private ReservationModel reservationModel;
     private LoggedUser loggedUser;
 
     /**
@@ -48,8 +46,6 @@ public class UserInfoSettingViewModel{
     public UserInfoSettingViewModel() {
         userActionsModel = ModelFactory.getModelFactory().getUserActionsModel();
         verificationModel = ModelFactory.getModelFactory().getVerificationModel();
-        advertisementModel = ModelFactory.getModelFactory().getAdvertisementModel();
-        reservationModel = ModelFactory.getModelFactory().getReservationModel();
         loggedUser = LoggedUser.getLoggedUser();
 
         usernameProperty = new SimpleStringProperty();

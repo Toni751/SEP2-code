@@ -1,4 +1,4 @@
-package ESharing.Server.Persistance;
+package ESharing.Server.Core;
 
 import ESharing.Server.Persistance.address.AddressDAO;
 import ESharing.Server.Persistance.address.AddressDAOManager;

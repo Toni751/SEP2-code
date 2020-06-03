@@ -27,8 +27,6 @@ public class SignInViewModel{
     private UserActionsModel userActionsModel;
     private VerificationModel verificationModel;
 
-    private PropertyChangeSupport support;
-
     /**
      * A constructor initializes model layer for a sign up features and all fields
      */
@@ -41,8 +39,6 @@ public class SignInViewModel{
         warningProperty = new SimpleStringProperty();
         warningStyleProperty = new SimpleStringProperty();
         warningVisibleProperty = new SimpleBooleanProperty();
-
-        support = new PropertyChangeSupport(this);
 
         userActionsModel.addPropertyChangeListener(Events.CONNECTION_FAILED.toString(), this::connectionFailed);
     }

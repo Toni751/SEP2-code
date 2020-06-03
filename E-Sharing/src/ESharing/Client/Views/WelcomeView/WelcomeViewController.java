@@ -17,7 +17,6 @@ public class WelcomeViewController extends ViewController {
 
     @FXML
     private Pane transitionPane;
-    private WelcomeViewModel welcomeViewModel;
     private ViewHandler viewHandler;
 
     private final String signInPath = "../SignInView/SignIn.fxml";
@@ -28,7 +27,6 @@ public class WelcomeViewController extends ViewController {
      * initializes a binding properties of the JavaFX components
      */
     public void init() {
-        this.welcomeViewModel = ViewModelFactory.getViewModelFactory().getWelcomeViewModel();
         this.viewHandler = ViewHandler.getViewHandler();
         moveTransitionPane(signInPath, 390);
     }

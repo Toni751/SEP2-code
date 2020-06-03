@@ -23,6 +23,8 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * The server model class for managing advertisements
@@ -33,6 +35,7 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
 
     private AdvertisementDAO advertisementDAO;
     private PropertyChangeSupport support;
+    private Lock lock;
 
     /**
      * One-argument constructor which initializes the advertisement DAO and the property change support instance
@@ -42,26 +45,38 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     {
         this.advertisementDAO = advertisementDAO;
         support = new PropertyChangeSupport(this);
+        lock = new ReentrantLock();
     }
 
 
     @Override
-    public synchronized boolean addAdvertisement(Advertisement advertisement) {
-
-        int result = advertisementDAO.create(advertisement);
+    public boolean addAdvertisement(Advertisement advertisement)
+    {
+        int result;
+        synchronized (lock)
+        {
+            result = advertisementDAO.create(advertisement);
+        }
         if(result != -1) {
                 advertisement = uploadPhotos(advertisement, result);
+            synchronized (lock)
+            {
                 advertisementDAO.addImagesAndDates(advertisement);
-                support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisementDAO.getAdminAdCatalogue(advertisement.getAdvertisementID()));
+            }
+            support.firePropertyChange(Events.NEW_AD_REQUEST.toString(), null, advertisementDAO.getAdminAdCatalogue(advertisement.getAdvertisementID()));
                 return true;
         }
         return false;
     }
 
     @Override
-    public synchronized boolean approveAdvertisement(int id)
+    public boolean approveAdvertisement(int id)
     {
-        CatalogueAd catalogueAd = advertisementDAO.approveAdvertisement(id);
+        CatalogueAd catalogueAd;
+        synchronized (lock)
+        {
+            catalogueAd = advertisementDAO.approveAdvertisement(id);
+        }
         if(catalogueAd != null) {
             try
             {
@@ -75,8 +90,12 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public synchronized boolean removeAdvertisement(int id) {
-       List<Message> messages = advertisementDAO.removeAdvertisement(id);
+    public boolean removeAdvertisement(int id) {
+        List<Message> messages;
+        synchronized (lock)
+        {
+            messages = advertisementDAO.removeAdvertisement(id);
+        }
         if(messages != null) {
             // add removing part for pictures
             deleteDirectory(new File("E-Sharing/Resources/User" + messages.get(0).getSender().getUser_id() + "/Advertisement" + id));
@@ -93,18 +112,26 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public synchronized List<Advertisement> selectAllAdvertisements() {
-       List<Advertisement> advertisements = advertisementDAO.getAllAdvertisements();
-       for(Advertisement advertisement : advertisements) {
+    public List<Advertisement> selectAllAdvertisements() {
+        List<Advertisement> advertisements;
+        synchronized (lock)
+        {
+            advertisements = advertisementDAO.getAllAdvertisements();
+        }
+        for(Advertisement advertisement : advertisements) {
              advertisement.setPhotos(convertAdvertisementPictures(advertisement));
        }
            return advertisements;
     }
 
     @Override
-    public synchronized List<CatalogueAd> getAdvertisementsCatalogue()
+    public List<CatalogueAd> getAdvertisementsCatalogue()
     {
-        List<CatalogueAd> catalogueAds = advertisementDAO.getAdvertisementsCatalogue();
+        List<CatalogueAd> catalogueAds;
+        synchronized (lock)
+        {
+            catalogueAds = advertisementDAO.getAdvertisementsCatalogue();
+        }
         if(catalogueAds != null) {
             for (CatalogueAd catalogueAd : catalogueAds) {
                 String mainImageServerPath = catalogueAd.getMainImageServerPath();
@@ -119,8 +146,12 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public synchronized List<CatalogueAd> getAdvertisementsCatalogueForUser(int id) {
-        List<CatalogueAd> catalogues = advertisementDAO.getAdvertisementsByUser(id);
+    public List<CatalogueAd> getAdvertisementsCatalogueForUser(int id) {
+        List<CatalogueAd> catalogues;
+        synchronized (lock)
+        {
+            catalogues = advertisementDAO.getAdvertisementsByUser(id);
+        }
         for(CatalogueAd catalogueAd : catalogues)
         {
             String mainImageServerPath = catalogueAd.getMainImageServerPath();
@@ -133,18 +164,26 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public synchronized Advertisement getAdvertisementById(int id)
+    public Advertisement getAdvertisementById(int id)
     {
-        Advertisement advertisement = advertisementDAO.getAdvertisementById(id);
+        Advertisement advertisement;
+        synchronized (lock)
+        {
+            advertisement = advertisementDAO.getAdvertisementById(id);
+        }
         advertisement.getOwner().setAvatar(convertUserAvatar(advertisement.getOwner().getAvatarServerPath()));
         advertisement.setPhotos(convertAdvertisementPictures(advertisement));
         return advertisement;
     }
 
     @Override
-    public synchronized boolean addNewAdvertisementReport(int advertisementID) {
+    public boolean addNewAdvertisementReport(int advertisementID) {
         System.out.println("REPORT ADDED");
-        int reports = advertisementDAO.addNewAdvertisementReport(advertisementID);
+        int reports;
+        synchronized (lock)
+        {
+            reports = advertisementDAO.addNewAdvertisementReport(advertisementID);
+        }
         if(reports != -1) {
             support.firePropertyChange(Events.NEW_ADVERTISEMENT_REPORT.toString(), advertisementID, reports);
             return true;
@@ -153,26 +192,46 @@ public class ServerAdvertisementModelManager implements ServerAdvertisementModel
     }
 
     @Override
-    public synchronized List<AdCatalogueAdmin> getAdminAdCatalogue()
+    public List<AdCatalogueAdmin> getAdminAdCatalogue()
     {
-        return advertisementDAO.getAdminAdCatalogue();
+        List<AdCatalogueAdmin> adminAdCatalogue;
+        synchronized (lock)
+        {
+            adminAdCatalogue = advertisementDAO.getAdminAdCatalogue();
+        }
+        return adminAdCatalogue;
     }
 
     @Override
-    public synchronized boolean addRating(int ad_id, int user_id, double rating)
+    public boolean addRating(int ad_id, int user_id, double rating)
     {
-        return advertisementDAO.addRating(ad_id, user_id, rating);
+        boolean resultAddRating;
+        synchronized (lock)
+        {
+            resultAddRating = advertisementDAO.addRating(ad_id, user_id, rating);
+        }
+        return resultAddRating;
     }
 
     @Override
-    public synchronized double retrieveAdRating(int ad_id)
+    public double retrieveAdRating(int ad_id)
     {
-        return advertisementDAO.retrieveAdRating(ad_id);
+        double adRating;
+        synchronized (lock)
+        {
+            adRating = advertisementDAO.retrieveAdRating(ad_id);
+        }
+        return adRating;
     }
 
     @Override
-    public synchronized int getAdvertisementNumber() {
-        return advertisementDAO.getAdvertisementsNumber();
+    public int getAdvertisementNumber() {
+        int advertisementsNumber;
+        synchronized (lock)
+        {
+            advertisementsNumber = advertisementDAO.getAdvertisementsNumber();
+        }
+        return advertisementsNumber;
     }
 
     @Override

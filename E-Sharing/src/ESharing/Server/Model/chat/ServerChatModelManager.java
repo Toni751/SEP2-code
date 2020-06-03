@@ -11,6 +11,8 @@ import ESharing.Shared.TransferedObject.User;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * The server model class for managing chat actions
@@ -22,6 +24,7 @@ public class ServerChatModelManager implements ServerChatModel
   private MessageDAO messageDAO;
   private AdministratorDAO administratorDAO;
   private PropertyChangeSupport support;
+  private Lock lock;
 
   /**
    * 2-arguments constructor initializing the messageDAO and administratorDAO field variables
@@ -33,44 +36,71 @@ public class ServerChatModelManager implements ServerChatModel
     this.messageDAO = messageDAO;
     this.administratorDAO = administratorDAO;
     support = new PropertyChangeSupport(this);
+    lock = new ReentrantLock();
   }
 
   @Override
-  public synchronized List<Message> loadConversation(User sender, User receiver)
+  public List<Message> loadConversation(User sender, User receiver)
   {
-    return messageDAO.loadConversation(sender, receiver);
+    List<Message> conversation;
+    synchronized (lock)
+    {
+      conversation = messageDAO.loadConversation(sender, receiver);
+    }
+    return conversation;
   }
 
   @Override
-  public synchronized int getNoUnreadMessages(User user)
+  public int getNoUnreadMessages(User user)
   {
-    return messageDAO.getNoUnreadMessages(user);
+    int noUnreadMessages;
+    synchronized (lock)
+    {
+      noUnreadMessages = messageDAO.getNoUnreadMessages(user);
+    }
+    return noUnreadMessages;
   }
 
   @Override
-  public synchronized List<Message> getLastMessageWithEveryone(User user)
+  public List<Message> getLastMessageWithEveryone(User user)
   {
-    return messageDAO.getLastMessageWithEveryone(user);
+    List<Message> lastMessageWithEveryone;
+    synchronized (lock)
+    {
+      lastMessageWithEveryone = messageDAO.getLastMessageWithEveryone(user);
+    }
+    return lastMessageWithEveryone;
   }
 
   @Override
-  public synchronized void addMessage(Message message)
+  public void addMessage(Message message)
   {
-    messageDAO.addMessage(message);
+    synchronized (lock)
+    {
+      messageDAO.addMessage(message);
+    }
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getReceiver().getUser_id(), null, message);
     support.firePropertyChange(Events.NEW_MESSAGE_RECEIVED.toString() + message.getSender().getUser_id(), null, message);
   }
 
   @Override
-  public synchronized void deleteMessagesForUser(User user)
+  public void deleteMessagesForUser(User user)
   {
-    messageDAO.deleteMessagesForUser(user);
+    synchronized (lock)
+    {
+      messageDAO.deleteMessagesForUser(user);
+    }
   }
 
   @Override
-  public synchronized void makeMessageRead(Message message) {
+  public void makeMessageRead(Message message) {
     System.out.println("Attempting to make message read");
-    if(messageDAO.makeMessageRead(message)) {
+    boolean resultMakeMessageRead;
+    synchronized (lock)
+    {
+      resultMakeMessageRead = messageDAO.makeMessageRead(message);
+    }
+    if(resultMakeMessageRead) {
       support.firePropertyChange(Events.MAKE_MESSAGE_READ.toString() + message.getReceiver().getUser_id(), null, message);
     }
   }
@@ -93,13 +123,6 @@ public class ServerChatModelManager implements ServerChatModel
   @Override
   public void removePropertyChangeListener(String eventName, PropertyChangeListener listener)
   {
-//    if ("".equals(eventName) || eventName == null)
-//      removePropertyChangeListener(listener);
-//    else
-//    {
-//      System.out.println("Support has listener for event: " + eventName + "? " + support.hasListeners(eventName));
-//      support.removePropertyChangeListener(eventName, listener);
-//    }
     PropertyChangeListener[] listeners = support.getPropertyChangeListeners(eventName);
     System.out.println("Number of listeners for event:" + eventName + " = " + listeners.length);
     for (int i = 0; i < listeners.length; i++)
